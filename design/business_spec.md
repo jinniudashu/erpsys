@@ -1,23 +1,24 @@
 
 Organization
-Role
-Device
 Staff
 Customer
 Contract
-Membership
-Account
-Bill
-ServiceType
+Device
+Material
+Capital
+Knowledge
 
-Schedule
-Dashboard
+Role
+Membership
+Account(充值记录，消费记录)
+ServiceType(["光电类", "护肤品类", "化学焕肤", "手术类", "仪器类", "注射填充类"])
+
 Service
 Operation
 Process
 Status
 WorkOrder
-Workpiece
+Workpiece(治疗记录)
 Metrics
 Event
 Rule
@@ -25,14 +26,15 @@ Field
 Form
 
 Resource
-Material
-Capital
-Knowledge
 Guide
 Instruction
 Tutorial
 Document
 Sample
+
+Schedule
+Dashboard
+Bill
 
 LaborHours
 EquipmentHours

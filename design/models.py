@@ -16,7 +16,7 @@ class DomainObject(Enum):
     OPERATION = "作业"
     STATUS = "状态"
     EVENT = "事件"
-    WORKORDER = "工单"
+    INSTRUCTION = "指令"
     WORKPIECE = "工件"
     ATTRIBUTE = "属性"
     RESOURCE = "资源"
