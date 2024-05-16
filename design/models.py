@@ -8,22 +8,24 @@ import uuid
 
 from pypinyin import Style, lazy_pinyin
 
-class BusinessObject(Enum):
-    """业务对象枚举类"""
-    ENTITY = "实体"
+class DomainObject(Enum):
+    """领域对象枚举类"""
+    ENTITY_CLASS = "实体类"
+    ENTITY_INSTANCE = "实体实例"
     SERVICE = "服务"
+    OPERATION = "作业"
+    STATE = "状态"
     EVENT = "事件"
+    WORKORDER = "工单"
+    ARTIFACT = "工件"
     ATTRIBUTE = "属性"
     RESOURCE = "资源"
+    CONTRACT = "合约"
+    SYSTEM_OBJECT = "系统对象"
+    SYSTEM_SERVICE = "系统服务"
     LABEL = "标签"
-
-class FormType(Enum):
-    """表单类型枚举类"""
-    PRODUCE = "服务作业"
-    WORK_ORDER = "服务工单"
-    DICT = "字典"
-    ENTITY = "实体"
-    KNOWLEDGE = "知识"
+    CONCEPT = "概念"
+    ELEMENT = "元素"
 
 class ResourceType(Enum):
     """资源类型枚举类"""
@@ -31,16 +33,21 @@ class ResourceType(Enum):
     EquipmentWorkingTime = "设备工时"
     OperatorWorkingTime = "人工工时"
     Money = "资金"
-    Document = "文档"
+    KNOWLEDGE = "知识"
 
 class ServiceType(Enum):
     """服务类型枚举类"""
     OPERATION = "作业"
-    TASK = "任务"
-    AUXILIARY_TASK = "辅助任务"
-    SERVICE_UNIT = "服务单元"
-    SERVICE_ITEM = "服务项目"
-    SERVICE_PACKAGE = "服务包"
+    SERVICE = "服务"
+
+class FormType(Enum):
+    """表单类型枚举类"""
+    PRODUCE = "服务作业"
+    WORK_ORDER = "服务工单"
+    DICT = "字典"
+    ENTITY = "实体"
+    Document = "文档"
+
 
 # ERPSys基类
 class ERPSysBase(models.Model):
