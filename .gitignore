@@ -11,6 +11,9 @@ agent_results/
 .env_new
 
 *.pyc
+# Byte-compile / optimized / DLL files
+__pycache__/
+*.py[cod]
 
 # Packages
 *.egg
