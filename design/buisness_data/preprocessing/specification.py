@@ -6,20 +6,11 @@
 3. 初始数据引用(csv文件)
 """
 # 全局业务常量
-ORGANIZATION = {
-    "name": "",
-    "roles": {"type": "String", "enum": ["医生", "护士", "客服", "管理员"]},
-    "staff": {"type": "List", "items": {
-        "name": {},
-        "roles": {}
-    }}
-}
+ORGANIZATION = "广州颜青医疗美容诊所"
 
-
-# 工件定义
-WORKPIECE = [
+FORMS = [
     {
-        "name": "基本信息",
+        "name": "基本信息调查",
         "body": {
             "您的基本信息": {
                 "姓名": {"type": "String"},
@@ -261,3 +252,62 @@ WORKPIECE = [
         },
     },
 ]
+
+# 工件定义
+class Workpiece():
+    def __init__(self, name, forms):
+        self.name = name
+        self.forms = forms
+    
+    def export_forms_to_django_model(self):
+        pass
+
+    def import_forms_from_execel(self):
+        pass
+
+# Vocabulary
+"""
+Organization
+Staff
+Customer
+Contract
+Device
+Material
+Capital
+Knowledge
+
+Service
+Operation
+Process
+Status
+WorkOrder
+Workpiece
+Metrics
+Event
+Rule
+Field
+Form
+
+Resource
+Guide
+Instruction
+Tutorial
+Document
+Sample
+
+Schedule
+Dashboard
+
+Role
+Membership
+Account(充值记录，消费记录)
+ServiceType(["光电类", "护肤品类", "化学焕肤", "手术类", "仪器类", "注射填充类"])
+TreatmentRecord
+InformedConsent
+Precautions
+Bill
+
+LaborHours
+EquipmentHours
+Work-hourUnit
+"""

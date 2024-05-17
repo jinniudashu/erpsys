@@ -1,52 +1,13 @@
 from django.db import models
+from django.db.models import Q
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
-from enum import Enum
 import uuid
-
 from pypinyin import Style, lazy_pinyin
 
-class DomainObject(Enum):
-    """领域对象枚举类"""
-    ENTITY_CLASS = "实体类"
-    ENTITY_INSTANCE = "实体实例"
-    SERVICE = "服务"
-    OPERATION = "作业"
-    STATUS = "状态"
-    EVENT = "事件"
-    INSTRUCTION = "指令"
-    WORKPIECE = "工件"
-    ATTRIBUTE = "属性"
-    RESOURCE = "资源"
-    CONTRACT = "合约"
-    SYSTEM_OBJECT = "系统对象"
-    SYSTEM_SERVICE = "系统服务"
-    LABEL = "标签"
-    CONCEPT = "概念"
-    ELEMENT = "元素"
-
-class ResourceType(Enum):
-    """资源类型枚举类"""
-    Material = "物料"
-    EquipmentWorkingTime = "设备工时"
-    OperatorWorkingTime = "人工工时"
-    Money = "资金"
-    KNOWLEDGE = "知识"
-
-class ServiceType(Enum):
-    """服务类型枚举类"""
-    OPERATION = "作业"
-    SERVICE = "服务"
-
-class FormType(Enum):
-    """表单类型枚举类"""
-    PRODUCE = "服务作业"
-    WORK_ORDER = "服务工单"
-    DICT = "字典"
-    ENTITY = "实体"
-    Document = "文档"
+from design.types import FormType, ResourceType, ServiceType
 
 
 # ERPSys基类
@@ -73,10 +34,9 @@ class ERPSysBase(models.Model):
 
 
 class Field(ERPSysBase):
-    Field_type = [('CharField', '单行文本'), ('TextField', '多行文本'), ('IntegerField', '整数'), ('DecimalField', '固定精度小数'), ('DateTimeField', '日期时间'), ('DateField', '日期'),  ('FileField', '文件'), ('RelationField', '关联字段'), ('ComputedField', '计算字段')]
+    Field_type = [('CharField', '单行文本'), ('IntegerField', '整数'), ('DecimalField', '固定精度小数'), ('DictionaryField', '字典字段'), ('TextField', '多行文本'), ('DateTimeField', '日期时间'), ('DateField', '日期'),  ('FileField', '文件'), ('ComputedField', '计算字段'), ]
     field_type = models.CharField(max_length=50, default='CharField', choices=Field_type, null=True, blank=True, verbose_name="字段类型")
-    related_content = models.CharField(max_length=100, null=True, blank=True, verbose_name="关联内容")
-    related_field_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="关联字段名称")
+    related_dictionary = models.ForeignKey("Dictionary", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="关联字典")
     Choice_type = [('Select', '下拉单选'), ('RadioSelect', '单选按钮列表'), ('CheckboxSelectMultiple', '复选框列表'), ('SelectMultiple', '下拉多选')]
     choice_type = models.CharField(max_length=50, choices=Choice_type, null=True, blank=True, verbose_name="选择类型")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
@@ -89,12 +49,43 @@ class Field(ERPSysBase):
     computed_logic = models.TextField(null=True, blank=True, verbose_name="计算逻辑")
     
     class Meta:
-        verbose_name = "表单字段"
+        verbose_name = "字段"
         verbose_name_plural = verbose_name
         ordering = ['id']
     
     def __str__(self):
         return str(self.label)
+
+
+# 字典列表
+class Dictionary(ERPSysBase):
+    fields = models.ManyToManyField(Field, through='DictionaryFields', verbose_name="字段")
+    is_entity = models.BooleanField(default=False, verbose_name="是否实体")
+
+    class Meta:
+        verbose_name = "字典"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.label)
+        
+    def import_from_excel(self):
+        from utils import read_excel
+        file_path = "design/business_data/initial_data.xlsx"
+        return read_excel(file_path, self.name)
+    
+class DictionaryFields(models.Model):
+    dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, verbose_name="字典")
+    field = models.ForeignKey(Field, on_delete=models.CASCADE, verbose_name="字段")
+    default_value_char = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
+    order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
+
+    class Meta:
+        verbose_name = "字典字段"
+        verbose_name_plural = verbose_name
+        ordering = ['order']
+
 
 class Form(ERPSysBase):
     """表单"""
@@ -113,7 +104,7 @@ class Form(ERPSysBase):
 
 class FormComponents(models.Model):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
-    component = models.ForeignKey(Field, on_delete=models.CASCADE, verbose_name="字段")
+    field = models.ForeignKey(Field, on_delete=models.CASCADE, verbose_name="字段")
     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     inherit_value = models.BooleanField(default=True, verbose_name="继承值")
     is_required = models.BooleanField(default=False, verbose_name="是否必填")
@@ -128,7 +119,7 @@ class FormComponents(models.Model):
 # 表单列表字段
 class FormListComponents(models.Model):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
-    component = models.ForeignKey(Field, on_delete=models.CASCADE, verbose_name="字段")
+    field = models.ForeignKey(Field, on_delete=models.CASCADE, verbose_name="字段")
     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     inherit_value = models.BooleanField(default=True, verbose_name="继承值")
     is_required = models.BooleanField(default=False, verbose_name="是否必填")
@@ -146,14 +137,12 @@ class FormListComponents(models.Model):
 """
 [('超声炮', 'EQUIPMENT'), ('肉毒素注射', 'KNOWLEDGE'), ('超声软组织理疗', 'KNOWLEDGE'), ('Q开关激光', 'KNOWLEDGE'), ('保妥适100单位', 'MATERIAL'), ('超声炮刀头', 'MATERIAL'), ('超声炮炮头', 'MATERIAL'), ('乔雅登极致0.8ml', 'MATERIAL'), ('医生', 'OPERATOR'), ('护士', 'OPERATOR'), ('客服', 'OPERATOR'), ('治疗', 'SKILL'), ('随访', 'SKILL'), ('预约', 'SKILL'), ('备料', 'SKILL')]
 """
-class ResourceObject(models.Model):
-    name = models.CharField(max_length=50, verbose_name="名称")
+class ResourceObject(ERPSysBase):
     resource_type = models.CharField(max_length=50, choices=[(entity_type.name, entity_type.value) for entity_type in ResourceType], verbose_name="类型")
     description = models.CharField(max_length=255, blank=True, null=True, verbose_name="描述")
     content_type = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.CASCADE, verbose_name="关联内容")
-    object_id = models.UUIDField(blank=True, null=True, verbose_name="关联ID")
+    object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Meta:
         verbose_name = "资源对象"
@@ -186,8 +175,7 @@ class ResourceObject(models.Model):
 
         super().save(*args, **kwargs)
 
-class ServiceBOM(models.Model):
-    name = models.CharField(max_length=255, unique=True, verbose_name="名称")
+class ServiceBOM(ERPSysBase):
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
     resource_object = models.ForeignKey(ResourceObject, blank=True, null=True, on_delete=models.CASCADE, verbose_name="资源对象")
     work_order = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="work_order_bom", verbose_name="服务工单")
@@ -197,8 +185,6 @@ class ServiceBOM(models.Model):
     estimated_time = models.IntegerField(blank=True, null=True, verbose_name="预计工时")
     estimated_cost = models.IntegerField(blank=True, null=True, verbose_name="预计成本")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
-    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="描述")
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Meta:
         verbose_name = "服务BOM"
@@ -232,7 +218,6 @@ class ServiceBOMDependency(models.Model):
     parent = models.ForeignKey(ServiceBOM, related_name='children', on_delete=models.CASCADE, verbose_name="父组件")
     child = models.ForeignKey(ServiceBOM, related_name='parents', on_delete=models.CASCADE, verbose_name="子组件")
     quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个子组件
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
     class Meta:
         verbose_name = "组件依赖"
@@ -271,30 +256,23 @@ class BOMService:
         return parents_info
 
 
-# 角色表
-class Role(ERPSysBase):
-    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="岗位描述")
+class Vocabulary(ERPSysBase):
+    q  = Q(app_label='design') & (Q(model = 'field') | Q(model = 'dictionary'))
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to=q , null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
-        verbose_name = "业务岗位"
+        verbose_name = "业务词汇"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-# 业务实体
-class Entity(ERPSysBase):
-    base_form = models.OneToOneField(Form, on_delete=models.SET_NULL, null=True, verbose_name="基础表单")
-    project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="所属项目")
-
-    class Meta:
-        verbose_name = "管理实体"
-        verbose_name_plural = verbose_name
 
 # 项目
 class Project(ERPSysBase):
     domain = models.CharField(max_length=255, null=True, blank=True, verbose_name="域名")
     description = models.CharField(max_length=255, null=True, blank=True, verbose_name='项目描述')  # 项目描述
-    roles = models.ManyToManyField(Role, blank=True, verbose_name='角色')  # 项目角色
-    # services = models.ManyToManyField(Service, blank=True, verbose_name="服务")
+    services = models.ManyToManyField(ServiceBOM, blank=True, verbose_name="服务")
 
     class Meta:
         verbose_name = '项目列表'
