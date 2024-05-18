@@ -29,9 +29,7 @@ class ERPSysBase(models.Model):
         if self.label:
             self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(self.label))
-
         super().save(*args, **kwargs)
-
 
 class Field(ERPSysBase):
     Field_type = [('CharField', '单行文本'), ('IntegerField', '整数'), ('DecimalField', '固定精度小数'), ('DictionaryField', '字典字段'), ('TextField', '多行文本'), ('DateTimeField', '日期时间'), ('DateField', '日期'),  ('FileField', '文件'), ('ComputedField', '计算字段'), ]
@@ -55,7 +53,6 @@ class Field(ERPSysBase):
     
     def __str__(self):
         return str(self.label)
-
 
 # 字典列表
 class Dictionary(ERPSysBase):
@@ -86,7 +83,6 @@ class DictionaryFields(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['order']
 
-
 class Form(ERPSysBase):
     """表单"""
     fields = models.ManyToManyField(Field, through='FormComponents', verbose_name="字段")
@@ -101,7 +97,6 @@ class Form(ERPSysBase):
     def __str__(self):
         return str(self.name)
 
-
 class FormComponents(models.Model):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
     field = models.ForeignKey(Field, on_delete=models.CASCADE, verbose_name="字段")
@@ -114,7 +109,6 @@ class FormComponents(models.Model):
         verbose_name = "表单字段"
         verbose_name_plural = verbose_name
         ordering = ['order']
-
 
 # 表单列表字段
 class FormListComponents(models.Model):
@@ -129,7 +123,6 @@ class FormListComponents(models.Model):
         verbose_name = '表单列表字段'
         verbose_name_plural = verbose_name
         ordering = ['order']
-
 
 # *********************************************************
 # DAG 版 ServiceBOM 业务配置
@@ -255,7 +248,6 @@ class BOMService:
         parents_info = [{'parent': dep.parent.name, 'quantity': dep.quantity} for dep in component.parents.all()]
         return parents_info
 
-
 class Vocabulary(ERPSysBase):
     q  = Q(app_label='design') & (Q(model = 'field') | Q(model = 'dictionary'))
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to=q , null=True, blank=True)
@@ -266,7 +258,6 @@ class Vocabulary(ERPSysBase):
         verbose_name = "业务词汇"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
 
 # 项目
 class Project(ERPSysBase):
