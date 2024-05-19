@@ -26,8 +26,9 @@ class ERPSysBase(models.Model):
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
-        if self.label:
+        if self.label and self.name is None:
             self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+            # 过滤label的汉字部分，并截取过长内容，转为拼音名称
             self.name = "_".join(lazy_pinyin(self.label))
         super().save(*args, **kwargs)
 
@@ -58,6 +59,7 @@ class Field(ERPSysBase):
 class Dictionary(ERPSysBase):
     fields = models.ManyToManyField(Field, through='DictionaryFields', verbose_name="字段")
     is_entity = models.BooleanField(default=False, verbose_name="是否实体")
+    content = models.JSONField(blank=True, null=True, verbose_name="内容")
 
     class Meta:
         verbose_name = "字典"
@@ -66,12 +68,7 @@ class Dictionary(ERPSysBase):
 
     def __str__(self):
         return str(self.label)
-        
-    def import_from_excel(self):
-        from utils import read_excel
-        file_path = "design/business_data/initial_data.xlsx"
-        return read_excel(file_path, self.name)
-    
+            
 class DictionaryFields(models.Model):
     dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, verbose_name="字典")
     field = models.ForeignKey(Field, on_delete=models.CASCADE, verbose_name="字段")

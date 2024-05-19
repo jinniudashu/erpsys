@@ -1,0 +1,147 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$BKF0xeIUAHoX9D7R8GIYYt$dKHPpcZUWT5Br9dWrr8Oaf70ZD1e1FfN2SuJFkFBtbI=",
+    "last_login": "2024-05-14T10:06:41.183Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2024-05-13T13:00:59.914Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "09q5htbg0bojweaubrfrm174u8wznc7d",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSHQ4enSvd9ABhikaiAp7cr479qkC93ec859sYDbWsM2aAlzZmcm2el3i5ge1HaQ79hunafe1mWOfFf4QQe_9kzPy-H-HVQc9VubiI6Uh2RsIe2UnSwpSEhKOE8RPUyYJVqyOpEo0hQtRASvtYCicmHvD-unOA0:1s6p3R:Nd1uGk1iQdvikdeKlwy2LFitCG8A4uL-DYFqDnzMVtk",
+    "expire_date": "2024-05-28T10:06:41.215Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "8cms53sbjx0mw3rcir9l80ncpjrddfu3",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSHQ4enSvd9ABhikaiAp7cr479qkC93ec859sYDbWsM2aAlzZmcm2el3i5ge1HaQ79hunafe1mWOfFf4QQe_9kzPy-H-HVQc9VubiI6Uh2RsIe2UnSwpSEhKOE8RPUyYJVqyOpEo0hQtRASvtYCicmHvD-unOA0:1s6VIr:DAOJJRbT1vumY7rKJP4QWuPmuUzNc_jVpl4if_Hvn2c",
+    "expire_date": "2024-05-27T13:01:17.989Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "r9d19sn7x4cjwnp6803xad61o44iosiw",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSHQ4enSvd9ABhikaiAp7cr479qkC93ec859sYDbWsM2aAlzZmcm2el3i5ge1HaQ79hunafe1mWOfFf4QQe_9kzPy-H-HVQc9VubiI6Uh2RsIe2UnSwpSEhKOE8RPUyYJVqyOpEo0hQtRASvtYCicmHvD-unOA0:1s6Wvq:k9MV3--ouS9a44Iv790a5iVI2W_Ym-KEaPc5xAA0E_g",
+    "expire_date": "2024-05-27T14:45:38.600Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "xx9k33as0tek5ce8th187w22i97qhdfx",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSHQ4enSvd9ABhikaiAp7cr479qkC93ec859sYDbWsM2aAlzZmcm2el3i5ge1HaQ79hunafe1mWOfFf4QQe_9kzPy-H-HVQc9VubiI6Uh2RsIe2UnSwpSEhKOE8RPUyYJVqyOpEo0hQtRASvtYCicmHvD-unOA0:1s6WXx:Z4yma0vHB8K4PNYoFcZz2bCBbqvt3bEqs1Gss6quinU",
+    "expire_date": "2024-05-27T14:20:57.460Z"
+  }
+},
+{
+  "model": "design.field",
+  "pk": 1,
+  "fields": {
+    "label": "姓名",
+    "name": "xing_ming",
+    "pym": "xm",
+    "erpsys_id": "66e4e548-1134-11ef-8052-0e586f6f8a1e",
+    "field_type": "CharField",
+    "related_dictionary": null,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": null
+  }
+},
+{
+  "model": "design.field",
+  "pk": 2,
+  "fields": {
+    "label": "年龄",
+    "name": "nian_ling",
+    "pym": "nl",
+    "erpsys_id": "e00241a0-1134-11ef-a024-0e586f6f8a1e",
+    "field_type": "IntegerField",
+    "related_dictionary": null,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": null
+  }
+},
+{
+  "model": "design.field",
+  "pk": 13,
+  "fields": {
+    "label": "注意事项",
+    "name": "zhu_yi_shi_xiang",
+    "pym": "zysx",
+    "erpsys_id": "9976f088-14e9-11ef-bf05-0e586f6f8a1e",
+    "field_type": "FileField",
+    "related_dictionary": null,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 14,
+  "fields": {
+    "label": "知情同意书",
+    "name": "zhi_qing_tong_yi_shu",
+    "pym": "zqtys",
+    "erpsys_id": "a3292d76-14e9-11ef-bf05-0e586f6f8a1e",
+    "field_type": "FileField",
+    "related_dictionary": null,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 15,
+  "fields": {
+    "label": "值",
+    "name": "zhi",
+    "pym": "z",
+    "erpsys_id": "ab96fb7c-15d5-11ef-9b02-0e586f6f8a1e",
+    "field_type": "CharField",
+    "related_dictionary": null,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+}
+]
