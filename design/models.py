@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
 import uuid
+import re
 from pypinyin import Style, lazy_pinyin
 
 from design.types import FormType, ResourceType, ServiceType
@@ -28,8 +29,9 @@ class ERPSysBase(models.Model):
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
             self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
-            # 过滤label的汉字部分，并截取过长内容，转为拼音名称
-            self.name = "_".join(lazy_pinyin(self.label))
+            # 使用正则表达式过滤掉label非汉字内容, 截取到8个汉字以内
+            truncated_label = re.sub(r'[^\u4e00-\u9fa5]', '', self.label)[:8]
+            self.name = "_".join(lazy_pinyin(truncated_label))
         super().save(*args, **kwargs)
 
 class Field(ERPSysBase):

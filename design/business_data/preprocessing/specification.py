@@ -6,23 +6,14 @@ from design.models import Field, Dictionary, DictionaryFields
 
 import pandas as pd
 
-# 读取 Excel 文件
-def read_excel(file_path: str, sheet_name: str,) -> pd.DataFrame:
-    df = pd.read_excel(file_path, engine="openpyxl")
-    # 显示 DataFrame 的前几行数据
-    print(df.head())
-    return df
 
 """
 1. 业务对象结构
 2. 业务过程描述
 3. 初始数据引用(csv文件)
-"""
-# 全局业务常量
-ORGANIZATION = "广州颜青医疗美容诊所"
 
+***************
 
-"""
 form数据结构规范
 顶层结构
 	•	类型: form
@@ -61,7 +52,60 @@ form数据结构规范
     •	Decimal -> DecimalField
     •	Text    -> TextField
 
+*****************
+
+# Vocabulary
+
+Organization
+Staff
+Customer
+Contract
+Device
+Material
+Capital
+Knowledge
+
+Service
+Operation
+Process
+Status
+WorkOrder
+Workpiece
+Metrics
+Event
+Rule
+Field
+Form
+
+Resource
+Guide
+Instruction
+Tutorial
+Document
+Sample
+
+Schedule
+Dashboard
+
+Role
+Membership
+Account(充值记录，消费记录)
+ServiceType(["光电类", "护肤品类", "化学焕肤", "手术类", "仪器类", "注射填充类"])
+TreatmentRecord
+InformedConsent
+Precautions
+Bill
+
+LaborHours
+EquipmentHours
+Work-hourUnit
+
 """
+
+# 全局业务常量
+ORGANIZATION = "广州颜青医疗美容诊所"
+
+# 业务表单
 FORMS = [
     {
         "type": "form",
@@ -1342,6 +1386,7 @@ FORMS = [
     },
 ]
 
+# 抽取Forms数据
 def abstract_forms_data(forms):
     def _map_field_type(f_type):
         mapping = {
@@ -1377,7 +1422,7 @@ def abstract_forms_data(forms):
                     dictionary, created = Dictionary.objects.get_or_create(label=label)
                     if created:
                         dictionary.fields.add(field)
-                        dictionary.content = json.dumps(enum, ensure_ascii=False)
+                        dictionary.content = json.dumps([{'值': item} for item in enum], ensure_ascii=False)
                         dictionary.save()
                         # 创建字典对应的Field对象
                         field, created = Field.objects.get_or_create(label=label, related_dictionary=dictionary, defaults={'field_type': 'DictionaryField'})
@@ -1391,54 +1436,45 @@ def abstract_forms_data(forms):
         for entry in entries:
             _process_entry(entry)
 
-def abstract_excel_data(file_path):
-    pass
+# 抽取excel数据
+def abstract_excel_data(file_path="design/business_data/preprocessing/initial_data.xlsx"):
+    # 将 Pandas 数据类型映射到 Python 的原生数据类型
+    dtype_map = {
+        'int64': 'IntegerField',
+        'float64': 'DecimalField',
+        'bool': 'BooleanField',
+        'datetime64[ns]': 'DateTimeField',
+        'object': 'CharField'
+    }    
 
-# abstract_excel_data("design/business_data/initial_data.xlsx")
+    # Load the Excel file
+    xls = pd.ExcelFile(file_path)
 
-# Vocabulary
-"""
-Organization
-Staff
-Customer
-Contract
-Device
-Material
-Capital
-Knowledge
+    result = {}
+    # Iterate through each sheet
+    for sheet_name in xls.sheet_names:
+        dictionary = Dictionary.objects.get_or_create(label=sheet_name)[0]
 
-Service
-Operation
-Process
-Status
-WorkOrder
-Workpiece
-Metrics
-Event
-Rule
-Field
-Form
+        # Parse the sheet into a DataFrame
+        df = pd.read_excel(xls, sheet_name=sheet_name)
 
-Resource
-Guide
-Instruction
-Tutorial
-Document
-Sample
+        # Parse the column names and their types
+        fields = [{'name': col, 'type': dtype_map.get(str(df[col].dtype), 'CharField')} for col in df.columns]
+        for field in fields:
+            _field = Field.objects.get_or_create(label=field['name'], defaults={'field_type': field['type']})[0]
+            dictionary.fields.add(_field)
+        
+        # Parse the sheet data into a list of dictionaries
+        data = df.to_dict(orient='records')
+        dictionary.content = json.dumps(data, ensure_ascii=False)
+        dictionary.save()
 
-Schedule
-Dashboard
+        # 创建字典对应的Field对象
+        field = Field.objects.get_or_create(label=sheet_name, related_dictionary=dictionary, defaults={'field_type': 'DictionaryField'})[0]
 
-Role
-Membership
-Account(充值记录，消费记录)
-ServiceType(["光电类", "护肤品类", "化学焕肤", "手术类", "仪器类", "注射填充类"])
-TreatmentRecord
-InformedConsent
-Precautions
-Bill
-
-LaborHours
-EquipmentHours
-Work-hourUnit
-"""
+        # Add parsed information to the result
+        result[sheet_name] = {
+            'fields': fields,
+            'data': data
+        }
+        print(f"Created Dictionary: {sheet_name}, {result[sheet_name]}")
