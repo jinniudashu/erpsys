@@ -1,15 +1,17 @@
 from django.db import models
 from django.db.models import Q
+from django.db.utils import IntegrityError
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
 import uuid
 import re
+import json
 from pypinyin import Style, lazy_pinyin
 
 from design.types import FormType, ResourceType, ServiceType
-
+from design.business_data.preprocessing.specification import GLOBAL_INITIAL_STATES
 
 # ERPSys基类
 class ERPSysBase(models.Model):
@@ -57,11 +59,100 @@ class Field(ERPSysBase):
     def __str__(self):
         return str(self.label)
 
+class DictionaryManager(models.Manager):
+    # 抽取Forms数据
+    def abstract_forms_data(self, forms=GLOBAL_INITIAL_STATES['Forms']):
+        def _map_field_type(f_type):
+            mapping = {
+                'String': 'CharField',
+                'Date': 'DateField',
+                'Boolean': 'BooleanField',
+                'Integer': 'IntegerField',
+                'Decimal': 'DecimalField',
+                'Text': 'TextField'
+            }
+            return mapping.get(f_type, 'CharField')  # Default to 'CharField' if not found
+
+        def _process_entry(entry):
+            if entry['type'] == 'group':
+                for entry in entry['entries']:
+                    _process_entry(entry)
+            elif entry['type'] == 'field':
+                label = entry.get('label')
+                field_type = _map_field_type(entry.get('field_type'))
+                enum = entry.get('enum', None)
+                try:
+                    if enum is None:
+                        field = Field.objects.get_or_create(label=label, defaults={'field_type': field_type})[0]
+                        print(f"Created Field: {field.label if field else 'None'}")
+                    else:
+                        dictionary, created = self.get_or_create(label=label)
+                        if created:
+                            field = Field.objects.get_or_create(label='值', defaults={'field_type': field_type})[0]
+                            dictionary.fields.add(field)
+                            dictionary.content = json.dumps([{'值': item} for item in enum], ensure_ascii=False)
+                            dictionary.save()
+                            # 创建字典对应的Field对象
+                            field, created = Field.objects.get_or_create(label=label, related_dictionary=dictionary, defaults={'field_type': 'DictionaryField'})
+                            print(f"Created Dictionary: {field.label if field else 'None'}")
+                except IntegrityError as e:
+                    print(f"Error creating field: {e}")
+
+        for form in forms:
+            entries = form.get('entries', [])
+            for entry in entries:
+                _process_entry(entry)
+
+    # 抽取excel数据
+    def abstract_excel_data(self, file_path="design/business_data/preprocessing/initial_data.xlsx"):
+        import pandas as pd
+        # 将 Pandas 数据类型映射到 Python 的原生数据类型
+        dtype_map = {
+            'int64': 'IntegerField',
+            'float64': 'DecimalField',
+            'bool': 'BooleanField',
+            'datetime64[ns]': 'DateTimeField',
+            'object': 'CharField'
+        }    
+
+        # Load the Excel file
+        xls = pd.ExcelFile(file_path)
+
+        result = {}
+        # Iterate through each sheet
+        for sheet_name in xls.sheet_names:
+            dictionary = self.get_or_create(label=sheet_name)[0]
+
+            # Parse the sheet into a DataFrame
+            df = pd.read_excel(xls, sheet_name=sheet_name)
+
+            # Parse the column names and their types
+            fields = [{'name': col, 'type': dtype_map.get(str(df[col].dtype), 'CharField')} for col in df.columns]
+            for field in fields:
+                _field = Field.objects.get_or_create(label=field['name'], defaults={'field_type': field['type']})[0]
+                dictionary.fields.add(_field)
+            
+            # Parse the sheet data into a list of dictionaries
+            data = df.to_dict(orient='records')
+            dictionary.content = json.dumps(data, ensure_ascii=False)
+            dictionary.save()
+
+            # 创建字典对应的Field对象
+            field = Field.objects.get_or_create(label=sheet_name, related_dictionary=dictionary, defaults={'field_type': 'DictionaryField'})[0]
+
+            # Add parsed information to the result
+            result[sheet_name] = {
+                'fields': fields,
+                'data': data
+            }
+            print(f"Created Dictionary: {sheet_name}, {result[sheet_name]}")
+
 # 字典列表
 class Dictionary(ERPSysBase):
     fields = models.ManyToManyField(Field, through='DictionaryFields', verbose_name="字段")
     is_entity = models.BooleanField(default=False, verbose_name="是否实体")
     content = models.JSONField(blank=True, null=True, verbose_name="内容")
+    objects = DictionaryManager()
 
     class Meta:
         verbose_name = "字典"
