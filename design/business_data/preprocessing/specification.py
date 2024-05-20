@@ -1,52 +1,9 @@
 """
-1. 业务对象结构
+1. 业务对象描述
 2. 业务过程描述
-3. 初始数据引用(csv文件)
-
-***************
-
-form数据结构规范
-顶层结构
-	•	类型: form
-	•	标签: label
-	•	条目: entries（列表）
-条目结构
-	•	类型: group 或 field
-	•	标签: label
-	•	条目: entries（仅适用于 group 类型）
-字段结构
-	•	字段类型: field_type
-	•	String
-	•	String可能有enum值（仅适用于String类型）
-	•	Date
-	•	Boolean
-    •	Integer
-    •	Decimal
-    •	Text
-嵌套结构
-	•	group 类型条目可以包含其他 group 和 field 类型的条目
-	•	field 类型条目只能包含字段相关信息
-
-从FORMS中导入数据的业务逻辑(至 Field, Dictionary, DictionaryFields)
-1. 遍历FORMS的所有form
-2. 遍历form的所有entries里的所有条目
-3. 如果条目的type是field且没有enum, 且Field中没有label名相同的对象, 则创建新Field对象, 使用条目的label作为新Field对象的label, field_type作为field_type;
-4. 如果条目的type是field且有enum, 且Field中没有label名为label名+"名称"的对象, 则执行以下3个步骤: 
-    step-1 获取或创建Field对象“值”;
-    step-2 创建Dictionary对象, 使用条目的label做为该Dictionary对象的label, 将step-1获取的Field对象“值”加入到该Dictionary对象的多对多字段fields字段的值中, 将enum的值写入JSONField字段content中;
-    step-3 创建Field对象, 使用条目的label做为该Field对象的label, 该Field对象的field_type为'DictionaryField', 该Field对象的related_dictionary为step-2创建的Dictionary对象;
-5. field_type -> Field.field_type 映射关系：
-	•	String -> CharField
-	•	Date -> DateField
-	•	Boolean -> BooleanField
-    •	Integer -> IntegerField
-    •	Decimal -> DecimalField
-    •	Text    -> TextField
-
-*****************
+3. 初始数据(initial_data.xlsx, Forms)
 
 # Vocabulary
-
 Organization
 Staff
 Customer
@@ -93,10 +50,53 @@ Work-hourUnit
 
 """
 
+"""
+业务表单
+
+form数据结构说明
+1. 顶层结构
+    •	类型: form
+    •	标签: label
+    •	条目: entries（列表）
+2. 条目结构
+    •	类型: group 或 field
+    •	标签: label
+    •	条目: entries（仅适用于 group 类型）
+3. 字段结构
+    •	字段类型: field_type
+    •	String
+    •	String可能有enum值（仅适用于String类型）
+    •	Date
+    •	Boolean
+    •	Integer
+    •	Decimal
+    •	Text
+4. 嵌套结构
+    •	group 类型条目可以包含其他 group 和 field 类型的条目
+    •	field 类型条目只能包含字段相关信息
+
+从FORMS中导入数据的业务逻辑(至 Field, Dictionary, DictionaryFields)
+1. 遍历FORMS的所有form
+2. 遍历form的所有entries里的所有条目
+3. 如果条目的type是field且没有enum, 且Field中没有label名相同的对象, 则创建新Field对象, 使用条目的label作为新Field对象的label, field_type作为field_type;
+4. 如果条目的type是field且有enum, 且Field中没有label名为label名+"名称"的对象, 则执行以下2个步骤: 
+    step-1 创建Dictionary对象, 使用条目的label做为该Dictionary对象的label, 获取或创建Field对象“值”加入到该Dictionary对象的多对多字段fields字段的值中, 将enum的值写入JSONField字段content中;
+    step-2 创建Field对象, 使用条目的label做为该Field对象的label, 该Field对象的field_type为'DictionaryField', 该Field对象的related_dictionary为step-2创建的Dictionary对象;
+5. field_type -> Field.field_type 映射关系：
+    •	String -> CharField
+    •	Date -> DateField
+    •	Boolean -> BooleanField
+    •	Integer -> IntegerField
+    •	Decimal -> DecimalField
+    •	Text    -> TextField
+
+"""
+
 GLOBAL_INITIAL_STATES = {
     # 全局业务常量
     'Organization': '广州颜青医疗美容诊所',
-    # 业务表单
+    
+    # 
     'Forms': [
         {
             "type": "form",

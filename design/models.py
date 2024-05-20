@@ -40,6 +40,7 @@ class Field(ERPSysBase):
     Field_type = [('CharField', '单行文本'), ('IntegerField', '整数'), ('DecimalField', '固定精度小数'), ('DictionaryField', '字典字段'), ('TextField', '多行文本'), ('DateTimeField', '日期时间'), ('DateField', '日期'),  ('FileField', '文件'), ('ComputedField', '计算字段'), ]
     field_type = models.CharField(max_length=50, default='CharField', choices=Field_type, null=True, blank=True, verbose_name="字段类型")
     related_dictionary = models.ForeignKey("Dictionary", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="关联字典")
+    is_entity = models.BooleanField(default=False, verbose_name="业务实体")
     Choice_type = [('Select', '下拉单选'), ('RadioSelect', '单选按钮列表'), ('CheckboxSelectMultiple', '复选框列表'), ('SelectMultiple', '下拉多选')]
     choice_type = models.CharField(max_length=50, choices=Choice_type, null=True, blank=True, verbose_name="选择类型")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
@@ -150,7 +151,6 @@ class DictionaryManager(models.Manager):
 # 字典列表
 class Dictionary(ERPSysBase):
     fields = models.ManyToManyField(Field, through='DictionaryFields', verbose_name="字段")
-    is_entity = models.BooleanField(default=False, verbose_name="是否实体")
     content = models.JSONField(blank=True, null=True, verbose_name="内容")
     objects = DictionaryManager()
 
@@ -172,6 +172,12 @@ class DictionaryFields(models.Model):
         verbose_name = "字典字段"
         verbose_name_plural = verbose_name
         ordering = ['order']
+
+class SystemObject(ERPSysBase):
+    pass
+
+class SystemCall(ERPSysBase):
+    pass
 
 class Form(ERPSysBase):
     """表单"""
