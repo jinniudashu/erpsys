@@ -165,6 +165,7 @@ class Dictionary(ERPSysBase):
 class DictionaryFields(models.Model):
     dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, verbose_name="字典")
     field = models.ForeignKey(Field, on_delete=models.CASCADE, verbose_name="字段")
+    is_multivalued= models.BooleanField(default=False, verbose_name="多值")
     default_value_char = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
 
