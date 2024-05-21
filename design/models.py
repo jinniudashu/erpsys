@@ -151,6 +151,7 @@ class DictionaryManager(models.Manager):
 # 字典列表
 class Dictionary(ERPSysBase):
     fields = models.ManyToManyField(Field, through='DictionaryFields', verbose_name="字段")
+    bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
     content = models.JSONField(blank=True, null=True, verbose_name="内容")
     objects = DictionaryManager()
 

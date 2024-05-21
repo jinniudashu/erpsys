@@ -5,16 +5,11 @@
 
 # Vocabulary
 Organization
-Staff
 Customer
 Contract
-Device
-Material
-Capital
-Knowledge
 
 Service
-Operation
+- Operation
 Process
 Status
 WorkOrder
@@ -22,10 +17,17 @@ Workpiece
 Metrics
 Event
 Rule
-Field
+
 Form
+Field
 
 Resource
+- Staff
+- Device
+- Material
+- Capital
+- Knowledge
+
 Guide
 Instruction
 Tutorial
@@ -44,9 +46,8 @@ InformedConsent
 Precautions
 Bill
 
-LaborHours
-EquipmentHours
-Work-hourUnit
+LaborHours = GenerateTimeSlot([Staff], Calendar, {'Work-hourUnit': config})
+EquipmentHours = GenerateTimeSlot([Device], Calendar, {'Work-hourUnit': config})
 
 """
 
@@ -93,6 +94,21 @@ form数据结构说明
 """
 
 GLOBAL_INITIAL_STATES = {
+    # 系统对象
+    'SystemObject': [
+        ('User', '系统用户'), 
+        ('DateTime', '系统时间'),
+        ('Date', '系统日期'), 
+        ('Timer', '系统计时器'),
+        ('ResourceLaborHours', '人工工时资源'),
+        ('ResourceEquipmentHours', '员工工时资源'),
+        ('ResourceMaterial', '物料资源'),
+        ('ResourceCapital', '资金资源'),
+        ('ResourceKnowledge', '知识资源'),
+        ('CreateService', '创建服务'),
+        ('CallService', '调用服务'),
+    ],
+
     # 全局业务常量
     'Organization': '广州颜青医疗美容诊所',
     
