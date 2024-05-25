@@ -267,15 +267,13 @@ class ResourceObject(ERPSysBase):
         super().save(*args, **kwargs)
 
 class ServiceBOM(ERPSysBase):
-    service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
-    resource_object = models.ForeignKey(ResourceObject, blank=True, null=True, on_delete=models.CASCADE, verbose_name="资源对象")
+    program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     work_order = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="work_order_bom", verbose_name="服务工单")
     produce = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="produce_bom", verbose_name="服务产出")
-    api_fields = models.JSONField(blank=True, null=True, verbose_name="API字段")
+    service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
     unit = models.CharField(max_length=50, blank=True, null=True, verbose_name="单位")
     estimated_time = models.IntegerField(blank=True, null=True, verbose_name="预计工时")
     estimated_cost = models.IntegerField(blank=True, null=True, verbose_name="预计成本")
-    program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
 
     class Meta:
         verbose_name = "服务BOM"
@@ -306,18 +304,31 @@ class ServiceBOM(ERPSysBase):
     #     super().save(*args, **kwargs)
 
 class ServiceBOMDependency(models.Model):
-    parent = models.ForeignKey(ServiceBOM, related_name='children', on_delete=models.CASCADE, verbose_name="父组件")
-    child = models.ForeignKey(ServiceBOM, related_name='parents', on_delete=models.CASCADE, verbose_name="子组件")
-    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个子组件
+    parent = models.ForeignKey(ServiceBOM, related_name='children', on_delete=models.CASCADE, verbose_name="父服务")
+    child = models.ForeignKey(ServiceBOM, related_name='parents', on_delete=models.CASCADE, verbose_name="子服务组件")
+    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个子服务
     
     class Meta:
-        verbose_name = "组件依赖"
+        verbose_name = "服务组件"
         verbose_name_plural = verbose_name
         ordering = ['id']
-        unique_together = ('parent', 'child')  # 确保每对父子组件关系唯一
+        unique_together = ('parent', 'child')  # 确保每对父子服务关系唯一
     
     def __str__(self):
         return f"{self.parent.name} -> {self.child.name}"
+
+class ResourceObjectDependency(models.Model):
+    service = models.ForeignKey(ServiceBOM, on_delete=models.CASCADE, verbose_name="服务")
+    resource_object = models.ForeignKey(ResourceObject, on_delete=models.CASCADE, verbose_name="资源对象")
+    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
+    
+    class Meta:
+        verbose_name = "资源组件"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+    
+    def __str__(self):
+        return f"{self.service.name} -> {self.resource_object.name}"
 
 class BOMService:
     @staticmethod
@@ -356,6 +367,16 @@ class Vocabulary(ERPSysBase):
         verbose_name = "业务词汇"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+# class Contract(ERPSysBase):
+#     customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE, verbose_name="客户")
+#     staff = models.ForeignKey('staff.Staff', on_delete=models.CASCADE, verbose_name="员工")
+#     service = models.ForeignKey(ServiceBOM, on_delete=models.CASCADE, verbose_name="服务")
+#     start_time = models.DateTimeField(verbose_name="开始时间")
+#     end_time = models.DateTimeField(verbose_name="结束时间")
+#     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="价格")
+#     status = models.CharField(max_length=50, choices=[('draft', '草稿'), ('confirmed', '已确认'), ('cancelled', '已取消')], default='draft', verbose_name="状态")
+#     document = models.FileField(upload_to='contract/', verbose_name="合同文件")
 
 # 项目
 class Project(ERPSysBase):

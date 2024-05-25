@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Field, Dictionary, DictionaryFields, Form, FormComponents, FormListComponents, ResourceObject, ServiceBOM, ServiceBOMDependency, Vocabulary
+from .models import Field, Dictionary, DictionaryFields, Form, FormComponents, FormListComponents, ResourceObject, ServiceBOM, ServiceBOMDependency, ResourceObjectDependency, Vocabulary
 
 
 @admin.register(Field)
@@ -51,11 +51,15 @@ class ServiceBOMDependencyInline(admin.TabularInline):
     fk_name = 'parent'  # 指定使用的外键字段名
     extra = 0
 
+class ResourceObjectDependencyInline(admin.TabularInline):
+    model = ResourceObjectDependency
+    extra = 0
+
 @admin.register(ServiceBOM)
 class ServiceBOMAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ServiceBOM._meta.fields]
     list_display_links = ['name',]
-    inlines = [ServiceBOMDependencyInline]
+    inlines = [ServiceBOMDependencyInline, ResourceObjectDependencyInline]
 
 @admin.register(Vocabulary)
 class VocabularyAdmin(admin.ModelAdmin):

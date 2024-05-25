@@ -49,6 +49,36 @@ Bill
 LaborHours = GenerateTimeSlot([Staff], Calendar, {'Work-hourUnit': config})
 EquipmentHours = GenerateTimeSlot([Device], Calendar, {'Work-hourUnit': config})
 
+# Linux命令 taskset => 把进程和特定的CPU绑定在一起
+# 公平分享CPU资源 Round-Robin
+# 医生每位患者面诊15分钟，是一种轮转调度算法
+# 动态优先级调度算法 MLFQ(Multi-Level Feedback Queue)
+# Linux调度算法 CFS(Completely Fair Scheduler)
+# 调度参数：nice值，优先级（权重？），实时性，时间片大小，调度策略
+# 不同岗位的操作员 => 异构处理器
+
+syscalls[num]():
+SYS_fork
+SYS_exit
+SYS_wait
+SYS_pipe
+SYS_read
+SYS_kill
+SYS_exec
+SYS_fstat
+SYS_chdir
+SYS_dup
+SYS_getpid
+SYS_sbrk
+SYS_sleep
+SYS_uptime
+SYS_open
+SYS_write
+SYS_mknod
+SYS_unlink
+SYS_link
+SYS_mkdir
+SYS_close
 """
 
 """
@@ -92,6 +122,46 @@ form数据结构说明
     •	Text    -> TextField
 
 """
+from enum import Enum, auto
+
+class SystemCall(Enum):
+    """系统调用枚举类"""
+    CreateService = auto()
+    CallService = auto()
+
+    def __str__(self):
+        return self.name
+
+class Scheduler:
+    def __init__(self):
+        self.job_handlers = {
+            SystemCall.CreateService: self.create_service,
+            SystemCall.CallService: self.call_service,
+        }
+
+    def schedule(self, sys_call, **kwargs):
+        handler = self.job_handlers.get(sys_call)
+        if handler:
+            return handler(**kwargs)
+        else:
+            raise ValueError(f"Unhandled job type: {sys_call}")
+
+    # Define job functions
+    def create_service(self, **kwargs):
+        print("Creating service...")
+        # Actual implementation here
+
+    def call_service(self, **kwargs):
+        print("Call service...")
+        # Actual implementation here
+
+class ResourceType(Enum):
+    """资源类型枚举类"""
+    MaterialResource = "物料"
+    EquipmentWorkingTimeResource = "设备工时"
+    OperatorWorkingTimeResource = "人工工时"
+    MoneyResource = "资金"
+    DocumentResource = "文档"
 
 GLOBAL_INITIAL_STATES = {
     # 系统对象
@@ -105,8 +175,8 @@ GLOBAL_INITIAL_STATES = {
         ('ResourceMaterial', '物料资源'),
         ('ResourceCapital', '资金资源'),
         ('ResourceKnowledge', '知识资源'),
-        ('CreateService', '创建服务'),
-        ('CallService', '调用服务'),
+        (SystemCall.CreateService, '创建服务'),
+        (SystemCall.CallService, '调用服务'),
     ],
 
     # 全局业务常量
