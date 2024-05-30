@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import Field, Dictionary, DictionaryFields, Form, FormComponents, FormListComponents, ResourceObject, ServiceBOM, ServiceBOMDependency, ResourceObjectDependency, Vocabulary
+from .models import *
 
 
 @admin.register(Field)
 class FieldAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Field._meta.fields]
-    list_display_links = ['name',]
+    list_display_links = ['label', 'name',]
 
 class DictionaryFieldsInline(admin.TabularInline):
     model = DictionaryFields
@@ -36,18 +36,18 @@ class ResourceObjectAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ResourceObject._meta.fields]
     list_display_links = ['name',]
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name in ["definition",]:
-            kwargs["queryset"] = Form.objects.filter(form_type="RESOURCE")
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name in ["definition",]:
+    #         kwargs["queryset"] = Form.objects.filter(form_type="RESOURCE")
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def get_form(self, request, obj=None, **kwargs):
-        # 仅在编辑对象时运行
-        request._obj_ = obj
-        return super().get_form(request, obj, **kwargs)
+    # def get_form(self, request, obj=None, **kwargs):
+    #     # 仅在编辑对象时运行
+    #     request._obj_ = obj
+    #     return super().get_form(request, obj, **kwargs)
 
-class ServiceBOMDependencyInline(admin.TabularInline):
-    model = ServiceBOMDependency
+class ServiceDependencyInline(admin.TabularInline):
+    model = ServiceDependency
     fk_name = 'parent'  # 指定使用的外键字段名
     extra = 0
 
@@ -55,11 +55,11 @@ class ResourceObjectDependencyInline(admin.TabularInline):
     model = ResourceObjectDependency
     extra = 0
 
-@admin.register(ServiceBOM)
-class ServiceBOMAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ServiceBOM._meta.fields]
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Service._meta.fields]
     list_display_links = ['name',]
-    inlines = [ServiceBOMDependencyInline, ResourceObjectDependencyInline]
+    inlines = [ServiceDependencyInline, ResourceObjectDependencyInline]
 
 @admin.register(Vocabulary)
 class VocabularyAdmin(admin.ModelAdmin):

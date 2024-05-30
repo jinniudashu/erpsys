@@ -3,8 +3,8 @@
   "model": "auth.user",
   "pk": 1,
   "fields": {
-    "password": "pbkdf2_sha256$720000$BKF0xeIUAHoX9D7R8GIYYt$dKHPpcZUWT5Br9dWrr8Oaf70ZD1e1FfN2SuJFkFBtbI=",
-    "last_login": "2024-05-14T10:06:41.183Z",
+    "password": "pbkdf2_sha256$600000$82QB4PdSeDsz3pzsP3xP2G$MhucFHCZp87BzZ5XauS9jI8cj/figK3SlLwcNdTPHV0=",
+    "last_login": "2024-05-30T08:20:32.519Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -31,6 +31,14 @@
   "fields": {
     "session_data": ".eJxVjMsOwiAQRf-FtSHQ4enSvd9ABhikaiAp7cr479qkC93ec859sYDbWsM2aAlzZmcm2el3i5ge1HaQ79hunafe1mWOfFf4QQe_9kzPy-H-HVQc9VubiI6Uh2RsIe2UnSwpSEhKOE8RPUyYJVqyOpEo0hQtRASvtYCicmHvD-unOA0:1s6VIr:DAOJJRbT1vumY7rKJP4QWuPmuUzNc_jVpl4if_Hvn2c",
     "expire_date": "2024-05-27T13:01:17.989Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "lzxxzzwcz1b2x3ru32r9nvdcqhs3790b",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQRO_iGlleJf5R0nMGa9e7JgFkS_lUEXcnkVJAMc28N7OphOsypHWWKY2srgrU5bcjzC-pB-An1kfTudVlGkkfij7prO-N5X073b-DAedhX_fIoZD1ewCEwPtowAUnzCChQGd67ggtBY5IIXIklztTTBa2ts_q8wX2cjiW:1sCb1U:VxVTbqu2d4y7-pfAzR1nZeOsvzp8AyzaHKKzR_gR4Qg",
+    "expire_date": "2024-06-13T08:20:32.519Z"
   }
 },
 {
@@ -147,6 +155,321 @@
     "api_field_type": null,
     "api_field_default_value": null,
     "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 16,
+  "fields": {
+    "label": "名称",
+    "name": "ming_cheng",
+    "pym": "mc",
+    "erpsys_id": "4232723c-1e6e-11ef-ad48-0e586f6f8a1e",
+    "field_type": "CharField",
+    "related_dictionary": null,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 17,
+  "fields": {
+    "label": "规格",
+    "name": "gui_ge",
+    "pym": "gg",
+    "erpsys_id": "4d3b93d4-1e6e-11ef-ad48-0e586f6f8a1e",
+    "field_type": "CharField",
+    "related_dictionary": null,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 18,
+  "fields": {
+    "label": "药品",
+    "name": "yao_pin",
+    "pym": "yp",
+    "erpsys_id": "8c7db13a-1e6e-11ef-ad48-0e586f6f8a1e",
+    "field_type": "DictionaryField",
+    "related_dictionary": 1,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 19,
+  "fields": {
+    "label": "保妥适",
+    "name": "bao_tuo_shi",
+    "pym": "bts",
+    "erpsys_id": "638e2a24-1e74-11ef-ad48-0e586f6f8a1e",
+    "field_type": "DictionaryField",
+    "related_dictionary": 1,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 20,
+  "fields": {
+    "label": "价格",
+    "name": "jia_ge",
+    "pym": "jg",
+    "erpsys_id": "3dd1d958-1e78-11ef-85dd-0e586f6f8a1e",
+    "field_type": "DecimalField",
+    "related_dictionary": null,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 21,
+  "fields": {
+    "label": "库存数量",
+    "name": "ku_cun_shu_liang",
+    "pym": "kcsl",
+    "erpsys_id": "5fa5aa28-1e78-11ef-85dd-0e586f6f8a1e",
+    "field_type": "IntegerField",
+    "related_dictionary": null,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 22,
+  "fields": {
+    "label": "最小库存数量",
+    "name": "zui_xiao_ku_cun_shu_liang",
+    "pym": "zxkcsl",
+    "erpsys_id": "67e97a52-1e78-11ef-85dd-0e586f6f8a1e",
+    "field_type": "IntegerField",
+    "related_dictionary": null,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 23,
+  "fields": {
+    "label": "条形码",
+    "name": "tiao_xing_ma",
+    "pym": "txm",
+    "erpsys_id": "71d70890-1e78-11ef-85dd-0e586f6f8a1e",
+    "field_type": "CharField",
+    "related_dictionary": null,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 24,
+  "fields": {
+    "label": "SKU ID",
+    "name": "skuid",
+    "pym": "SKUID",
+    "erpsys_id": "8010cd06-1e78-11ef-85dd-0e586f6f8a1e",
+    "field_type": "CharField",
+    "related_dictionary": null,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 25,
+  "fields": {
+    "label": "乔雅登极致",
+    "name": "qiao_ya_deng_ji_zhi",
+    "pym": "qydjz",
+    "erpsys_id": "5da23c06-1e8b-11ef-9fcc-0e586f6f8a1e",
+    "field_type": "DictionaryField",
+    "related_dictionary": 1,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.dictionary",
+  "pk": 1,
+  "fields": {
+    "label": "药品",
+    "name": "yao_pin",
+    "pym": "yp",
+    "erpsys_id": "804e1c24-1e6e-11ef-ad48-0e586f6f8a1e",
+    "bind_system_object": null,
+    "content": null
+  }
+},
+{
+  "model": "design.dictionaryfields",
+  "pk": 1,
+  "fields": {
+    "dictionary": 1,
+    "field": 16,
+    "is_multivalued": false,
+    "default_value_char": null,
+    "order": 10
+  }
+},
+{
+  "model": "design.dictionaryfields",
+  "pk": 2,
+  "fields": {
+    "dictionary": 1,
+    "field": 17,
+    "is_multivalued": false,
+    "default_value_char": null,
+    "order": 10
+  }
+},
+{
+  "model": "design.dictionaryfields",
+  "pk": 3,
+  "fields": {
+    "dictionary": 1,
+    "field": 20,
+    "is_multivalued": false,
+    "default_value_char": null,
+    "order": 10
+  }
+},
+{
+  "model": "design.dictionaryfields",
+  "pk": 4,
+  "fields": {
+    "dictionary": 1,
+    "field": 21,
+    "is_multivalued": false,
+    "default_value_char": null,
+    "order": 10
+  }
+},
+{
+  "model": "design.dictionaryfields",
+  "pk": 5,
+  "fields": {
+    "dictionary": 1,
+    "field": 22,
+    "is_multivalued": false,
+    "default_value_char": null,
+    "order": 10
+  }
+},
+{
+  "model": "design.dictionaryfields",
+  "pk": 6,
+  "fields": {
+    "dictionary": 1,
+    "field": 23,
+    "is_multivalued": false,
+    "default_value_char": null,
+    "order": 10
+  }
+},
+{
+  "model": "design.dictionaryfields",
+  "pk": 7,
+  "fields": {
+    "dictionary": 1,
+    "field": 24,
+    "is_multivalued": false,
+    "default_value_char": null,
+    "order": 10
+  }
+},
+{
+  "model": "design.resourceobject",
+  "pk": 1,
+  "fields": {
+    "label": "保妥适",
+    "name": "bao_tuo_shi",
+    "pym": "bts",
+    "erpsys_id": "a02e2840-1e6e-11ef-ad48-0e586f6f8a1e",
+    "representation": 19,
+    "resource_class": "Material",
+    "business_class": 1
+  }
+},
+{
+  "model": "design.resourceobject",
+  "pk": 2,
+  "fields": {
+    "label": "乔雅登极致",
+    "name": "qiao_ya_deng_ji_zhi",
+    "pym": "qydjz",
+    "erpsys_id": "16e79f4a-1e8b-11ef-9fcc-0e586f6f8a1e",
+    "representation": 25,
+    "resource_class": "Material",
+    "business_class": 1
   }
 }
 ]

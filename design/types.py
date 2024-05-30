@@ -19,12 +19,24 @@ class DomainObject(Enum):
     CONCEPT = "概念"
     ELEMENT = "元素"
 
-class ResourceType(Enum):
+class ResourceClassType(Enum):
     """资源类型枚举类"""
     Material = "物料"
+    Equipment = "设备"
+    Device = "工具"
+    Operator = "人员"
+    Capital = "资金"
+    Knowledge = "知识"
+
+class ResourceObjectType(Enum):
+    """资源对象枚举类"""
+    Material = "物料"
+    Device = "工具"
+    Equipment = "设备"
+    Operator = "人员"
     EquipmentWorkingTime = "设备工时"
     OperatorWorkingTime = "人工工时"
-    Money = "资金"
+    Capital = "资金"
     KNOWLEDGE = "知识"
 
 class ServiceType(Enum):

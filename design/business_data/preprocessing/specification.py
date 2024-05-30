@@ -23,7 +23,7 @@ Field
 
 Resource
 - Staff
-- Device
+- Equipment
 - Material
 - Capital
 - Knowledge
@@ -47,7 +47,9 @@ Precautions
 Bill
 
 LaborHours = GenerateTimeSlot([Staff], Calendar, {'Work-hourUnit': config})
-EquipmentHours = GenerateTimeSlot([Device], Calendar, {'Work-hourUnit': config})
+EquipmentHours = GenerateTimeSlot([Equipment], Calendar, {'Work-hourUnit': config})
+
+[('超声炮', 'EQUIPMENT'), ('肉毒素注射', 'KNOWLEDGE'), ('超声软组织理疗', 'KNOWLEDGE'), ('Q开关激光', 'KNOWLEDGE'), ('保妥适100单位', 'MATERIAL'), ('超声炮刀头', 'MATERIAL'), ('超声炮炮头', 'MATERIAL'), ('乔雅登极致0.8ml', 'MATERIAL'), ('医生', 'OPERATOR'), ('护士', 'OPERATOR'), ('客服', 'OPERATOR'), ('治疗', 'SKILL'), ('随访', 'SKILL'), ('预约', 'SKILL'), ('备料', 'SKILL')]
 
 # Linux命令 taskset => 把进程和特定的CPU绑定在一起
 # 公平分享CPU资源 Round-Robin
@@ -56,6 +58,32 @@ EquipmentHours = GenerateTimeSlot([Device], Calendar, {'Work-hourUnit': config})
 # Linux调度算法 CFS(Completely Fair Scheduler)
 # 调度参数：nice值，优先级（权重？），实时性，时间片大小，调度策略
 # 不同岗位的操作员 => 异构处理器
+
+Operating System Services Provide:
+1. User Interface: CLI, GUI
+2. Program Execution: Source code -> Compiler -> Object code -> Executor
+3. I/O Operations
+4. File System Manipulation
+5. Communications: Inter-process communication, Networking
+6. Error Detection: Hardware, Software
+7. Resource Allocation: CPU, Memory, I/O devices
+8. Accounting: Usage statistics, Billing information -- Which users use how much and what kinds of resources
+9. Protection and Security: User authentication, File permissions, Encryption
+
+Types of System Calls
+1. Process Control
+2. File Manipulation
+3. Device Management
+4. Information Maintenance
+5. Communications
+
+Types of System Programs
+1. File Management
+2. Status Information
+3. File Modification
+4. Programming Language Support
+5. Program Loading and Execution
+6. Communications
 
 syscalls[num]():
 SYS_fork
@@ -155,14 +183,6 @@ class Scheduler:
         print("Call service...")
         # Actual implementation here
 
-class ResourceType(Enum):
-    """资源类型枚举类"""
-    MaterialResource = "物料"
-    EquipmentWorkingTimeResource = "设备工时"
-    OperatorWorkingTimeResource = "人工工时"
-    MoneyResource = "资金"
-    DocumentResource = "文档"
-
 GLOBAL_INITIAL_STATES = {
     # 系统对象
     'SystemObject': [
@@ -179,10 +199,44 @@ GLOBAL_INITIAL_STATES = {
         (SystemCall.CallService, '调用服务'),
     ],
 
+    # 资源分类
+    'ResourceClass': {
+        "Material": {
+            "quantity": "int",
+            "unit": "string",
+            "supplier": "string"
+        },
+        "Device": {
+            "serial_number": "string",
+            "status": "string",
+            "purchase_date": "date"
+        },
+        "Equipment": {
+            "type": "string",
+            "maintenance_cycle": "int",
+            "last_maintenance_date": "date"
+        },
+        "Operator": {
+            "role": "string",
+            "skill_level": "string",
+            "hire_date": "date"
+        },
+        "Capital": {
+            "amount": "float",
+            "type": "string",
+            "source": "string"
+        },
+        "Knowledge": {
+            "subject": "string",
+            "description": "string",
+            "importance_level": "string"
+        }
+    },
+
     # 全局业务常量
     'Organization': '广州颜青医疗美容诊所',
     
-    # 
+    # 业务表单
     'Forms': [
         {
             "type": "form",

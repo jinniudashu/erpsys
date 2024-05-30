@@ -10,7 +10,7 @@ import re
 import json
 from pypinyin import Style, lazy_pinyin
 
-from design.types import FormType, ResourceType, ServiceType
+from design.types import FormType, ResourceClassType, ResourceObjectType, ServiceType
 from design.business_data.preprocessing.specification import GLOBAL_INITIAL_STATES
 
 # ERPSys基类
@@ -223,50 +223,22 @@ class FormListComponents(models.Model):
         ordering = ['order']
 
 # *********************************************************
-# DAG 版 ServiceBOM 业务配置
+# DAG 版 Service 业务配置
 # *********************************************************
-"""
-[('超声炮', 'EQUIPMENT'), ('肉毒素注射', 'KNOWLEDGE'), ('超声软组织理疗', 'KNOWLEDGE'), ('Q开关激光', 'KNOWLEDGE'), ('保妥适100单位', 'MATERIAL'), ('超声炮刀头', 'MATERIAL'), ('超声炮炮头', 'MATERIAL'), ('乔雅登极致0.8ml', 'MATERIAL'), ('医生', 'OPERATOR'), ('护士', 'OPERATOR'), ('客服', 'OPERATOR'), ('治疗', 'SKILL'), ('随访', 'SKILL'), ('预约', 'SKILL'), ('备料', 'SKILL')]
-"""
 class ResourceObject(ERPSysBase):
-    resource_type = models.CharField(max_length=50, choices=[(entity_type.name, entity_type.value) for entity_type in ResourceType], verbose_name="类型")
-    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="描述")
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.CASCADE, verbose_name="关联内容")
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_object = GenericForeignKey('content_type', 'object_id')
+    representation = models.OneToOneField(Field, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="表示")
+    resource_class = models.CharField(max_length=50, choices=[(entity_type.name, entity_type.value) for entity_type in ResourceClassType], verbose_name="资源类型")
+    business_class = models.ForeignKey(Dictionary, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="业务类型")
 
     class Meta:
         verbose_name = "资源对象"
         verbose_name_plural = verbose_name
-        ordering = ['resource_type', 'id']
+        ordering = ['id']
     
     def __str__(self):
         return str(self.name)
-    
-    def save(self, *args, **kwargs):
-        try:
-            # 创建资源对象时自动在content_type对应的资源类Model中创建一个资源类对象实例
-            if self.content_type is None and self.object_id is None:
-                # 获取资源Model的名称
-                model_class_name = self.resource_type
-                model_class = apps.get_model('resource', model_class_name)  # 可能抛出 LookupError
-                # 尝试获取ContentType，如果不存在，则抛出ContentType.DoesNotExist异常
-                self.content_type = ContentType.objects.get_for_model(model_class)
-                instance = model_class.objects.create(name=self.name)
-                self.object_id = instance.id
-        except LookupError:
-            # 处理模型未找到的情况
-            print(f"Model '{model_class_name}' not found.")
-        except ContentType.DoesNotExist:
-            # 处理ContentType未找到的情况
-            print(f"ContentType for model '{model_class_name}' does not exist.")
-        except Exception as e:
-            # 处理其他未预料到的异常
-            print(f"An unexpected error occurred: {e}")
 
-        super().save(*args, **kwargs)
-
-class ServiceBOM(ERPSysBase):
+class Service(ERPSysBase):
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     work_order = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="work_order_bom", verbose_name="服务工单")
     produce = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="produce_bom", verbose_name="服务产出")
@@ -276,7 +248,7 @@ class ServiceBOM(ERPSysBase):
     estimated_cost = models.IntegerField(blank=True, null=True, verbose_name="预计成本")
 
     class Meta:
-        verbose_name = "服务BOM"
+        verbose_name = "服务"
         verbose_name_plural = verbose_name
         ordering = ['service_type', 'name', 'id']
     
@@ -296,16 +268,16 @@ class ServiceBOM(ERPSysBase):
 
     #         kwargs['name'] = f'表单-服务产出-{self.name}'
     #         kwargs['form_type'] = FormType.PRODUCE.name
-    #         kwargs['description'] = f'为服务BOM-{self.name}-自动生成的服务产出'
+    #         kwargs['description'] = f'为服务BOM-{self.name}-自动生成的服务作业表单'
     #         produce_form = super().create(*args, **kwargs)
     #         produce_form.fields.add(init_field)
     #         self.produce = produce_form
 
     #     super().save(*args, **kwargs)
 
-class ServiceBOMDependency(models.Model):
-    parent = models.ForeignKey(ServiceBOM, related_name='children', on_delete=models.CASCADE, verbose_name="父服务")
-    child = models.ForeignKey(ServiceBOM, related_name='parents', on_delete=models.CASCADE, verbose_name="子服务组件")
+class ServiceDependency(models.Model):
+    parent = models.ForeignKey(Service, related_name='children', on_delete=models.CASCADE, verbose_name="父服务")
+    child = models.ForeignKey(Service, related_name='parents', on_delete=models.CASCADE, verbose_name="子服务组件")
     quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个子服务
     
     class Meta:
@@ -318,7 +290,7 @@ class ServiceBOMDependency(models.Model):
         return f"{self.parent.name} -> {self.child.name}"
 
 class ResourceObjectDependency(models.Model):
-    service = models.ForeignKey(ServiceBOM, on_delete=models.CASCADE, verbose_name="服务")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
     resource_object = models.ForeignKey(ResourceObject, on_delete=models.CASCADE, verbose_name="资源对象")
     quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
     
@@ -333,27 +305,27 @@ class ResourceObjectDependency(models.Model):
 class BOMService:
     @staticmethod
     def add_component(name):
-        component, created = ServiceBOM.objects.get_or_create(name=name)
+        component, created = Service.objects.get_or_create(name=name)
         return component
 
     @staticmethod
     def add_dependency(parent_name, child_name, quantity=1):
         parent = BOMService.add_component(parent_name)
         child = BOMService.add_component(child_name)
-        dependency, created = ServiceBOMDependency.objects.get_or_create(parent=parent, child=child)
+        dependency, created = ServiceDependency.objects.get_or_create(parent=parent, child=child)
         dependency.quantity = quantity
         dependency.save()
         return dependency
 
     @staticmethod
     def find_direct_children(component_name):
-        component = ServiceBOM.objects.get(name=component_name)
+        component = Service.objects.get(name=component_name)
         children_info = [{'child': dep.child.name, 'quantity': dep.quantity} for dep in component.children.all()]
         return children_info
 
     @staticmethod
     def find_direct_parents(component_name):
-        component = ServiceBOM.objects.get(name=component_name)
+        component = Service.objects.get(name=component_name)
         parents_info = [{'parent': dep.parent.name, 'quantity': dep.quantity} for dep in component.parents.all()]
         return parents_info
 
@@ -371,7 +343,7 @@ class Vocabulary(ERPSysBase):
 # class Contract(ERPSysBase):
 #     customer = models.ForeignKey('customer.Customer', on_delete=models.CASCADE, verbose_name="客户")
 #     staff = models.ForeignKey('staff.Staff', on_delete=models.CASCADE, verbose_name="员工")
-#     service = models.ForeignKey(ServiceBOM, on_delete=models.CASCADE, verbose_name="服务")
+#     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
 #     start_time = models.DateTimeField(verbose_name="开始时间")
 #     end_time = models.DateTimeField(verbose_name="结束时间")
 #     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="价格")
@@ -382,7 +354,7 @@ class Vocabulary(ERPSysBase):
 class Project(ERPSysBase):
     domain = models.CharField(max_length=255, null=True, blank=True, verbose_name="域名")
     description = models.CharField(max_length=255, null=True, blank=True, verbose_name='项目描述')  # 项目描述
-    services = models.ManyToManyField(ServiceBOM, blank=True, verbose_name="服务")
+    services = models.ManyToManyField(Service, blank=True, verbose_name="服务")
 
     class Meta:
         verbose_name = '项目列表'
