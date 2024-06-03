@@ -51,6 +51,11 @@ EquipmentHours = GenerateTimeSlot([Equipment], Calendar, {'Work-hourUnit': confi
 
 [('超声炮', 'EQUIPMENT'), ('肉毒素注射', 'KNOWLEDGE'), ('超声软组织理疗', 'KNOWLEDGE'), ('Q开关激光', 'KNOWLEDGE'), ('保妥适100单位', 'MATERIAL'), ('超声炮刀头', 'MATERIAL'), ('超声炮炮头', 'MATERIAL'), ('乔雅登极致0.8ml', 'MATERIAL'), ('医生', 'OPERATOR'), ('护士', 'OPERATOR'), ('客服', 'OPERATOR'), ('治疗', 'SKILL'), ('随访', 'SKILL'), ('预约', 'SKILL'), ('备料', 'SKILL')]
 
+# CPU -> 总线 -> 内存、I/O设备...
+# 总线提供I/O设备的虚拟化，负责注册、转发
+# PCIE总线自带中断控制器
+# PCIE总线 -> USB总线 -> USB设备
+
 # Linux命令 taskset => 把进程和特定的CPU绑定在一起
 # 公平分享CPU资源 Round-Robin
 # 医生每位患者面诊15分钟，是一种轮转调度算法
@@ -150,6 +155,7 @@ form数据结构说明
     •	Text    -> TextField
 
 """
+
 from enum import Enum, auto
 
 class SystemCall(Enum):
@@ -188,19 +194,15 @@ GLOBAL_INITIAL_STATES = {
     'SystemObject': [
         ('User', '系统用户'), 
         ('DateTime', '系统时间'),
-        ('Date', '系统日期'), 
         ('Timer', '系统计时器'),
-        ('ResourceLaborHours', '人工工时资源'),
-        ('ResourceEquipmentHours', '员工工时资源'),
-        ('ResourceMaterial', '物料资源'),
-        ('ResourceCapital', '资金资源'),
-        ('ResourceKnowledge', '知识资源'),
+        ('Service', '服务'),
+        ('Resource', '资源'),
         (SystemCall.CreateService, '创建服务'),
         (SystemCall.CallService, '调用服务'),
     ],
 
     # 资源分类
-    'ResourceClass': {
+    'ResourceType': {
         "Material": {
             "quantity": "int",
             "unit": "string",

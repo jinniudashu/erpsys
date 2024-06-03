@@ -10,7 +10,7 @@ import re
 import json
 from pypinyin import Style, lazy_pinyin
 
-from design.types import FormType, ResourceClassType, ResourceObjectType, ServiceType
+from design.types import FieldType, ChoiceType, FormType, ResourceType, ServiceType
 from design.business_data.preprocessing.specification import GLOBAL_INITIAL_STATES
 
 # ERPSys基类
@@ -37,12 +37,10 @@ class ERPSysBase(models.Model):
         super().save(*args, **kwargs)
 
 class Field(ERPSysBase):
-    Field_type = [('CharField', '单行文本'), ('IntegerField', '整数'), ('DecimalField', '固定精度小数'), ('DictionaryField', '字典字段'), ('TextField', '多行文本'), ('DateTimeField', '日期时间'), ('DateField', '日期'),  ('FileField', '文件'), ('ComputedField', '计算字段'), ]
-    field_type = models.CharField(max_length=50, default='CharField', choices=Field_type, null=True, blank=True, verbose_name="字段类型")
+    field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="字段类型")
     related_dictionary = models.ForeignKey("Dictionary", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="关联字典")
     is_entity = models.BooleanField(default=False, verbose_name="业务实体")
-    Choice_type = [('Select', '下拉单选'), ('RadioSelect', '单选按钮列表'), ('CheckboxSelectMultiple', '复选框列表'), ('SelectMultiple', '下拉多选')]
-    choice_type = models.CharField(max_length=50, choices=Choice_type, null=True, blank=True, verbose_name="选择类型")
+    choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
     max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
     decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
@@ -58,7 +56,7 @@ class Field(ERPSysBase):
         ordering = ['id']
     
     def __str__(self):
-        return str(self.label)
+        return self.label
 
 class DictionaryManager(models.Manager):
     # 抽取Forms数据
@@ -135,7 +133,7 @@ class DictionaryManager(models.Manager):
             
             # Parse the sheet data into a list of dictionaries
             data = df.to_dict(orient='records')
-            dictionary.content = json.dumps(data, ensure_ascii=False)
+            dictionary.init_content = json.dumps(data, ensure_ascii=False)
             dictionary.save()
 
             # 创建字典对应的Field对象
@@ -152,7 +150,7 @@ class DictionaryManager(models.Manager):
 class Dictionary(ERPSysBase):
     fields = models.ManyToManyField(Field, through='DictionaryFields', verbose_name="字段")
     bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
-    content = models.JSONField(blank=True, null=True, verbose_name="内容")
+    init_content = models.JSONField(blank=True, null=True, verbose_name="初始内容")
     objects = DictionaryManager()
 
     class Meta:
@@ -161,7 +159,7 @@ class Dictionary(ERPSysBase):
         ordering = ['id']
 
     def __str__(self):
-        return str(self.label)
+        return self.label
             
 class DictionaryFields(models.Model):
     dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, verbose_name="字典")
@@ -175,14 +173,7 @@ class DictionaryFields(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['order']
 
-class SystemObject(ERPSysBase):
-    pass
-
-class SystemCall(ERPSysBase):
-    pass
-
 class Form(ERPSysBase):
-    """表单"""
     fields = models.ManyToManyField(Field, through='FormComponents', verbose_name="字段")
     form_type = models.CharField(max_length=50, choices=[(form_type.name, form_type.value) for form_type in FormType], verbose_name="类型")
     description = models.CharField(max_length=255, blank=True, null=True, verbose_name="描述")
@@ -193,7 +184,7 @@ class Form(ERPSysBase):
         ordering = ['id']
 
     def __str__(self):
-        return str(self.name)
+        return self.label
 
 class FormComponents(models.Model):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
@@ -225,27 +216,27 @@ class FormListComponents(models.Model):
 # *********************************************************
 # DAG 版 Service 业务配置
 # *********************************************************
-class ResourceObject(ERPSysBase):
-    representation = models.OneToOneField(Field, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="表示")
-    resource_class = models.CharField(max_length=50, choices=[(entity_type.name, entity_type.value) for entity_type in ResourceClassType], verbose_name="资源类型")
-    business_class = models.ForeignKey(Dictionary, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="业务类型")
+class Resource(ERPSysBase):
+    representation = models.OneToOneField(Field, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="术语表示")
+    business_type = models.ForeignKey(Dictionary, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="业务类型")
+    resource_type = models.CharField(max_length=50, choices=[(entity_type.name, entity_type.value) for entity_type in ResourceType], verbose_name="资源类型")
 
     class Meta:
-        verbose_name = "资源对象"
+        verbose_name = "资源"
         verbose_name_plural = verbose_name
         ordering = ['id']
     
     def __str__(self):
-        return str(self.name)
+        return self.label
 
 class Service(ERPSysBase):
+    form = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="produce_bom", verbose_name="表单")
+    work_order = models.ForeignKey(Dictionary, blank=True, null=True, on_delete=models.SET_NULL, related_name="work_order_bom", verbose_name="工单")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
-    work_order = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="work_order_bom", verbose_name="服务工单")
-    produce = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="produce_bom", verbose_name="服务产出")
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
-    unit = models.CharField(max_length=50, blank=True, null=True, verbose_name="单位")
     estimated_time = models.IntegerField(blank=True, null=True, verbose_name="预计工时")
     estimated_cost = models.IntegerField(blank=True, null=True, verbose_name="预计成本")
+    unit = models.CharField(max_length=50, blank=True, null=True, verbose_name="单位")
 
     class Meta:
         verbose_name = "服务"
@@ -253,27 +244,7 @@ class Service(ERPSysBase):
         ordering = ['service_type', 'name', 'id']
     
     def __str__(self):
-        return str(self.name)
-    
-    # def save(self, *args, **kwargs):
-    #     if self.work_order is None and self.produce is None:
-    #         init_field = Field.objects.get(name='name')
-
-    #         kwargs['name'] = f'表单-服务工单-{self.name}'
-    #         kwargs['form_type'] = FormType.WORK_ORDER.name
-    #         kwargs['description'] = f'为-{self.name}-自动生成的服务工单'
-    #         form_work_order = super().create(*args, **kwargs)
-    #         form_work_order.fields.add(init_field)
-    #         self.work_order = form_work_order
-
-    #         kwargs['name'] = f'表单-服务产出-{self.name}'
-    #         kwargs['form_type'] = FormType.PRODUCE.name
-    #         kwargs['description'] = f'为服务BOM-{self.name}-自动生成的服务作业表单'
-    #         produce_form = super().create(*args, **kwargs)
-    #         produce_form.fields.add(init_field)
-    #         self.produce = produce_form
-
-    #     super().save(*args, **kwargs)
+        return self.label
 
 class ServiceDependency(models.Model):
     parent = models.ForeignKey(Service, related_name='children', on_delete=models.CASCADE, verbose_name="父服务")
@@ -289,9 +260,9 @@ class ServiceDependency(models.Model):
     def __str__(self):
         return f"{self.parent.name} -> {self.child.name}"
 
-class ResourceObjectDependency(models.Model):
+class ResourceDependency(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-    resource_object = models.ForeignKey(ResourceObject, on_delete=models.CASCADE, verbose_name="资源对象")
+    resource_object = models.ForeignKey(Resource, on_delete=models.CASCADE, verbose_name="资源对象")
     quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
     
     class Meta:
@@ -362,7 +333,7 @@ class Project(ERPSysBase):
         ordering = ['id']
     
     def __str__(self):
-        return str(self.label)
+        return self.label
 
 # 输出脚本
 class SourceCode(models.Model):
@@ -375,3 +346,9 @@ class SourceCode(models.Model):
         verbose_name = "作业系统脚本"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+class SystemObject(ERPSysBase):
+    pass
+
+class SystemCall(ERPSysBase):
+    pass
