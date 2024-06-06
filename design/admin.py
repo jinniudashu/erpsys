@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import *
 
+from .models import *
+from .utils import generate_source_code
 
 @admin.register(Field)
 class FieldAdmin(admin.ModelAdmin):
@@ -38,6 +39,12 @@ class FormAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Form._meta.fields]
     list_display_links = ['label', 'name',]
     inlines = [FormComponentsInline, FormListComponentsInline]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(ResourceBusinessType)
+class ResourceBusinessTypeAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ResourceBusinessType._meta.fields]
+    list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
 @admin.register(Resource)
@@ -83,3 +90,22 @@ class VocabularyAdmin(admin.ModelAdmin):
         return False
     def has_delete_permission(self, request, obj=None):
         return False
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Project._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+    change_form_template = 'project_changeform.html'
+
+    def response_change(self, request, obj):
+        # 生成源码
+        if '_generate_source_code' in request.POST:
+            generate_source_code(obj)
+        return super().response_change(request, obj)
+
+@admin.register(SourceCode)
+class SourceCodeAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in SourceCode._meta.fields]
+    list_display_links = ['name', 'project',]

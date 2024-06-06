@@ -36,6 +36,59 @@ class ERPSysBase(models.Model):
             self.name = "_".join(lazy_pinyin(truncated_label))
         super().save(*args, **kwargs)
 
+class GenerateScriptMixin(object):
+    def _create_model_script(self):
+        _fields_script = _autocomplete_fields = _radio_fields = ''
+        for form_components in FormComponents.objects.filter(form=self).order_by('position'):
+            component=form_components.component
+
+            # construct fields script
+            _script = self._create_field_script(component, self)
+            
+            _fields_script = _fields_script + _script
+            
+            # 如果是关联字段，构造ModelAdmin内容
+            if component.content_object.__class__.__name__ == 'RelatedField':
+                field_name = component.content_object.name
+                # 判断是否单选，如果是单选，是否Radio
+                if component.content_object.related_content.related_content_type == 'dictionaries':
+                    if component.content_object.__dict__['type'] == 'RadioSelect':
+                        _radio_fields = _radio_fields + f'"{field_name}": admin.VERTICAL, '  # 或admin.HORIZONTAL
+                # 判断是否需要autocomplete_fields
+                else:
+                    _autocomplete_fields = _autocomplete_fields + f'"{field_name}", '
+
+        return _fields_script, _autocomplete_fields, _radio_fields
+
+    def _create_admin_script(self):
+        pass 
+    
+    def _create_field_script(self):
+        pass
+
+    def _create_model_footer_script(self):
+        pass
+
+    def generate_script(self, domain):
+        print(f'Generate Script for {domain}')
+        # construct model script
+        model_head = f'class {self.name.capitalize()}(models.Model):'
+        model_fields, autocomplete_fields, radio_fields = self._create_model_script()
+        model_footer = self._create_model_footer_script()
+        model_script = f'{model_head}{model_fields}{model_footer}\n\n'
+        print(f'Model Script: {model_script}')
+
+        # construct admin script
+        modeladmin_body = {}
+        if radio_fields:
+            modeladmin_body['radio_fields'] = radio_fields
+        if autocomplete_fields:
+            modeladmin_body['autocomplete_fields'] = autocomplete_fields
+        admin_script = self._create_admin_script(modeladmin_body)
+        print(f'Admin Script: {admin_script}')
+
+        return {'models': model_script, 'admin': admin_script}
+
 class Field(ERPSysBase):
     field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="字段类型")
     related_dictionary = models.ForeignKey("Dictionary", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="关联字典")
@@ -147,7 +200,7 @@ class DictionaryManager(models.Manager):
             print(f"Created Dictionary: {sheet_name}, {result[sheet_name]}")
 
 # 字典列表
-class Dictionary(ERPSysBase):
+class Dictionary(GenerateScriptMixin, ERPSysBase):
     fields = models.ManyToManyField(Field, through='DictionaryFields', verbose_name="字段")
     bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
     init_content = models.JSONField(blank=True, null=True, verbose_name="初始内容")
@@ -173,7 +226,7 @@ class DictionaryFields(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['order']
 
-class Form(ERPSysBase):
+class Form(GenerateScriptMixin, ERPSysBase):
     fields = models.ManyToManyField(Field, through='FormComponents', verbose_name="字段")
     form_type = models.CharField(max_length=50, choices=[(form_type.name, form_type.value) for form_type in FormType], verbose_name="类型")
     description = models.CharField(max_length=255, blank=True, null=True, verbose_name="描述")
@@ -216,10 +269,20 @@ class FormListComponents(models.Model):
 # *********************************************************
 # DAG 版 Service 业务配置
 # *********************************************************
+class ResourceBusinessType(ERPSysBase):
+    dictionary = models.ForeignKey(Dictionary, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="字典")
+    resource_type = models.CharField(max_length=50, choices=[(entity_type.name, str(entity_type)) for entity_type in ResourceType], verbose_name="资源类型")
+    class Meta:
+        verbose_name = "资源业务类型"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return self.label
+
 class Resource(ERPSysBase):
     representation = models.OneToOneField(Field, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="术语表示")
-    business_type = models.ForeignKey(Dictionary, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="业务类型")
-    resource_type = models.CharField(max_length=50, choices=[(entity_type.name, entity_type.value) for entity_type in ResourceType], verbose_name="资源类型")
+    resource_business_type = models.ForeignKey(ResourceBusinessType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="资源业务类型")
 
     class Meta:
         verbose_name = "资源"
@@ -229,7 +292,7 @@ class Resource(ERPSysBase):
     def __str__(self):
         return self.label
 
-class Service(ERPSysBase):
+class Service(GenerateScriptMixin, ERPSysBase):
     form = models.ForeignKey(Form, blank=True, null=True, on_delete=models.SET_NULL, related_name="produce_bom", verbose_name="表单")
     work_order = models.ForeignKey(Dictionary, blank=True, null=True, on_delete=models.SET_NULL, related_name="work_order_bom", verbose_name="工单")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
@@ -328,27 +391,28 @@ class Project(ERPSysBase):
     services = models.ManyToManyField(Service, blank=True, verbose_name="服务")
 
     class Meta:
-        verbose_name = '项目列表'
+        verbose_name = '项目'
         verbose_name_plural = verbose_name
         ordering = ['id']
     
     def __str__(self):
         return self.label
 
-# 输出脚本
+    def get_queryset_by_model(self, model_name):
+        if model_name == 'Service':
+            return self.services.all()
+        # else:
+        #     return eval(model_name).objects.all()
+
+# 源码
 class SourceCode(models.Model):
+    name = models.CharField(max_length=255, null=True, verbose_name="名称")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, verbose_name="项目")
     code = models.TextField(null=True, verbose_name="源代码")
     description = models.TextField(max_length=255, verbose_name="描述", null=True, blank=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, verbose_name="项目")
 
     class Meta:
-        verbose_name = "作业系统脚本"
+        verbose_name = "项目源码"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
-class SystemObject(ERPSysBase):
-    pass
-
-class SystemCall(ERPSysBase):
-    pass

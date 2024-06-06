@@ -12,16 +12,21 @@ class Process(models.Model):
     进程
     """
     pid = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="进程id")
-    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name="child_instances", verbose_name="父进程")
-    status = models.CharField(max_length=50, choices=[(state.name, state.value) for state in ProcessState], default=ProcessState.NEW.name, verbose_name="状态")
-    schedule_context = models.JSONField(blank=True, null=True, verbose_name="调度上下文")  # 涉及到决定进程执行顺序、分配CPU时间等方面的信息
-    control_context = models.JSONField(blank=True, null=True, verbose_name="控制上下文")  # 涉及到进程的状态管理、进程间通信、同步等方面的信息
+    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
+    state = models.CharField(max_length=50, choices=[(state.name, state.value) for state in ProcessState], default=ProcessState.NEW.name, verbose_name="状态")
     program = models.JSONField(blank=True, null=True, verbose_name="程序")
+    pc = models.PositiveIntegerField(blank=True, null=True, verbose_name="程序计数器")
+    registers = models.JSONField(blank=True, null=True, verbose_name="寄存器")
+    io_status = models.JSONField(blank=True, null=True, verbose_name="I/O状态")
+    cpu_scheduling = models.JSONField(blank=True, null=True, verbose_name="CPU调度")
+    accounting = models.JSONField(blank=True, null=True, verbose_name="帐务")
+    sp = models.PositiveIntegerField(blank=True, null=True, verbose_name="栈指针")
     pcb = models.JSONField(blank=True, null=True, verbose_name="进程控制块")
     stack = models.JSONField(blank=True, null=True, verbose_name="栈")  # 存储局部变量、函数参数以及程序的控制流（例如，函数调用时的返回地址）
     heap = models.JSONField(blank=True, null=True, verbose_name="堆")
-    pc = models.PositiveIntegerField(blank=True, null=True, verbose_name="程序计数器")
+    schedule_context = models.JSONField(blank=True, null=True, verbose_name="调度上下文")  # 涉及到决定进程执行顺序、分配CPU时间等方面的信息
+    control_context = models.JSONField(blank=True, null=True, verbose_name="控制上下文")  # 涉及到进程的状态管理、进程间通信、同步等方面的信息
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
@@ -92,3 +97,51 @@ class Process(models.Model):
     进程的元数据或统计信息（例如创建时间、修改时间、访问时间）
     与过程相关的其他数据或状态信息    
     """
+
+
+"""
+# 结合时间戳和序列号来生成一个唯一且有序的数字ID
+
+import time
+import threading
+
+class TimestampIDGenerator:
+    def __init__(self):
+        self.last_timestamp = None
+        self.sequence = 0
+        # 用于确保线程安全
+        self.lock = threading.Lock()
+        # 序列号的最大值，这里假设每个时间戳下最多生成 1000 个唯一ID
+        self.SEQUENCE_MASK = 999
+
+    def _current_millis(self):
+        # 返回当前时间的毫秒数
+        return int(time.time() * 1000)
+
+    def generate_id(self):
+        # 生成一个基于时间戳的唯一ID
+        with self.lock:
+            current_timestamp = self._current_millis()
+
+            if self.last_timestamp == current_timestamp:
+                self.sequence = (self.sequence + 1) % (self.SEQUENCE_MASK + 1)
+                if self.sequence == 0:
+                    # 如果序列号超出范围，等待下一个时间戳
+                    while current_timestamp <= self.last_timestamp:
+                        current_timestamp = self._current_millis()
+            else:
+                # 如果当前时间戳与上一次不同，重置序列号
+                self.sequence = 0
+
+            self.last_timestamp = current_timestamp
+
+            # 将时间戳和序列号结合生成ID
+            id = (current_timestamp * 1000) + self.sequence
+            return id
+
+# 示例使用
+generator = TimestampIDGenerator()
+for _ in range(10):
+    print(generator.generate_id())
+
+"""

@@ -3638,6 +3638,46 @@
   }
 },
 {
+  "model": "design.field",
+  "pk": 191,
+  "fields": {
+    "label": "设备",
+    "name": "she_bei",
+    "pym": "sb",
+    "erpsys_id": "e2bea392-23e6-11ef-a385-0e586f6f8a1e",
+    "field_type": "DictionaryField",
+    "related_dictionary": 45,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
+  "model": "design.field",
+  "pk": 192,
+  "fields": {
+    "label": "器材",
+    "name": "qi_cai",
+    "pym": "qc",
+    "erpsys_id": "ea9cd502-23e6-11ef-a385-0e586f6f8a1e",
+    "field_type": "CharField",
+    "related_dictionary": 46,
+    "is_entity": false,
+    "choice_type": null,
+    "max_length": 100,
+    "max_digits": 10,
+    "decimal_places": 2,
+    "api_field_type": null,
+    "api_field_default_value": null,
+    "computed_logic": ""
+  }
+},
+{
   "model": "design.dictionary",
   "pk": 1,
   "fields": {
@@ -4162,6 +4202,66 @@
     "pym": "fwxm",
     "erpsys_id": "7cde3d34-1fb9-11ef-8ee7-0e586f6f8a1e",
     "bind_system_object": "Service",
+    "init_content": null
+  }
+},
+{
+  "model": "design.dictionary",
+  "pk": 45,
+  "fields": {
+    "label": "设备",
+    "name": "she_bei",
+    "pym": "sb",
+    "erpsys_id": "cd0bf46e-23e6-11ef-a385-0e586f6f8a1e",
+    "bind_system_object": "Resource",
+    "init_content": null
+  }
+},
+{
+  "model": "design.dictionary",
+  "pk": 46,
+  "fields": {
+    "label": "器材",
+    "name": "qi_cai",
+    "pym": "qc",
+    "erpsys_id": "d449c10c-23e6-11ef-a385-0e586f6f8a1e",
+    "bind_system_object": "Resource",
+    "init_content": null
+  }
+},
+{
+  "model": "design.dictionary",
+  "pk": 47,
+  "fields": {
+    "label": "费用",
+    "name": "fei_yong",
+    "pym": "fy",
+    "erpsys_id": "5e0dbe98-23e7-11ef-a385-0e586f6f8a1e",
+    "bind_system_object": "Resource",
+    "init_content": null
+  }
+},
+{
+  "model": "design.dictionary",
+  "pk": 48,
+  "fields": {
+    "label": "注意事项",
+    "name": "zhu_yi_shi_xiang",
+    "pym": "zysx",
+    "erpsys_id": "a229efac-23e7-11ef-a385-0e586f6f8a1e",
+    "bind_system_object": "Resource",
+    "init_content": null
+  }
+},
+{
+  "model": "design.dictionary",
+  "pk": 49,
+  "fields": {
+    "label": "知情同意书",
+    "name": "zhi_qing_tong_yi_shu",
+    "pym": "zqtys",
+    "erpsys_id": "ace47610-23e7-11ef-a385-0e586f6f8a1e",
+    "bind_system_object": "Resource",
     "init_content": null
   }
 },
@@ -5311,6 +5411,126 @@
   }
 },
 {
+  "model": "design.resourcebusinesstype",
+  "pk": 1,
+  "fields": {
+    "label": "药品",
+    "name": "yao_pin",
+    "pym": "yp",
+    "erpsys_id": "e52592ea-23e5-11ef-8242-0e586f6f8a1e",
+    "dictionary": 1,
+    "resource_type": "MATERIAL"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 2,
+  "fields": {
+    "label": "耗材",
+    "name": "hao_cai",
+    "pym": "hc",
+    "erpsys_id": "ed98b0b0-23e5-11ef-8242-0e586f6f8a1e",
+    "dictionary": 42,
+    "resource_type": "MATERIAL"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 3,
+  "fields": {
+    "label": "诊室",
+    "name": "zhen_shi",
+    "pym": "zs",
+    "erpsys_id": "094b9444-23e6-11ef-8242-0e586f6f8a1e",
+    "dictionary": 43,
+    "resource_type": "SPACE"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 4,
+  "fields": {
+    "label": "设备",
+    "name": "she_bei",
+    "pym": "sb",
+    "erpsys_id": "0261ce04-23e7-11ef-a385-0e586f6f8a1e",
+    "dictionary": 45,
+    "resource_type": "EQUIPMENT"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 5,
+  "fields": {
+    "label": "器材",
+    "name": "qi_cai",
+    "pym": "qc",
+    "erpsys_id": "0f192cc8-23e7-11ef-a385-0e586f6f8a1e",
+    "dictionary": 46,
+    "resource_type": "DEVICE"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 6,
+  "fields": {
+    "label": "作业员",
+    "name": "zuo_ye_yuan",
+    "pym": "zyy",
+    "erpsys_id": "36541348-23e7-11ef-a385-0e586f6f8a1e",
+    "dictionary": 40,
+    "resource_type": "OPERATOR"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 7,
+  "fields": {
+    "label": "客户",
+    "name": "ke_hu",
+    "pym": "kh",
+    "erpsys_id": "3e226d40-23e7-11ef-a385-0e586f6f8a1e",
+    "dictionary": 39,
+    "resource_type": "OPERATOR"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 8,
+  "fields": {
+    "label": "费用",
+    "name": "fei_yong",
+    "pym": "fy",
+    "erpsys_id": "7ba485e0-23e7-11ef-a385-0e586f6f8a1e",
+    "dictionary": 47,
+    "resource_type": "CAPITAL"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 9,
+  "fields": {
+    "label": "注意事项",
+    "name": "zhu_yi_shi_xiang",
+    "pym": "zysx",
+    "erpsys_id": "d117adb8-23e7-11ef-a385-0e586f6f8a1e",
+    "dictionary": 48,
+    "resource_type": "KNOWLEDGE"
+  }
+},
+{
+  "model": "design.resourcebusinesstype",
+  "pk": 10,
+  "fields": {
+    "label": "知情同意书",
+    "name": "zhi_qing_tong_yi_shu",
+    "pym": "zqtys",
+    "erpsys_id": "dbdf3158-23e7-11ef-a385-0e586f6f8a1e",
+    "dictionary": 49,
+    "resource_type": "KNOWLEDGE"
+  }
+},
+{
   "model": "design.resource",
   "pk": 1,
   "fields": {
@@ -5319,8 +5539,7 @@
     "pym": "bts",
     "erpsys_id": "a02e2840-1e6e-11ef-ad48-0e586f6f8a1e",
     "representation": 19,
-    "business_type": 1,
-    "resource_type": "Material"
+    "resource_business_type": 1
   }
 },
 {
@@ -5332,8 +5551,7 @@
     "pym": "qydjz",
     "erpsys_id": "16e79f4a-1e8b-11ef-9fcc-0e586f6f8a1e",
     "representation": 25,
-    "business_type": 1,
-    "resource_type": "Material"
+    "resource_business_type": 1
   }
 },
 {
@@ -5345,8 +5563,7 @@
     "pym": "ycxzsq",
     "erpsys_id": "b96cd2e8-1f4f-11ef-9d26-0e586f6f8a1e",
     "representation": 179,
-    "business_type": 42,
-    "resource_type": "Material"
+    "resource_business_type": 2
   }
 },
 {
@@ -5358,8 +5575,7 @@
     "pym": "zls",
     "erpsys_id": "d914bbaa-1f55-11ef-b907-0e586f6f8a1e",
     "representation": 181,
-    "business_type": 43,
-    "resource_type": "Space"
+    "resource_business_type": 3
   }
 },
 {
@@ -5516,6 +5732,21 @@
     "service": 1,
     "resource_object": 4,
     "quantity": 1
+  }
+},
+{
+  "model": "design.project",
+  "pk": 1,
+  "fields": {
+    "label": "Maor",
+    "name": "",
+    "pym": "Maor",
+    "erpsys_id": "32259010-2321-11ef-813e-0e586f6f8a1e",
+    "domain": "127.0.0.1",
+    "description": null,
+    "services": [
+      1
+    ]
   }
 }
 ]

@@ -22,15 +22,20 @@ ChoiceType = [
 
 class ResourceType(Enum):
     """资源类型枚举类"""
-    Material = "物料"
-    Equipment = "设备"
-    Device = "工具"
-    Operator = "人员"
-    Capital = "资金"
-    Knowledge = "知识"
-    Space = "空间"
-    EquipmentWorkingTime = "设备工时"
-    OperatorWorkingTime = "人工工时"
+    MATERIAL = ("物料", "Consumption")
+    EQUIPMENT = ("设备", "TDM")
+    DEVICE = ("工具", "TDM")
+    OPERATOR = ("人员", "TDM")
+    SPACE = ("空间", "TDM")
+    CAPITAL = ("资金", "Consumption")
+    KNOWLEDGE = ("知识", "Shared")
+
+    def __init__(self, zh_label, category):
+        self.zh_label = zh_label
+        self.category = category
+
+    def __str__(self):
+        return self.zh_label
 
 class ServiceType(Enum):
     """服务类型枚举类"""

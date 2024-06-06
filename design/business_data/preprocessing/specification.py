@@ -56,6 +56,8 @@ EquipmentHours = GenerateTimeSlot([Equipment], Calendar, {'Work-hourUnit': confi
 # PCIE总线自带中断控制器
 # PCIE总线 -> USB总线 -> USB设备
 
+# 设备驱动程序除了读写, 还要处理配置, 非数据的设备功能依赖ioctl
+
 # Linux命令 taskset => 把进程和特定的CPU绑定在一起
 # 公平分享CPU资源 Round-Robin
 # 医生每位患者面诊15分钟，是一种轮转调度算法
