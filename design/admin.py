@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import *
 from .utils import generate_source_code
 
-@admin.action(description="刷新业务词汇表")
+@admin.action(description="刷新业务语汇表")
 def refresh_vocabulary(modeladmin, request, queryset):
     modeladmin.model.objects.refresh()
 
@@ -20,46 +20,26 @@ class VocabularyAdmin(admin.ModelAdmin):
     # def has_delete_permission(self, request, obj=None):
     #     return False
 
-@admin.register(Field)
-class FieldAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Field._meta.fields]
+@admin.register(DataItem)
+class DataItemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'related_dictionary', 'vocabulary']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'is_entity']
-    autocomplete_fields = ['self_vocab', 'related_dictionary']
+    autocomplete_fields = ['vocabulary', 'related_dictionary']
 
-class DictionaryFieldsInline(admin.TabularInline):
-    model = DictionaryFields
+class DataItemDictDetailInline(admin.TabularInline):
+    model = DataItemDictDetail
     extra = 0
-    autocomplete_fields = ['field']
+    autocomplete_fields = ['data_item']
 
-@admin.register(Dictionary)
-class DictionaryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'bind_system_object', 'erpsys_id', ]
+@admin.register(DataItemDict)
+class DataItemDictAdmin(admin.ModelAdmin):
+    list_display = ['id', 'label', 'name', 'pym', 'system_resource_type', 'bind_system_object', 'erpsys_id', ]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['bind_system_object']
-    inlines = [DictionaryFieldsInline]
-
-class FormComponentsInline(admin.TabularInline):
-    model = FormComponents
-    extra = 0
-    autocomplete_fields = ['field']
-
-@admin.register(Form)
-class FormAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Form._meta.fields]
-    list_display_links = ['label', 'name',]
-    inlines = [FormComponentsInline, ]
-    search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['self_vocab']
-
-@admin.register(Resource)
-class ResourceAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Resource._meta.fields]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['self_vocab']
+    inlines = [DataItemDictDetailInline]
 
 class ServiceDependencyInline(admin.TabularInline):
     model = ServiceDependency
@@ -76,14 +56,30 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     inlines = [ServiceDependencyInline, ResourceDependencyInline]
     search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['self_vocab', 'form', 'work_order']
+    autocomplete_fields = ['vocabulary', 'form', 'work_order']
+
+class FormComponentsInline(admin.TabularInline):
+    model = FormComponents
+    extra = 0
+    autocomplete_fields = ['data_item']
+
+@admin.register(Form)
+class FormAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Form._meta.fields]
+    list_display_links = ['label', 'name',]
+    inlines = [FormComponentsInline, ]
+    search_fields = ['label', 'name', 'pym']
+
+class SourceCodeInline(admin.TabularInline):
+    model = SourceCode
+    extra = 0
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Project._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-
+    inlines = [SourceCodeInline, ]
     change_form_template = 'project_changeform.html'
 
     def response_change(self, request, obj):
@@ -91,8 +87,3 @@ class ProjectAdmin(admin.ModelAdmin):
         if '_generate_source_code' in request.POST:
             generate_source_code(obj)
         return super().response_change(request, obj)
-
-@admin.register(SourceCode)
-class SourceCodeAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in SourceCode._meta.fields]
-    list_display_links = ['name', 'project',]

@@ -3,7 +3,8 @@ from enum import Enum
 FieldType = [
     ('CharField', '单行文本'),
     ('IntegerField', '整数'),
-    ('DictionaryField', '字典字段'),
+    ('BusinessObject', '业务对象'),
+    ('DictionaryField', '类型字典'),
     ('DecimalField', '固定精度小数'),
     ('TextField', '多行文本'),
     ('DateTimeField', '日期时间'),
@@ -24,11 +25,12 @@ class SystemResourceType(Enum):
     """资源类型枚举类"""
     MATERIAL = ("物料", "Consumption")
     EQUIPMENT = ("设备", "TDM")
-    DEVICE = ("工具", "TDM")
+    DEVICE = ("工具", "Recycle")
     OPERATOR = ("人员", "TDM")
     SPACE = ("空间", "TDM")
     CAPITAL = ("资金", "Consumption")
     KNOWLEDGE = ("知识", "Shared")
+    SERVICE = ("服务", "Depend")
 
     def __init__(self, zh_label, category):
         self.zh_label = zh_label

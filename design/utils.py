@@ -15,8 +15,8 @@ def generate_source_code(project):
         admin_script =  ScriptFileHeader['admin_file_head']
 
         for item in query_set:
-            # 判断item类型：Dictionary or Service or Form
-            if item.__class__.__name__ == 'Dictionary':
+            # 判断item类型：DataItemDict or Service or Form
+            if item.__class__.__name__ == 'DataItemDict':
                 pass
             elif item.__class__.__name__ == 'Service':
                 pass
@@ -101,7 +101,7 @@ class FieldsType(Enum):
     }
 
     # 生成运行时数据结构
-    dict_queryset = Dictionary.objects.all()
+    dict_queryset = DataItemDict.objects.all()
     source_code['script']['dictionary'] = _generate_models_admin(dict_queryset, project.domain)  # 导出App:service脚本
 
     # 生成服务&表单脚本

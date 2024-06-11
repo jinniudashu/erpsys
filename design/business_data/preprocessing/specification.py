@@ -141,14 +141,14 @@ form数据结构说明
     •	group 类型条目可以包含其他 group 和 field 类型的条目
     •	field 类型条目只能包含字段相关信息
 
-从FORMS中导入数据的业务逻辑(至 Field, Dictionary, DictionaryFields)
+从FORMS中导入数据的业务逻辑(至 DataItem, DataItemDict, DataItemDictDetail)
 1. 遍历FORMS的所有form
 2. 遍历form的所有entries里的所有条目
-3. 如果条目的type是field且没有enum, 且Field中没有label名相同的对象, 则创建新Field对象, 使用条目的label作为新Field对象的label, field_type作为field_type;
-4. 如果条目的type是field且有enum, 且Field中没有label名为label名+"名称"的对象, 则执行以下2个步骤: 
-    step-1 创建Dictionary对象, 使用条目的label做为该Dictionary对象的label, 获取或创建Field对象“值”加入到该Dictionary对象的多对多字段fields字段的值中, 将enum的值写入JSONField字段content中;
-    step-2 创建Field对象, 使用条目的label做为该Field对象的label, 该Field对象的field_type为'DictionaryField', 该Field对象的related_dictionary为step-2创建的Dictionary对象;
-5. field_type -> Field.field_type 映射关系：
+3. 如果条目的type是field且没有enum, 且DataItem中没有label名相同的对象, 则创建新DataItem对象, 使用条目的label作为新DataItem对象的label, field_type作为field_type;
+4. 如果条目的type是field且有enum, 且DataItem中没有label名为label名+"名称"的对象, 则执行以下2个步骤: 
+    step-1 创建Dictionary对象, 使用条目的label做为该Dictionary对象的label, 获取或创建DataItem对象“值”加入到该Dictionary对象的多对多字段fields字段的值中, 将enum的值写入JSONField字段content中;
+    step-2 创建DataItem对象, 使用条目的label做为该DataItem对象的label, 该DataItem对象的field_type为'DictionaryField', 该DataItem对象的related_dictionary为step-2创建的Dictionary对象;
+5. field_type -> DataItem.field_type 映射关系：
     •	String -> CharField
     •	Date -> DateField
     •	Boolean -> BooleanField
@@ -197,13 +197,6 @@ GLOBAL_INITIAL_STATES = {
         ('User', '系统用户'), 
         ('DateTime', '系统时间'),
         ('Timer', '系统计时器'),
-        ('MATERIAL','物料'),
-        ('EQUIPMENT','设备'),
-        ('DEVICE','工具'),
-        ('OPERATOR','人员'),
-        ('SPACE','空间'),
-        ('CAPITAL','资金'),
-        ('KNOWLEDGE','知识'),
         ('Service', '服务'),
         (SystemCall.CreateService, '创建服务'),
         (SystemCall.CallService, '调用服务'),
