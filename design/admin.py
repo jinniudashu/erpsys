@@ -3,13 +3,30 @@ from django.contrib import admin
 from .models import *
 from .utils import generate_source_code
 
+@admin.action(description="刷新业务词汇表")
+def refresh_vocabulary(modeladmin, request, queryset):
+    modeladmin.model.objects.refresh()
+
+@admin.register(Vocabulary)
+class VocabularyAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Vocabulary._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+    actions = [refresh_vocabulary]
+
+    def has_add_permission(self, request):
+        return False
+    
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
 @admin.register(Field)
 class FieldAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Field._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-    list_filter = ['field_type', 'related_dictionary', 'is_entity']
-    autocomplete_fields = ['related_dictionary']
+    list_filter = ['field_type', 'is_entity']
+    autocomplete_fields = ['self_vocab', 'related_dictionary']
 
 class DictionaryFieldsInline(admin.TabularInline):
     model = DictionaryFields
@@ -29,39 +46,20 @@ class FormComponentsInline(admin.TabularInline):
     extra = 0
     autocomplete_fields = ['field']
 
-class FormListComponentsInline(admin.TabularInline):
-    model = FormListComponents
-    extra = 0
-    autocomplete_fields = ['field']
-
 @admin.register(Form)
 class FormAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Form._meta.fields]
     list_display_links = ['label', 'name',]
-    inlines = [FormComponentsInline, FormListComponentsInline]
+    inlines = [FormComponentsInline, ]
     search_fields = ['label', 'name', 'pym']
-
-@admin.register(ResourceBusinessType)
-class ResourceBusinessTypeAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ResourceBusinessType._meta.fields]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
+    autocomplete_fields = ['self_vocab']
 
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Resource._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name in ["definition",]:
-    #         kwargs["queryset"] = Form.objects.filter(form_type="RESOURCE")
-    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    # def get_form(self, request, obj=None, **kwargs):
-    #     # 仅在编辑对象时运行
-    #     request._obj_ = obj
-    #     return super().get_form(request, obj, **kwargs)
+    autocomplete_fields = ['self_vocab']
 
 class ServiceDependencyInline(admin.TabularInline):
     model = ServiceDependency
@@ -78,18 +76,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     inlines = [ServiceDependencyInline, ResourceDependencyInline]
     search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['form', 'work_order']
-
-@admin.register(Vocabulary)
-class VocabularyAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Vocabulary._meta.fields]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-
-    def has_add_permission(self, request):
-        return False
-    def has_delete_permission(self, request, obj=None):
-        return False
+    autocomplete_fields = ['self_vocab', 'form', 'work_order']
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):

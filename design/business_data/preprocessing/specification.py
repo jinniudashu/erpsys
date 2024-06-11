@@ -197,14 +197,20 @@ GLOBAL_INITIAL_STATES = {
         ('User', '系统用户'), 
         ('DateTime', '系统时间'),
         ('Timer', '系统计时器'),
+        ('MATERIAL','物料'),
+        ('EQUIPMENT','设备'),
+        ('DEVICE','工具'),
+        ('OPERATOR','人员'),
+        ('SPACE','空间'),
+        ('CAPITAL','资金'),
+        ('KNOWLEDGE','知识'),
         ('Service', '服务'),
-        ('Resource', '资源'),
         (SystemCall.CreateService, '创建服务'),
         (SystemCall.CallService, '调用服务'),
     ],
 
     # 资源分类
-    'ResourceType': {
+    'SystemResourceType': {
         "Material": {
             "quantity": "int",
             "unit": "string",

@@ -3,8 +3,8 @@ from enum import Enum
 FieldType = [
     ('CharField', '单行文本'),
     ('IntegerField', '整数'),
-    ('DecimalField', '固定精度小数'),
     ('DictionaryField', '字典字段'),
+    ('DecimalField', '固定精度小数'),
     ('TextField', '多行文本'),
     ('DateTimeField', '日期时间'),
     ('DateField', '日期'),
@@ -20,7 +20,7 @@ ChoiceType = [
     ('SelectMultiple', '下拉多选')
 ]
 
-class ResourceType(Enum):
+class SystemResourceType(Enum):
     """资源类型枚举类"""
     MATERIAL = ("物料", "Consumption")
     EQUIPMENT = ("设备", "TDM")

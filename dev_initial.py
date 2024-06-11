@@ -20,10 +20,6 @@ def create_superuser(username, email, password):
     else:
         print(f"Superuser {username} already exists!")
 
-# 清理旧的内容类型
-print("清理旧的内容类型")
-ContentType.objects.all().delete()
-
 # 从项目根目录获取所有app目录
 app_dirs = [d for d in os.listdir() if os.path.isdir(d) and not d.startswith('.')]
 
