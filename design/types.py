@@ -29,7 +29,7 @@ class SystemResourceType(Enum):
     OPERATOR = ("人员", "TDM")
     SPACE = ("空间", "TDM")
     CAPITAL = ("资金", "Consumption")
-    KNOWLEDGE = ("知识", "Shared")
+    INFORMATION = ("信息", "Shared")
     SERVICE = ("服务", "Depend")
 
     def __init__(self, zh_label, category):
@@ -47,7 +47,7 @@ class ServiceType(Enum):
 class FormType(Enum):
     """表单类型枚举类"""
     PRODUCE = "服务作业"
-    Document = "文档"
+    DOCUMENT = "文档"
 
 class DomainObject(Enum):
     """领域对象枚举类"""

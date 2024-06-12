@@ -146,7 +146,7 @@ form数据结构说明
 2. 遍历form的所有entries里的所有条目
 3. 如果条目的type是field且没有enum, 且DataItem中没有label名相同的对象, 则创建新DataItem对象, 使用条目的label作为新DataItem对象的label, field_type作为field_type;
 4. 如果条目的type是field且有enum, 且DataItem中没有label名为label名+"名称"的对象, 则执行以下2个步骤: 
-    step-1 创建Dictionary对象, 使用条目的label做为该Dictionary对象的label, 获取或创建DataItem对象“值”加入到该Dictionary对象的多对多字段fields字段的值中, 将enum的值写入JSONField字段content中;
+    step-1 创建DataItemDict对象, 使用条目的label做为该DataItemDict对象的label, 获取或创建DataItem对象“值”加入到该Dictionary对象的多对多字段fields字段的值中, 将enum的值写入JSONField字段content中;
     step-2 创建DataItem对象, 使用条目的label做为该DataItem对象的label, 该DataItem对象的field_type为'DictionaryField', 该DataItem对象的related_dictionary为step-2创建的Dictionary对象;
 5. field_type -> DataItem.field_type 映射关系：
     •	String -> CharField

@@ -110,7 +110,7 @@ class VocabularyManager(models.Manager):
                 instance.save()
 
 class Vocabulary(ERPSysBase):
-    q  = Q(app_label='design') & (Q(model = 'field') | Q(model = 'service') | Q(model = 'form'))
+    q  = Q(app_label='design') & (Q(model = 'dataitem') | Q(model = 'service'))
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to=q , null=True, blank=True, verbose_name="词汇类型")
     object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
@@ -145,7 +145,6 @@ class DataItem(ERPSysBase):
 class DataItemDictManager(models.Manager):
     # 抽取Forms数据
     def abstract_forms_data(self, forms=GLOBAL_INITIAL_STATES['Forms']):
-        zhi_data_item = DataItem.objects.get_or_create(label='值', defaults={'field_type': 'CharField'})[0]
         def _map_field_type(f_type):
             mapping = {
                 'String': 'CharField',
@@ -157,10 +156,10 @@ class DataItemDictManager(models.Manager):
             }
             return mapping.get(f_type, 'CharField')  # Default to 'CharField' if not found
 
-        def _process_entry(entry):
+        def _process_entry(entry, form):
             if entry['type'] == 'group':
                 for entry in entry['entries']:
-                    _process_entry(entry)
+                    _process_entry(entry, form)
             elif entry['type'] == 'field':
                 label = entry.get('label')
                 field_type = _map_field_type(entry.get('field_type'))
@@ -168,6 +167,8 @@ class DataItemDictManager(models.Manager):
                 try:
                     if enum is None:
                         data_item = DataItem.objects.get_or_create(label=label, defaults={'field_type': field_type})[0]
+                        # 向表单添加数据项
+                        form.data_items.add(data_item)
                         print(f"Created DataItem: {data_item.label if data_item else 'None'}")
                     else:
                         dict, created = self.get_or_create(label=label)
@@ -175,14 +176,18 @@ class DataItemDictManager(models.Manager):
                             dict.data_items.add(zhi_data_item)
                             dict.init_content = json.dumps([{'值': item} for item in enum], ensure_ascii=False)
                             dict.save()
+                            # 向表单添加字典对应的数据项
+                            form.data_items.add(dict.data_item)
                             print(f"Created DataItemDict: {dict}")
                 except IntegrityError as e:
                     print(f"Error creating field: {e}")
 
+        zhi_data_item = DataItem.objects.get_or_create(label='值', defaults={'field_type': 'CharField'})[0]
         for form in forms:
             entries = form.get('entries', [])
+            _form = Form.objects.get_or_create(label=form['label'], defaults={'form_type': FormType.PRODUCE.name})[0]
             for entry in entries:
-                _process_entry(entry)
+                _process_entry(entry, _form)
 
     # 抽取excel数据
     def abstract_excel_data(self, file_path="design/business_data/preprocessing/initial_data.xlsx"):
@@ -256,12 +261,12 @@ class DataItemDictDetail(models.Model):
 class Service(GenerateScriptMixin, ERPSysBase):
     vocabulary = models.OneToOneField(Vocabulary, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="业务词汇")
     form = models.ForeignKey('Form', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
-    work_order = models.ForeignKey(DataItem, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="工单")
+    q = Q(field_type='BusinessObject')
+    work_order = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=q, blank=True, null=True, verbose_name="工单")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
     estimated_time = models.IntegerField(blank=True, null=True, verbose_name="预计工时")
     estimated_cost = models.IntegerField(blank=True, null=True, verbose_name="预计成本")
-    unit = models.CharField(max_length=50, blank=True, null=True, verbose_name="单位")
 
     class Meta:
         verbose_name = "服务"
@@ -454,7 +459,6 @@ def delete_vocabulary(sender, instance, **kwargs):
     if instance.vocabulary:
         instance.vocabulary.delete()
 
-# DataItem,DataItemDict,Form,Service
 """
 客户 姓名
 客户 年龄

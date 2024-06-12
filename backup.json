@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-06-11T12:36:46.919Z",
+            "last_login": "2024-06-11T15:28:43.649Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -85,7 +85,7 @@
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
             "is_entity": false
         }
     },
@@ -306,6 +306,24 @@
         }
     },
     {
+        "model": "design.dataitem",
+        "pk": 17,
+        "fields": {
+            "label": "\u6807\u51c6\u5de5\u5355",
+            "name": "biao_zhun_gong_dan",
+            "pym": "bzgd",
+            "erpsys_id": "0682610a-2807-11ef-8563-0e586f6f8a1e",
+            "vocabulary": null,
+            "field_type": "BusinessObject",
+            "related_dictionary": 4,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "is_entity": false
+        }
+    },
+    {
         "model": "design.dataitemdict",
         "pk": 1,
         "fields": {
@@ -356,7 +374,7 @@
             "pym": "gd",
             "erpsys_id": "8b75f702-27ec-11ef-a526-0e586f6f8a1e",
             "data_item": 4,
-            "system_resource_type": "KNOWLEDGE",
+            "system_resource_type": "INFORMATION",
             "bind_system_object": null,
             "init_content": null
         }
@@ -440,7 +458,7 @@
             "pym": "zysx",
             "erpsys_id": "cff216e0-27ec-11ef-a526-0e586f6f8a1e",
             "data_item": 10,
-            "system_resource_type": "KNOWLEDGE",
+            "system_resource_type": "INFORMATION",
             "bind_system_object": null,
             "init_content": null
         }
@@ -454,7 +472,7 @@
             "pym": "zqtys",
             "erpsys_id": "d8f1595e-27ec-11ef-a526-0e586f6f8a1e",
             "data_item": 11,
-            "system_resource_type": "KNOWLEDGE",
+            "system_resource_type": "INFORMATION",
             "bind_system_object": null,
             "init_content": null
         }
@@ -487,8 +505,7 @@
             "program": null,
             "service_type": "SERVICE",
             "estimated_time": 60,
-            "estimated_cost": null,
-            "unit": null
+            "estimated_cost": null
         }
     },
     {
@@ -505,8 +522,7 @@
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 30,
-            "estimated_cost": null,
-            "unit": null
+            "estimated_cost": null
         }
     },
     {
@@ -523,8 +539,7 @@
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 5,
-            "estimated_cost": null,
-            "unit": null
+            "estimated_cost": null
         }
     },
     {
@@ -537,12 +552,11 @@
             "erpsys_id": "f6e7f7ca-1f4e-11ef-9d26-0e586f6f8a1e",
             "vocabulary": null,
             "form": 3,
-            "work_order": null,
+            "work_order": 17,
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 5,
-            "estimated_cost": null,
-            "unit": null
+            "estimated_cost": null
         }
     },
     {
@@ -559,8 +573,7 @@
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 5,
-            "estimated_cost": null,
-            "unit": null
+            "estimated_cost": null
         }
     },
     {
@@ -577,8 +590,7 @@
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 15,
-            "estimated_cost": null,
-            "unit": null
+            "estimated_cost": null
         }
     },
     {
