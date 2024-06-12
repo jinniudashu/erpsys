@@ -3,7 +3,6 @@ from enum import Enum
 FieldType = [
     ('CharField', '单行文本'),
     ('IntegerField', '整数'),
-    ('BusinessObject', '业务对象'),
     ('DictionaryField', '类型字典'),
     ('DecimalField', '固定精度小数'),
     ('TextField', '多行文本'),

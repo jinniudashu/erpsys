@@ -7,26 +7,13 @@ from .utils import generate_source_code
 def refresh_vocabulary(modeladmin, request, queryset):
     modeladmin.model.objects.refresh()
 
-@admin.register(Vocabulary)
-class VocabularyAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Vocabulary._meta.fields]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-    actions = [refresh_vocabulary]
-
-    def has_add_permission(self, request):
-        return False
-    
-    # def has_delete_permission(self, request, obj=None):
-    #     return False
-
 @admin.register(DataItem)
 class DataItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'related_dictionary', 'vocabulary']
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'related_dictionary']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'is_entity']
-    autocomplete_fields = ['vocabulary', 'related_dictionary']
+    autocomplete_fields = ['related_dictionary']
 
 class DataItemDictDetailInline(admin.TabularInline):
     model = DataItemDictDetail
@@ -41,6 +28,13 @@ class DataItemDictAdmin(admin.ModelAdmin):
     list_filter = ['bind_system_object']
     inlines = [DataItemDictDetailInline]
 
+@admin.register(BusinessObject)
+class BusinessObjectAdmin(admin.ModelAdmin):
+    list_display = ['id', 'label', 'name', 'pym', 'data_item']
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+    autocomplete_fields = ['data_item']
+
 class ServiceDependencyInline(admin.TabularInline):
     model = ServiceDependency
     fk_name = 'parent'  # 指定使用的外键字段名
@@ -52,11 +46,11 @@ class ResourceDependencyInline(admin.TabularInline):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Service._meta.fields]
+    list_display = ['label', 'name', 'form', 'subject', 'work_order', 'route_to', 'program', 'service_type', 'estimated_time', 'estimated_cost',]
     list_display_links = ['label', 'name',]
     inlines = [ServiceDependencyInline, ResourceDependencyInline]
     search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['vocabulary', 'form', 'work_order']
+    autocomplete_fields = ['form', 'subject', 'work_order', 'route_to']
 
 class FormComponentsInline(admin.TabularInline):
     model = FormComponents

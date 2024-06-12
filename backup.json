@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-06-11T15:28:43.649Z",
+            "last_login": "2024-06-12T10:23:11.200Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -25,7 +25,6 @@
             "name": "yao_pin",
             "pym": "yp",
             "erpsys_id": "389fd296-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 1,
             "max_length": 100,
@@ -43,7 +42,6 @@
             "name": "ke_hu",
             "pym": "kh",
             "erpsys_id": "46a91014-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 2,
             "max_length": 100,
@@ -61,7 +59,6 @@
             "name": "zuo_ye_yuan",
             "pym": "zyy",
             "erpsys_id": "4f15f8a2-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 3,
             "max_length": 100,
@@ -79,7 +76,6 @@
             "name": "gong_dan",
             "pym": "gd",
             "erpsys_id": "8b7686a4-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 4,
             "max_length": 100,
@@ -97,7 +93,6 @@
             "name": "hao_cai",
             "pym": "hc",
             "erpsys_id": "9e992020-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 5,
             "max_length": 100,
@@ -115,7 +110,6 @@
             "name": "zhen_shi",
             "pym": "zs",
             "erpsys_id": "a745868c-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 6,
             "max_length": 100,
@@ -133,7 +127,6 @@
             "name": "she_bei",
             "pym": "sb",
             "erpsys_id": "b3abaa5a-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 7,
             "max_length": 100,
@@ -151,7 +144,6 @@
             "name": "qi_cai",
             "pym": "qc",
             "erpsys_id": "bba6bcd6-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 8,
             "max_length": 100,
@@ -169,7 +161,6 @@
             "name": "fei_yong",
             "pym": "fy",
             "erpsys_id": "c5eabb34-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 9,
             "max_length": 100,
@@ -187,7 +178,6 @@
             "name": "zhu_yi_shi_xiang",
             "pym": "zysx",
             "erpsys_id": "cff299a8-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 10,
             "max_length": 100,
@@ -205,7 +195,6 @@
             "name": "zhi_qing_tong_yi_shu",
             "pym": "zqtys",
             "erpsys_id": "d8f1c5ec-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 11,
             "max_length": 100,
@@ -223,103 +212,12 @@
             "name": "fu_wu_xiang_mu",
             "pym": "fwxm",
             "erpsys_id": "f73a6c98-27ec-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
             "field_type": "DictionaryField",
             "related_dictionary": 12,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 13,
-        "fields": {
-            "label": "\u4fdd\u59a5\u9002",
-            "name": "bao_tuo_shi",
-            "pym": "bts",
-            "erpsys_id": "26ecd3ea-27ed-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
-            "field_type": "BusinessObject",
-            "related_dictionary": 1,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 14,
-        "fields": {
-            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
-            "name": "qiao_ya_deng_ji_zhi",
-            "pym": "qydjz",
-            "erpsys_id": "3121d28e-27ed-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
-            "field_type": "BusinessObject",
-            "related_dictionary": 1,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 15,
-        "fields": {
-            "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
-            "name": "yi_ci_xing_zhu_she_qi",
-            "pym": "ycxzsq",
-            "erpsys_id": "3d3a9e48-27ed-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
-            "field_type": "BusinessObject",
-            "related_dictionary": 5,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 16,
-        "fields": {
-            "label": "\u6cbb\u7597\u5ba4",
-            "name": "zhi_liao_shi",
-            "pym": "zls",
-            "erpsys_id": "57b934a0-27ed-11ef-a526-0e586f6f8a1e",
-            "vocabulary": null,
-            "field_type": "BusinessObject",
-            "related_dictionary": 6,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 17,
-        "fields": {
-            "label": "\u6807\u51c6\u5de5\u5355",
-            "name": "biao_zhun_gong_dan",
-            "pym": "bzgd",
-            "erpsys_id": "0682610a-2807-11ef-8563-0e586f6f8a1e",
-            "vocabulary": null,
-            "field_type": "BusinessObject",
-            "related_dictionary": 4,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
             "is_entity": false
         }
     },
@@ -492,6 +390,116 @@
         }
     },
     {
+        "model": "design.businessobject",
+        "pk": 1,
+        "fields": {
+            "label": "\u5ba2\u6237",
+            "name": "ke_hu",
+            "pym": "kh",
+            "erpsys_id": "00044aa6-28a1-11ef-b3e0-0e586f6f8a1e",
+            "data_item": 2
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 2,
+        "fields": {
+            "label": "\u64cd\u4f5c\u5458",
+            "name": "cao_zuo_yuan",
+            "pym": "czy",
+            "erpsys_id": "0c30daf6-28a1-11ef-b3e0-0e586f6f8a1e",
+            "data_item": 3
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 3,
+        "fields": {
+            "label": "\u4fdd\u59a5\u9002",
+            "name": "bao_tuo_shi",
+            "pym": "bts",
+            "erpsys_id": "19004b2c-28a1-11ef-b3e0-0e586f6f8a1e",
+            "data_item": 1
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 4,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "30063714-28a1-11ef-b3e0-0e586f6f8a1e",
+            "data_item": 1
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 5,
+        "fields": {
+            "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
+            "name": "yi_ci_xing_zhu_she_qi",
+            "pym": "ycxzsq",
+            "erpsys_id": "455053f2-28a1-11ef-b3e0-0e586f6f8a1e",
+            "data_item": 5
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 6,
+        "fields": {
+            "label": "\u6cbb\u7597\u5ba4",
+            "name": "zhi_liao_shi",
+            "pym": "zls",
+            "erpsys_id": "60aea73e-28a1-11ef-b3e0-0e586f6f8a1e",
+            "data_item": 6
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 7,
+        "fields": {
+            "label": "\u6807\u51c6\u5de5\u5355",
+            "name": "biao_zhun_gong_dan",
+            "pym": "bzgd",
+            "erpsys_id": "87d632b4-28a1-11ef-b3e0-0e586f6f8a1e",
+            "data_item": 4
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 8,
+        "fields": {
+            "label": "\u836f\u54c1",
+            "name": "yao_pin",
+            "pym": "yp",
+            "erpsys_id": "207969aa-28a2-11ef-aa55-0e586f6f8a1e",
+            "data_item": 1
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 9,
+        "fields": {
+            "label": "\u8017\u6750",
+            "name": "hao_cai",
+            "pym": "hc",
+            "erpsys_id": "26316992-28a2-11ef-aa55-0e586f6f8a1e",
+            "data_item": 5
+        }
+    },
+    {
+        "model": "design.businessobject",
+        "pk": 10,
+        "fields": {
+            "label": "\u804c\u5458",
+            "name": "zhi_yuan",
+            "pym": "zy",
+            "erpsys_id": "5605fc28-28a2-11ef-aa55-0e586f6f8a1e",
+            "data_item": 3
+        }
+    },
+    {
         "model": "design.service",
         "pk": 1,
         "fields": {
@@ -499,9 +507,10 @@
             "name": "rou_du_su_zhi_liao",
             "pym": "rdszl",
             "erpsys_id": "88e73c20-1f1e-11ef-b5e7-0e586f6f8a1e",
-            "vocabulary": null,
             "form": 6,
-            "work_order": null,
+            "subject": 1,
+            "work_order": 7,
+            "route_to": null,
             "program": null,
             "service_type": "SERVICE",
             "estimated_time": 60,
@@ -516,9 +525,10 @@
             "name": "zhu_she",
             "pym": "zs",
             "erpsys_id": "8c8b5334-1f4b-11ef-b5e7-0e586f6f8a1e",
-            "vocabulary": null,
             "form": 5,
-            "work_order": null,
+            "subject": 1,
+            "work_order": 7,
+            "route_to": null,
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 30,
@@ -533,9 +543,10 @@
             "name": "ling_yao",
             "pym": "ly",
             "erpsys_id": "dfd3eb82-1f4b-11ef-9d26-0e586f6f8a1e",
-            "vocabulary": null,
             "form": 4,
-            "work_order": null,
+            "subject": 8,
+            "work_order": 7,
+            "route_to": null,
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 5,
@@ -550,9 +561,10 @@
             "name": "ling_hao_cai",
             "pym": "lhc",
             "erpsys_id": "f6e7f7ca-1f4e-11ef-9d26-0e586f6f8a1e",
-            "vocabulary": null,
             "form": 3,
-            "work_order": 17,
+            "subject": 9,
+            "work_order": 7,
+            "route_to": null,
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 5,
@@ -567,9 +579,10 @@
             "name": "yu_yue",
             "pym": "yy",
             "erpsys_id": "859444c4-1f59-11ef-b907-0e586f6f8a1e",
-            "vocabulary": null,
             "form": 1,
-            "work_order": null,
+            "subject": 1,
+            "work_order": 7,
+            "route_to": null,
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 5,
@@ -584,9 +597,10 @@
             "name": "sui_fang",
             "pym": "sf",
             "erpsys_id": "44065154-1f5a-11ef-9e76-0e586f6f8a1e",
-            "vocabulary": null,
             "form": 2,
-            "work_order": null,
+            "subject": 1,
+            "work_order": 7,
+            "route_to": null,
             "program": null,
             "service_type": "OPERATION",
             "estimated_time": 15,

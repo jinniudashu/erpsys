@@ -92,40 +92,7 @@ class GenerateScriptMixin(object):
 
         return {'models': model_script, 'admin': admin_script}
 
-class VocabularyManager(models.Manager):
-    def refresh(self):
-        # 刷新所有的业务词汇
-        for model in ['DataItem', 'Service',]:
-            model_class = apps.get_model('design', model)
-            for instance in model_class.objects.all():
-                content_type=ContentType.objects.get_for_model(model_class)
-                object_id=instance.id                    
-                vocab, created = Vocabulary.objects.update_or_create(
-                    content_type=content_type,
-                    object_id=object_id,
-                    defaults={'name': instance.name, 'label': instance.label, 'pym': instance.pym}
-                )
-                # 更新实例的Vocabulary外键
-                instance.vocabulary = vocab
-                instance.save()
-
-class Vocabulary(ERPSysBase):
-    q  = Q(app_label='design') & (Q(model = 'dataitem') | Q(model = 'service'))
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to=q , null=True, blank=True, verbose_name="词汇类型")
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_object = GenericForeignKey('content_type', 'object_id')
-    objects = VocabularyManager()
-
-    class Meta:
-        verbose_name = "业务语汇"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-    
-    def __str__(self):
-        return self.label
-
 class DataItem(ERPSysBase):
-    vocabulary = models.OneToOneField(Vocabulary, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="业务词汇")
     field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据项类型")
     related_dictionary = models.ForeignKey('DataItemDict', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="数据项定义")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
@@ -239,7 +206,7 @@ class DataItemDict(GenerateScriptMixin, ERPSysBase):
     objects = DataItemDictManager()
 
     class Meta:
-        verbose_name = "数据项字典"
+        verbose_name = "数据项定义"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -258,11 +225,22 @@ class DataItemDictDetail(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['order']
 
+class BusinessObject(ERPSysBase):
+    data_item = models.ForeignKey(DataItem, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="数据项")
+
+    class Meta:
+        verbose_name = "业务对象"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.label
+
 class Service(GenerateScriptMixin, ERPSysBase):
-    vocabulary = models.OneToOneField(Vocabulary, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="业务词汇")
     form = models.ForeignKey('Form', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
-    q = Q(field_type='BusinessObject')
-    work_order = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=q, blank=True, null=True, verbose_name="工单")
+    subject = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业对象")
+    work_order = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='ordered_service', blank=True, null=True, verbose_name="工单")
+    route_to = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='routed_services', blank=True, null=True, verbose_name="传递至")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
     estimated_time = models.IntegerField(blank=True, null=True, verbose_name="预计工时")
@@ -420,44 +398,6 @@ def delete_field(sender, instance, created, **kwargs):
         instance.field.delete()
     except:
         pass
-
-# 业务词汇表维护
-@receiver(post_save, sender=DataItem)
-@receiver(post_save, sender=Service)
-def maintain_vocabulary(sender, instance, created, **kwargs):
-    content_type = ContentType.objects.get_for_model(instance)
-    object_id = instance.id
-
-    if created:
-        # 当实例被创建时，也创建一个新的Vocabulary实例
-        vocab = Vocabulary(
-            name=instance.name,
-            label=instance.label,
-            pym=instance.pym,
-            content_type=content_type,
-            object_id=object_id
-        )
-        vocab.save()
-        instance.vocabulary = vocab
-        instance.save()
-    else:
-        # 更新现有的Vocabulary实例
-        vocab, created = Vocabulary.objects.update_or_create(
-            content_type=content_type,
-            object_id=object_id,
-            defaults={
-                'name': instance.name, 
-                'label': instance.label,
-                'pym': instance.pym
-            }
-        )
-
-# 当模型实例被删除时，也删除对应的Vocabulary实例
-@receiver(post_delete, sender=DataItem)
-@receiver(post_delete, sender=Service)
-def delete_vocabulary(sender, instance, **kwargs):
-    if instance.vocabulary:
-        instance.vocabulary.delete()
 
 """
 客户 姓名

@@ -23,17 +23,12 @@ call_command(
         'sessions.session',
         'admin.logentry',
         'contenttypes',
-        'design.Vocabulary'
     ]
 )
 
 # 将输出的字符串转换回JSON对象
 data = json.loads(output.getvalue())
 
-# 修改数据，设置vocabulary字段为null
-for item in data:
-    if item['model'] in ['design.dataitem', 'design.service']:
-        item['fields']['vocabulary'] = None
 
 # 写入修改后的数据到文件
 with open('backup.json', 'w', encoding='utf-8') as file:
