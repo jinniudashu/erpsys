@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-06-13T09:05:06.172Z",
+            "last_login": "2024-06-13T12:48:03.068Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -27,7 +27,6 @@
             "erpsys_id": "389fd296-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "MATERIAL",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -46,7 +45,6 @@
             "erpsys_id": "46a91014-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "OPERATOR",
-            "bind_system_object": "User",
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -65,7 +63,6 @@
             "erpsys_id": "4f15f8a2-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "OPERATOR",
-            "bind_system_object": "User",
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -84,7 +81,6 @@
             "erpsys_id": "8b7686a4-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "INFORMATION",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -103,7 +99,6 @@
             "erpsys_id": "9e992020-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "MATERIAL",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -122,7 +117,6 @@
             "erpsys_id": "a745868c-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "SPACE",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -141,7 +135,6 @@
             "erpsys_id": "b3abaa5a-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "EQUIPMENT",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -160,7 +153,6 @@
             "erpsys_id": "bba6bcd6-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "DEVICE",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -179,7 +171,6 @@
             "erpsys_id": "c5eabb34-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "CAPITAL",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -198,7 +189,6 @@
             "erpsys_id": "cff299a8-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "INFORMATION",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -217,7 +207,6 @@
             "erpsys_id": "d8f1c5ec-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "INFORMATION",
-            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -236,7 +225,24 @@
             "erpsys_id": "f73a6c98-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
             "system_resource_type": "SERVICE",
-            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 13,
+        "fields": {
+            "label": "\u59d3\u540d",
+            "name": "xing_ming",
+            "pym": "xm",
+            "erpsys_id": "26039912-297f-11ef-9918-0e586f6f8a1e",
+            "field_type": "CharField",
+            "system_resource_type": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -253,7 +259,8 @@
             "name": "ke_hu",
             "pym": "kh",
             "erpsys_id": "00044aa6-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 2
+            "data_item": 2,
+            "bind_system_object": null
         }
     },
     {
@@ -264,7 +271,8 @@
             "name": "cao_zuo_yuan",
             "pym": "czy",
             "erpsys_id": "0c30daf6-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 3
+            "data_item": 3,
+            "bind_system_object": null
         }
     },
     {
@@ -275,7 +283,8 @@
             "name": "bao_tuo_shi",
             "pym": "bts",
             "erpsys_id": "19004b2c-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 1
+            "data_item": 1,
+            "bind_system_object": null
         }
     },
     {
@@ -286,7 +295,8 @@
             "name": "qiao_ya_deng_ji_zhi",
             "pym": "qydjz",
             "erpsys_id": "30063714-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 1
+            "data_item": 1,
+            "bind_system_object": null
         }
     },
     {
@@ -297,7 +307,8 @@
             "name": "yi_ci_xing_zhu_she_qi",
             "pym": "ycxzsq",
             "erpsys_id": "455053f2-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 5
+            "data_item": 5,
+            "bind_system_object": null
         }
     },
     {
@@ -308,7 +319,8 @@
             "name": "zhi_liao_shi",
             "pym": "zls",
             "erpsys_id": "60aea73e-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 6
+            "data_item": 6,
+            "bind_system_object": null
         }
     },
     {
@@ -319,7 +331,8 @@
             "name": "biao_zhun_gong_dan",
             "pym": "bzgd",
             "erpsys_id": "87d632b4-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 4
+            "data_item": 4,
+            "bind_system_object": null
         }
     },
     {
@@ -330,7 +343,8 @@
             "name": "yao_pin",
             "pym": "yp",
             "erpsys_id": "207969aa-28a2-11ef-aa55-0e586f6f8a1e",
-            "data_item": 1
+            "data_item": 1,
+            "bind_system_object": null
         }
     },
     {
@@ -341,7 +355,8 @@
             "name": "hao_cai",
             "pym": "hc",
             "erpsys_id": "26316992-28a2-11ef-aa55-0e586f6f8a1e",
-            "data_item": 5
+            "data_item": 5,
+            "bind_system_object": null
         }
     },
     {
@@ -352,7 +367,8 @@
             "name": "zhi_yuan",
             "pym": "zy",
             "erpsys_id": "5605fc28-28a2-11ef-aa55-0e586f6f8a1e",
-            "data_item": 3
+            "data_item": 3,
+            "bind_system_object": null
         }
     },
     {
@@ -368,9 +384,7 @@
             "work_order": 7,
             "route_to": null,
             "program": null,
-            "service_type": "SERVICE",
-            "estimated_time": 60,
-            "estimated_cost": null
+            "service_type": "SERVICE"
         }
     },
     {
@@ -386,9 +400,7 @@
             "work_order": 7,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
-            "estimated_time": 30,
-            "estimated_cost": null
+            "service_type": "OPERATION"
         }
     },
     {
@@ -404,9 +416,7 @@
             "work_order": 7,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
-            "estimated_time": 5,
-            "estimated_cost": null
+            "service_type": "OPERATION"
         }
     },
     {
@@ -422,9 +432,7 @@
             "work_order": 7,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
-            "estimated_time": 5,
-            "estimated_cost": null
+            "service_type": "OPERATION"
         }
     },
     {
@@ -440,9 +448,7 @@
             "work_order": 7,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
-            "estimated_time": 5,
-            "estimated_cost": null
+            "service_type": "OPERATION"
         }
     },
     {
@@ -458,9 +464,7 @@
             "work_order": 7,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
-            "estimated_time": 15,
-            "estimated_cost": null
+            "service_type": "OPERATION"
         }
     },
     {

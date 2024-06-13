@@ -11,13 +11,13 @@ class DataItemConsistsInline(admin.TabularInline):
 
 class DataItemIncludesInline(admin.TabularInline):
     model = DataItemIncludes
-    fk_name = 'parent'  # 指定使用的外键字段名
+    fk_name = 'hypernymy'  # 指定使用的外键字段名
     extra = 0
-    autocomplete_fields = ['parent', 'child']
+    autocomplete_fields = ['hypernymy', 'hyponymy']
 
 @admin.register(DataItem)
 class DataItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'system_resource_type', 'bind_system_object']
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'system_resource_type', ]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'is_entity']
@@ -25,10 +25,14 @@ class DataItemAdmin(admin.ModelAdmin):
 
 @admin.register(BusinessObject)
 class BusinessObjectAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'data_item']
+    list_display = ['id', 'label', 'name', 'pym', 'data_item', 'bind_system_object']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     autocomplete_fields = ['data_item']
+
+class ServiceAttributesInline(admin.TabularInline):
+    model = ServiceAttributes
+    extra = 0
 
 class ResourceDependencyInline(admin.TabularInline):
     model = ResourceDependency
@@ -42,9 +46,9 @@ class ServiceConsistsInline(admin.TabularInline):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['label', 'name', 'form', 'subject', 'work_order', 'route_to', 'program', 'service_type', 'estimated_time', 'estimated_cost',]
+    list_display = ['label', 'name', 'form', 'subject', 'work_order', 'route_to', 'program', 'service_type', ]
     list_display_links = ['label', 'name',]
-    inlines = [ServiceConsistsInline, ResourceDependencyInline]
+    inlines = [ServiceConsistsInline, ResourceDependencyInline, ServiceAttributesInline]
     search_fields = ['label', 'name', 'pym']
     autocomplete_fields = ['form', 'subject', 'work_order', 'route_to']
 

@@ -184,7 +184,6 @@ class DataItem(ERPSysBase):
     consists = models.ManyToManyField('self', through='DataItemConsists', symmetrical=False, verbose_name="数据项组成")
     field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据项类型")
     system_resource_type = models.CharField(max_length=50, choices=[(entity_type.name, str(entity_type)) for entity_type in SystemResourceType], null=True, blank=True, verbose_name="系统资源类型")
-    bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
     max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
     decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
@@ -213,22 +212,24 @@ class DataItemConsists(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['id']
         unique_together = ('data_item', 'sub_data_item')
-    
+
+# 上下义关系（Hypernymy and Hyponymy）
 class DataItemIncludes(models.Model):
-    parent = models.ForeignKey(DataItem, related_name='children', on_delete=models.CASCADE, verbose_name="父类")
-    child = models.ForeignKey(DataItem, related_name='parent', on_delete=models.CASCADE, verbose_name="子项")
+    hypernymy = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='hyponymies', null=True, verbose_name="上位词")
+    hyponymy = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='hypernymies', null=True, verbose_name="下位词")
 
     class Meta:
-        verbose_name = "数据项包含关系"
+        verbose_name = "上下义关系"
         verbose_name_plural = verbose_name
         ordering = ['id']
-        unique_together = ('parent', 'child')  # 确保每对父子服务关系唯一
+        unique_together = ('hypernymy', 'hyponymy')  # 确保每对父子服务关系唯一
     
     def __str__(self):
-        return f"{self.parent.name} -> {self.child.name}"
+        return f"{self.hypernymy.name} -> {self.hyponymy.name}"
 
 class BusinessObject(ERPSysBase):
     data_item = models.ForeignKey(DataItem, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="数据项")
+    bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
 
     class Meta:
         verbose_name = "业务对象"
@@ -246,8 +247,7 @@ class Service(GenerateScriptMixin, ERPSysBase):
     route_to = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='routed_services', blank=True, null=True, verbose_name="传递至")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
-    estimated_time = models.IntegerField(blank=True, null=True, verbose_name="预计工时")
-    estimated_cost = models.IntegerField(blank=True, null=True, verbose_name="预计成本")
+    attributes = models.ManyToManyField(DataItem, through='ServiceAttributes', symmetrical=False, verbose_name="属性")
 
     class Meta:
         verbose_name = "服务"
@@ -283,6 +283,18 @@ class ResourceDependency(models.Model):
     
     def __str__(self):
         return f"{self.service.name} -> {self.resource_object.name}"
+
+class ServiceAttributes(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
+    attribute = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="属性")
+
+    class Meta:
+        verbose_name = "服务属性"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return f"{self.service.name} -> {self.attribute.name}"
 
 class ServiceBOM:
     @staticmethod
