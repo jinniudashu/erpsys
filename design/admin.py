@@ -3,30 +3,25 @@ from django.contrib import admin
 from .models import *
 from .utils import generate_source_code
 
-@admin.action(description="刷新业务语汇表")
-def refresh_vocabulary(modeladmin, request, queryset):
-    modeladmin.model.objects.refresh()
+class DataItemConsistsInline(admin.TabularInline):
+    model = DataItemConsists
+    fk_name = 'data_item'  # 指定使用的外键字段名
+    extra = 0
+    autocomplete_fields = ['data_item', 'sub_data_item']
+
+class DataItemIncludesInline(admin.TabularInline):
+    model = DataItemIncludes
+    fk_name = 'parent'  # 指定使用的外键字段名
+    extra = 0
+    autocomplete_fields = ['parent', 'child']
 
 @admin.register(DataItem)
 class DataItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'related_dictionary']
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'system_resource_type', 'bind_system_object']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'is_entity']
-    autocomplete_fields = ['related_dictionary']
-
-class DataItemDictDetailInline(admin.TabularInline):
-    model = DataItemDictDetail
-    extra = 0
-    autocomplete_fields = ['data_item']
-
-@admin.register(DataItemDict)
-class DataItemDictAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'system_resource_type', 'bind_system_object', 'erpsys_id', ]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-    list_filter = ['bind_system_object']
-    inlines = [DataItemDictDetailInline]
+    inlines = [DataItemConsistsInline, DataItemIncludesInline]
 
 @admin.register(BusinessObject)
 class BusinessObjectAdmin(admin.ModelAdmin):
@@ -35,20 +30,21 @@ class BusinessObjectAdmin(admin.ModelAdmin):
     search_fields = ['label', 'name', 'pym']
     autocomplete_fields = ['data_item']
 
-class ServiceDependencyInline(admin.TabularInline):
-    model = ServiceDependency
-    fk_name = 'parent'  # 指定使用的外键字段名
-    extra = 0
-
 class ResourceDependencyInline(admin.TabularInline):
     model = ResourceDependency
     extra = 0
+
+class ServiceConsistsInline(admin.TabularInline):
+    model = ServiceConsists
+    fk_name = 'service'  # 指定使用的外键字段名
+    extra = 0
+    autocomplete_fields = ['service', 'sub_service']
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ['label', 'name', 'form', 'subject', 'work_order', 'route_to', 'program', 'service_type', 'estimated_time', 'estimated_cost',]
     list_display_links = ['label', 'name',]
-    inlines = [ServiceDependencyInline, ResourceDependencyInline]
+    inlines = [ServiceConsistsInline, ResourceDependencyInline]
     search_fields = ['label', 'name', 'pym']
     autocomplete_fields = ['form', 'subject', 'work_order', 'route_to']
 
@@ -74,6 +70,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     inlines = [SourceCodeInline, ]
+    filter_horizontal = ['services',]
     change_form_template = 'project_changeform.html'
 
     def response_change(self, request, obj):

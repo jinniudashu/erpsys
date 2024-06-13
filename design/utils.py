@@ -101,7 +101,7 @@ class FieldsType(Enum):
     }
 
     # 生成运行时数据结构
-    dict_queryset = DataItemDict.objects.all()
+    dict_queryset = DataItem.objects.all()
     source_code['script']['dictionary'] = _generate_models_admin(dict_queryset, project.domain)  # 导出App:service脚本
 
     # 生成服务&表单脚本

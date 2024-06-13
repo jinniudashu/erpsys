@@ -42,7 +42,7 @@ class ERPSysBase(models.Model):
 class GenerateScriptMixin(object):
     def _create_model_script(self):
         _fields_script = _autocomplete_fields = _radio_fields = ''
-        for form_components in FormComponents.objects.filter(form=self).order_by('position'):
+        for form_components in FormComponents.objects.filter(form=self).order_by('order'):
             component=form_components.component
 
             # construct fields script
@@ -92,24 +92,7 @@ class GenerateScriptMixin(object):
 
         return {'models': model_script, 'admin': admin_script}
 
-class DataItem(ERPSysBase):
-    field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据项类型")
-    related_dictionary = models.ForeignKey('DataItemDict', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="数据项定义")
-    max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
-    max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
-    decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
-    computed_logic = models.TextField(null=True, blank=True, verbose_name="计算逻辑")
-    is_entity = models.BooleanField(default=False, verbose_name="业务实体")
-    
-    class Meta:
-        verbose_name = "数据项"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-    
-    def __str__(self):
-        return self.label
-
-class DataItemDictManager(models.Manager):
+class DataItemManager(models.Manager):
     # 抽取Forms数据
     def abstract_forms_data(self, forms=GLOBAL_INITIAL_STATES['Forms']):
         def _map_field_type(f_type):
@@ -197,33 +180,52 @@ class DataItemDictManager(models.Manager):
             }
             print(f"Created DataItemDict: {sheet_name}, {result[sheet_name]}")
 
-class DataItemDict(GenerateScriptMixin, ERPSysBase):
-    data_item = models.OneToOneField(DataItem, on_delete=models.SET_NULL, related_name='data_item_dict', null=True, blank=True, verbose_name="数据项")
-    data_items = models.ManyToManyField(DataItem, through='DataItemDictDetail', related_name='data_item_dicts', verbose_name="字段")
+class DataItem(ERPSysBase):
+    consists = models.ManyToManyField('self', through='DataItemConsists', symmetrical=False, verbose_name="数据项组成")
+    field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据项类型")
     system_resource_type = models.CharField(max_length=50, choices=[(entity_type.name, str(entity_type)) for entity_type in SystemResourceType], null=True, blank=True, verbose_name="系统资源类型")
     bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
+    max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
+    max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
+    decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
+    computed_logic = models.TextField(null=True, blank=True, verbose_name="计算逻辑")
     init_content = models.JSONField(blank=True, null=True, verbose_name="初始内容")
-    objects = DataItemDictManager()
-
+    is_entity = models.BooleanField(default=False, verbose_name="业务实体")
+    objects = DataItemManager()
+    
     class Meta:
-        verbose_name = "数据项定义"
+        verbose_name = "数据项"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
+    
     def __str__(self):
         return self.label
-            
-class DataItemDictDetail(models.Model):
-    data_item_dict = models.ForeignKey(DataItemDict, on_delete=models.CASCADE, verbose_name="数据项字典")
-    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, null=True, verbose_name="数据项")
+
+class DataItemConsists(models.Model):
+    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='subset', null=True, verbose_name="数据项")
+    sub_data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='superset', null=True, verbose_name="子数据项")
     is_multivalued= models.BooleanField(default=False, verbose_name="多值")
     default_value_char = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
 
     class Meta:
-        verbose_name = "字典详情"
+        verbose_name = "数据项组成"
         verbose_name_plural = verbose_name
-        ordering = ['order']
+        ordering = ['id']
+        unique_together = ('data_item', 'sub_data_item')
+    
+class DataItemIncludes(models.Model):
+    parent = models.ForeignKey(DataItem, related_name='children', on_delete=models.CASCADE, verbose_name="父类")
+    child = models.ForeignKey(DataItem, related_name='parent', on_delete=models.CASCADE, verbose_name="子项")
+
+    class Meta:
+        verbose_name = "数据项包含关系"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+        unique_together = ('parent', 'child')  # 确保每对父子服务关系唯一
+    
+    def __str__(self):
+        return f"{self.parent.name} -> {self.child.name}"
 
 class BusinessObject(ERPSysBase):
     data_item = models.ForeignKey(DataItem, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="数据项")
@@ -237,6 +239,7 @@ class BusinessObject(ERPSysBase):
         return self.label
 
 class Service(GenerateScriptMixin, ERPSysBase):
+    consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
     form = models.ForeignKey('Form', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
     subject = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业对象")
     work_order = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='ordered_service', blank=True, null=True, verbose_name="工单")
@@ -254,19 +257,19 @@ class Service(GenerateScriptMixin, ERPSysBase):
     def __str__(self):
         return self.label
 
-class ServiceDependency(models.Model):
-    parent = models.ForeignKey(Service, related_name='children', on_delete=models.CASCADE, verbose_name="父服务")
-    child = models.ForeignKey(Service, related_name='parents', on_delete=models.CASCADE, verbose_name="子服务组件")
-    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个子服务
-    
+class ServiceConsists(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='sub_services', verbose_name="服务")
+    sub_service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='parent_services', verbose_name="子服务")
+    quantity = models.PositiveIntegerField(default=1)
+
     class Meta:
-        verbose_name = "服务组件"
+        verbose_name = "服务组成"
         verbose_name_plural = verbose_name
         ordering = ['id']
-        unique_together = ('parent', 'child')  # 确保每对父子服务关系唯一
+        unique_together = ('service', 'sub_service')  # 确保每对父子服务关系唯一
     
     def __str__(self):
-        return f"{self.parent.name} -> {self.child.name}"
+        return f"{self.service.name} -> {self.sub_service.name}"
 
 class ResourceDependency(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
@@ -283,30 +286,30 @@ class ResourceDependency(models.Model):
 
 class ServiceBOM:
     @staticmethod
-    def add_component(name):
-        component, created = Service.objects.get_or_create(name=name)
-        return component
+    def add_sub_service(name):
+        service, created = Service.objects.get_or_create(name=name)
+        return service
 
     @staticmethod
-    def add_dependency(parent_name, child_name, quantity=1):
-        parent = ServiceBOM.add_component(parent_name)
-        child = ServiceBOM.add_component(child_name)
-        dependency, created = ServiceDependency.objects.get_or_create(parent=parent, child=child)
-        dependency.quantity = quantity
-        dependency.save()
-        return dependency
+    def add_sub_service(parent_name, sub_name, quantity=1):
+        service = ServiceBOM.add_sub_service(parent_name)
+        sub_service = ServiceBOM.add_sub_service(sub_name)
+        relationship, created = ServiceConsists.objects.get_or_create(service=service, sub_service=sub_service)
+        relationship.quantity = quantity
+        relationship.save()
+        return relationship
 
     @staticmethod
-    def find_direct_children(component_name):
-        component = Service.objects.get(name=component_name)
-        children_info = [{'child': dep.child.name, 'quantity': dep.quantity} for dep in component.children.all()]
-        return children_info
+    def direct_children(component_name):
+        service = Service.objects.get(name=component_name)
+        sub_services_info = [{'sub_service': relationship.sub_service.name, 'quantity': relationship.quantity} for relationship in service.sub_services.all()]
+        return sub_services_info
 
     @staticmethod
-    def find_direct_parents(component_name):
-        component = Service.objects.get(name=component_name)
-        parents_info = [{'parent': dep.parent.name, 'quantity': dep.quantity} for dep in component.parents.all()]
-        return parents_info
+    def direct_parents(component_name):
+        service = Service.objects.get(name=component_name)
+        parent_services_info = [{'service': relationship.service.name, 'quantity': relationship.quantity} for relationship in service.parent_services.all()]
+        return parent_services_info
 
 class Form(GenerateScriptMixin, ERPSysBase):
     data_items = models.ManyToManyField(DataItem, through='FormComponents', verbose_name="字段")
@@ -325,7 +328,7 @@ class FormComponents(models.Model):
     data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, null=True, verbose_name="字段")
     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
-    expand_dict = models.BooleanField(default=False, verbose_name="扩展字典")
+    expand_dict = models.BooleanField(default=False, verbose_name="展开字典")
     is_required = models.BooleanField(default=False, verbose_name="必填")
     is_list = models.BooleanField(default=False, verbose_name="列表字段")
     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
@@ -366,38 +369,6 @@ class SourceCode(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-# DataItem维护
-@receiver(post_save, sender=DataItemDict)
-def maintain_field(sender, instance, created, **kwargs):
-    if created:
-        data_item, created = DataItem.objects.update_or_create(
-            name=instance.name, 
-            defaults={
-                'label': instance.label, 
-                'pym': instance.pym,
-                'field_type': 'DictionaryField',
-                'related_dictionary': instance
-            }
-        )
-        instance.data_item = data_item
-        instance.save()
-    else:
-        field, created = DataItem.objects.update_or_create(
-            name=instance.name, 
-            defaults={
-                'label': instance.label, 
-                'pym': instance.pym,
-                'field_type': 'DictionaryField',
-                'related_dictionary': instance
-            }
-        )
-
-@receiver(post_delete, sender=DataItemDict)
-def delete_field(sender, instance, created, **kwargs):
-    try:
-        instance.field.delete()
-    except:
-        pass
 
 """
 客户 姓名
@@ -415,5 +386,4 @@ def delete_field(sender, instance, created, **kwargs):
 耗材 SKU ID
 诊室 名称
 诊室 规格
-
 """

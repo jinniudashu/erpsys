@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-06-12T10:23:11.200Z",
+            "last_login": "2024-06-13T09:05:06.172Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -26,11 +26,13 @@
             "pym": "yp",
             "erpsys_id": "389fd296-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 1,
+            "system_resource_type": "MATERIAL",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -43,11 +45,13 @@
             "pym": "kh",
             "erpsys_id": "46a91014-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 2,
+            "system_resource_type": "OPERATOR",
+            "bind_system_object": "User",
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -55,16 +59,18 @@
         "model": "design.dataitem",
         "pk": 3,
         "fields": {
-            "label": "\u4f5c\u4e1a\u5458",
+            "label": "\u804c\u5458",
             "name": "zuo_ye_yuan",
             "pym": "zyy",
             "erpsys_id": "4f15f8a2-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 3,
+            "system_resource_type": "OPERATOR",
+            "bind_system_object": "User",
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -77,11 +83,13 @@
             "pym": "gd",
             "erpsys_id": "8b7686a4-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 4,
+            "system_resource_type": "INFORMATION",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -94,11 +102,13 @@
             "pym": "hc",
             "erpsys_id": "9e992020-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 5,
+            "system_resource_type": "MATERIAL",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -111,11 +121,13 @@
             "pym": "zs",
             "erpsys_id": "a745868c-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 6,
+            "system_resource_type": "SPACE",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -128,11 +140,13 @@
             "pym": "sb",
             "erpsys_id": "b3abaa5a-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 7,
+            "system_resource_type": "EQUIPMENT",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -145,11 +159,13 @@
             "pym": "qc",
             "erpsys_id": "bba6bcd6-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 8,
+            "system_resource_type": "DEVICE",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -162,11 +178,13 @@
             "pym": "fy",
             "erpsys_id": "c5eabb34-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 9,
+            "system_resource_type": "CAPITAL",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -179,11 +197,13 @@
             "pym": "zysx",
             "erpsys_id": "cff299a8-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 10,
+            "system_resource_type": "INFORMATION",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -196,11 +216,13 @@
             "pym": "zqtys",
             "erpsys_id": "d8f1c5ec-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 11,
+            "system_resource_type": "INFORMATION",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
         }
     },
@@ -213,180 +235,14 @@
             "pym": "fwxm",
             "erpsys_id": "f73a6c98-27ec-11ef-a526-0e586f6f8a1e",
             "field_type": "DictionaryField",
-            "related_dictionary": 12,
+            "system_resource_type": "SERVICE",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
-            "computed_logic": null,
+            "computed_logic": "",
+            "init_content": null,
             "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 1,
-        "fields": {
-            "label": "\u836f\u54c1",
-            "name": "yao_pin",
-            "pym": "yp",
-            "erpsys_id": "389eb19a-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 1,
-            "system_resource_type": "MATERIAL",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 2,
-        "fields": {
-            "label": "\u5ba2\u6237",
-            "name": "ke_hu",
-            "pym": "kh",
-            "erpsys_id": "46a884c8-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 2,
-            "system_resource_type": "OPERATOR",
-            "bind_system_object": "User",
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 3,
-        "fields": {
-            "label": "\u4f5c\u4e1a\u5458",
-            "name": "zuo_ye_yuan",
-            "pym": "zyy",
-            "erpsys_id": "4f155a78-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 3,
-            "system_resource_type": "OPERATOR",
-            "bind_system_object": "User",
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 4,
-        "fields": {
-            "label": "\u5de5\u5355",
-            "name": "gong_dan",
-            "pym": "gd",
-            "erpsys_id": "8b75f702-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 4,
-            "system_resource_type": "INFORMATION",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 5,
-        "fields": {
-            "label": "\u8017\u6750",
-            "name": "hao_cai",
-            "pym": "hc",
-            "erpsys_id": "9e98b658-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 5,
-            "system_resource_type": "MATERIAL",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 6,
-        "fields": {
-            "label": "\u8bca\u5ba4",
-            "name": "zhen_shi",
-            "pym": "zs",
-            "erpsys_id": "a744fbae-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 6,
-            "system_resource_type": "SPACE",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 7,
-        "fields": {
-            "label": "\u8bbe\u5907",
-            "name": "she_bei",
-            "pym": "sb",
-            "erpsys_id": "b3ab08f2-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 7,
-            "system_resource_type": "EQUIPMENT",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 8,
-        "fields": {
-            "label": "\u5668\u6750",
-            "name": "qi_cai",
-            "pym": "qc",
-            "erpsys_id": "bba65e12-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 8,
-            "system_resource_type": "DEVICE",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 9,
-        "fields": {
-            "label": "\u8d39\u7528",
-            "name": "fei_yong",
-            "pym": "fy",
-            "erpsys_id": "c5ea3f74-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 9,
-            "system_resource_type": "CAPITAL",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 10,
-        "fields": {
-            "label": "\u6ce8\u610f\u4e8b\u9879",
-            "name": "zhu_yi_shi_xiang",
-            "pym": "zysx",
-            "erpsys_id": "cff216e0-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 10,
-            "system_resource_type": "INFORMATION",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 11,
-        "fields": {
-            "label": "\u77e5\u60c5\u540c\u610f\u4e66",
-            "name": "zhi_qing_tong_yi_shu",
-            "pym": "zqtys",
-            "erpsys_id": "d8f1595e-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 11,
-            "system_resource_type": "INFORMATION",
-            "bind_system_object": null,
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitemdict",
-        "pk": 12,
-        "fields": {
-            "label": "\u670d\u52a1\u9879\u76ee",
-            "name": "fu_wu_xiang_mu",
-            "pym": "fwxm",
-            "erpsys_id": "f739f8f8-27ec-11ef-a526-0e586f6f8a1e",
-            "data_item": 12,
-            "system_resource_type": "SERVICE",
-            "bind_system_object": null,
-            "init_content": null
         }
     },
     {
@@ -608,29 +464,29 @@
         }
     },
     {
-        "model": "design.servicedependency",
+        "model": "design.serviceconsists",
         "pk": 1,
         "fields": {
-            "parent": 1,
-            "child": 2,
+            "service": 1,
+            "sub_service": 2,
             "quantity": 1
         }
     },
     {
-        "model": "design.servicedependency",
+        "model": "design.serviceconsists",
         "pk": 2,
         "fields": {
-            "parent": 1,
-            "child": 3,
+            "service": 1,
+            "sub_service": 3,
             "quantity": 1
         }
     },
     {
-        "model": "design.servicedependency",
+        "model": "design.serviceconsists",
         "pk": 3,
         "fields": {
-            "parent": 1,
-            "child": 4,
+            "service": 1,
+            "sub_service": 4,
             "quantity": 1
         }
     },
