@@ -10,6 +10,7 @@ from django.db.models.signals import post_save, post_delete
 import uuid
 import re
 import json
+
 from pypinyin import Style, lazy_pinyin
 
 from design.types import FieldType, ChoiceType, FormType, SystemResourceType, ServiceType
@@ -181,7 +182,8 @@ class DataItemManager(models.Manager):
             print(f"Created DataItemDict: {sheet_name}, {result[sheet_name]}")
 
 class DataItem(ERPSysBase):
-    consists = models.ManyToManyField('self', through='DataItemConsists', symmetrical=False, verbose_name="数据项组成")
+    consists = models.ManyToManyField('self', through='DataItemConsists', related_name='parent', symmetrical=False, verbose_name="数据项组成")
+    taxonomy = models.ManyToManyField('self', through='DataItemTaxonomy', symmetrical=False, verbose_name="词义分类")
     field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据项类型")
     system_resource_type = models.CharField(max_length=50, choices=[(entity_type.name, str(entity_type)) for entity_type in SystemResourceType], null=True, blank=True, verbose_name="系统资源类型")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
@@ -191,12 +193,12 @@ class DataItem(ERPSysBase):
     init_content = models.JSONField(blank=True, null=True, verbose_name="初始内容")
     is_entity = models.BooleanField(default=False, verbose_name="业务实体")
     objects = DataItemManager()
-    
+
     class Meta:
         verbose_name = "数据项"
         verbose_name_plural = verbose_name
         ordering = ['id']
-    
+
     def __str__(self):
         return self.label
 
@@ -213,10 +215,9 @@ class DataItemConsists(models.Model):
         ordering = ['id']
         unique_together = ('data_item', 'sub_data_item')
 
-# 上下义关系（Hypernymy and Hyponymy）
-class DataItemIncludes(models.Model):
-    hypernymy = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='hyponymies', null=True, verbose_name="上位词")
-    hyponymy = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='hypernymies', null=True, verbose_name="下位词")
+class DataItemTaxonomy(models.Model):
+    hypernymy = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='hyponymies', null=True, verbose_name="上义词")
+    hyponymy = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='hypernymies', null=True, verbose_name="下义词")
 
     class Meta:
         verbose_name = "上下义关系"

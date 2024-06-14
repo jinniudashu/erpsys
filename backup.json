@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-06-13T12:48:03.068Z",
+            "last_login": "2024-06-14T01:31:45.596Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -260,7 +260,7 @@
             "pym": "kh",
             "erpsys_id": "00044aa6-28a1-11ef-b3e0-0e586f6f8a1e",
             "data_item": 2,
-            "bind_system_object": null
+            "bind_system_object": "User"
         }
     },
     {
@@ -272,7 +272,7 @@
             "pym": "czy",
             "erpsys_id": "0c30daf6-28a1-11ef-b3e0-0e586f6f8a1e",
             "data_item": 3,
-            "bind_system_object": null
+            "bind_system_object": "User"
         }
     },
     {

@@ -9,8 +9,8 @@ class DataItemConsistsInline(admin.TabularInline):
     extra = 0
     autocomplete_fields = ['data_item', 'sub_data_item']
 
-class DataItemIncludesInline(admin.TabularInline):
-    model = DataItemIncludes
+class DataItemTaxonomyInline(admin.TabularInline):
+    model = DataItemTaxonomy
     fk_name = 'hypernymy'  # 指定使用的外键字段名
     extra = 0
     autocomplete_fields = ['hypernymy', 'hyponymy']
@@ -21,7 +21,7 @@ class DataItemAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'is_entity']
-    inlines = [DataItemConsistsInline, DataItemIncludesInline]
+    inlines = [DataItemConsistsInline, DataItemTaxonomyInline]
 
 @admin.register(BusinessObject)
 class BusinessObjectAdmin(admin.ModelAdmin):
