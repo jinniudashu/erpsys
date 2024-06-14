@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-06-14T01:31:45.596Z",
+            "last_login": "2024-06-14T08:18:12.986Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -383,7 +383,13 @@
             "subject": 1,
             "work_order": 7,
             "route_to": null,
-            "program": null,
+            "program": {
+                "\u4e8b\u4ef6": [
+                    {
+                        "\u4e8b\u4ef6A": "\u6307\u4ee4A(\u53c2\u65701,\u53c2\u65702)"
+                    }
+                ]
+            },
             "service_type": "SERVICE"
         }
     },

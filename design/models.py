@@ -297,6 +297,53 @@ class ServiceAttributes(models.Model):
     def __str__(self):
         return f"{self.service.name} -> {self.attribute.name}"
 
+class Event(ERPSysBase):
+    rule = models.TextField(verbose_name="规则")
+
+    class Meta:
+        verbose_name = "服务事件"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class SystemInstruction(ERPSysBase):
+    sys_call = models.CharField(max_length=255, verbose_name="系统调用")
+    parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
+
+    class Meta:
+        verbose_name = "系统指令"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return self.label
+
+class Form(GenerateScriptMixin, ERPSysBase):
+    data_items = models.ManyToManyField(DataItem, through='FormComponents', verbose_name="字段")
+    form_type = models.CharField(max_length=50, choices=[(form_type.name, form_type.value) for form_type in FormType], verbose_name="类型")
+
+    class Meta:
+        verbose_name = "服务表单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return self.label
+
+class FormComponents(models.Model):
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
+    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, null=True, verbose_name="字段")
+    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
+    choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
+    expand_dict = models.BooleanField(default=False, verbose_name="展开字典")
+    is_required = models.BooleanField(default=False, verbose_name="必填")
+    is_list = models.BooleanField(default=False, verbose_name="列表字段")
+    order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
+
+    class Meta:
+        verbose_name = "表单字段"
+        verbose_name_plural = verbose_name
+        ordering = ['order']
+
 class ServiceBOM:
     @staticmethod
     def add_sub_service(name):
@@ -323,33 +370,6 @@ class ServiceBOM:
         service = Service.objects.get(name=component_name)
         parent_services_info = [{'service': relationship.service.name, 'quantity': relationship.quantity} for relationship in service.parent_services.all()]
         return parent_services_info
-
-class Form(GenerateScriptMixin, ERPSysBase):
-    data_items = models.ManyToManyField(DataItem, through='FormComponents', verbose_name="字段")
-    form_type = models.CharField(max_length=50, choices=[(form_type.name, form_type.value) for form_type in FormType], verbose_name="类型")
-
-    class Meta:
-        verbose_name = "表单"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return self.label
-
-class FormComponents(models.Model):
-    form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
-    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, null=True, verbose_name="字段")
-    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
-    choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
-    expand_dict = models.BooleanField(default=False, verbose_name="展开字典")
-    is_required = models.BooleanField(default=False, verbose_name="必填")
-    is_list = models.BooleanField(default=False, verbose_name="列表字段")
-    order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
-
-    class Meta:
-        verbose_name = "表单字段"
-        verbose_name_plural = verbose_name
-        ordering = ['order']
 
 class Project(ERPSysBase):
     domain = models.CharField(max_length=255, null=True, blank=True, verbose_name="域名")
@@ -381,22 +401,3 @@ class SourceCode(models.Model):
         verbose_name = "项目源码"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
-
-"""
-客户 姓名
-客户 年龄
-客户 性别
-客户 初诊日期
-作业员 姓名
-标准工单 日期
-耗材 名称
-耗材 规格
-耗材 价格
-耗材 库存数量
-耗材 最小库存数量
-耗材 条形码
-耗材 SKU ID
-诊室 名称
-诊室 规格
-"""

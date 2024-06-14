@@ -64,6 +64,18 @@ class FormAdmin(admin.ModelAdmin):
     inlines = [FormComponentsInline, ]
     search_fields = ['label', 'name', 'pym']
 
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ['id', 'label', 'name', 'pym', 'rule']
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(SystemInstruction)
+class SystemInstructionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'label', 'name', 'pym', 'sys_call', 'parameters']
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
 class SourceCodeInline(admin.TabularInline):
     model = SourceCode
     extra = 0
