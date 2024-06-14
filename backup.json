@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-06-14T08:18:12.986Z",
+            "last_login": "2024-06-14T09:56:01.131Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -19,14 +19,15 @@
     },
     {
         "model": "design.dataitem",
-        "pk": 1,
+        "pk": 14,
         "fields": {
-            "label": "\u836f\u54c1",
-            "name": "yao_pin",
-            "pym": "yp",
-            "erpsys_id": "389fd296-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "MATERIAL",
+            "label": "\u540d\u79f0",
+            "name": "ming_cheng",
+            "pym": "mc",
+            "erpsys_id": "360cc6d4-2a2f-11ef-a3b6-0e586f6f8a1e",
+            "field_type": "CharField",
+            "inherit": null,
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -37,212 +38,15 @@
     },
     {
         "model": "design.dataitem",
-        "pk": 2,
-        "fields": {
-            "label": "\u5ba2\u6237",
-            "name": "ke_hu",
-            "pym": "kh",
-            "erpsys_id": "46a91014-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "OPERATOR",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 3,
-        "fields": {
-            "label": "\u804c\u5458",
-            "name": "zuo_ye_yuan",
-            "pym": "zyy",
-            "erpsys_id": "4f15f8a2-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "OPERATOR",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 4,
-        "fields": {
-            "label": "\u5de5\u5355",
-            "name": "gong_dan",
-            "pym": "gd",
-            "erpsys_id": "8b7686a4-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "INFORMATION",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 5,
-        "fields": {
-            "label": "\u8017\u6750",
-            "name": "hao_cai",
-            "pym": "hc",
-            "erpsys_id": "9e992020-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "MATERIAL",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 6,
-        "fields": {
-            "label": "\u8bca\u5ba4",
-            "name": "zhen_shi",
-            "pym": "zs",
-            "erpsys_id": "a745868c-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "SPACE",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 7,
-        "fields": {
-            "label": "\u8bbe\u5907",
-            "name": "she_bei",
-            "pym": "sb",
-            "erpsys_id": "b3abaa5a-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "EQUIPMENT",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 8,
-        "fields": {
-            "label": "\u5668\u6750",
-            "name": "qi_cai",
-            "pym": "qc",
-            "erpsys_id": "bba6bcd6-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "DEVICE",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 9,
-        "fields": {
-            "label": "\u8d39\u7528",
-            "name": "fei_yong",
-            "pym": "fy",
-            "erpsys_id": "c5eabb34-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "CAPITAL",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 10,
-        "fields": {
-            "label": "\u6ce8\u610f\u4e8b\u9879",
-            "name": "zhu_yi_shi_xiang",
-            "pym": "zysx",
-            "erpsys_id": "cff299a8-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "INFORMATION",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 11,
-        "fields": {
-            "label": "\u77e5\u60c5\u540c\u610f\u4e66",
-            "name": "zhi_qing_tong_yi_shu",
-            "pym": "zqtys",
-            "erpsys_id": "d8f1c5ec-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "INFORMATION",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 12,
-        "fields": {
-            "label": "\u670d\u52a1\u9879\u76ee",
-            "name": "fu_wu_xiang_mu",
-            "pym": "fwxm",
-            "erpsys_id": "f73a6c98-27ec-11ef-a526-0e586f6f8a1e",
-            "field_type": "DictionaryField",
-            "system_resource_type": "SERVICE",
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 13,
+        "pk": 15,
         "fields": {
             "label": "\u59d3\u540d",
             "name": "xing_ming",
             "pym": "xm",
-            "erpsys_id": "26039912-297f-11ef-9918-0e586f6f8a1e",
+            "erpsys_id": "3c736910-2a2f-11ef-a3b6-0e586f6f8a1e",
             "field_type": "CharField",
-            "system_resource_type": null,
+            "inherit": null,
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -252,123 +56,498 @@
         }
     },
     {
-        "model": "design.businessobject",
-        "pk": 1,
+        "model": "design.dataitem",
+        "pk": 16,
         "fields": {
-            "label": "\u5ba2\u6237",
-            "name": "ke_hu",
-            "pym": "kh",
-            "erpsys_id": "00044aa6-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 2,
-            "bind_system_object": "User"
+            "label": "\u4eba\u5458",
+            "name": "ren_yuan",
+            "pym": "ry",
+            "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 38,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
         }
     },
     {
-        "model": "design.businessobject",
-        "pk": 2,
+        "model": "design.dataitem",
+        "pk": 18,
+        "fields": {
+            "label": "\u7269\u6599",
+            "name": "wu_liao",
+            "pym": "wl",
+            "erpsys_id": "6c35906e-2a30-11ef-8c28-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 38,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 19,
+        "fields": {
+            "label": "\u8bbe\u5907",
+            "name": "she_bei",
+            "pym": "sb",
+            "erpsys_id": "793baa96-2a30-11ef-8c28-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 38,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 20,
+        "fields": {
+            "label": "\u5de5\u5177",
+            "name": "gong_ju",
+            "pym": "gj",
+            "erpsys_id": "88656aca-2a30-11ef-8c28-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 38,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 21,
+        "fields": {
+            "label": "\u8d44\u91d1",
+            "name": "zi_jin",
+            "pym": "zj",
+            "erpsys_id": "9cc2ba4a-2a30-11ef-8c28-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 38,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 22,
+        "fields": {
+            "label": "\u7a7a\u95f4",
+            "name": "kong_jian",
+            "pym": "kj",
+            "erpsys_id": "b7b59c78-2a30-11ef-8c28-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 38,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 23,
+        "fields": {
+            "label": "\u4fe1\u606f",
+            "name": "xin_xi",
+            "pym": "xx",
+            "erpsys_id": "d9ce1772-2a30-11ef-8c28-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 38,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 24,
+        "fields": {
+            "label": "\u670d\u52a1\u9879\u76ee",
+            "name": "fu_wu_xiang_mu",
+            "pym": "fwxm",
+            "erpsys_id": "e66128a8-2a30-11ef-8c28-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 38,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 25,
         "fields": {
             "label": "\u64cd\u4f5c\u5458",
             "name": "cao_zuo_yuan",
             "pym": "czy",
-            "erpsys_id": "0c30daf6-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 3,
-            "bind_system_object": "User"
+            "erpsys_id": "caff453a-2a31-11ef-ba21-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 16,
+            "bind_system_object": "User",
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
         }
     },
     {
-        "model": "design.businessobject",
-        "pk": 3,
+        "model": "design.dataitem",
+        "pk": 26,
         "fields": {
-            "label": "\u4fdd\u59a5\u9002",
-            "name": "bao_tuo_shi",
-            "pym": "bts",
-            "erpsys_id": "19004b2c-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 1,
-            "bind_system_object": null
+            "label": "\u5ba2\u6237",
+            "name": "ke_hu",
+            "pym": "kh",
+            "erpsys_id": "88980352-2a32-11ef-946b-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 25,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
         }
     },
     {
-        "model": "design.businessobject",
-        "pk": 4,
-        "fields": {
-            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
-            "name": "qiao_ya_deng_ji_zhi",
-            "pym": "qydjz",
-            "erpsys_id": "30063714-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 1,
-            "bind_system_object": null
-        }
-    },
-    {
-        "model": "design.businessobject",
-        "pk": 5,
-        "fields": {
-            "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
-            "name": "yi_ci_xing_zhu_she_qi",
-            "pym": "ycxzsq",
-            "erpsys_id": "455053f2-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 5,
-            "bind_system_object": null
-        }
-    },
-    {
-        "model": "design.businessobject",
-        "pk": 6,
-        "fields": {
-            "label": "\u6cbb\u7597\u5ba4",
-            "name": "zhi_liao_shi",
-            "pym": "zls",
-            "erpsys_id": "60aea73e-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 6,
-            "bind_system_object": null
-        }
-    },
-    {
-        "model": "design.businessobject",
-        "pk": 7,
-        "fields": {
-            "label": "\u6807\u51c6\u5de5\u5355",
-            "name": "biao_zhun_gong_dan",
-            "pym": "bzgd",
-            "erpsys_id": "87d632b4-28a1-11ef-b3e0-0e586f6f8a1e",
-            "data_item": 4,
-            "bind_system_object": null
-        }
-    },
-    {
-        "model": "design.businessobject",
-        "pk": 8,
-        "fields": {
-            "label": "\u836f\u54c1",
-            "name": "yao_pin",
-            "pym": "yp",
-            "erpsys_id": "207969aa-28a2-11ef-aa55-0e586f6f8a1e",
-            "data_item": 1,
-            "bind_system_object": null
-        }
-    },
-    {
-        "model": "design.businessobject",
-        "pk": 9,
-        "fields": {
-            "label": "\u8017\u6750",
-            "name": "hao_cai",
-            "pym": "hc",
-            "erpsys_id": "26316992-28a2-11ef-aa55-0e586f6f8a1e",
-            "data_item": 5,
-            "bind_system_object": null
-        }
-    },
-    {
-        "model": "design.businessobject",
-        "pk": 10,
+        "model": "design.dataitem",
+        "pk": 27,
         "fields": {
             "label": "\u804c\u5458",
             "name": "zhi_yuan",
             "pym": "zy",
-            "erpsys_id": "5605fc28-28a2-11ef-aa55-0e586f6f8a1e",
-            "data_item": 3,
-            "bind_system_object": null
+            "erpsys_id": "99f7a5b2-2a32-11ef-946b-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 25,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 28,
+        "fields": {
+            "label": "\u836f\u54c1",
+            "name": "yao_pin",
+            "pym": "yp",
+            "erpsys_id": "f08b61c0-2a32-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 18,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 29,
+        "fields": {
+            "label": "\u8017\u6750",
+            "name": "hao_cai",
+            "pym": "hc",
+            "erpsys_id": "fefa5b58-2a32-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 18,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 30,
+        "fields": {
+            "label": "\u5de5\u5355",
+            "name": "gong_dan",
+            "pym": "gd",
+            "erpsys_id": "5abb3476-2a33-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 23,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 31,
+        "fields": {
+            "label": "\u8bca\u5ba4",
+            "name": "zhen_shi",
+            "pym": "zs",
+            "erpsys_id": "6adc9430-2a33-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 22,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 32,
+        "fields": {
+            "label": "\u533b\u751f",
+            "name": "yi_sheng",
+            "pym": "ys",
+            "erpsys_id": "a22f5c10-2a33-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 27,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 33,
+        "fields": {
+            "label": "\u62a4\u58eb",
+            "name": "hu_shi",
+            "pym": "hs",
+            "erpsys_id": "b01b7c96-2a33-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 27,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 34,
+        "fields": {
+            "label": "\u5ba2\u670d",
+            "name": "ke_fu",
+            "pym": "kf",
+            "erpsys_id": "c2397b9e-2a33-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 27,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 35,
+        "fields": {
+            "label": "\u4fdd\u59a5\u9002",
+            "name": "bao_tuo_shi",
+            "pym": "bts",
+            "erpsys_id": "f18adca8-2a33-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 28,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 36,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "fee23f2c-2a33-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 28,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 37,
+        "fields": {
+            "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
+            "name": "yi_ci_xing_zhu_she_qi",
+            "pym": "ycxzsq",
+            "erpsys_id": "194cc580-2a34-11ef-b9c0-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": 29,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 38,
+        "fields": {
+            "label": "\u7cfb\u7edf\u7c7b\u578b",
+            "name": "xi_tong_lei_xing",
+            "pym": "xtlx",
+            "erpsys_id": "682ef634-2a5a-11ef-9cc9-0e586f6f8a1e",
+            "field_type": "DictionaryField",
+            "inherit": null,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null,
+            "is_entity": false
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 1,
+        "fields": {
+            "data_item": 16,
+            "sub_data_item": 15,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 3,
+        "fields": {
+            "data_item": 18,
+            "sub_data_item": 14,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 4,
+        "fields": {
+            "data_item": 19,
+            "sub_data_item": 14,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 5,
+        "fields": {
+            "data_item": 20,
+            "sub_data_item": 14,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 6,
+        "fields": {
+            "data_item": 21,
+            "sub_data_item": 14,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 7,
+        "fields": {
+            "data_item": 22,
+            "sub_data_item": 14,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 8,
+        "fields": {
+            "data_item": 23,
+            "sub_data_item": 14,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
         }
     },
     {
@@ -380,8 +559,8 @@
             "pym": "rdszl",
             "erpsys_id": "88e73c20-1f1e-11ef-b5e7-0e586f6f8a1e",
             "form": 6,
-            "subject": 1,
-            "work_order": 7,
+            "subject": null,
+            "work_order": null,
             "route_to": null,
             "program": {
                 "\u4e8b\u4ef6": [
@@ -402,8 +581,8 @@
             "pym": "zs",
             "erpsys_id": "8c8b5334-1f4b-11ef-b5e7-0e586f6f8a1e",
             "form": 5,
-            "subject": 1,
-            "work_order": 7,
+            "subject": null,
+            "work_order": null,
             "route_to": null,
             "program": null,
             "service_type": "OPERATION"
@@ -418,8 +597,8 @@
             "pym": "ly",
             "erpsys_id": "dfd3eb82-1f4b-11ef-9d26-0e586f6f8a1e",
             "form": 4,
-            "subject": 8,
-            "work_order": 7,
+            "subject": null,
+            "work_order": null,
             "route_to": null,
             "program": null,
             "service_type": "OPERATION"
@@ -434,8 +613,8 @@
             "pym": "lhc",
             "erpsys_id": "f6e7f7ca-1f4e-11ef-9d26-0e586f6f8a1e",
             "form": 3,
-            "subject": 9,
-            "work_order": 7,
+            "subject": null,
+            "work_order": null,
             "route_to": null,
             "program": null,
             "service_type": "OPERATION"
@@ -450,8 +629,8 @@
             "pym": "yy",
             "erpsys_id": "859444c4-1f59-11ef-b907-0e586f6f8a1e",
             "form": 1,
-            "subject": 1,
-            "work_order": 7,
+            "subject": null,
+            "work_order": null,
             "route_to": null,
             "program": null,
             "service_type": "OPERATION"
@@ -466,8 +645,8 @@
             "pym": "sf",
             "erpsys_id": "44065154-1f5a-11ef-9e76-0e586f6f8a1e",
             "form": 2,
-            "subject": 1,
-            "work_order": 7,
+            "subject": null,
+            "work_order": null,
             "route_to": null,
             "program": null,
             "service_type": "OPERATION"
