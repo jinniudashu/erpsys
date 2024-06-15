@@ -94,6 +94,47 @@ class GenerateScriptMixin(object):
         return {'models': model_script, 'admin': admin_script}
 
 class DataItemManager(models.Manager):
+    # 抽取excel数据
+    def abstract_excel_data(self, file_path="design/business_data/preprocessing/initial_data.xlsx"):
+        import pandas as pd
+        # 将 Pandas 数据类型映射到 Python 的原生数据类型
+        dtype_map = {
+            'int64': 'IntegerField',
+            'float64': 'DecimalField',
+            'bool': 'BooleanField',
+            'datetime64[ns]': 'DateTimeField',
+            'object': 'CharField'
+        }    
+
+        # Load the Excel file
+        xls = pd.ExcelFile(file_path)
+
+        result = {}
+        # Iterate through each sheet
+        for sheet_name in xls.sheet_names:
+            dict_data_item = self.get_or_create(label=sheet_name, defaults={'field_type': 'DictionaryField'})[0]
+
+            # Parse the sheet into a DataFrame
+            df = pd.read_excel(xls, sheet_name=sheet_name)
+
+            # Parse the column names and their types
+            fields = [{'name': col, 'type': dtype_map.get(str(df[col].dtype), 'CharField')} for col in df.columns]
+            for field in fields:
+                data_item = self.get_or_create(label=field['name'], defaults={'field_type': field['type']})[0]
+                dict_data_item.consists.add(data_item)
+            
+            # Parse the sheet data into a list of dictionaries
+            dict_data = df.to_dict(orient='records')
+            dict_data_item.init_content = json.dumps(dict_data, ensure_ascii=False)
+            dict_data_item.save()
+
+            # Add parsed information to the result
+            result[sheet_name] = {
+                'fields': fields,
+                'data': dict_data
+            }
+            print(f"Created DataItemDict: {sheet_name}, {result[sheet_name]}")
+
     # 抽取Forms数据
     def abstract_forms_data(self, forms=GLOBAL_INITIAL_STATES['Forms']):
         def _map_field_type(f_type):
@@ -117,19 +158,19 @@ class DataItemManager(models.Manager):
                 enum = entry.get('enum', None)
                 try:
                     if enum is None:
-                        data_item = DataItem.objects.get_or_create(label=label, defaults={'field_type': field_type})[0]
+                        data_item = self.get_or_create(label=label, defaults={'field_type': field_type})[0]
                         # 向表单添加数据项
                         form.data_items.add(data_item)
                         print(f"Created DataItem: {data_item.label if data_item else 'None'}")
                     else:
-                        dict, created = self.get_or_create(label=label)
+                        dict_data_item, created = self.get_or_create(label=label, defaults={'field_type': 'DictionaryField'})
                         if created:
-                            dict.data_items.add(zhi_data_item)
-                            dict.init_content = json.dumps([{'值': item} for item in enum], ensure_ascii=False)
-                            dict.save()
-                            # 向表单添加字典对应的数据项
-                            form.data_items.add(dict.data_item)
-                            print(f"Created DataItemDict: {dict}")
+                            dict_data_item.consists.add(zhi_data_item)
+                            dict_data_item.init_content = json.dumps([{'值': item} for item in enum], ensure_ascii=False)
+                            dict_data_item.save()
+                        # 向表单添加字典对应的数据项
+                        form.data_items.add(dict_data_item)
+                        print(f"Created DataItemDict: {dict_data_item}")
                 except IntegrityError as e:
                     print(f"Error creating field: {e}")
 
@@ -139,47 +180,6 @@ class DataItemManager(models.Manager):
             _form = Form.objects.get_or_create(label=form['label'], defaults={'form_type': FormType.PRODUCE.name})[0]
             for entry in entries:
                 _process_entry(entry, _form)
-
-    # 抽取excel数据
-    def abstract_excel_data(self, file_path="design/business_data/preprocessing/initial_data.xlsx"):
-        import pandas as pd
-        # 将 Pandas 数据类型映射到 Python 的原生数据类型
-        dtype_map = {
-            'int64': 'IntegerField',
-            'float64': 'DecimalField',
-            'bool': 'BooleanField',
-            'datetime64[ns]': 'DateTimeField',
-            'object': 'CharField'
-        }    
-
-        # Load the Excel file
-        xls = pd.ExcelFile(file_path)
-
-        result = {}
-        # Iterate through each sheet
-        for sheet_name in xls.sheet_names:
-            dict = self.get_or_create(label=sheet_name)[0]
-
-            # Parse the sheet into a DataFrame
-            df = pd.read_excel(xls, sheet_name=sheet_name)
-
-            # Parse the column names and their types
-            fields = [{'name': col, 'type': dtype_map.get(str(df[col].dtype), 'CharField')} for col in df.columns]
-            for field in fields:
-                data_item = DataItem.objects.get_or_create(label=field['name'], defaults={'field_type': field['type']})[0]
-                dict.data_items.add(data_item)
-            
-            # Parse the sheet data into a list of dictionaries
-            data = df.to_dict(orient='records')
-            dict.init_content = json.dumps(data, ensure_ascii=False)
-            dict.save()
-
-            # Add parsed information to the result
-            result[sheet_name] = {
-                'fields': fields,
-                'data': data
-            }
-            print(f"Created DataItemDict: {sheet_name}, {result[sheet_name]}")
 
 class DataItem(ERPSysBase):
     consists = models.ManyToManyField('self', through='DataItemConsists', related_name='parent', symmetrical=False, verbose_name="数据项组成")
@@ -402,3 +402,11 @@ class SourceCode(models.Model):
         verbose_name = "项目源码"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+"""
+客户	姓名	年龄	性别	初诊日期			
+作业员	姓名						
+标准工单	日期						
+耗材	名称	规格	价格	库存数量	最小库存数量	条形码	SKU ID
+诊室	名称	规格					
+"""
