@@ -338,6 +338,7 @@ class FormComponents(models.Model):
     expand_dict = models.BooleanField(default=False, verbose_name="展开字典")
     is_required = models.BooleanField(default=False, verbose_name="必填")
     is_list = models.BooleanField(default=False, verbose_name="列表字段")
+    is_aggregate = models.BooleanField(default=False, verbose_name="聚合字段")
     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
 
     class Meta:
