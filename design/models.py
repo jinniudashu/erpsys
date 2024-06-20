@@ -112,7 +112,7 @@ class DataItemManager(models.Manager):
         result = {}
         # Iterate through each sheet
         for sheet_name in xls.sheet_names:
-            dict_data_item = self.get_or_create(label=sheet_name, defaults={'field_type': 'DictionaryField'})[0]
+            dict_data_item = self.get_or_create(label=sheet_name, defaults={'field_type': 'TypeField'})[0]
 
             # Parse the sheet into a DataFrame
             df = pd.read_excel(xls, sheet_name=sheet_name)
@@ -163,7 +163,7 @@ class DataItemManager(models.Manager):
                         form.data_items.add(data_item)
                         print(f"Created DataItem: {data_item.label if data_item else 'None'}")
                     else:
-                        dict_data_item, created = self.get_or_create(label=label, defaults={'field_type': 'DictionaryField'})
+                        dict_data_item, created = self.get_or_create(label=label, defaults={'field_type': 'TypeField'})
                         if created:
                             dict_data_item.consists.add(zhi_data_item)
                             dict_data_item.init_content = json.dumps([{'值': item} for item in enum], ensure_ascii=False)
@@ -184,7 +184,8 @@ class DataItemManager(models.Manager):
 class DataItem(ERPSysBase):
     consists = models.ManyToManyField('self', through='DataItemConsists', related_name='parent', symmetrical=False, verbose_name="数据项组成")
     taxonomy = models.ManyToManyField('self', through='DataItemTaxonomy', symmetrical=False, verbose_name="词义分类")
-    field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据项类型")
+    field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据类型")
+    business_type = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='instances', null=True, blank=True, verbose_name="业务类型")
     inherit = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='children', null=True, blank=True, verbose_name="继承")
     bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
@@ -319,7 +320,8 @@ class SystemInstruction(ERPSysBase):
         return self.label
 
 class Form(GenerateScriptMixin, ERPSysBase):
-    data_items = models.ManyToManyField(DataItem, through='FormComponents', verbose_name="字段")
+    data_items = models.ManyToManyField(DataItem, through='FormComponents', related_name='parent_form', verbose_name="字段")
+    data_items_config = models.ManyToManyField(DataItem, through='FormComponentsConfig', related_name='root_form', verbose_name="字段配置")
     form_type = models.CharField(max_length=50, choices=[(form_type.name, form_type.value) for form_type in FormType], verbose_name="类型")
 
     class Meta:
@@ -345,6 +347,17 @@ class FormComponents(models.Model):
         verbose_name = "表单字段"
         verbose_name_plural = verbose_name
         ordering = ['order']
+
+class FormComponentsConfig(models.Model):
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
+    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="字段")
+    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
+    readonly = models.BooleanField(default=False, verbose_name="只读")
+
+    class Meta:
+        verbose_name = "字段配置"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
 
 class ServiceBOM:
     @staticmethod

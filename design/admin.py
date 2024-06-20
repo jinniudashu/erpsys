@@ -17,7 +17,7 @@ class DataItemTaxonomyInline(admin.TabularInline):
 
 @admin.register(DataItem)
 class DataItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'inherit', 'bind_system_object']
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'inherit', 'bind_system_object']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'is_entity']
@@ -57,11 +57,16 @@ class FormComponentsInline(admin.TabularInline):
     extra = 0
     autocomplete_fields = ['data_item']
 
+class FormComponentsConfigInline(admin.TabularInline):
+    model = FormComponentsConfig
+    extra = 0
+    autocomplete_fields = ['data_item']
+
 @admin.register(Form)
 class FormAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Form._meta.fields]
     list_display_links = ['label', 'name',]
-    inlines = [FormComponentsInline, ]
+    inlines = [FormComponentsInline, FormComponentsConfigInline]
     search_fields = ['label', 'name', 'pym']
 
 @admin.register(Event)
