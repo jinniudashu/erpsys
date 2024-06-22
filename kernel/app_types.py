@@ -1,0 +1,1 @@
+app_types = {'gang_wei_ming_cheng': 'CharField', 'zhi': 'CharField', 'xing_ming': 'CharField', 'ming_cheng': 'CharField', 'xi_tong_yong_hu': 'User', 'wu_liao': 'WuLiao', 'ru_chu_ku_cao_zuo': 'RuChuKuCaoZuo', 'shu_liang': 'IntegerField', 'bing_li_hao': 'CharField'}

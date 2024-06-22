@@ -1,5 +1,6 @@
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.management import call_command
 from django.utils import timezone
 import json
 from collections import defaultdict
@@ -44,6 +45,14 @@ def write_project_file(file_name, content):
     with open(file_name, 'w', encoding='utf-8') as f:
         f.write(content)
 
+def migrate_app(app_name):
+    try:
+        call_command('makemigrations', app_name)
+        call_command('migrate', app_name)
+        print(f"Successfully migrated {app_name}")
+    except Exception as e:
+        print(f"Error migrating {app_name}: {e}")
+
 # 生成脚本, 被design.admin调用
 def generate_source_code(project):
     # 生成models.py, admin.py脚本
@@ -51,13 +60,18 @@ def generate_source_code(project):
 
         models_script = ScriptFileHeader['models_file_head']
         admin_script =  ScriptFileHeader['admin_file_head']
+        fields_type_script = ScriptFileHeader['fields_type_head']
+        fields_type = {}
 
         for item in query_set:
-            _script = item.generate_script(domain)            
-            models_script = f'{models_script}{_script["models"]}'
-            admin_script = f'{admin_script}{_script["admin"]}'
+            script = item.generate_script(domain)            
+            models_script = f'{models_script}{script["models"]}'
+            admin_script = f'{admin_script}{script["admin"]}'
+            fields_type.update(script["fields_type"])
 
-        return {'models': models_script, 'admin': admin_script, }
+        fields_type_script = f'{fields_type_script}{fields_type}'
+
+        return {'models': models_script, 'admin': admin_script, 'fields_type': fields_type_script}
 
     # 生成基类脚本baseclass.py
     def _generate_baseclass_script(queryset):
@@ -127,7 +141,7 @@ class FieldsType(Enum):
         }
     }
 
-    # 生成运行时数据结构
+    # 生成运行时数据结构代码
     _queryset = DataItem.objects.filter(field_type='TypeField')
     tree, root_items, depth_map = build_inheritance_tree_with_depth(_queryset)
     sorted_items, depth_map = get_sorted_items_with_depth(tree, root_items, depth_map)
@@ -136,27 +150,33 @@ class FieldsType(Enum):
     source_code['script']['type'] = _generate_models_admin(sorted_items, project.domain)
     print('models:', source_code['script']['type']['models'])
     print('admin:', source_code['script']['type']['admin'])
-    # 生成服务&表单脚本
+    print('fields_type:', source_code['script']['type']['fields_type'])
+
+    # 生成服务表单代码
     # project_queryset = project.get_queryset_by_model('Service').order_by('-id')
     # print('project_queryset', project_queryset)
-    # source_code['script']['service'] = _generate_models_admin(project_queryset, project.domain)
+    # source_code['script']['form'] = _generate_models_admin(project_queryset, project.domain)
 
     # 导出baseclass.py脚本
+    
     # 导出业务定义数据
     # source_code['data']['core'] = _generate_init_data(project)
 
-    result = SourceCode.objects.create(
-        name = timezone.now().strftime('%Y%m%d%H%M%S'),
-        project = project,
-        code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
-    )
-    print(f'作业脚本写入数据库成功, id: {result}')
+    # result = SourceCode.objects.create(
+    #     name = timezone.now().strftime('%Y%m%d%H%M%S'),
+    #     project = project,
+    #     code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
+    # )
+    # print(f'作业脚本写入数据库成功, id: {result}')
 
-    # 写入项目文件
-    print('开始写入项目文件...')
-    filename = f'./{project.name}/models.py'
-    content = source_code['script']['type']['models']
-    write_project_file(filename, content)
-    filename = f'./{project.name}/admin.py'
-    content = source_code['script']['type']['admin']
-    write_project_file(filename, content)
+    print('写入项目文件...')
+    object_files = [
+        (f'./{project.name}/models.py', source_code['script']['type']['models']),
+        (f'./{project.name}/admin.py', source_code['script']['type']['admin']),
+        (f'./kernel/app_types.py', source_code['script']['type']['fields_type']),
+    ]
+    for filename, content in object_files:
+        write_project_file(filename, content)
+
+    # makemigrations & migrate
+    migrate_app(project.name)

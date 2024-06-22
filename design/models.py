@@ -43,9 +43,10 @@ class ERPSysBase(models.Model):
 class GenerateScriptMixin(object):
     def _create_model_script(self):
         fields_script = autocomplete_fields = radio_fields = ''
-        fields_script = self.generate_field_definitions()
+        field_type_dict = {}
+        fields_script, field_type_dict = self.generate_field_definitions()
 
-        return fields_script, autocomplete_fields, radio_fields
+        return fields_script, field_type_dict, autocomplete_fields, radio_fields
 
     def _create_admin_script(self, body):
         class_name = self._get_data_item_classname()
@@ -67,7 +68,6 @@ class {class_name}Admin(admin.ModelAdmin):
                     ancestry_list, consists_list = self.get_ancestry_and_consists()
                     print('ancestry_list:', ancestry_list)
                     print('consists_list:', consists_list)
-            case 'Service':
                 pass
             case 'Form':
                 pass
@@ -92,7 +92,7 @@ class {class_name}Admin(admin.ModelAdmin):
 
     def generate_script(self, domain):
         model_head = f'class {self._get_data_item_classname()}(models.Model):\n'
-        model_fields, autocomplete_fields, radio_fields = self._create_model_script()
+        model_fields, fields_type_dict, autocomplete_fields, radio_fields = self._create_model_script()
         model_footer = self._create_model_footer_script()
         model_script = f'{model_head}{model_fields}{model_footer}\n'
 
@@ -104,7 +104,7 @@ class {class_name}Admin(admin.ModelAdmin):
             modeladmin_body['autocomplete_fields'] = autocomplete_fields
         admin_script = self._create_admin_script(modeladmin_body)
 
-        return {'models': model_script, 'admin': admin_script}
+        return {'models': model_script, 'admin': admin_script, 'fields_type': fields_type_dict}
 
 class DataItemManager(models.Manager):
     # 抽取excel数据
@@ -244,10 +244,12 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
 
     def generate_field_definitions(self):
         field_definitions = ''
+        field_type_dict = {}
 
         for consist_item in self.consists.all():
             field_name = consist_item.name
             field_type = consist_item.field_type
+            field_type_dict.update({field_name: field_type})
             match field_type:
                 case 'CharField':
                     field_definitions += f"    {field_name} = models.CharField(max_length={consist_item.max_length}, blank=True, null=True, verbose_name='{consist_item.label}')\n"
@@ -266,9 +268,12 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
                 case 'FileField':
                     field_definitions += f"    {field_name} = models.FileField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                 case 'TypeField':
-                    field_definitions += f"    {field_name} = models.ForeignKey({consist_item._get_data_item_classname()}, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                    _field_type = consist_item._get_data_item_classname()
+                    field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                    field_type_dict.update({field_name: _field_type})
                 case 'User':
                     field_definitions += f"    {field_name} = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                    field_type_dict.update({field_name: 'User'})
                 case 'InstanceField':
                     pass
                 case 'ComputedField':
@@ -276,7 +281,7 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
                 case _:
                     pass
 
-        return field_definitions
+        return field_definitions, field_type_dict
 
 class DataItemConsists(models.Model):
     data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='subset', null=True, verbose_name="数据项")
@@ -304,7 +309,7 @@ class DataItemTaxonomy(models.Model):
     def __str__(self):
         return f"{self.hypernymy.name} -> {self.hyponymy.name}"
 
-class Service(GenerateScriptMixin, ERPSysBase):
+class Service(ERPSysBase):
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
     form = models.ForeignKey('Form', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
     subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业对象")
@@ -460,12 +465,6 @@ class Project(ERPSysBase):
     
     def __str__(self):
         return self.label
-
-    def get_queryset_by_model(self, model_name):
-        if model_name == 'Service':
-            return self.services.all()
-        # else:
-        #     return eval(model_name).objects.all()
 
 class SourceCode(models.Model):
     name = models.CharField(max_length=255, null=True, verbose_name="名称")

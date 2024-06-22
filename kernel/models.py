@@ -4,9 +4,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 import uuid
 
-from design.models import Service
+from design.models import DataItem, Service, Event, SystemInstruction, Form
+from maor.models import *
 from kernel.types import ProcessState
-
+from kernel.app_types import app_types
 class Process(models.Model):
     """
     进程
