@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-06-19T14:10:00.548Z",
+            "last_login": "2024-06-22T06:54:38.339Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -33,8 +33,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -53,8 +52,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -73,8 +71,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -93,8 +90,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -113,8 +109,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -133,8 +128,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -153,8 +147,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -173,8 +166,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -193,8 +185,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -213,8 +204,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -228,13 +218,12 @@
             "field_type": "TypeField",
             "business_type": null,
             "inherit": 16,
-            "bind_system_object": "User",
+            "bind_system_object": null,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -253,8 +242,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -273,8 +261,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -293,8 +280,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -313,8 +299,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -333,8 +318,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -353,8 +337,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -373,8 +356,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -393,8 +375,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -413,8 +394,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -433,8 +413,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -453,8 +432,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -473,8 +451,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": null,
-            "init_content": "[{\"\u5c97\u4f4d\u540d\u79f0\": \"\u533b\u751f\"}, {\"\u5c97\u4f4d\u540d\u79f0\": \"\u62a4\u58eb\"}, {\"\u5c97\u4f4d\u540d\u79f0\": \"\u5ba2\u670d\"}, {\"\u5c97\u4f4d\u540d\u79f0\": \"\u7ba1\u7406\u5458\"}]",
-            "is_entity": false
+            "init_content": "[{\"\u5c97\u4f4d\u540d\u79f0\": \"\u533b\u751f\"}, {\"\u5c97\u4f4d\u540d\u79f0\": \"\u62a4\u58eb\"}, {\"\u5c97\u4f4d\u540d\u79f0\": \"\u5ba2\u670d\"}, {\"\u5c97\u4f4d\u540d\u79f0\": \"\u7ba1\u7406\u5458\"}]"
         }
     },
     {
@@ -493,108 +470,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": null,
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 41,
-        "fields": {
-            "label": "\u4f1a\u5458",
-            "name": "hui_yuan",
-            "pym": "hy",
-            "erpsys_id": "c2698b88-2c6b-11ef-81c5-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
-            "inherit": null,
-            "bind_system_object": null,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": null,
-            "init_content": "[{\"\u4f1a\u5458\u540d\u79f0\": \"VIP\", \"\u661f\u7ea7\": NaN, \"\u5145\u503c\u91d1\u989d\": 10000, \"\u4f1a\u5458\u6298\u6263\": 0.98}, {\"\u4f1a\u5458\u540d\u79f0\": \"VIP\", \"\u661f\u7ea7\": \"\u4e8c\u661f\", \"\u5145\u503c\u91d1\u989d\": 14800, \"\u4f1a\u5458\u6298\u6263\": 0.96}, {\"\u4f1a\u5458\u540d\u79f0\": \"VIP\", \"\u661f\u7ea7\": \"\u4e09\u661f\", \"\u5145\u503c\u91d1\u989d\": 18800, \"\u4f1a\u5458\u6298\u6263\": 0.94}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u94f6\u5361\", \"\u661f\u7ea7\": NaN, \"\u5145\u503c\u91d1\u989d\": 20000, \"\u4f1a\u5458\u6298\u6263\": 0.92}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u94f6\u5361\", \"\u661f\u7ea7\": \"\u4e8c\u661f\", \"\u5145\u503c\u91d1\u989d\": 30000, \"\u4f1a\u5458\u6298\u6263\": 0.9}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u94f6\u5361\", \"\u661f\u7ea7\": \"\u4e09\u661f\", \"\u5145\u503c\u91d1\u989d\": 40000, \"\u4f1a\u5458\u6298\u6263\": 0.88}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u91d1\u5361\", \"\u661f\u7ea7\": NaN, \"\u5145\u503c\u91d1\u989d\": 60000, \"\u4f1a\u5458\u6298\u6263\": 0.86}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u91d1\u5361\", \"\u661f\u7ea7\": \"\u4e8c\u661f\", \"\u5145\u503c\u91d1\u989d\": 80000, \"\u4f1a\u5458\u6298\u6263\": 0.84}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u91d1\u5361\", \"\u661f\u7ea7\": \"\u4e09\u661f\", \"\u5145\u503c\u91d1\u989d\": 100000, \"\u4f1a\u5458\u6298\u6263\": 0.82}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u767d\u91d1\u5361\", \"\u661f\u7ea7\": NaN, \"\u5145\u503c\u91d1\u989d\": 150000, \"\u4f1a\u5458\u6298\u6263\": 0.8}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u767d\u91d1\u5361\", \"\u661f\u7ea7\": \"\u4e8c\u661f\", \"\u5145\u503c\u91d1\u989d\": 200000, \"\u4f1a\u5458\u6298\u6263\": 0.78}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u767d\u91d1\u5361\", \"\u661f\u7ea7\": \"\u4e09\u661f\", \"\u5145\u503c\u91d1\u989d\": 300000, \"\u4f1a\u5458\u6298\u6263\": 0.76}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u94bb\u77f3\u5361\", \"\u661f\u7ea7\": NaN, \"\u5145\u503c\u91d1\u989d\": 500000, \"\u4f1a\u5458\u6298\u6263\": 0.74}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u94bb\u77f3\u5361\", \"\u661f\u7ea7\": \"\u4e8c\u661f\", \"\u5145\u503c\u91d1\u989d\": 900000, \"\u4f1a\u5458\u6298\u6263\": 0.71}, {\"\u4f1a\u5458\u540d\u79f0\": \"\u94bb\u77f3\u5361\", \"\u661f\u7ea7\": \"\u4e09\u661f\", \"\u5145\u503c\u91d1\u989d\": 1400000, \"\u4f1a\u5458\u6298\u6263\": 0.68}]",
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 42,
-        "fields": {
-            "label": "\u4f1a\u5458\u540d\u79f0",
-            "name": "hui_yuan_ming_cheng",
-            "pym": "hymc",
-            "erpsys_id": "c269d066-2c6b-11ef-81c5-0e586f6f8a1e",
-            "field_type": "CharField",
-            "business_type": null,
-            "inherit": null,
-            "bind_system_object": null,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": null,
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 43,
-        "fields": {
-            "label": "\u661f\u7ea7",
-            "name": "xing_ji",
-            "pym": "xj",
-            "erpsys_id": "c26a1486-2c6b-11ef-81c5-0e586f6f8a1e",
-            "field_type": "CharField",
-            "business_type": null,
-            "inherit": null,
-            "bind_system_object": null,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": null,
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 44,
-        "fields": {
-            "label": "\u5145\u503c\u91d1\u989d",
-            "name": "chong_zhi_jin_e",
-            "pym": "czje",
-            "erpsys_id": "c26a5978-2c6b-11ef-81c5-0e586f6f8a1e",
-            "field_type": "IntegerField",
-            "business_type": null,
-            "inherit": null,
-            "bind_system_object": null,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": null,
-            "init_content": null,
-            "is_entity": false
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 45,
-        "fields": {
-            "label": "\u4f1a\u5458\u6298\u6263",
-            "name": "hui_yuan_zhe_kou",
-            "pym": "hyzk",
-            "erpsys_id": "c26aa680-2c6b-11ef-81c5-0e586f6f8a1e",
-            "field_type": "DecimalField",
-            "business_type": null,
-            "inherit": null,
-            "bind_system_object": null,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": null,
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -613,8 +489,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": null,
-            "init_content": "[{\"\u503c\": \"\u5149\u7535\u7c7b\"}, {\"\u503c\": \"\u62a4\u80a4\u54c1\"}, {\"\u503c\": \"\u5316\u5b66\u7115\u80a4\"}, {\"\u503c\": \"\u624b\u672f\u7c7b\"}, {\"\u503c\": \"\u4eea\u5668\u7c7b\"}, {\"\u503c\": \"\u6ce8\u5c04\u586b\u5145\u7c7b\"}]",
-            "is_entity": false
+            "init_content": "[{\"\u503c\": \"\u5149\u7535\u7c7b\"}, {\"\u503c\": \"\u62a4\u80a4\u54c1\"}, {\"\u503c\": \"\u5316\u5b66\u7115\u80a4\"}, {\"\u503c\": \"\u624b\u672f\u7c7b\"}, {\"\u503c\": \"\u4eea\u5668\u7c7b\"}, {\"\u503c\": \"\u6ce8\u5c04\u586b\u5145\u7c7b\"}]"
         }
     },
     {
@@ -633,8 +508,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": null,
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
@@ -653,8 +527,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": "[{\"\u503c\": \"\u5165\u5e93\"}, {\"\u503c\": \"\u51fa\u5e93\"}]",
-            "is_entity": false
+            "init_content": "[{\"\u503c\": \"\u5165\u5e93\"}, {\"\u503c\": \"\u51fa\u5e93\"}]"
         }
     },
     {
@@ -673,15 +546,14 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
         }
     },
     {
         "model": "design.dataitem",
         "pk": 50,
         "fields": {
-            "label": "\u7269\u6599\u660e\u7ec6\u8bb0\u5f55",
+            "label": "\u7269\u6599\u53f0\u8d26",
             "name": "wu_liao_ming_xi_ji_lu",
             "pym": "wlmxjl",
             "erpsys_id": "5741ba0a-2c6c-11ef-a7db-0e586f6f8a1e",
@@ -693,8 +565,45 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null,
-            "is_entity": false
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 51,
+        "fields": {
+            "label": "\u7cfb\u7edf\u7528\u6237",
+            "name": "xi_tong_yong_hu",
+            "pym": "xtyh",
+            "erpsys_id": "dedac8a6-2eee-11ef-9033-0e586f6f8a1e",
+            "field_type": "User",
+            "business_type": 38,
+            "inherit": null,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 52,
+        "fields": {
+            "label": "\u75c5\u5386\u53f7",
+            "name": "bing_li_hao",
+            "pym": "blh",
+            "erpsys_id": "6ae389e6-2eef-11ef-9033-0e586f6f8a1e",
+            "field_type": "CharField",
+            "business_type": null,
+            "inherit": null,
+            "bind_system_object": null,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
         }
     },
     {
@@ -787,50 +696,6 @@
     },
     {
         "model": "design.dataitemconsists",
-        "pk": 10,
-        "fields": {
-            "data_item": 41,
-            "sub_data_item": 42,
-            "is_multivalued": false,
-            "default_value_char": null,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 11,
-        "fields": {
-            "data_item": 41,
-            "sub_data_item": 43,
-            "is_multivalued": false,
-            "default_value_char": null,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 12,
-        "fields": {
-            "data_item": 41,
-            "sub_data_item": 44,
-            "is_multivalued": false,
-            "default_value_char": null,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 13,
-        "fields": {
-            "data_item": 41,
-            "sub_data_item": 45,
-            "is_multivalued": false,
-            "default_value_char": null,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
         "pk": 14,
         "fields": {
             "data_item": 46,
@@ -842,7 +707,40 @@
     },
     {
         "model": "design.dataitemconsists",
-        "pk": 15,
+        "pk": 17,
+        "fields": {
+            "data_item": 25,
+            "sub_data_item": 51,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 18,
+        "fields": {
+            "data_item": 26,
+            "sub_data_item": 52,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 19,
+        "fields": {
+            "data_item": 50,
+            "sub_data_item": 18,
+            "is_multivalued": false,
+            "default_value_char": null,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 20,
         "fields": {
             "data_item": 50,
             "sub_data_item": 48,
@@ -853,7 +751,7 @@
     },
     {
         "model": "design.dataitemconsists",
-        "pk": 16,
+        "pk": 21,
         "fields": {
             "data_item": 50,
             "sub_data_item": 49,
@@ -882,22 +780,6 @@
                 ]
             },
             "service_type": "SERVICE"
-        }
-    },
-    {
-        "model": "design.service",
-        "pk": 2,
-        "fields": {
-            "label": "\u6ce8\u5c04",
-            "name": "zhu_she",
-            "pym": "zs",
-            "erpsys_id": "8c8b5334-1f4b-11ef-b5e7-0e586f6f8a1e",
-            "form": 5,
-            "subject": null,
-            "work_order": null,
-            "route_to": null,
-            "program": null,
-            "service_type": "OPERATION"
         }
     },
     {
@@ -965,15 +847,6 @@
         }
     },
     {
-        "model": "design.serviceconsists",
-        "pk": 1,
-        "fields": {
-            "service": 1,
-            "sub_service": 2,
-            "quantity": 1
-        }
-    },
-    {
         "model": "design.form",
         "pk": 1,
         "fields": {
@@ -992,17 +865,6 @@
             "name": "sui_fang_ji_lu_dan",
             "pym": "sfjld",
             "erpsys_id": "1329b018-1fbd-11ef-8ee7-0e586f6f8a1e",
-            "form_type": "PRODUCE"
-        }
-    },
-    {
-        "model": "design.form",
-        "pk": 5,
-        "fields": {
-            "label": "\u6ce8\u5c04\u5355",
-            "name": "zhu_she_dan",
-            "pym": "zsd",
-            "erpsys_id": "c3e0606e-1fe5-11ef-a2bd-0e586f6f8a1e",
             "form_type": "PRODUCE"
         }
     },
@@ -1094,14 +956,73 @@
         "pk": 1,
         "fields": {
             "label": "Maor",
-            "name": "",
+            "name": "maor",
             "pym": "Maor",
             "erpsys_id": "32259010-2321-11ef-813e-0e586f6f8a1e",
             "domain": "127.0.0.1",
             "description": null,
             "services": [
+                6,
+                8,
+                7,
+                5,
                 1
             ]
+        }
+    },
+    {
+        "model": "design.sourcecode",
+        "pk": 1,
+        "fields": {
+            "name": "20240621134109",
+            "project": 1,
+            "code": "{\r\n    \"script\": {\r\n        \"service\": {},\r\n        \"type\": {\r\n            \"models\": \"\\nfrom django.db import models\\n\\n\\nclass XiTongLeiXing(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u7cfb\u7edf\u7c7b\u578b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass GangWei(models.Model):\\n    gang_wei_ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u5c97\u4f4d\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5c97\u4f4d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass FuWuLeiBie(models.Model):\\n    zhi = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u503c')\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u7c7b\u522b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass RuChuKuCaoZuo(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5165\u51fa\u5e93\u64cd\u4f5c\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass RenYuan(models.Model):\\n    xing_ming = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u59d3\u540d')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4eba\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass WuLiao(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass SheBei(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bbe\u5907\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass GongJu(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5177\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass ZiJin(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8d44\u91d1\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass KongJian(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7a7a\u95f4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass XinXi(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4fe1\u606f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass FuWuXiangMu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u9879\u76ee\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass CaoZuoYuan(models.Model):\\n    xi_tong_yong_hu = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7cfb\u7edf\u7528\u6237')\\n\\n    class Meta:\\n        verbose_name = \\\"\u64cd\u4f5c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass GongDan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5355\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass ZhenShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bca\u5ba4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass WuLiaoTaiZhang(models.Model):\\n    wu_liao = models.ForeignKey(WuLiao, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7269\u6599')\\n    ru_chu_ku_cao_zuo = models.ForeignKey(RuChuKuCaoZuo, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u5165\u51fa\u5e93\u64cd\u4f5c')\\n    shu_liang = models.IntegerField(blank=True, null=True, verbose_name='\u6570\u91cf')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\u53f0\u8d26\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass KeHu(models.Model):\\n    bing_li_hao = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u75c5\u5386\u53f7')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u6237\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass ZhiYuan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u804c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass YiSheng(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u533b\u751f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass HuShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u62a4\u58eb\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\\nclass KeFu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u670d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\",\r\n            \"admin\": \"\\nfrom django.contrib import admin\\nfrom .models import *\\n\\n\\n@admin.register(XiTongLeiXing)\\nclass XiTongLeiXingAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XiTongLeiXing._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(GangWei)\\nclass GangWeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GangWei._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(FuWuLeiBie)\\nclass FuWuLeiBieAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuLeiBie._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(RuChuKuCaoZuo)\\nclass RuChuKuCaoZuoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(RenYuan)\\nclass RenYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RenYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(WuLiao)\\nclass WuLiaoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiao._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(SheBei)\\nclass SheBeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in SheBei._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(GongJu)\\nclass GongJuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongJu._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(ZiJin)\\nclass ZiJinAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZiJin._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(KongJian)\\nclass KongJianAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KongJian._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(XinXi)\\nclass XinXiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XinXi._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(FuWuXiangMu)\\nclass FuWuXiangMuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuXiangMu._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(CaoZuoYuan)\\nclass CaoZuoYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in CaoZuoYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(GongDan)\\nclass GongDanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongDan._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(ZhenShi)\\nclass ZhenShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhenShi._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(WuLiaoTaiZhang)\\nclass WuLiaoTaiZhangAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiaoTaiZhang._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(KeHu)\\nclass KeHuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeHu._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(ZhiYuan)\\nclass ZhiYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhiYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(YiSheng)\\nclass YiShengAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in YiSheng._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(HuShi)\\nclass HuShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in HuShi._meta.fields]\\n    list_display_links = ['id']\\n\\n\\n@admin.register(KeFu)\\nclass KeFuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeFu._meta.fields]\\n    list_display_links = ['id']\\n\"\r\n        }\r\n    },\r\n    \"data\": {\r\n        \"core\": {}\r\n    }\r\n}",
+            "description": "",
+            "create_time": "2024-06-21T13:41:09.174Z"
+        }
+    },
+    {
+        "model": "design.sourcecode",
+        "pk": 2,
+        "fields": {
+            "name": "20240621135149",
+            "project": 1,
+            "code": "{\r\n    \"script\": {\r\n        \"service\": {},\r\n        \"type\": {\r\n            \"models\": \"from django.db import models\\n\\nclass XiTongLeiXing(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u7cfb\u7edf\u7c7b\u578b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GangWei(models.Model):\\n    gang_wei_ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u5c97\u4f4d\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5c97\u4f4d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass FuWuLeiBie(models.Model):\\n    zhi = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u503c')\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u7c7b\u522b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass RuChuKuCaoZuo(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5165\u51fa\u5e93\u64cd\u4f5c\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass RenYuan(models.Model):\\n    xing_ming = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u59d3\u540d')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4eba\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass WuLiao(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass SheBei(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bbe\u5907\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GongJu(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5177\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZiJin(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8d44\u91d1\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KongJian(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7a7a\u95f4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass XinXi(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4fe1\u606f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass FuWuXiangMu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u9879\u76ee\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass CaoZuoYuan(models.Model):\\n    xi_tong_yong_hu = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7cfb\u7edf\u7528\u6237')\\n\\n    class Meta:\\n        verbose_name = \\\"\u64cd\u4f5c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GongDan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5355\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZhenShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bca\u5ba4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass WuLiaoTaiZhang(models.Model):\\n    wu_liao = models.ForeignKey(WuLiao, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7269\u6599')\\n    ru_chu_ku_cao_zuo = models.ForeignKey(RuChuKuCaoZuo, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u5165\u51fa\u5e93\u64cd\u4f5c')\\n    shu_liang = models.IntegerField(blank=True, null=True, verbose_name='\u6570\u91cf')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\u53f0\u8d26\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KeHu(models.Model):\\n    bing_li_hao = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u75c5\u5386\u53f7')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u6237\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZhiYuan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u804c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass YiSheng(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u533b\u751f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass HuShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u62a4\u58eb\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KeFu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u670d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\",\r\n            \"admin\": \"from django.contrib import admin\\nfrom .models import *\\n\\n\\n@admin.register(XiTongLeiXing)\\nclass XiTongLeiXingAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XiTongLeiXing._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GangWei)\\nclass GangWeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GangWei._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(FuWuLeiBie)\\nclass FuWuLeiBieAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuLeiBie._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(RuChuKuCaoZuo)\\nclass RuChuKuCaoZuoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(RenYuan)\\nclass RenYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RenYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(WuLiao)\\nclass WuLiaoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiao._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(SheBei)\\nclass SheBeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in SheBei._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GongJu)\\nclass GongJuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongJu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZiJin)\\nclass ZiJinAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZiJin._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KongJian)\\nclass KongJianAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KongJian._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(XinXi)\\nclass XinXiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XinXi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(FuWuXiangMu)\\nclass FuWuXiangMuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuXiangMu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(CaoZuoYuan)\\nclass CaoZuoYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in CaoZuoYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GongDan)\\nclass GongDanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongDan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZhenShi)\\nclass ZhenShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhenShi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(WuLiaoTaiZhang)\\nclass WuLiaoTaiZhangAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiaoTaiZhang._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KeHu)\\nclass KeHuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeHu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZhiYuan)\\nclass ZhiYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhiYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(YiSheng)\\nclass YiShengAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in YiSheng._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(HuShi)\\nclass HuShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in HuShi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KeFu)\\nclass KeFuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeFu._meta.fields]\\n    list_display_links = ['id']\\n\"\r\n        }\r\n    },\r\n    \"data\": {\r\n        \"core\": {}\r\n    }\r\n}",
+            "description": "",
+            "create_time": "2024-06-21T13:51:49.876Z"
+        }
+    },
+    {
+        "model": "design.sourcecode",
+        "pk": 3,
+        "fields": {
+            "name": "20240621135441",
+            "project": 1,
+            "code": "{\r\n    \"script\": {\r\n        \"service\": {},\r\n        \"type\": {\r\n            \"models\": \"from django.db import models\\n\\nclass XiTongLeiXing(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u7cfb\u7edf\u7c7b\u578b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GangWei(models.Model):\\n    gang_wei_ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u5c97\u4f4d\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5c97\u4f4d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass FuWuLeiBie(models.Model):\\n    zhi = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u503c')\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u7c7b\u522b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass RuChuKuCaoZuo(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5165\u51fa\u5e93\u64cd\u4f5c\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass RenYuan(models.Model):\\n    xing_ming = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u59d3\u540d')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4eba\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass WuLiao(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass SheBei(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bbe\u5907\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GongJu(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5177\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZiJin(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8d44\u91d1\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KongJian(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7a7a\u95f4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass XinXi(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4fe1\u606f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass FuWuXiangMu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u9879\u76ee\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass CaoZuoYuan(models.Model):\\n    xi_tong_yong_hu = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7cfb\u7edf\u7528\u6237')\\n\\n    class Meta:\\n        verbose_name = \\\"\u64cd\u4f5c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GongDan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5355\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZhenShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bca\u5ba4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass WuLiaoTaiZhang(models.Model):\\n    wu_liao = models.ForeignKey(WuLiao, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7269\u6599')\\n    ru_chu_ku_cao_zuo = models.ForeignKey(RuChuKuCaoZuo, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u5165\u51fa\u5e93\u64cd\u4f5c')\\n    shu_liang = models.IntegerField(blank=True, null=True, verbose_name='\u6570\u91cf')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\u53f0\u8d26\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KeHu(models.Model):\\n    bing_li_hao = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u75c5\u5386\u53f7')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u6237\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZhiYuan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u804c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass YiSheng(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u533b\u751f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass HuShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u62a4\u58eb\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KeFu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u670d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\",\r\n            \"admin\": \"from django.contrib import admin\\nfrom .models import *\\n\\n\\n@admin.register(XiTongLeiXing)\\nclass XiTongLeiXingAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XiTongLeiXing._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GangWei)\\nclass GangWeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GangWei._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(FuWuLeiBie)\\nclass FuWuLeiBieAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuLeiBie._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(RuChuKuCaoZuo)\\nclass RuChuKuCaoZuoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(RenYuan)\\nclass RenYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RenYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(WuLiao)\\nclass WuLiaoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiao._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(SheBei)\\nclass SheBeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in SheBei._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GongJu)\\nclass GongJuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongJu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZiJin)\\nclass ZiJinAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZiJin._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KongJian)\\nclass KongJianAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KongJian._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(XinXi)\\nclass XinXiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XinXi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(FuWuXiangMu)\\nclass FuWuXiangMuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuXiangMu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(CaoZuoYuan)\\nclass CaoZuoYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in CaoZuoYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GongDan)\\nclass GongDanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongDan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZhenShi)\\nclass ZhenShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhenShi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(WuLiaoTaiZhang)\\nclass WuLiaoTaiZhangAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiaoTaiZhang._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KeHu)\\nclass KeHuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeHu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZhiYuan)\\nclass ZhiYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhiYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(YiSheng)\\nclass YiShengAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in YiSheng._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(HuShi)\\nclass HuShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in HuShi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KeFu)\\nclass KeFuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeFu._meta.fields]\\n    list_display_links = ['id']\\n\"\r\n        }\r\n    },\r\n    \"data\": {\r\n        \"core\": {}\r\n    }\r\n}",
+            "description": "",
+            "create_time": "2024-06-21T13:54:41.569Z"
+        }
+    },
+    {
+        "model": "design.sourcecode",
+        "pk": 4,
+        "fields": {
+            "name": "20240621140146",
+            "project": 1,
+            "code": "{\r\n    \"script\": {\r\n        \"service\": {},\r\n        \"type\": {\r\n            \"models\": \"from django.db import models\\nfrom django.contrib.auth.models import User\\n\\nclass XiTongLeiXing(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u7cfb\u7edf\u7c7b\u578b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GangWei(models.Model):\\n    gang_wei_ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u5c97\u4f4d\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5c97\u4f4d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass FuWuLeiBie(models.Model):\\n    zhi = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u503c')\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u7c7b\u522b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass RuChuKuCaoZuo(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5165\u51fa\u5e93\u64cd\u4f5c\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass RenYuan(models.Model):\\n    xing_ming = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u59d3\u540d')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4eba\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass WuLiao(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass SheBei(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bbe\u5907\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GongJu(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5177\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZiJin(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8d44\u91d1\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KongJian(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7a7a\u95f4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass XinXi(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4fe1\u606f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass FuWuXiangMu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u9879\u76ee\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass CaoZuoYuan(models.Model):\\n    xi_tong_yong_hu = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7cfb\u7edf\u7528\u6237')\\n\\n    class Meta:\\n        verbose_name = \\\"\u64cd\u4f5c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GongDan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5355\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZhenShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bca\u5ba4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass WuLiaoTaiZhang(models.Model):\\n    wu_liao = models.ForeignKey(WuLiao, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7269\u6599')\\n    ru_chu_ku_cao_zuo = models.ForeignKey(RuChuKuCaoZuo, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u5165\u51fa\u5e93\u64cd\u4f5c')\\n    shu_liang = models.IntegerField(blank=True, null=True, verbose_name='\u6570\u91cf')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\u53f0\u8d26\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KeHu(models.Model):\\n    bing_li_hao = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u75c5\u5386\u53f7')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u6237\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZhiYuan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u804c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass YiSheng(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u533b\u751f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass HuShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u62a4\u58eb\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KeFu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u670d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\",\r\n            \"admin\": \"from django.contrib import admin\\nfrom .models import *\\n\\n\\n@admin.register(XiTongLeiXing)\\nclass XiTongLeiXingAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XiTongLeiXing._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GangWei)\\nclass GangWeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GangWei._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(FuWuLeiBie)\\nclass FuWuLeiBieAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuLeiBie._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(RuChuKuCaoZuo)\\nclass RuChuKuCaoZuoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(RenYuan)\\nclass RenYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RenYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(WuLiao)\\nclass WuLiaoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiao._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(SheBei)\\nclass SheBeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in SheBei._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GongJu)\\nclass GongJuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongJu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZiJin)\\nclass ZiJinAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZiJin._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KongJian)\\nclass KongJianAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KongJian._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(XinXi)\\nclass XinXiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XinXi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(FuWuXiangMu)\\nclass FuWuXiangMuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuXiangMu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(CaoZuoYuan)\\nclass CaoZuoYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in CaoZuoYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GongDan)\\nclass GongDanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongDan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZhenShi)\\nclass ZhenShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhenShi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(WuLiaoTaiZhang)\\nclass WuLiaoTaiZhangAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiaoTaiZhang._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KeHu)\\nclass KeHuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeHu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZhiYuan)\\nclass ZhiYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhiYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(YiSheng)\\nclass YiShengAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in YiSheng._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(HuShi)\\nclass HuShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in HuShi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KeFu)\\nclass KeFuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeFu._meta.fields]\\n    list_display_links = ['id']\\n\"\r\n        }\r\n    },\r\n    \"data\": {\r\n        \"core\": {}\r\n    }\r\n}",
+            "description": "",
+            "create_time": "2024-06-21T14:01:46.823Z"
+        }
+    },
+    {
+        "model": "design.sourcecode",
+        "pk": 5,
+        "fields": {
+            "name": "20240621140212",
+            "project": 1,
+            "code": "{\n    \"script\": {\n        \"service\": {},\n        \"type\": {\n            \"models\": \"from django.db import models\\nfrom django.contrib.auth.models import User\\n\\nclass XiTongLeiXing(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u7cfb\u7edf\u7c7b\u578b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GangWei(models.Model):\\n    gang_wei_ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u5c97\u4f4d\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5c97\u4f4d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass FuWuLeiBie(models.Model):\\n    zhi = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u503c')\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u7c7b\u522b\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass RuChuKuCaoZuo(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5165\u51fa\u5e93\u64cd\u4f5c\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass RenYuan(models.Model):\\n    xing_ming = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u59d3\u540d')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4eba\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass WuLiao(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass SheBei(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bbe\u5907\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GongJu(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5177\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZiJin(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u8d44\u91d1\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KongJian(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7a7a\u95f4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass XinXi(models.Model):\\n    ming_cheng = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u540d\u79f0')\\n\\n    class Meta:\\n        verbose_name = \\\"\u4fe1\u606f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass FuWuXiangMu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u670d\u52a1\u9879\u76ee\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass CaoZuoYuan(models.Model):\\n    xi_tong_yong_hu = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7cfb\u7edf\u7528\u6237')\\n\\n    class Meta:\\n        verbose_name = \\\"\u64cd\u4f5c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass GongDan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5de5\u5355\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZhenShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u8bca\u5ba4\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass WuLiaoTaiZhang(models.Model):\\n    wu_liao = models.ForeignKey(WuLiao, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u7269\u6599')\\n    ru_chu_ku_cao_zuo = models.ForeignKey(RuChuKuCaoZuo, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='\u5165\u51fa\u5e93\u64cd\u4f5c')\\n    shu_liang = models.IntegerField(blank=True, null=True, verbose_name='\u6570\u91cf')\\n\\n    class Meta:\\n        verbose_name = \\\"\u7269\u6599\u53f0\u8d26\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KeHu(models.Model):\\n    bing_li_hao = models.CharField(max_length=100, blank=True, null=True, verbose_name='\u75c5\u5386\u53f7')\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u6237\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass ZhiYuan(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u804c\u5458\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass YiSheng(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u533b\u751f\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass HuShi(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u62a4\u58eb\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\nclass KeFu(models.Model):\\n\\n    class Meta:\\n        verbose_name = \\\"\u5ba2\u670d\\\"\\n        verbose_name_plural = verbose_name\\n        ordering = ['id']\\n\\n\",\n            \"admin\": \"from django.contrib import admin\\nfrom .models import *\\n\\n\\n@admin.register(XiTongLeiXing)\\nclass XiTongLeiXingAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XiTongLeiXing._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GangWei)\\nclass GangWeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GangWei._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(FuWuLeiBie)\\nclass FuWuLeiBieAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuLeiBie._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(RuChuKuCaoZuo)\\nclass RuChuKuCaoZuoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(RenYuan)\\nclass RenYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in RenYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(WuLiao)\\nclass WuLiaoAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiao._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(SheBei)\\nclass SheBeiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in SheBei._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GongJu)\\nclass GongJuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongJu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZiJin)\\nclass ZiJinAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZiJin._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KongJian)\\nclass KongJianAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KongJian._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(XinXi)\\nclass XinXiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in XinXi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(FuWuXiangMu)\\nclass FuWuXiangMuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in FuWuXiangMu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(CaoZuoYuan)\\nclass CaoZuoYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in CaoZuoYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(GongDan)\\nclass GongDanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in GongDan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZhenShi)\\nclass ZhenShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhenShi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(WuLiaoTaiZhang)\\nclass WuLiaoTaiZhangAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in WuLiaoTaiZhang._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KeHu)\\nclass KeHuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeHu._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(ZhiYuan)\\nclass ZhiYuanAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in ZhiYuan._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(YiSheng)\\nclass YiShengAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in YiSheng._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(HuShi)\\nclass HuShiAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in HuShi._meta.fields]\\n    list_display_links = ['id']\\n\\n@admin.register(KeFu)\\nclass KeFuAdmin(admin.ModelAdmin):\\n    list_display = [field.name for field in KeFu._meta.fields]\\n    list_display_links = ['id']\\n\"\n        }\n    },\n    \"data\": {\n        \"core\": {}\n    }\n}",
+            "description": null,
+            "create_time": "2024-06-21T14:02:12.310Z"
         }
     }
 ]

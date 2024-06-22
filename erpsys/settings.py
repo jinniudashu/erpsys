@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # My apps
     'design',
     'kernel',
+    'maor',
 ]
 
 MIDDLEWARE = [

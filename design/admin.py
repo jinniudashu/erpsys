@@ -20,15 +20,8 @@ class DataItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'inherit', 'bind_system_object']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-    list_filter = ['field_type', 'is_entity']
+    list_filter = ['field_type']
     inlines = [DataItemConsistsInline, DataItemTaxonomyInline]
-
-@admin.register(BusinessObject)
-class BusinessObjectAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'data_item', 'bind_system_object']
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['data_item']
 
 class ServiceAttributesInline(admin.TabularInline):
     model = ServiceAttributes

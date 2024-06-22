@@ -2,9 +2,47 @@ from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
 import json
+from collections import defaultdict
 
 from design.models import *
 from design.script_file_header import ScriptFileHeader
+
+# Function to build the inheritance tree
+def build_inheritance_tree_with_depth(queryset):
+    tree = defaultdict(list)
+    root_items = []
+    depth_map = {}
+
+    for item in queryset:
+        if item.inherit is None:
+            root_items.append(item)
+            depth_map[item.id] = 0
+        else:
+            tree[item.inherit_id].append(item)
+
+    return tree, root_items, depth_map
+
+# Recursive function to get sorted items and update depth_map
+def get_sorted_items_with_depth(tree, root_items, depth_map, current_depth=0):
+    sorted_items = []
+
+    def recurse(item, depth):
+        depth_map[item.id] = depth
+        sorted_items.append(item)
+        children = tree.get(item.id, [])
+        children.sort(key=lambda x: x.id)  # Sort children by id
+        for child in children:
+            recurse(child, depth + 1)
+
+    root_items.sort(key=lambda x: x.id)  # Sort root items by id
+    for root_item in root_items:
+        recurse(root_item, current_depth)
+
+    return sorted_items, depth_map
+
+def write_project_file(file_name, content):
+    with open(file_name, 'w', encoding='utf-8') as f:
+        f.write(content)
 
 # 生成脚本, 被design.admin调用
 def generate_source_code(project):
@@ -15,20 +53,9 @@ def generate_source_code(project):
         admin_script =  ScriptFileHeader['admin_file_head']
 
         for item in query_set:
-            # 判断item类型：DataItemDict or Service or Form
-            if item.__class__.__name__ == 'DataItemDict':
-                pass
-            elif item.__class__.__name__ == 'Service':
-                pass
-            elif item.__class__.__name__ == 'Form':
-                pass
-            else:
-                print(f'未知类型: {item.__class__.__name__}')
-                continue
-            
-            script = item.generate_script(domain)
-            models_script = f'{models_script}{script["models"]}'
-            admin_script = f'{admin_script}{script["admin"]}'
+            _script = item.generate_script(domain)            
+            models_script = f'{models_script}{_script["models"]}'
+            admin_script = f'{admin_script}{_script["admin"]}'
 
         return {'models': models_script, 'admin': admin_script, }
 
@@ -101,13 +128,18 @@ class FieldsType(Enum):
     }
 
     # 生成运行时数据结构
-    dict_queryset = DataItem.objects.all()
-    source_code['script']['dictionary'] = _generate_models_admin(dict_queryset, project.domain)  # 导出App:service脚本
-
+    _queryset = DataItem.objects.filter(field_type='TypeField')
+    tree, root_items, depth_map = build_inheritance_tree_with_depth(_queryset)
+    sorted_items, depth_map = get_sorted_items_with_depth(tree, root_items, depth_map)
+    # Sort the items by depth first, then by id
+    sorted_items.sort(key=lambda x: (depth_map[x.id], x.id))
+    source_code['script']['type'] = _generate_models_admin(sorted_items, project.domain)
+    print('models:', source_code['script']['type']['models'])
+    print('admin:', source_code['script']['type']['admin'])
     # 生成服务&表单脚本
-    project_queryset = project.get_queryset_by_model('Service').order_by('-id')
-    print('project_queryset', project_queryset)
-    source_code['script']['service'] = _generate_models_admin(project_queryset, project.domain)  # 导出App:service脚本
+    # project_queryset = project.get_queryset_by_model('Service').order_by('-id')
+    # print('project_queryset', project_queryset)
+    # source_code['script']['service'] = _generate_models_admin(project_queryset, project.domain)
 
     # 导出baseclass.py脚本
     # 导出业务定义数据
@@ -120,8 +152,11 @@ class FieldsType(Enum):
     )
     print(f'作业脚本写入数据库成功, id: {result}')
 
-    # # 写入json文件
-    # print('开始写入json文件...')
-    # with open(f'./define_backup/backup/script/作业系统脚本_{project.name}_{script_name}.json', 'w', encoding='utf-8') as f:
-    #     json.dump(source_code, f, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder)
-    #     print(f'作业脚本写入成功, id: {script_name}')
+    # 写入项目文件
+    print('开始写入项目文件...')
+    filename = f'./{project.name}/models.py'
+    content = source_code['script']['type']['models']
+    write_project_file(filename, content)
+    filename = f'./{project.name}/admin.py'
+    content = source_code['script']['type']['admin']
+    write_project_file(filename, content)

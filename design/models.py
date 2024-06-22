@@ -42,45 +42,59 @@ class ERPSysBase(models.Model):
 
 class GenerateScriptMixin(object):
     def _create_model_script(self):
-        _fields_script = _autocomplete_fields = _radio_fields = ''
-        for form_components in FormComponents.objects.filter(form=self).order_by('order'):
-            component=form_components.component
+        fields_script = autocomplete_fields = radio_fields = ''
+        fields_script = self.generate_field_definitions()
 
-            # construct fields script
-            _script = self._create_field_script(component, self)
-            
-            _fields_script = _fields_script + _script
-            
-            # 如果是关联字段，构造ModelAdmin内容
-            if component.content_object.__class__.__name__ == 'RelatedField':
-                field_name = component.content_object.name
-                # 判断是否单选，如果是单选，是否Radio
-                if component.content_object.related_content.related_content_type == 'dictionaries':
-                    if component.content_object.__dict__['type'] == 'RadioSelect':
-                        _radio_fields = _radio_fields + f'"{field_name}": admin.VERTICAL, '  # 或admin.HORIZONTAL
-                # 判断是否需要autocomplete_fields
+        return fields_script, autocomplete_fields, radio_fields
+
+    def _create_admin_script(self, body):
+        class_name = self._get_data_item_classname()
+        admin_script = f'''
+@admin.register({class_name})
+class {class_name}Admin(admin.ModelAdmin):
+    list_display = [field.name for field in {class_name}._meta.fields]
+    list_display_links = ['id']
+'''        
+        return admin_script
+
+    def _create_fields_script(self):
+        fields_script = ''
+        match self.__class__.__name__:
+            case 'DataItem':
+                if self.inherit is None:
+                    print('无继承')
                 else:
-                    _autocomplete_fields = _autocomplete_fields + f'"{field_name}", '
+                    ancestry_list, consists_list = self.get_ancestry_and_consists()
+                    print('ancestry_list:', ancestry_list)
+                    print('consists_list:', consists_list)
+            case 'Service':
+                pass
+            case 'Form':
+                pass
+            case _:
+                print(f'未知类型: {self.__class__.__name__}')
 
-        return _fields_script, _autocomplete_fields, _radio_fields
-
-    def _create_admin_script(self):
-        pass 
-    
-    def _create_field_script(self):
-        pass
+        return fields_script
 
     def _create_model_footer_script(self):
-        pass
+        footer = f'''
+    class Meta:
+        verbose_name = "{self.label}"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+'''
+        return footer
+    
+    def _get_data_item_classname(self):
+        pinyin_list = lazy_pinyin(self.label)
+        class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
+        return class_name
 
     def generate_script(self, domain):
-        print(f'Generate Script for {domain}')
-        # construct model script
-        model_head = f'class {self.name.capitalize()}(models.Model):'
+        model_head = f'class {self._get_data_item_classname()}(models.Model):\n'
         model_fields, autocomplete_fields, radio_fields = self._create_model_script()
         model_footer = self._create_model_footer_script()
-        model_script = f'{model_head}{model_fields}{model_footer}\n\n'
-        print(f'Model Script: {model_script}')
+        model_script = f'{model_head}{model_fields}{model_footer}\n'
 
         # construct admin script
         modeladmin_body = {}
@@ -89,7 +103,6 @@ class GenerateScriptMixin(object):
         if autocomplete_fields:
             modeladmin_body['autocomplete_fields'] = autocomplete_fields
         admin_script = self._create_admin_script(modeladmin_body)
-        print(f'Admin Script: {admin_script}')
 
         return {'models': model_script, 'admin': admin_script}
 
@@ -181,7 +194,7 @@ class DataItemManager(models.Manager):
             for entry in entries:
                 _process_entry(entry, _form)
 
-class DataItem(ERPSysBase):
+class DataItem(GenerateScriptMixin, ERPSysBase):
     consists = models.ManyToManyField('self', through='DataItemConsists', related_name='parent', symmetrical=False, verbose_name="数据项组成")
     taxonomy = models.ManyToManyField('self', through='DataItemTaxonomy', symmetrical=False, verbose_name="词义分类")
     field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据类型")
@@ -193,7 +206,6 @@ class DataItem(ERPSysBase):
     decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
     computed_logic = models.TextField(null=True, blank=True, verbose_name="计算逻辑")
     init_content = models.JSONField(blank=True, null=True, verbose_name="初始内容")
-    is_entity = models.BooleanField(default=False, verbose_name="业务实体")
     objects = DataItemManager()
 
     class Meta:
@@ -203,6 +215,68 @@ class DataItem(ERPSysBase):
 
     def __str__(self):
         return self.label
+
+    def get_ancestry_and_consists(self):
+        """
+        Returns two lists:
+        1. Ancestry list: A list of DataItem instances from the given item to the root of its inherit tree.
+        2. Consists list: A list of DataItem instances that are in the consists field of each item in the ancestry list.
+        
+        :param item: DataItem instance
+        :return: (ancestry_list, consists_list)
+        """
+        ancestry_list = []
+        consists_list = []
+
+        # Traverse up the inheritance tree to find all ancestors
+        current_item = self
+        while current_item is not None:
+            ancestry_list.append(current_item)
+            current_item = current_item.inherit
+
+        # Reverse ancestry list to have root at the beginning
+        ancestry_list.reverse()
+        
+        for item in ancestry_list:
+            consists_list.extend(item.consists.all())
+
+        return ancestry_list, consists_list
+
+    def generate_field_definitions(self):
+        field_definitions = ''
+
+        for consist_item in self.consists.all():
+            field_name = consist_item.name
+            field_type = consist_item.field_type
+            match field_type:
+                case 'CharField':
+                    field_definitions += f"    {field_name} = models.CharField(max_length={consist_item.max_length}, blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'TextField':
+                    field_definitions += f"    {field_name} = models.TextField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'IntegerField':
+                    field_definitions += f"    {field_name} = models.IntegerField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'DecimalField':
+                    field_definitions += f"    {field_name} = models.DecimalField(max_digits={consist_item.max_digits}, decimal_places={consist_item.decimal_places}, blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'DateTimeField':
+                    field_definitions += f"    {field_name} = models.DateTimeField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'DateField':
+                    field_definitions += f"    {field_name} = models.DateField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'JSONField':
+                    field_definitions += f"    {field_name} = models.JSONField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'FileField':
+                    field_definitions += f"    {field_name} = models.FileField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'TypeField':
+                    field_definitions += f"    {field_name} = models.ForeignKey({consist_item._get_data_item_classname()}, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                case 'User':
+                    field_definitions += f"    {field_name} = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                case 'InstanceField':
+                    pass
+                case 'ComputedField':
+                    pass
+                case _:
+                    pass
+
+        return field_definitions
 
 class DataItemConsists(models.Model):
     data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='subset', null=True, verbose_name="数据项")
@@ -230,24 +304,12 @@ class DataItemTaxonomy(models.Model):
     def __str__(self):
         return f"{self.hypernymy.name} -> {self.hyponymy.name}"
 
-class BusinessObject(ERPSysBase):
-    data_item = models.ForeignKey(DataItem, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="数据项")
-    bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
-
-    class Meta:
-        verbose_name = "业务对象"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-    
-    def __str__(self):
-        return self.label
-
 class Service(GenerateScriptMixin, ERPSysBase):
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
     form = models.ForeignKey('Form', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
-    subject = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业对象")
-    work_order = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='ordered_service', blank=True, null=True, verbose_name="工单")
-    route_to = models.ForeignKey(BusinessObject, on_delete=models.SET_NULL, related_name='routed_services', blank=True, null=True, verbose_name="传递至")
+    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业对象")
+    work_order = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='ordered_service', blank=True, null=True, verbose_name="工单")
+    route_to = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='routed_services', blank=True, null=True, verbose_name="传递至")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
     attributes = models.ManyToManyField(DataItem, through='ServiceAttributes', symmetrical=False, verbose_name="属性")

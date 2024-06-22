@@ -5,6 +5,7 @@ FieldType = [
     ('IntegerField', '整数'),
     ('TypeField', '类型'),
     ('InstanceField', '实例'),
+    ('User', '系统用户'),
     ('DecimalField', '固定精度小数'),
     ('TextField', '多行文本'),
     ('DateTimeField', '日期时间'),

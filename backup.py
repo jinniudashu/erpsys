@@ -23,6 +23,7 @@ call_command(
         'sessions.session',
         'admin.logentry',
         'contenttypes',
+        'maor',
     ]
 )
 
