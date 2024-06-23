@@ -47,7 +47,9 @@ def write_project_file(file_name, content):
 
 def migrate_app(app_name):
     try:
+        print(f"Start migrating {app_name}...")
         call_command('makemigrations', app_name)
+        print(f"Start migrating {app_name}...")
         call_command('migrate', app_name)
         print(f"Successfully migrated {app_name}")
     except Exception as e:
@@ -56,7 +58,7 @@ def migrate_app(app_name):
 # 生成脚本, 被design.admin调用
 def generate_source_code(project):
     # 生成models.py, admin.py脚本
-    def _generate_models_admin(query_set, domain):
+    def _generate_models_admin_script(query_set, domain):
 
         models_script = ScriptFileHeader['models_file_head']
         admin_script =  ScriptFileHeader['admin_file_head']
@@ -64,7 +66,7 @@ def generate_source_code(project):
         fields_type = {}
 
         for item in query_set:
-            script = item.generate_script(domain)            
+            script = item.generate_script(domain)
             models_script = f'{models_script}{script["models"]}'
             admin_script = f'{admin_script}{script["admin"]}'
             fields_type.update(script["fields_type"])
@@ -73,48 +75,15 @@ def generate_source_code(project):
 
         return {'models': models_script, 'admin': admin_script, 'fields_type': fields_type_script}
 
-    # 生成基类脚本baseclass.py
-    def _generate_baseclass_script(queryset):
-        def _get_field_type(component):
-            _type = component.content_type.model
-            if _type == 'characterfield':
-                return 'String'
-            elif _type == 'numberfield':
-                return 'Numbers'
-            elif _type == 'dtfield':
-                return 'Datetime' if component.content_object.type == 'DateTimeField' else 'Date'
-            elif _type == 'relatedfield':
-                # 返回关联字段的类型: Model name
-                model_name = component.content_object.related_content.related_content
-                app_label = component.content_object.related_content.related_content_type
-                return f'{app_label}.{model_name}'
+    def _generate_forms_script(forms, domain):
+        models_script = admin_script = ''
 
-        # 生成FieldsType内容
-        fields_type_script = f'''
-from enum import Enum
-class FieldsType(Enum):
-    # 手工添加CustomerSchedule字段数据类型
-    start_time = "Datetime"  # 开始时间
-    scheduled_time = "Datetime"  # 计划执行时间
-    overtime = "Datetime"  # 超期时限
-    scheduled_operator = "entities.Stuff"  # 计划执行人员
-    service = "core.Service"  # 服务
-    priority_operator = "core.VirtualStaff"  # 虚拟职员
-    reference_operation = "core.OperationProc"  # 引用表单
-    is_assigned = "Boolean"  # 是否已生成任务
+        for form in forms:
+            script = form.generate_form_script(domain)            
+            models_script = f'{models_script}{script["models"]}'
+            admin_script = f'{admin_script}{script["admin"]}'
 
-    # 自动生成字段数据类型'''
-
-        for component in queryset:
-            field_type = _get_field_type(component)
-            fields_type_script = f'{fields_type_script}\n    {component.name} = "{field_type}"  # {component.label}'
-
-        # 获取hsscbase_class脚本内容
-        with open('./formdesign/hsscbase_class.py', 'r', encoding="utf8") as f:
-            hsscbase_class = f.read()
-        
-        # 返回合并内容
-        return {'hsscbase_class': f'{hsscbase_class}\n\n{fields_type_script}'}
+        return {'models': models_script, 'admin': admin_script}
 
     # 生成业务定义数据
     def _generate_init_data(project):
@@ -147,32 +116,24 @@ class FieldsType(Enum):
     sorted_items, depth_map = get_sorted_items_with_depth(tree, root_items, depth_map)
     # Sort the items by depth first, then by id
     sorted_items.sort(key=lambda x: (depth_map[x.id], x.id))
-    source_code['script']['type'] = _generate_models_admin(sorted_items, project.domain)
-    print('models:', source_code['script']['type']['models'])
-    print('admin:', source_code['script']['type']['admin'])
-    print('fields_type:', source_code['script']['type']['fields_type'])
+    source_code['script']['type'] = _generate_models_admin_script(sorted_items, project.domain)
 
     # 生成服务表单代码
-    # project_queryset = project.get_queryset_by_model('Service').order_by('-id')
-    # print('project_queryset', project_queryset)
-    # source_code['script']['form'] = _generate_models_admin(project_queryset, project.domain)
+    forms = [service.form for service in project.services.all()]
+    source_code['script']['form'] = _generate_forms_script(forms, project.domain)
 
-    # 导出baseclass.py脚本
-    
+    print('models_script:', source_code['script']['form']['models'])
+    print('admin_script:', source_code['script']['form']['admin'])
+
     # 导出业务定义数据
     # source_code['data']['core'] = _generate_init_data(project)
 
-    # result = SourceCode.objects.create(
-    #     name = timezone.now().strftime('%Y%m%d%H%M%S'),
-    #     project = project,
-    #     code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
-    # )
-    # print(f'作业脚本写入数据库成功, id: {result}')
-
     print('写入项目文件...')
+    models_script = source_code['script']['type']['models'] + source_code['script']['form']['models']
+    admin_script = source_code['script']['type']['admin'] + source_code['script']['form']['admin']
     object_files = [
-        (f'./{project.name}/models.py', source_code['script']['type']['models']),
-        (f'./{project.name}/admin.py', source_code['script']['type']['admin']),
+        (f'./{project.name}/models.py', models_script),
+        (f'./{project.name}/admin.py', admin_script),
         (f'./kernel/app_types.py', source_code['script']['type']['fields_type']),
     ]
     for filename, content in object_files:
@@ -180,3 +141,10 @@ class FieldsType(Enum):
 
     # makemigrations & migrate
     migrate_app(project.name)
+
+    # result = SourceCode.objects.create(
+    #     name = timezone.now().strftime('%Y%m%d%H%M%S'),
+    #     project = project,
+    #     code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
+    # )
+    # print(f'作业脚本写入数据库成功, id: {result}')

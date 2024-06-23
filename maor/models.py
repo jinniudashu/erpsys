@@ -162,3 +162,40 @@ class KeFu(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
+class SuiFangJiLuDan(models.Model):
+
+    class Meta:
+        verbose_name = "随访记录单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class WuLiaoChuKuDan(models.Model):
+    wu_liao_ming_xi_ji_lu = models.ForeignKey(WuLiaoTaiZhang, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='物料台账')
+
+    class Meta:
+        verbose_name = "物料出库单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class WuLiaoRuKuDan(models.Model):
+    wu_liao_ming_xi_ji_lu = models.ForeignKey(WuLiaoTaiZhang, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='物料台账')
+
+    class Meta:
+        verbose_name = "物料入库单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class YuYueJiLuDan(models.Model):
+
+    class Meta:
+        verbose_name = "预约记录单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class RouDuSuZhiLiaoJiLuDan(models.Model):
+
+    class Meta:
+        verbose_name = "肉毒素治疗记录单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+

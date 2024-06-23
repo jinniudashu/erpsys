@@ -106,3 +106,28 @@ class HuShiAdmin(admin.ModelAdmin):
 class KeFuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in KeFu._meta.fields]
     list_display_links = ['id']
+
+@admin.register(SuiFangJiLuDan)
+class SuiFangJiLuDanAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in SuiFangJiLuDan._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(WuLiaoChuKuDan)
+class WuLiaoChuKuDanAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in WuLiaoChuKuDan._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(WuLiaoRuKuDan)
+class WuLiaoRuKuDanAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in WuLiaoRuKuDan._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(YuYueJiLuDan)
+class YuYueJiLuDanAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in YuYueJiLuDan._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(RouDuSuZhiLiaoJiLuDan)
+class RouDuSuZhiLiaoJiLuDanAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in RouDuSuZhiLiaoJiLuDan._meta.fields]
+    list_display_links = ['id']

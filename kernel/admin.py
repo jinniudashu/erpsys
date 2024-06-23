@@ -15,3 +15,11 @@ class ProcessAdmin(admin.ModelAdmin):
             'fields': ('pid', 'service', 'parent', 'state', 'schedule_context', 'control_context', 'program', 'pcb', 'stack', 'heap', 'pc', 'content_type', 'object_id', 'start_time', 'end_time', 'updated_time', 'created_time')
         }),
     )
+
+@admin.register(Stacks)
+class StacksAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Stacks._meta.fields]
+    list_display_links = ['id', 'process',]
+    search_fields = ['id', 'process']
+    list_filter = ['process']
+    readonly_fields = ['id', 'created_time', 'updated_time']

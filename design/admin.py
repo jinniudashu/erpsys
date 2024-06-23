@@ -68,11 +68,11 @@ class EventAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
-@admin.register(SystemInstruction)
-class SystemInstructionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'sys_call', 'parameters']
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
+# @admin.register(SystemInstruction)
+# class SystemInstructionAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'label', 'name', 'pym', 'sys_call', 'parameters']
+#     list_display_links = ['label', 'name',]
+#     search_fields = ['label', 'name', 'pym']
 
 class SourceCodeInline(admin.TabularInline):
     model = SourceCode

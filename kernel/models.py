@@ -8,6 +8,7 @@ from design.models import DataItem, Service, Event, SystemInstruction, Form
 from maor.models import *
 from kernel.types import ProcessState
 from kernel.app_types import app_types
+
 class Process(models.Model):
     """
     进程
@@ -99,6 +100,24 @@ class Process(models.Model):
     与过程相关的其他数据或状态信息    
     """
 
+class Stacks(models.Model):
+    """
+    进程栈
+    """
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
+    stack = models.JSONField(blank=True, null=True, verbose_name="栈")
+    heap = models.JSONField(blank=True, null=True, verbose_name="堆")
+    sp = models.PositiveIntegerField(blank=True, null=True, verbose_name="栈指针")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+
+    class Meta:
+        verbose_name = "进程栈"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.process)
 
 """
 # 结合时间戳和序列号来生成一个唯一且有序的数字ID
