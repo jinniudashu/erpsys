@@ -192,16 +192,6 @@ class Scheduler:
         # Actual implementation here
 
 GLOBAL_INITIAL_STATES = {
-    # 系统对象
-    'SystemObject': [
-        ('User', '系统用户'), 
-        ('DateTime', '系统时间'),
-        ('Timer', '系统计时器'),
-        ('Service', '服务'),
-        (SystemCall.CreateService, '创建服务'),
-        (SystemCall.CallService, '调用服务'),
-    ],
-
     # 资源分类
     'SystemResourceType': {
         "Material": {
@@ -238,7 +228,7 @@ GLOBAL_INITIAL_STATES = {
 
     # 全局业务常量
     'Organization': '广州颜青医疗美容诊所',
-    
+
     # 业务表单
     'Forms': [
         {

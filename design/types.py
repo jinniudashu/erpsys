@@ -22,6 +22,15 @@ ChoiceType = [
     ('SelectMultiple', '下拉多选')
 ]
 
+SystemObject = [
+    ('User', '系统用户'), 
+    ('DateTime', '系统时间'),
+    ('Timer', '系统计时器'),
+    ('Service', '服务'),
+    ('CreateService', '创建服务'),
+    ('CallService', '调用服务'),
+]
+
 class SystemResourceType(Enum):
     """资源类型枚举类"""
     MATERIAL = ("物料", "Consumption")

@@ -13,7 +13,7 @@ import json
 
 from pypinyin import Style, lazy_pinyin
 
-from design.types import FieldType, ChoiceType, FormType, SystemResourceType, ServiceType
+from design.types import FieldType, ChoiceType, SystemObject, FormType, SystemResourceType, ServiceType
 from design.business_data.preprocessing.specification import GLOBAL_INITIAL_STATES
 
 # ERPSys基类
@@ -245,7 +245,7 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
     field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据类型")
     business_type = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='instances', null=True, blank=True, verbose_name="业务类型")
     inherit = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='children', null=True, blank=True, verbose_name="继承")
-    bind_system_object = models.CharField(max_length=50, choices=GLOBAL_INITIAL_STATES['SystemObject'], null=True, blank=True, verbose_name="绑定系统对象")
+    bind_system_object = models.CharField(max_length=50, choices=SystemObject, null=True, blank=True, verbose_name="绑定系统对象")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
     max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
     decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
