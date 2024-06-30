@@ -14,7 +14,7 @@ import json
 from pypinyin import Style, lazy_pinyin
 
 from design.types import FieldType, ChoiceType, SystemObject, FormType, SystemResourceType, ServiceType
-from design.business_data.preprocessing.specification import GLOBAL_INITIAL_STATES
+from design.specification import GLOBAL_INITIAL_STATES
 
 # ERPSys基类
 class ERPSysBase(models.Model):
@@ -55,6 +55,7 @@ class GenerateScriptMixin(object):
 class {class_name}Admin(admin.ModelAdmin):
     list_display = [field.name for field in {class_name}._meta.fields]
     list_display_links = ['id']
+maor_site.register({class_name}, {class_name}Admin)
 '''        
         return admin_script
 

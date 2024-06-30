@@ -1,0 +1,189 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+<script src="htmx.min.js" defer></script>
+{% block content %}
+    <h3>病例首页</h3>
+    <br>
+    <div class="row">
+        {{ profile.form.as_p }}
+    </div>
+    <a href="{{ profile.url }}">...查看完整档案</a>
+    <br>
+    <br>
+    <hr>
+    <br>
+    <label value="新增服务">服务: </label> <input class="form-control" type="search" 
+    name="search" placeholder="查找服务..." 
+    hx-post="/clinic/search_services/{{ profile.id }}/"
+    hx-trigger="keyup changed delay:500ms, search" 
+    hx-target="#search-service-results" 
+    hx-indicator=".htmx-indicator">
+
+    <input type="submit" value="返回工作台" onclick="location.href='/clinic/';"/>
+    
+    <div id="search-service-results"></div>
+    <br>
+    <hr>
+    <br>
+
+    {% verbatim %}
+    <div id="app">
+        <h3>已安排服务</h3>
+        <div v-for="service in servicesList.scheduled_services_today" :key="service.service_id">
+            <a :href="permittedServicesId.includes(service.service_id) && service.operator_id==operatorId ? service.service_entry : null"
+                :style="{'color': permittedServicesId.includes(service.service_id) && service.operator_id==operatorId ? (service.completion_timeout ? 'red' : '#447e9b') : 'gray'}"
+            >
+                {{ service.service_label }} {{ service.state=='6' ? '(退)' : ''}}
+            </a>
+            <br>
+        </div>
+        <br>
+        <hr>
+        <br>
+        
+        <h3>可选服务</h3>
+        <div v-for="service in recommendedServices" :key="service.id">
+            <a :href="'/clinic/new_service/' + service.customer_id + '/' + service.service_id + '/' + service.id + '/'">
+                {{ service.service_label }}
+                <span v-if="service.enable_queue_counter"> ({{ service.queue_count }})</span>
+            </a>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <div>
+            <select v-model="history_days">
+                <option value=2>过去2天</option>
+                <option value=7>过去1周</option>
+                <option value=30>过去1月</option>
+                <option value=0>全部</option>
+            </select>
+            <input type="text" title="服务" v-model="history_service_name" placeholder="服务名称...">
+            <h3>历史服务</h3>
+        </div>
+        <div v-for="service in servicesList.history_services" :key="service.service_id">
+            <a :href="service.service_entry">
+                {{ service.service_label }}
+            </a>
+            <br>
+        </div>
+        <br>
+        <hr>
+        <br>
+
+        <h3>近期服务</h3>
+        <div v-for="service in servicesList.scheduled_services_recent" :key="service.service_id">
+            <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null"
+                :style="{'color': (service.completion_timeout ? 'red' : '#447e9b')}"
+            >
+                {{ service.service_label }}
+            </a>
+            <br>
+        </div>
+        <br>
+        <hr>
+        <br>
+    </div>
+
+    {% endverbatim %}
+    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>    
+    <script>
+        const { createApp } = Vue;
+
+        const customerServiceApp = {
+            data() {
+                return {
+                    recommendedServices: null,     // 可选服务
+                    servicesList: {
+                        'scheduled_services': [],  // 已安排服务
+                        'history_services': [],    // 历史服务
+                    },
+                    permittedServicesId: [],  // 当前操作员可以操作的服务id
+                    operatorId: null,
+                    history_days: 2,  // 默认值“过去2天”
+                    servicesListSocket: null, // 存储 WebSocket 连接
+                    history_service_name: '',  // 初始化为空字符串
+                }
+            },
+
+            created() {
+                let _this = this;
+                
+                customerId = Cookies.get('customer_id');
+                this.operatorId = Number(Cookies.get('operator_id'));
+                console.log('客户ID：', customerId);
+                console.log('操作员ID：', this.operatorId);
+
+                history_days = this.history_days;
+                history_service_name = this.history_service_name;
+
+                permitted_services_id = Cookies.get('permitted_services_id').slice(1,-1).replace(/\\054 /g, ',').split(',')
+                this.permittedServicesId = permitted_services_id.map(id => parseInt(id))
+
+                var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws"
+
+                // 可选服务信道
+                const recommendedServicesSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/customer_recommended_services_list/${customerId}/`);
+                recommendedServicesSocket.onmessage = function (event) {
+                    _this.recommendedServices = JSON.parse(event.data);
+                }
+
+                this.refreshServicesList();
+            },
+
+            watch: {
+                history_days(newVal, oldVal) {
+                    if (newVal !== oldVal) {
+                        this.refreshServicesList();
+                    }
+                },
+                history_service_name(newVal, oldVal) {
+                    if (newVal !== oldVal) {
+                        this.refreshServicesList();
+                    }
+                }
+            },
+
+            methods: {
+                refreshServicesList() {
+                    var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+                    let history_days = this.history_days;
+                    let history_service_name = this.history_service_name;
+                    if (history_service_name == '') {
+                        history_service_name = 'none';
+                    }
+                    let customerId = Cookies.get('customer_id');
+
+                    // 如果之前有连接，则先关闭
+                    if (this.servicesListSocket) {
+                        this.servicesListSocket.close();
+                    }
+
+                    // 重新建立 WebSocket 连接
+                    this.servicesListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/customer_services_list/${customerId}/${history_days}/${history_service_name}/`);
+                    this.servicesListSocket.onmessage = (event) => {
+                        this.servicesList = JSON.parse(event.data);
+                    };
+                }
+            },            
+            
+        };
+
+        createApp(customerServiceApp).mount('#app');
+
+    </script>
+
+{% endblock %}

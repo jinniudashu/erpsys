@@ -192,40 +192,6 @@ class Scheduler:
         # Actual implementation here
 
 GLOBAL_INITIAL_STATES = {
-    # 资源分类
-    'SystemResourceType': {
-        "Material": {
-            "quantity": "int",
-            "unit": "string",
-            "supplier": "string"
-        },
-        "Device": {
-            "serial_number": "string",
-            "status": "string",
-            "purchase_date": "date"
-        },
-        "Equipment": {
-            "type": "string",
-            "maintenance_cycle": "int",
-            "last_maintenance_date": "date"
-        },
-        "Operator": {
-            "role": "string",
-            "skill_level": "string",
-            "hire_date": "date"
-        },
-        "Capital": {
-            "amount": "float",
-            "type": "string",
-            "source": "string"
-        },
-        "Knowledge": {
-            "subject": "string",
-            "description": "string",
-            "importance_level": "string"
-        }
-    },
-
     # 全局业务常量
     'Organization': '广州颜青医疗美容诊所',
 

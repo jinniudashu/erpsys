@@ -122,12 +122,16 @@ def generate_source_code(project):
     forms = [service.form for service in project.services.all()]
     source_code['script']['form'] = _generate_forms_script(forms, project.domain)
 
-    print('models_script:', source_code['script']['form']['models'])
-    print('admin_script:', source_code['script']['form']['admin'])
-
-    # 导出业务定义数据
+    # 导出预定义数据
     # source_code['data']['core'] = _generate_init_data(project)
 
+    result = SourceCode.objects.create(
+        name = timezone.now().strftime('%Y%m%d%H%M%S'),
+        project = project,
+        code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
+    )
+    print(f'作业脚本写入数据库成功, id: {result}')
+    
     print('写入项目文件...')
     models_script = source_code['script']['type']['models'] + source_code['script']['form']['models']
     admin_script = source_code['script']['type']['admin'] + source_code['script']['form']['admin']
@@ -141,10 +145,3 @@ def generate_source_code(project):
 
     # makemigrations & migrate
     migrate_app(project.name)
-
-    # result = SourceCode.objects.create(
-    #     name = timezone.now().strftime('%Y%m%d%H%M%S'),
-    #     project = project,
-    #     code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
-    # )
-    # print(f'作业脚本写入数据库成功, id: {result}')

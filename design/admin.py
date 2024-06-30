@@ -77,6 +77,9 @@ class EventAdmin(admin.ModelAdmin):
 class SourceCodeInline(admin.TabularInline):
     model = SourceCode
     extra = 0
+    ordering = ['-create_time']
+    
+
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
