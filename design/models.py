@@ -49,7 +49,7 @@ class GenerateScriptMixin(object):
         return fields_script, field_type_dict
 
     def _generate_admin_script(self):
-        class_name = self._get_data_item_classname()
+        class_name = self.get_data_item_classname()
         admin_script = f'''
 @admin.register({class_name})
 class {class_name}Admin(admin.ModelAdmin):
@@ -85,8 +85,15 @@ maor_site.register({class_name}, {class_name}Admin)
                 case 'FileField':
                     field_definitions += f"    {field_name} = models.FileField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                 case 'TypeField':
-                    _field_type = consist_item._get_data_item_classname()
-                    field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                    if consist_item.business_type:
+                        _field_type = consist_item.business_type.get_data_item_classname()
+                        if consist_item.is_multivalued:
+                            field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, blank=True, verbose_name='{consist_item.label}')\n"
+                        else:
+                            field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                    else:
+                        _field_type = consist_item.get_data_item_classname()
+                        field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
                     field_type_dict.update({field_name: _field_type})
                 case 'User':
                     field_definitions += f"    {field_name} = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
@@ -105,17 +112,12 @@ maor_site.register({class_name}, {class_name}Admin)
     class Meta:
         verbose_name = "{self.label}"
         verbose_name_plural = verbose_name
-        ordering = ['id']
+        ordering = ["id"]
 '''
         return footer
     
-    def _get_data_item_classname(self):
-        pinyin_list = lazy_pinyin(self.label)
-        class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
-        return class_name
-
     def generate_script(self, domain):
-        model_head = f'class {self._get_data_item_classname()}(models.Model):\n'
+        model_head = f'class {self.get_data_item_classname()}(models.Model):\n'
         model_fields, fields_type_dict = self._generate_model_script()
         model_footer = self._generate_model_footer_script()
         model_script = f'{model_head}{model_fields}{model_footer}\n'
@@ -126,7 +128,7 @@ maor_site.register({class_name}, {class_name}Admin)
         return {'models': model_script, 'admin': admin_script, 'fields_type': fields_type_dict}
 
     def generate_form_script(self, domain):
-        model_head = f'class {self._get_data_item_classname()}(models.Model):\n'
+        model_head = f'class {self.get_data_item_classname()}(models.Model):\n'
         model_fields, _ = self._generate_field_definitions()
         autocomplete_fields = radio_fields = ''
         model_footer = self._generate_model_footer_script()
@@ -143,7 +145,7 @@ maor_site.register({class_name}, {class_name}Admin)
         return {'models': model_script, 'admin': admin_script}
     
     def _generate_form_admin_script(self, modeladmin_body):
-        class_name = self._get_data_item_classname()
+        class_name = self.get_data_item_classname()
         admin_script = f'''
 @admin.register({class_name})
 class {class_name}Admin(admin.ModelAdmin):
@@ -247,6 +249,8 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
     business_type = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='instances', null=True, blank=True, verbose_name="业务类型")
     inherit = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='children', null=True, blank=True, verbose_name="继承")
     bind_system_object = models.CharField(max_length=50, choices=SystemObject, null=True, blank=True, verbose_name="绑定系统对象")
+    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
+    is_multivalued= models.BooleanField(default=False, verbose_name="多值")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
     max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
     decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
@@ -261,6 +265,11 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
 
     def __str__(self):
         return self.label
+
+    def get_data_item_classname(self):
+        pinyin_list = lazy_pinyin(self.label)
+        class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
+        return class_name
 
     def get_ancestry_and_consists(self):
         """
@@ -278,7 +287,7 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
         current_item = self
         while current_item is not None:
             ancestry_list.append(current_item)
-            current_item = current_item.inherit
+            current_item = current_item.business_type
 
         # Reverse ancestry list to have root at the beginning
         ancestry_list.reverse()
@@ -291,8 +300,6 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
 class DataItemConsists(models.Model):
     data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='subset', null=True, verbose_name="数据项")
     sub_data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='superset', null=True, verbose_name="子数据项")
-    is_multivalued= models.BooleanField(default=False, verbose_name="多值")
-    default_value_char = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
 
     class Meta:
@@ -403,6 +410,11 @@ class Form(GenerateScriptMixin, ERPSysBase):
 
     def __str__(self):
         return self.label
+
+    def get_data_item_classname(self):
+        pinyin_list = lazy_pinyin(self.label)
+        class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
+        return class_name
 
 class FormComponents(models.Model):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")

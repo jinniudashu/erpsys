@@ -17,7 +17,7 @@ class DataItemTaxonomyInline(admin.TabularInline):
 
 @admin.register(DataItem)
 class DataItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'inherit', 'bind_system_object']
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'inherit', 'bind_system_object', 'default_value', 'is_multivalued']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type']

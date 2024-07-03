@@ -15,6 +15,7 @@ class MaorSite(admin.AdminSite):
         ]
         return my_urls + urls
 
+    # 职员登录后的首页
     def index(self, request, extra_context=None):
         print('MaorSite index:', request.user, extra_context)
         # user = User.objects.get(username=request.user).customer
@@ -22,29 +23,6 @@ class MaorSite(admin.AdminSite):
 
 maor_site = MaorSite(name = 'MaorSite')
 
-@admin.register(XiTongLeiXing)
-class XiTongLeiXingAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in XiTongLeiXing._meta.fields]
-    list_display_links = ['id']
-maor_site.register(XiTongLeiXing, XiTongLeiXingAdmin)
-
-@admin.register(GangWei)
-class GangWeiAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in GangWei._meta.fields]
-    list_display_links = ['id']
-maor_site.register(GangWei, GangWeiAdmin)
-
-@admin.register(FuWuLeiBie)
-class FuWuLeiBieAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in FuWuLeiBie._meta.fields]
-    list_display_links = ['id']
-maor_site.register(FuWuLeiBie, FuWuLeiBieAdmin)
-
-@admin.register(RuChuKuCaoZuo)
-class RuChuKuCaoZuoAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]
-    list_display_links = ['id']
-maor_site.register(RuChuKuCaoZuo, RuChuKuCaoZuoAdmin)
 
 @admin.register(RenYuan)
 class RenYuanAdmin(admin.ModelAdmin):
@@ -100,6 +78,42 @@ class CaoZuoYuanAdmin(admin.ModelAdmin):
     list_display_links = ['id']
 maor_site.register(CaoZuoYuan, CaoZuoYuanAdmin)
 
+@admin.register(XiTongLeiXing)
+class XiTongLeiXingAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in XiTongLeiXing._meta.fields]
+    list_display_links = ['id']
+maor_site.register(XiTongLeiXing, XiTongLeiXingAdmin)
+
+@admin.register(GangWei)
+class GangWeiAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in GangWei._meta.fields]
+    list_display_links = ['id']
+maor_site.register(GangWei, GangWeiAdmin)
+
+@admin.register(FuWuLeiBie)
+class FuWuLeiBieAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in FuWuLeiBie._meta.fields]
+    list_display_links = ['id']
+maor_site.register(FuWuLeiBie, FuWuLeiBieAdmin)
+
+@admin.register(RuChuKuCaoZuo)
+class RuChuKuCaoZuoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]
+    list_display_links = ['id']
+maor_site.register(RuChuKuCaoZuo, RuChuKuCaoZuoAdmin)
+
+@admin.register(KeHu)
+class KeHuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in KeHu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(KeHu, KeHuAdmin)
+
+@admin.register(ZhiYuan)
+class ZhiYuanAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ZhiYuan._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ZhiYuan, ZhiYuanAdmin)
+
 @admin.register(GongDan)
 class GongDanAdmin(admin.ModelAdmin):
     list_display = [field.name for field in GongDan._meta.fields]
@@ -118,18 +132,6 @@ class WuLiaoTaiZhangAdmin(admin.ModelAdmin):
     list_display_links = ['id']
 maor_site.register(WuLiaoTaiZhang, WuLiaoTaiZhangAdmin)
 
-@admin.register(KeHu)
-class KeHuAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in KeHu._meta.fields]
-    list_display_links = ['id']
-maor_site.register(KeHu, KeHuAdmin)
-
-@admin.register(ZhiYuan)
-class ZhiYuanAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ZhiYuan._meta.fields]
-    list_display_links = ['id']
-maor_site.register(ZhiYuan, ZhiYuanAdmin)
-
 @admin.register(YiSheng)
 class YiShengAdmin(admin.ModelAdmin):
     list_display = [field.name for field in YiSheng._meta.fields]
@@ -147,6 +149,18 @@ class KeFuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in KeFu._meta.fields]
     list_display_links = ['id']
 maor_site.register(KeFu, KeFuAdmin)
+
+@admin.register(LingYongRen)
+class LingYongRenAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in LingYongRen._meta.fields]
+    list_display_links = ['id']
+maor_site.register(LingYongRen, LingYongRenAdmin)
+
+@admin.register(ShiYongRen)
+class ShiYongRenAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ShiYongRen._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ShiYongRen, ShiYongRenAdmin)
 
 @admin.register(SuiFangJiLuDan)
 class SuiFangJiLuDanAdmin(admin.ModelAdmin):
