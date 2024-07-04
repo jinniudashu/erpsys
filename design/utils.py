@@ -143,13 +143,13 @@ def generate_source_code(project):
     }
 
     # 生成运行时数据结构代码
-    _queryset = DataItem.objects.filter(field_type='TypeField').order_by('business_type')
-    sorted_items = sort_data_items(_queryset)
-    source_code['script']['type'] = generate_models_admin_script(sorted_items, project.domain)
+    _queryset = DataItem.objects.filter(implement_type='Model').order_by('dependency_order')
+    # sorted_items = sort_data_items(_queryset)
+    source_code['script']['type'] = generate_models_admin_script(_queryset, project.name)
 
     # 生成服务表单代码
-    forms = [service.form for service in project.services.all()]
-    source_code['script']['form'] = generate_forms_script(forms, project.domain)
+    # forms = [service.form for service in project.services.all()]
+    # source_code['script']['form'] = generate_forms_script(forms, project.domain)
 
     result = SourceCode.objects.create(
         name = timezone.now().strftime('%Y%m%d%H%M%S'),
@@ -159,8 +159,10 @@ def generate_source_code(project):
     print(f'作业脚本写入数据库成功, id: {result}')
 
     print('写入项目文件...')
-    models_script = source_code['script']['type']['models'] + source_code['script']['form']['models']
-    admin_script = source_code['script']['type']['admin'] + source_code['script']['form']['admin']
+    models_script = source_code['script']['type']['models']
+    admin_script = source_code['script']['type']['admin']
+    # models_script = source_code['script']['type']['models'] + source_code['script']['form']['models']
+    # admin_script = source_code['script']['type']['admin'] + source_code['script']['form']['admin']
     object_files = [
         (f'./{project.name}/models.py', models_script),
         (f'./{project.name}/admin.py', admin_script),

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db.utils import IntegrityError
 from django.apps import apps
@@ -13,7 +14,7 @@ import json
 
 from pypinyin import Style, lazy_pinyin
 
-from design.types import FieldType, ChoiceType, SystemObject, FormType, SystemResourceType, ServiceType
+from design.types import FieldType, ChoiceType, SystemObject, ImplementType, FormType, ServiceType
 from design.specification import GLOBAL_INITIAL_STATES
 
 # ERPSys基类
@@ -88,18 +89,19 @@ maor_site.register({class_name}, {class_name}Admin)
                     if consist_item.business_type:
                         _field_type = consist_item.business_type.get_data_item_classname()
                         if consist_item.is_multivalued:
-                            field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, blank=True, verbose_name='{consist_item.label}')\n"
+                            field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, related_name='{field_name}', blank=True, verbose_name='{consist_item.label}')\n"
                         else:
-                            field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                            field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, on_delete=models.SET_NULL, related_name='{field_name}', blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     else:
                         _field_type = consist_item.get_data_item_classname()
-                        field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                        field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     field_type_dict.update({field_name: _field_type})
                 case 'User':
-                    field_definitions += f"    {field_name} = models.OneToOneField(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='{consist_item.label}')\n"
+                    field_definitions += f"    {field_name} = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     field_type_dict.update({field_name: 'User'})
-                case 'InstanceField':
-                    pass
+                case 'Service':
+                    field_definitions += f"    {field_name} = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    field_type_dict.update({field_name: 'Service'})
                 case 'ComputedField':
                     pass
                 case _:
@@ -108,16 +110,20 @@ maor_site.register({class_name}, {class_name}Admin)
         return field_definitions, field_type_dict
 
     def _generate_model_footer_script(self):
+        if self.dependency_order == 0:
+            verbose_name = f'Dict-{self.label}'
+        else:
+            verbose_name = self.label
         footer = f'''
     class Meta:
-        verbose_name = "{self.label}"
+        verbose_name = "{verbose_name}"
         verbose_name_plural = verbose_name
         ordering = ["id"]
 '''
         return footer
     
     def generate_script(self, domain):
-        model_head = f'class {self.get_data_item_classname()}(models.Model):\n'
+        model_head = f'class {self.get_data_item_classname()}({domain.capitalize()}Base):\n'
         model_fields, fields_type_dict = self._generate_model_script()
         model_footer = self._generate_model_footer_script()
         model_script = f'{model_head}{model_fields}{model_footer}\n'
@@ -247,7 +253,8 @@ class DataItem(GenerateScriptMixin, ERPSysBase):
     taxonomy = models.ManyToManyField('self', through='DataItemTaxonomy', symmetrical=False, verbose_name="词义分类")
     field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据类型")
     business_type = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='instances', null=True, blank=True, verbose_name="业务类型")
-    inherit = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='children', null=True, blank=True, verbose_name="继承")
+    implement_type = models.CharField(max_length=50, choices=ImplementType, default='Field', verbose_name="实现类型")
+    dependency_order = models.PositiveSmallIntegerField(default=0, verbose_name="依赖顺序")
     bind_system_object = models.CharField(max_length=50, choices=SystemObject, null=True, blank=True, verbose_name="绑定系统对象")
     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     is_multivalued= models.BooleanField(default=False, verbose_name="多值")
@@ -321,89 +328,58 @@ class DataItemTaxonomy(models.Model):
     def __str__(self):
         return f"{self.hypernymy.name} -> {self.hyponymy.name}"
 
-class Service(ERPSysBase):
-    consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
-    form = models.OneToOneField('Form', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
-    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业对象")
-    work_order = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='ordered_service', blank=True, null=True, verbose_name="工单")
-    route_to = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='routed_services', blank=True, null=True, verbose_name="传递至")
-    program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
-    service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
-    attributes = models.ManyToManyField(DataItem, through='ServiceAttributes', symmetrical=False, verbose_name="属性")
+class Operator(ERPSysBase):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")
 
     class Meta:
-        verbose_name = "服务"
-        verbose_name_plural = verbose_name
-        ordering = ['service_type', 'name', 'id']
-    
-    def __str__(self):
-        return self.label
-
-class ServiceConsists(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='sub_services', verbose_name="服务")
-    sub_service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='parent_services', verbose_name="子服务")
-    quantity = models.PositiveIntegerField(default=1)
-
-    class Meta:
-        verbose_name = "服务组成"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-        unique_together = ('service', 'sub_service')  # 确保每对父子服务关系唯一
-    
-    def __str__(self):
-        return f"{self.service.name} -> {self.sub_service.name}"
-
-class ResourceDependency(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-    resource_object = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="资源对象")
-    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
-    
-    class Meta:
-        verbose_name = "资源组件"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-    
-    def __str__(self):
-        return f"{self.service.name} -> {self.resource_object.name}"
-
-class ServiceAttributes(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-    attribute = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="属性")
-
-    class Meta:
-        verbose_name = "服务属性"
+        abstract = True
+        verbose_name = "操作员"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-    def __str__(self):
-        return f"{self.service.name} -> {self.attribute.name}"
-
-class Event(ERPSysBase):
-    rule = models.TextField(verbose_name="规则")
-
+class Material(ERPSysBase):
     class Meta:
-        verbose_name = "服务事件"
+        verbose_name = "物料"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-class SystemInstruction(ERPSysBase):
-    sys_call = models.CharField(max_length=255, verbose_name="系统调用")
-    parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
-
+class Equipment(ERPSysBase):
     class Meta:
-        verbose_name = "系统指令"
+        verbose_name = "设备"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-    def __str__(self):
-        return self.label
+class Device(ERPSysBase):
+    class Meta:
+        verbose_name = "器材"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
 
-class Form(GenerateScriptMixin, ERPSysBase):
+class Space(ERPSysBase):
+    class Meta:
+        verbose_name = "空间"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Capital(ERPSysBase):
+    class Meta:
+        verbose_name = "资金"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class WorkOrder(ERPSysBase):
+    class Meta:
+        verbose_name = "工单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Form(ERPSysBase):
     consists = models.ManyToManyField(DataItem, through='FormComponents', related_name='parent_form', verbose_name="字段")
     consists_config = models.ManyToManyField(DataItem, through='FormComponentsConfig', related_name='root_form', verbose_name="字段配置")
     form_type = models.CharField(max_length=50, choices=[(form_type.name, form_type.value) for form_type in FormType], verbose_name="类型")
 
     class Meta:
+        abstract = True
         verbose_name = "服务表单"
         verbose_name_plural = verbose_name
         ordering = ['id']
@@ -426,6 +402,7 @@ class FormComponents(models.Model):
     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
 
     class Meta:
+        abstract = True
         verbose_name = "表单字段"
         verbose_name_plural = verbose_name
         ordering = ['order']
@@ -439,9 +416,94 @@ class FormComponentsConfig(models.Model):
     is_required = models.BooleanField(default=False, verbose_name="必填")
 
     class Meta:
+        abstract = True
         verbose_name = "表单配置"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+class Event(ERPSysBase):
+    rule = models.TextField(verbose_name="规则")
+
+    class Meta:
+        abstract = True
+        verbose_name = "服务事件"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Service(ERPSysBase):
+    consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
+    form = models.OneToOneField(Form, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
+    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业对象")
+    reference = models.ManyToManyField(DataItem, related_name='referenced_services', blank=True, verbose_name="参考对象")
+    work_order = models.ForeignKey(WorkOrder, on_delete=models.SET_NULL, related_name='ordered_service', blank=True, null=True, verbose_name="工单")
+    allowed_operators = models.ManyToManyField(Operator, related_name='allowed_services', blank=True, verbose_name="允许操作员")
+    route_to = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='routed_services', blank=True, null=True, verbose_name="传递至")
+    program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
+    service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
+    attributes = models.ManyToManyField(DataItem, through='ServiceAttributes', symmetrical=False, verbose_name="属性")
+
+    class Meta:
+        abstract = True
+        verbose_name = "服务"
+        verbose_name_plural = verbose_name
+        ordering = ['service_type', 'name', 'id']
+    
+    def __str__(self):
+        return self.label
+
+class ServiceConsists(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='sub_services', verbose_name="服务")
+    sub_service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='parent_services', verbose_name="子服务")
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        abstract = True
+        verbose_name = "服务组成"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+        unique_together = ('service', 'sub_service')  # 确保每对父子服务关系唯一
+    
+    def __str__(self):
+        return f"{self.service.name} -> {self.sub_service.name}"
+
+class ResourceDependency(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
+    resource_object = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="资源对象")
+    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
+    
+    class Meta:
+        abstract = True
+        verbose_name = "资源组件"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+    
+    def __str__(self):
+        return f"{self.service.name} -> {self.resource_object.name}"
+
+class ServiceAttributes(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
+    attribute = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="属性")
+
+    class Meta:
+        abstract = True
+        verbose_name = "服务属性"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return f"{self.service.name} -> {self.attribute.name}"
+
+class SystemInstruction(ERPSysBase):
+    sys_call = models.CharField(max_length=255, verbose_name="系统调用")
+    parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
+
+    class Meta:
+        verbose_name = "系统指令"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return self.label
 
 class ServiceBOM:
     @staticmethod
@@ -473,7 +535,7 @@ class ServiceBOM:
 class Project(ERPSysBase):
     domain = models.CharField(max_length=255, null=True, blank=True, verbose_name="域名")
     description = models.CharField(max_length=255, null=True, blank=True, verbose_name='项目描述')  # 项目描述
-    services = models.ManyToManyField(Service, blank=True, verbose_name="服务")
+    # services = models.ManyToManyField(Service, blank=True, verbose_name="服务")
 
     class Meta:
         verbose_name = '项目'

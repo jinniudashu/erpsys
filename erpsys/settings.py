@@ -29,7 +29,7 @@ INSTALLED_APPS = [
 
     # My apps
     'design',
-    'kernel',
+    # 'kernel',
     'maor',
 ]
 

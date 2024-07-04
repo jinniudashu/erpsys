@@ -6,6 +6,7 @@ FieldType = [
     ('TypeField', '类型'),
     ('InstanceField', '实例'),
     ('User', '系统用户'),
+    ('Service', '服务'),
     ('DecimalField', '固定精度小数'),
     ('TextField', '多行文本'),
     ('DateTimeField', '日期时间'),
@@ -29,6 +30,12 @@ SystemObject = [
     ('Service', '服务'),
     ('CreateService', '创建服务'),
     ('CallService', '调用服务'),
+]
+
+ImplementType = [
+    ('Field', '字段'),
+    ('Model', '数据表'),
+    ('Program', '程序'),
 ]
 
 class SystemResourceType(Enum):
