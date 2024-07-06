@@ -2,6 +2,8 @@ from design.specification import GLOBAL_INITIAL_STATES
 
 ScriptFileHeader = {
     'models_file_head': f"""from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth.models import User
 
 from design.models import ERPSysBase

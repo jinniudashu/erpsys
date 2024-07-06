@@ -11,7 +11,7 @@ class DataItemConsistsInline(admin.TabularInline):
 
 @admin.register(DataItem)
 class DataItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'implement_type', 'dependency_order', 'bind_system_object', 'default_value', 'is_multivalued']
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'implement_type', 'dependency_order', 'default_value', 'is_multivalued']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'implement_type', 'business_type']
@@ -71,12 +71,6 @@ class InformationAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
-@admin.register(WorkOrder)
-class WorkOrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym']
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-
 @admin.register(Knowledge)
 class KnowledgeAdmin(admin.ModelAdmin):
     list_display = ['id', 'label', 'name', 'pym']
@@ -113,10 +107,10 @@ class ServiceAttributesInline(admin.TabularInline):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['label', 'name', 'form', 'subject', 'work_order', 'route_to', 'program', 'service_type', ]
+    list_display = ['label', 'name', 'form', 'route_to', 'program', 'service_type', ]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['form', 'subject', 'work_order', 'route_to']
+    autocomplete_fields = ['form', 'route_to']
     inlines = [ServiceConsistsInline, ResourceDependencyInline, ServiceAttributesInline]
 
 class SourceCodeInline(admin.TabularInline):

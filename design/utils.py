@@ -6,8 +6,6 @@ from django.utils import timezone
 import json
 from collections import defaultdict
 
-from pypinyin import lazy_pinyin
-
 from design.models import DataItem, DESIGN_CLASS_MAPPING
 from design.specification import GLOBAL_INITIAL_STATES
 from design.script_file_header import ScriptFileHeader

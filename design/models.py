@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models import Q
 
 import uuid
@@ -39,7 +41,6 @@ class DataItem(ERPSysBase):
     business_type = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='instances', null=True, blank=True, verbose_name="业务类型")
     implement_type = models.CharField(max_length=50, choices=ImplementType, default='Field', verbose_name="实现类型")
     dependency_order = models.PositiveSmallIntegerField(default=0, verbose_name="依赖顺序")
-    bind_system_object = models.CharField(max_length=50, choices=SystemObject, null=True, blank=True, verbose_name="绑定系统对象")
     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     is_multivalued= models.BooleanField(default=False, verbose_name="多值")
     max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
@@ -51,7 +52,7 @@ class DataItem(ERPSysBase):
     class Meta:
         verbose_name = "数据项"
         verbose_name_plural = verbose_name
-        ordering = ['implement_type', 'field_type', 'id']
+        ordering = ['implement_type', 'dependency_order', 'field_type', 'id']
 
     def _generate_model_script(self):
         fields_script = ''
@@ -253,12 +254,6 @@ class Information(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ["id"]
 
-class WorkOrder(ERPSysBase):
-    class Meta:
-        verbose_name = "工单"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
 class Knowledge(ERPSysBase):
     zhi_shi_wen_jian = models.FileField(blank=True, null=True, verbose_name='知识文件')
     zhi_shi_wen_ben = models.TextField(blank=True, null=True, verbose_name='知识文本')
@@ -295,12 +290,12 @@ class FormComponentsConfig(models.Model):
         
 class Service(ERPSysBase):
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
-    form = models.OneToOneField(Form, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
     subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业对象")
-    reference = models.ManyToManyField(DataItem, related_name='referenced_services', blank=True, verbose_name="参考对象")
-    work_order = models.ForeignKey(WorkOrder, on_delete=models.SET_NULL, related_name='ordered_service', blank=True, null=True, verbose_name="工单")
-    allowed_operators = models.ManyToManyField(Operator, related_name='allowed_services', blank=True, verbose_name="允许操作员")
+    form = models.OneToOneField(Form, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
+    allowed_roles = models.ManyToManyField(Role, related_name='role_allowed_services', blank=True, verbose_name="允许角色")
+    allowed_operators = models.ManyToManyField(Operator, related_name='operator_allowed_services', blank=True, verbose_name="允许操作员")
     route_to = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='routed_services', blank=True, null=True, verbose_name="传递至")
+    reference = models.ManyToManyField(DataItem, related_name='referenced_services', blank=True, verbose_name="参考对象")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], verbose_name="服务类型")
     attributes = models.ManyToManyField(DataItem, through='ServiceAttributes', symmetrical=False, verbose_name="属性")
@@ -398,7 +393,6 @@ class SourceCode(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-
 DESIGN_CLASS_MAPPING = {
     "Role": Role,
     "Operator": Operator,
@@ -408,16 +402,8 @@ DESIGN_CLASS_MAPPING = {
     "Capital": Capital,
     "Space": Space,
     "Information": Information,
-    "WorkOrder": WorkOrder,
     "Form": Form,
     "Knowledge": Knowledge,
     "Event": Event,
     "Service": Service,
 }
-
-"""
-客户	姓名	年龄	性别	初诊日期			
-作业员	姓名						
-标准工单	日期						
-物料	名称	规格	价格	库存数量	最小库存数量	条形码	SKU ID
-"""

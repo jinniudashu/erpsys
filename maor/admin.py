@@ -130,12 +130,6 @@ class InformationAdmin(admin.ModelAdmin):
     list_display_links = ['id']
 maor_site.register(Information, InformationAdmin)
 
-@admin.register(WorkOrder)
-class WorkOrderAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in WorkOrder._meta.fields]
-    list_display_links = ['id']
-maor_site.register(WorkOrder, WorkOrderAdmin)
-
 @admin.register(Form)
 class FormAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Form._meta.fields]
@@ -148,12 +142,6 @@ class KnowledgeAdmin(admin.ModelAdmin):
     list_display_links = ['id']
 maor_site.register(Knowledge, KnowledgeAdmin)
 
-@admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Event._meta.fields]
-    list_display_links = ['id']
-maor_site.register(Event, EventAdmin)
-
 @admin.register(WuLiaoTaiZhang)
 class WuLiaoTaiZhangAdmin(admin.ModelAdmin):
     list_display = [field.name for field in WuLiaoTaiZhang._meta.fields]
@@ -165,3 +153,9 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Service._meta.fields]
     list_display_links = ['id']
 maor_site.register(Service, ServiceAdmin)
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Event._meta.fields]
+    list_display_links = ['id']
+maor_site.register(Event, EventAdmin)

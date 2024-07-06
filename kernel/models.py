@@ -110,6 +110,12 @@ class Process(models.Model):
     与过程相关的其他数据或状态信息    
     """
 
+class WorkOrder(models.Model):
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
+    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
+    operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="操作员")
+    scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划时间")
+
 class Stacks(models.Model):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
     stack = models.JSONField(blank=True, null=True, verbose_name="栈")
