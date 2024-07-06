@@ -6,12 +6,23 @@ import uuid
 
 from kernel.types import ProcessState
 from kernel.app_types import app_types
+from design.models import Service
 from maor.models import *
 
+class SystemInstruction(models.Model):
+    name = models.CharField(max_length=255, unique=True, verbose_name="名称")
+    sys_call = models.CharField(max_length=255, verbose_name="系统调用")
+    parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
+
+    class Meta:
+        verbose_name = "系统指令"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return self.name
+
 class Process(models.Model):
-    """
-    进程
-    """
     pid = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="进程id")
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name="child_instances", verbose_name="父进程")
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
@@ -100,9 +111,6 @@ class Process(models.Model):
     """
 
 class Stacks(models.Model):
-    """
-    进程栈
-    """
     process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
     stack = models.JSONField(blank=True, null=True, verbose_name="栈")
     heap = models.JSONField(blank=True, null=True, verbose_name="堆")

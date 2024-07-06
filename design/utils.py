@@ -11,7 +11,7 @@ from pypinyin import lazy_pinyin
 from design.models import *
 from design.script_file_header import ScriptFileHeader
 
-from maor.models import class_mappings
+from maor.models import CLASS_MAPPING
 
 # 生成脚本, 被design.admin调用
 def generate_source_code(project):
@@ -76,10 +76,13 @@ def generate_source_code(project):
         #     print(f"Error migrating {app_name}: {e}")
 
     def import_init_data():
-        for item in DataItem.objects.filter(field_type='TypeField', init_content__isnull=False):
-            class_name = item.get_data_item_classname()
+        for item in DataItem.objects.filter(field_type__in = ['TypeField', 'Reserved'], init_content__isnull=False):
+            if item.field_type == 'Reserved':
+                class_name = item.name
+            else:
+                class_name = item.get_data_item_classname()
             print(class_name, item.init_content)
-            model_class = class_mappings.get(class_name)
+            model_class = CLASS_MAPPING.get(class_name)
             if model_class:
                 model_class.objects.all().delete()
 
@@ -96,83 +99,153 @@ def generate_source_code(project):
                 # 处理未找到对应类的情况
                 print(f"Class not found for label: {item.label}")
 
-    def import_test_data():
-        pass
-
     # 生成models.py, admin.py脚本
-    def generate_models_admin_script(query_set, domain):
+    def generate_models_admin_script(query_set):
 
         models_script = ScriptFileHeader['models_file_head']
         admin_script =  ScriptFileHeader['admin_file_head']
         fields_type_script = ScriptFileHeader['fields_type_head']
         fields_type = {}
-        class_mappings_str = """class_mappings = {\n"""
+        class_mappings_str = """CLASS_MAPPING = {\n"""
 
         for item in query_set:
-            script = item.generate_script(domain)
-            models_script = f'{models_script}{script["models"]}'
-            admin_script = f'{admin_script}{script["admin"]}'
+            _model_script, _admin_script, _fields_type_dict = item.generate_script()
+            models_script = f'{models_script}{_model_script}'
+            admin_script = f'{admin_script}{_admin_script}'
 
-            fields_type.update(script["fields_type"])
+            fields_type.update(_fields_type_dict)
 
-            _class_name = item.get_data_item_classname()
-            class_mappings_str = f'{class_mappings_str}    "{_class_name}": {_class_name},\n'
+            if item.field_type == 'Reserved':
+                class_name = item.name
+            else:
+                class_name = item.get_data_item_classname()
+            class_mappings_str = f'{class_mappings_str}    "{class_name}": {class_name},\n'
 
         class_mappings_str = class_mappings_str + '}\n\n'
+        models_script = models_script + class_mappings_str
         fields_type_script = f'{fields_type_script}{fields_type}'
 
-        return {'models': models_script + class_mappings_str, 'admin': admin_script, 'fields_type': fields_type_script}
+        return models_script, admin_script, fields_type_script
 
-    def generate_forms_script(forms, domain):
-        models_script = admin_script = ''
-
-        for form in forms:
-            script = form.generate_form_script(domain)            
-            models_script = f'{models_script}{script["models"]}'
-            admin_script = f'{admin_script}{script["admin"]}'
-
-        return {'models': models_script, 'admin': admin_script}
+    project_name = project.name.lower()
 
     source_code = {
-        'script': {
-            'service': {},
-        },
-        'data': {
-            'core': {},
-        }
+        'script': {},
+        'data': {}
     }
 
     # 生成运行时数据结构代码
     _queryset = DataItem.objects.filter(implement_type='Model').order_by('dependency_order')
     # sorted_items = sort_data_items(_queryset)
-    source_code['script']['type'] = generate_models_admin_script(_queryset, project.name)
-
-    # 生成服务表单代码
-    # forms = [service.form for service in project.services.all()]
-    # source_code['script']['form'] = generate_forms_script(forms, project.domain)
-
-    result = SourceCode.objects.create(
-        name = timezone.now().strftime('%Y%m%d%H%M%S'),
-        project = project,
-        code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
-    )
-    print(f'作业脚本写入数据库成功, id: {result}')
+    models_script, admin_script, fields_type_script = generate_models_admin_script(_queryset)
 
     print('写入项目文件...')
-    models_script = source_code['script']['type']['models']
-    admin_script = source_code['script']['type']['admin']
-    # models_script = source_code['script']['type']['models'] + source_code['script']['form']['models']
-    # admin_script = source_code['script']['type']['admin'] + source_code['script']['form']['admin']
     object_files = [
-        (f'./{project.name}/models.py', models_script),
-        (f'./{project.name}/admin.py', admin_script),
-        (f'./kernel/app_types.py', source_code['script']['type']['fields_type']),
+        (f'./{project_name}/models.py', models_script),
+        (f'./{project_name}/admin.py', admin_script),
+        (f'./kernel/app_types.py', fields_type_script),
     ]
     for filename, content in object_files:
         write_project_file(filename, content)
 
+    # source_code['script']['type']['models'] = models_script
+    # source_code['script']['type']['admin'] = admin_script
+    # result = SourceCode.objects.create(
+    #     name = timezone.now().strftime('%Y%m%d%H%M%S'),
+    #     project = project,
+    #     code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
+    # )
+    # print(f'作业脚本写入数据库成功, id: {result}')
+
     # makemigrations & migrate
-    migrate_app(project.name)
+    migrate_app(project_name)
 
     # 写入初始业务数据
     import_init_data()
+
+# 抽取excel数据
+def abstract_excel_data(file_path="design/business_data/preprocessing/initial_data.xlsx"):
+    import pandas as pd
+    # 将 Pandas 数据类型映射到 Python 的原生数据类型
+    dtype_map = {
+        'int64': 'IntegerField',
+        'float64': 'DecimalField',
+        'bool': 'BooleanField',
+        'datetime64[ns]': 'DateTimeField',
+        'object': 'CharField'
+    }    
+
+    # Load the Excel file
+    xls = pd.ExcelFile(file_path)
+
+    result = {}
+    # Iterate through each sheet
+    for sheet_name in xls.sheet_names:
+        dict_data_item = DataItem.objects.get_or_create(label=sheet_name, defaults={'field_type': 'TypeField'})[0]
+
+        # Parse the sheet into a DataFrame
+        df = pd.read_excel(xls, sheet_name=sheet_name)
+
+        # Parse the column names and their types
+        fields = [{'name': col, 'type': dtype_map.get(str(df[col].dtype), 'CharField')} for col in df.columns]
+        for field in fields:
+            data_item = DataItem.objects.get_or_create(label=field['name'], defaults={'field_type': field['type']})[0]
+            dict_data_item.consists.add(data_item)
+        
+        # Parse the sheet data into a list of dictionaries
+        dict_data = df.to_dict(orient='records')
+        dict_data_item.init_content = json.dumps(dict_data, ensure_ascii=False)
+        dict_data_item.save()
+
+        # Add parsed information to the result
+        result[sheet_name] = {
+            'fields': fields,
+            'data': dict_data
+        }
+        print(f"Created DataItemDict: {sheet_name}, {result[sheet_name]}")
+
+# 抽取Forms数据
+def abstract_forms_data(forms=GLOBAL_INITIAL_STATES['Forms']):
+    def _map_field_type(f_type):
+        mapping = {
+            'String': 'CharField',
+            'Date': 'DateField',
+            'Boolean': 'BooleanField',
+            'Integer': 'IntegerField',
+            'Decimal': 'DecimalField',
+            'Text': 'TextField'
+        }
+        return mapping.get(f_type, 'CharField')  # Default to 'CharField' if not found
+
+    def _process_entry(entry, form):
+        if entry['type'] == 'group':
+            for entry in entry['entries']:
+                _process_entry(entry, form)
+        elif entry['type'] == 'field':
+            label = entry.get('label')
+            field_type = _map_field_type(entry.get('field_type'))
+            enum = entry.get('enum', None)
+            try:
+                if enum is None:
+                    data_item = DataItem.objects.get_or_create(label=label, defaults={'field_type': field_type})[0]
+                    # 向表单添加数据项
+                    form.data_items.add(data_item)
+                    print(f"Created DataItem: {data_item.label if data_item else 'None'}")
+                else:
+                    dict_data_item, created = DataItem.objects.get_or_create(label=label, defaults={'field_type': 'TypeField'})
+                    if created:
+                        dict_data_item.consists.add(zhi_data_item)
+                        dict_data_item.init_content = json.dumps([{'值': item} for item in enum], ensure_ascii=False)
+                        dict_data_item.save()
+                    # 向表单添加字典对应的数据项
+                    form.data_items.add(dict_data_item)
+                    print(f"Created DataItemDict: {dict_data_item}")
+            except IntegrityError as e:
+                print(f"Error creating field: {e}")
+
+    zhi_data_item = DataItem.objects.get_or_create(label='值', defaults={'field_type': 'CharField'})[0]
+    for form in forms:
+        entries = form.get('entries', [])
+        _form = Form.objects.get_or_create(label=form['label'], defaults={'form_type': FormType.PRODUCE.name})[0]
+        for entry in entries:
+            _process_entry(entry, _form)

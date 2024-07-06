@@ -14,12 +14,13 @@ import json
 
 from pypinyin import Style, lazy_pinyin
 
-from design.types import FieldType, ChoiceType, SystemObject, ImplementType, FormType, ServiceType
+from design.types import FieldType, ChoiceType, SystemObject, ImplementType, ServiceType
 from design.specification import GLOBAL_INITIAL_STATES
+from design.script_file_header import ScriptFileHeader
 
 # ERPSys基类
 class ERPSysBase(models.Model):
-    label = models.CharField(max_length=255, null=True, verbose_name="标签")
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
     pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
     erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
@@ -28,20 +29,39 @@ class ERPSysBase(models.Model):
         abstract = True
 
     def __str__(self):
-        return str(self.name)
+        return str(self.label)
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\u4e00-\u9fa5]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
-            # 使用正则表达式过滤掉label非汉字内容, 截取到8个汉字以内
-            self.name = "_".join(lazy_pinyin(label[:8]))
+            # 使用正则表达式过滤掉label非汉字内容, 截取到10个汉字以内
+            self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
 
-class GenerateScriptMixin(object):
+class DataItem(ERPSysBase):
+    consists = models.ManyToManyField('self', through='DataItemConsists', related_name='parent', symmetrical=False, verbose_name="数据项组成")
+    field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据类型")
+    business_type = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='instances', null=True, blank=True, verbose_name="业务类型")
+    implement_type = models.CharField(max_length=50, choices=ImplementType, default='Field', verbose_name="实现类型")
+    dependency_order = models.PositiveSmallIntegerField(default=0, verbose_name="依赖顺序")
+    bind_system_object = models.CharField(max_length=50, choices=SystemObject, null=True, blank=True, verbose_name="绑定系统对象")
+    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
+    is_multivalued= models.BooleanField(default=False, verbose_name="多值")
+    max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
+    max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
+    decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
+    computed_logic = models.TextField(null=True, blank=True, verbose_name="计算逻辑")
+    init_content = models.JSONField(blank=True, null=True, verbose_name="初始内容")
+
+    class Meta:
+        verbose_name = "数据项"
+        verbose_name_plural = verbose_name
+        ordering = ['implement_type', 'field_type', 'id']
+
     def _generate_model_script(self):
         fields_script = ''
         field_type_dict = {}
@@ -50,7 +70,10 @@ class GenerateScriptMixin(object):
         return fields_script, field_type_dict
 
     def _generate_admin_script(self):
-        class_name = self.get_data_item_classname()
+        if self.business_type is None:
+            class_name = self.get_data_item_classname()
+        else:
+            class_name = self.business_type.name
         admin_script = f'''
 @admin.register({class_name})
 class {class_name}Admin(admin.ModelAdmin):
@@ -87,7 +110,7 @@ maor_site.register({class_name}, {class_name}Admin)
                     field_definitions += f"    {field_name} = models.FileField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                 case 'TypeField':
                     if consist_item.business_type:
-                        _field_type = consist_item.business_type.get_data_item_classname()
+                        _field_type = consist_item.business_type.name
                         if consist_item.is_multivalued:
                             field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, related_name='{field_name}', blank=True, verbose_name='{consist_item.label}')\n"
                         else:
@@ -110,10 +133,11 @@ maor_site.register({class_name}, {class_name}Admin)
         return field_definitions, field_type_dict
 
     def _generate_model_footer_script(self):
+        verbose_name = self.label
+        if self.field_type == 'Reserved':
+            verbose_name = f'{self.field_type}-{self.label}'
         if self.dependency_order == 0:
             verbose_name = f'Dict-{self.label}'
-        else:
-            verbose_name = self.label
         footer = f'''
     class Meta:
         verbose_name = "{verbose_name}"
@@ -122,8 +146,17 @@ maor_site.register({class_name}, {class_name}Admin)
 '''
         return footer
     
-    def generate_script(self, domain):
-        model_head = f'class {self.get_data_item_classname()}({domain.capitalize()}Base):\n'
+    def generate_script(self):
+        if self.field_type == 'Reserved':
+            model_head = f'class {self.name}(ERPSysBase):\n'
+            match self.name:
+                # Add Reserved body script here
+                case 'Service':
+                    model_head = model_head + ScriptFileHeader['Service_Reserved_body_script']
+                case 'Form':
+                    model_head = model_head + ScriptFileHeader['Form_Reserved_body_script']
+        else:
+            model_head = f'class {self.get_data_item_classname()}(ERPSysBase):\n'
         model_fields, fields_type_dict = self._generate_model_script()
         model_footer = self._generate_model_footer_script()
         model_script = f'{model_head}{model_fields}{model_footer}\n'
@@ -131,148 +164,8 @@ maor_site.register({class_name}, {class_name}Admin)
         # construct admin script
         admin_script = self._generate_admin_script()
 
-        return {'models': model_script, 'admin': admin_script, 'fields_type': fields_type_dict}
-
-    def generate_form_script(self, domain):
-        model_head = f'class {self.get_data_item_classname()}(models.Model):\n'
-        model_fields, _ = self._generate_field_definitions()
-        autocomplete_fields = radio_fields = ''
-        model_footer = self._generate_model_footer_script()
-        model_script = f'{model_head}{model_fields}{model_footer}\n'
-
-        # construct admin script
-        modeladmin_body = {}
-        if radio_fields:
-            modeladmin_body['radio_fields'] = radio_fields
-        if autocomplete_fields:
-            modeladmin_body['autocomplete_fields'] = autocomplete_fields
-        admin_script = self._generate_form_admin_script(modeladmin_body)
-
-        return {'models': model_script, 'admin': admin_script}
+        return model_script, admin_script, fields_type_dict
     
-    def _generate_form_admin_script(self, modeladmin_body):
-        class_name = self.get_data_item_classname()
-        admin_script = f'''
-@admin.register({class_name})
-class {class_name}Admin(admin.ModelAdmin):
-    list_display = [field.name for field in {class_name}._meta.fields]
-    list_display_links = ['id']
-'''        
-        return admin_script
-    
-class DataItemManager(models.Manager):
-    # 抽取excel数据
-    def abstract_excel_data(self, file_path="design/business_data/preprocessing/initial_data.xlsx"):
-        import pandas as pd
-        # 将 Pandas 数据类型映射到 Python 的原生数据类型
-        dtype_map = {
-            'int64': 'IntegerField',
-            'float64': 'DecimalField',
-            'bool': 'BooleanField',
-            'datetime64[ns]': 'DateTimeField',
-            'object': 'CharField'
-        }    
-
-        # Load the Excel file
-        xls = pd.ExcelFile(file_path)
-
-        result = {}
-        # Iterate through each sheet
-        for sheet_name in xls.sheet_names:
-            dict_data_item = self.get_or_create(label=sheet_name, defaults={'field_type': 'TypeField'})[0]
-
-            # Parse the sheet into a DataFrame
-            df = pd.read_excel(xls, sheet_name=sheet_name)
-
-            # Parse the column names and their types
-            fields = [{'name': col, 'type': dtype_map.get(str(df[col].dtype), 'CharField')} for col in df.columns]
-            for field in fields:
-                data_item = self.get_or_create(label=field['name'], defaults={'field_type': field['type']})[0]
-                dict_data_item.consists.add(data_item)
-            
-            # Parse the sheet data into a list of dictionaries
-            dict_data = df.to_dict(orient='records')
-            dict_data_item.init_content = json.dumps(dict_data, ensure_ascii=False)
-            dict_data_item.save()
-
-            # Add parsed information to the result
-            result[sheet_name] = {
-                'fields': fields,
-                'data': dict_data
-            }
-            print(f"Created DataItemDict: {sheet_name}, {result[sheet_name]}")
-
-    # 抽取Forms数据
-    def abstract_forms_data(self, forms=GLOBAL_INITIAL_STATES['Forms']):
-        def _map_field_type(f_type):
-            mapping = {
-                'String': 'CharField',
-                'Date': 'DateField',
-                'Boolean': 'BooleanField',
-                'Integer': 'IntegerField',
-                'Decimal': 'DecimalField',
-                'Text': 'TextField'
-            }
-            return mapping.get(f_type, 'CharField')  # Default to 'CharField' if not found
-
-        def _process_entry(entry, form):
-            if entry['type'] == 'group':
-                for entry in entry['entries']:
-                    _process_entry(entry, form)
-            elif entry['type'] == 'field':
-                label = entry.get('label')
-                field_type = _map_field_type(entry.get('field_type'))
-                enum = entry.get('enum', None)
-                try:
-                    if enum is None:
-                        data_item = self.get_or_create(label=label, defaults={'field_type': field_type})[0]
-                        # 向表单添加数据项
-                        form.data_items.add(data_item)
-                        print(f"Created DataItem: {data_item.label if data_item else 'None'}")
-                    else:
-                        dict_data_item, created = self.get_or_create(label=label, defaults={'field_type': 'TypeField'})
-                        if created:
-                            dict_data_item.consists.add(zhi_data_item)
-                            dict_data_item.init_content = json.dumps([{'值': item} for item in enum], ensure_ascii=False)
-                            dict_data_item.save()
-                        # 向表单添加字典对应的数据项
-                        form.data_items.add(dict_data_item)
-                        print(f"Created DataItemDict: {dict_data_item}")
-                except IntegrityError as e:
-                    print(f"Error creating field: {e}")
-
-        zhi_data_item = DataItem.objects.get_or_create(label='值', defaults={'field_type': 'CharField'})[0]
-        for form in forms:
-            entries = form.get('entries', [])
-            _form = Form.objects.get_or_create(label=form['label'], defaults={'form_type': FormType.PRODUCE.name})[0]
-            for entry in entries:
-                _process_entry(entry, _form)
-
-class DataItem(GenerateScriptMixin, ERPSysBase):
-    consists = models.ManyToManyField('self', through='DataItemConsists', related_name='parent', symmetrical=False, verbose_name="数据项组成")
-    taxonomy = models.ManyToManyField('self', through='DataItemTaxonomy', symmetrical=False, verbose_name="词义分类")
-    field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据类型")
-    business_type = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='instances', null=True, blank=True, verbose_name="业务类型")
-    implement_type = models.CharField(max_length=50, choices=ImplementType, default='Field', verbose_name="实现类型")
-    dependency_order = models.PositiveSmallIntegerField(default=0, verbose_name="依赖顺序")
-    bind_system_object = models.CharField(max_length=50, choices=SystemObject, null=True, blank=True, verbose_name="绑定系统对象")
-    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
-    is_multivalued= models.BooleanField(default=False, verbose_name="多值")
-    max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
-    max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
-    decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
-    computed_logic = models.TextField(null=True, blank=True, verbose_name="计算逻辑")
-    init_content = models.JSONField(blank=True, null=True, verbose_name="初始内容")
-    objects = DataItemManager()
-
-    class Meta:
-        verbose_name = "数据项"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return self.label
-
     def get_data_item_classname(self):
         pinyin_list = lazy_pinyin(self.label)
         class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
@@ -315,24 +208,8 @@ class DataItemConsists(models.Model):
         ordering = ['id']
         unique_together = ('data_item', 'sub_data_item')
 
-class DataItemTaxonomy(models.Model):
-    hypernymy = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='hyponymies', null=True, verbose_name="上义词")
-    hyponymy = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='hypernymies', null=True, verbose_name="下义词")
-
-    class Meta:
-        verbose_name = "上下义关系"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-        unique_together = ('hypernymy', 'hyponymy')  # 确保每对父子服务关系唯一
-    
-    def __str__(self):
-        return f"{self.hypernymy.name} -> {self.hyponymy.name}"
-
 class Operator(ERPSysBase):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")
-
     class Meta:
-        abstract = True
         verbose_name = "操作员"
         verbose_name_plural = verbose_name
         ordering = ['id']
@@ -367,6 +244,12 @@ class Capital(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
+class Event(ERPSysBase):
+    class Meta:
+        verbose_name = "事件"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
 class WorkOrder(ERPSysBase):
     class Meta:
         verbose_name = "工单"
@@ -374,38 +257,12 @@ class WorkOrder(ERPSysBase):
         ordering = ['id']
 
 class Form(ERPSysBase):
-    consists = models.ManyToManyField(DataItem, through='FormComponents', related_name='parent_form', verbose_name="字段")
     consists_config = models.ManyToManyField(DataItem, through='FormComponentsConfig', related_name='root_form', verbose_name="字段配置")
-    form_type = models.CharField(max_length=50, choices=[(form_type.name, form_type.value) for form_type in FormType], verbose_name="类型")
 
     class Meta:
-        abstract = True
-        verbose_name = "服务表单"
+        verbose_name = "表单"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
-    def __str__(self):
-        return self.label
-
-    def get_data_item_classname(self):
-        pinyin_list = lazy_pinyin(self.label)
-        class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
-        return class_name
-
-class FormComponents(models.Model):
-    form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
-    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, null=True, verbose_name="字段")
-    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
-    is_list = models.BooleanField(default=False, verbose_name="列表字段")
-    expand_data_item = models.BooleanField(default=False, verbose_name="展开字段")
-    is_aggregate = models.BooleanField(default=False, verbose_name="聚合字段")
-    order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
-
-    class Meta:
-        abstract = True
-        verbose_name = "表单字段"
-        verbose_name_plural = verbose_name
-        ordering = ['order']
 
 class FormComponentsConfig(models.Model):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
@@ -414,22 +271,16 @@ class FormComponentsConfig(models.Model):
     readonly = models.BooleanField(default=False, verbose_name="只读")
     choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
     is_required = models.BooleanField(default=False, verbose_name="必填")
+    is_list = models.BooleanField(default=False, verbose_name="列表字段")
+    expand_data_item = models.BooleanField(default=False, verbose_name="展开字段")
+    is_aggregate = models.BooleanField(default=False, verbose_name="聚合字段")
+    order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
 
     class Meta:
-        abstract = True
         verbose_name = "表单配置"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
-class Event(ERPSysBase):
-    rule = models.TextField(verbose_name="规则")
-
-    class Meta:
-        abstract = True
-        verbose_name = "服务事件"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
+        
 class Service(ERPSysBase):
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
     form = models.OneToOneField(Form, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="表单")
@@ -443,13 +294,9 @@ class Service(ERPSysBase):
     attributes = models.ManyToManyField(DataItem, through='ServiceAttributes', symmetrical=False, verbose_name="属性")
 
     class Meta:
-        abstract = True
         verbose_name = "服务"
         verbose_name_plural = verbose_name
         ordering = ['service_type', 'name', 'id']
-    
-    def __str__(self):
-        return self.label
 
 class ServiceConsists(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='sub_services', verbose_name="服务")
@@ -457,14 +304,13 @@ class ServiceConsists(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
-        abstract = True
         verbose_name = "服务组成"
         verbose_name_plural = verbose_name
         ordering = ['id']
         unique_together = ('service', 'sub_service')  # 确保每对父子服务关系唯一
     
     def __str__(self):
-        return f"{self.service.name} -> {self.sub_service.name}"
+        return self.service.name + '->' + self.sub_service.name
 
 class ResourceDependency(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
@@ -472,38 +318,24 @@ class ResourceDependency(models.Model):
     quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
     
     class Meta:
-        abstract = True
         verbose_name = "资源组件"
         verbose_name_plural = verbose_name
         ordering = ['id']
     
     def __str__(self):
-        return f"{self.service.name} -> {self.resource_object.name}"
+        return self.service.name + '->' + self.resource_object.name
 
 class ServiceAttributes(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
     attribute = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="属性")
 
     class Meta:
-        abstract = True
         verbose_name = "服务属性"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
     def __str__(self):
-        return f"{self.service.name} -> {self.attribute.name}"
-
-class SystemInstruction(ERPSysBase):
-    sys_call = models.CharField(max_length=255, verbose_name="系统调用")
-    parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
-
-    class Meta:
-        verbose_name = "系统指令"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return self.label
+        return self.service.name + '->' + self.attribute.name
 
 class ServiceBOM:
     @staticmethod
@@ -523,13 +355,13 @@ class ServiceBOM:
     @staticmethod
     def direct_children(component_name):
         service = Service.objects.get(name=component_name)
-        sub_services_info = [{'sub_service': relationship.sub_service.name, 'quantity': relationship.quantity} for relationship in service.sub_services.all()]
+        sub_services_info = [{{'sub_service': relationship.sub_service.name, 'quantity': relationship.quantity}} for relationship in service.sub_services.all()]
         return sub_services_info
 
     @staticmethod
     def direct_parents(component_name):
         service = Service.objects.get(name=component_name)
-        parent_services_info = [{'service': relationship.service.name, 'quantity': relationship.quantity} for relationship in service.parent_services.all()]
+        parent_services_info = [{{'service': relationship.service.name, 'quantity': relationship.quantity}} for relationship in service.parent_services.all()]
         return parent_services_info
 
 class Project(ERPSysBase):
@@ -542,9 +374,6 @@ class Project(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
     
-    def __str__(self):
-        return self.label
-
 class SourceCode(models.Model):
     name = models.CharField(max_length=255, null=True, verbose_name="名称")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, verbose_name="项目")
@@ -561,6 +390,5 @@ class SourceCode(models.Model):
 客户	姓名	年龄	性别	初诊日期			
 作业员	姓名						
 标准工单	日期						
-耗材	名称	规格	价格	库存数量	最小库存数量	条形码	SKU ID
-诊室	名称	规格					
+物料	名称	规格	价格	库存数量	最小库存数量	条形码	SKU ID
 """

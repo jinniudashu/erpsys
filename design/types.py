@@ -6,7 +6,7 @@ FieldType = [
     ('TypeField', '类型'),
     ('InstanceField', '实例'),
     ('User', '系统用户'),
-    ('Service', '服务'),
+    ('Reserved', '系统保留'),
     ('DecimalField', '固定精度小数'),
     ('TextField', '多行文本'),
     ('DateTimeField', '日期时间'),
@@ -46,6 +46,7 @@ class SystemResourceType(Enum):
     OPERATOR = ("人员", "TDM")
     SPACE = ("空间", "TDM")
     CAPITAL = ("资金", "Consumption")
+    KNOWLEDGE = ('知识', "Shared")
     INFORMATION = ("信息", "Shared")
     SERVICE = ("服务", "Depend")
 

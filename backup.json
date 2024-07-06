@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-07-03T10:33:29.123Z",
+            "last_login": "2024-07-06T07:43:40.676Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -66,11 +66,11 @@
         "pk": 16,
         "fields": {
             "label": "\u4eba\u5458",
-            "name": "ren_yuan",
+            "name": "Operator",
             "pym": "ry",
             "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
+            "field_type": "Reserved",
+            "business_type": 16,
             "implement_type": "Model",
             "dependency_order": 1,
             "bind_system_object": null,
@@ -80,7 +80,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": null
+            "init_content": "[{\"\u4e2d\u6587\u540d\u79f0\": \"\u81ea\u52a8\u8c03\u5ea6\", \"\u540d\u79f0\": \"SystemSchedler\" }]"
         }
     },
     {
@@ -88,11 +88,11 @@
         "pk": 18,
         "fields": {
             "label": "\u7269\u6599",
-            "name": "wu_liao",
+            "name": "Material",
             "pym": "wl",
             "erpsys_id": "6c35906e-2a30-11ef-8c28-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
+            "field_type": "Reserved",
+            "business_type": 18,
             "implement_type": "Model",
             "dependency_order": 1,
             "bind_system_object": null,
@@ -110,11 +110,11 @@
         "pk": 19,
         "fields": {
             "label": "\u8bbe\u5907",
-            "name": "she_bei",
+            "name": "Equipment",
             "pym": "sb",
             "erpsys_id": "793baa96-2a30-11ef-8c28-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
+            "field_type": "Reserved",
+            "business_type": 19,
             "implement_type": "Model",
             "dependency_order": 1,
             "bind_system_object": null,
@@ -132,11 +132,11 @@
         "pk": 20,
         "fields": {
             "label": "\u5de5\u5177",
-            "name": "gong_ju",
+            "name": "Device",
             "pym": "gj",
             "erpsys_id": "88656aca-2a30-11ef-8c28-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
+            "field_type": "Reserved",
+            "business_type": 20,
             "implement_type": "Model",
             "dependency_order": 1,
             "bind_system_object": null,
@@ -154,11 +154,11 @@
         "pk": 21,
         "fields": {
             "label": "\u8d44\u91d1",
-            "name": "zi_jin",
+            "name": "Capital",
             "pym": "zj",
             "erpsys_id": "9cc2ba4a-2a30-11ef-8c28-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
+            "field_type": "Reserved",
+            "business_type": 21,
             "implement_type": "Model",
             "dependency_order": 1,
             "bind_system_object": null,
@@ -176,11 +176,11 @@
         "pk": 22,
         "fields": {
             "label": "\u7a7a\u95f4",
-            "name": "kong_jian",
+            "name": "Space",
             "pym": "kj",
             "erpsys_id": "b7b59c78-2a30-11ef-8c28-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
+            "field_type": "Reserved",
+            "business_type": 22,
             "implement_type": "Model",
             "dependency_order": 1,
             "bind_system_object": null,
@@ -198,11 +198,11 @@
         "pk": 23,
         "fields": {
             "label": "\u4fe1\u606f",
-            "name": "xin_xi",
+            "name": "Information",
             "pym": "xx",
             "erpsys_id": "d9ce1772-2a30-11ef-8c28-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
+            "field_type": "Reserved",
+            "business_type": 23,
             "implement_type": "Model",
             "dependency_order": 1,
             "bind_system_object": null,
@@ -242,13 +242,13 @@
         "pk": 30,
         "fields": {
             "label": "\u5de5\u5355",
-            "name": "gong_dan",
+            "name": "WorkOrder",
             "pym": "gd",
             "erpsys_id": "5abb3476-2a33-11ef-b9c0-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": 23,
-            "implement_type": "Field",
-            "dependency_order": 0,
+            "field_type": "Reserved",
+            "business_type": 30,
+            "implement_type": "Model",
+            "dependency_order": 1,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -269,28 +269,6 @@
             "erpsys_id": "6adc9430-2a33-11ef-b9c0-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 22,
-            "implement_type": "Field",
-            "dependency_order": 0,
-            "bind_system_object": null,
-            "default_value": null,
-            "is_multivalued": false,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 38,
-        "fields": {
-            "label": "\u7cfb\u7edf\u7c7b\u578b",
-            "name": "xi_tong_lei_xing",
-            "pym": "xtlx",
-            "erpsys_id": "682ef634-2a5a-11ef-9cc9-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
             "implement_type": "Field",
             "dependency_order": 0,
             "bind_system_object": null,
@@ -400,7 +378,7 @@
             "pym": "xtyh",
             "erpsys_id": "dedac8a6-2eee-11ef-9033-0e586f6f8a1e",
             "field_type": "User",
-            "business_type": 38,
+            "business_type": null,
             "implement_type": "Field",
             "dependency_order": 0,
             "bind_system_object": "User",
@@ -532,7 +510,7 @@
             "pym": "wltz",
             "erpsys_id": "1a27c720-3844-11ef-80e6-0e586f6f8a1e",
             "field_type": "TypeField",
-            "business_type": 23,
+            "business_type": null,
             "implement_type": "Model",
             "dependency_order": 2,
             "bind_system_object": null,
@@ -550,11 +528,11 @@
         "pk": 58,
         "fields": {
             "label": "\u670d\u52a1",
-            "name": "fu_wu",
+            "name": "Service",
             "pym": "fw",
             "erpsys_id": "f37f2712-38e8-11ef-97ad-0e586f6f8a1e",
-            "field_type": "Service",
-            "business_type": 38,
+            "field_type": "Reserved",
+            "business_type": 58,
             "implement_type": "Model",
             "dependency_order": 3,
             "bind_system_object": null,
@@ -615,11 +593,99 @@
         "model": "design.dataitem",
         "pk": 61,
         "fields": {
-            "label": "SysID",
-            "name": "maor_id",
-            "pym": null,
-            "erpsys_id": "80d341a6-391c-11ef-99bf-0e586f6f8a1e",
-            "field_type": "CharField",
+            "label": "\u8868\u5355",
+            "name": "Form",
+            "pym": "bd",
+            "erpsys_id": "516d1a10-3a00-11ef-89c6-0e586f6f8a1e",
+            "field_type": "Reserved",
+            "business_type": 61,
+            "implement_type": "Model",
+            "dependency_order": 1,
+            "bind_system_object": null,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 62,
+        "fields": {
+            "label": "\u64cd\u4f5c\u5458",
+            "name": "cao_zuo_yuan",
+            "pym": "czy",
+            "erpsys_id": "f9f40dd6-3ac0-11ef-8ca9-0e586f6f8a1e",
+            "field_type": "TypeField",
+            "business_type": 16,
+            "implement_type": "Field",
+            "dependency_order": 0,
+            "bind_system_object": null,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 63,
+        "fields": {
+            "label": "\u77e5\u8bc6",
+            "name": "Knowledge",
+            "pym": "zs",
+            "erpsys_id": "27d39a66-3b69-11ef-a6ee-0e586f6f8a1e",
+            "field_type": "Reserved",
+            "business_type": 63,
+            "implement_type": "Model",
+            "dependency_order": 1,
+            "bind_system_object": null,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 65,
+        "fields": {
+            "label": "\u77e5\u8bc6\u6587\u672c",
+            "name": "zhi_shi_wen_ben",
+            "pym": "zswb",
+            "erpsys_id": "58f8f38e-3b69-11ef-a6ee-0e586f6f8a1e",
+            "field_type": "TextField",
+            "business_type": null,
+            "implement_type": "Field",
+            "dependency_order": 0,
+            "bind_system_object": null,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 66,
+        "fields": {
+            "label": "\u77e5\u8bc6\u6587\u4ef6",
+            "name": "zhi_shi_wen_jian",
+            "pym": "zswj",
+            "erpsys_id": "6f30c140-3b69-11ef-a6ee-0e586f6f8a1e",
+            "field_type": "FileField",
             "business_type": null,
             "implement_type": "Field",
             "dependency_order": 0,
@@ -639,51 +705,6 @@
         "fields": {
             "data_item": 16,
             "sub_data_item": 15,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 4,
-        "fields": {
-            "data_item": 19,
-            "sub_data_item": 14,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 5,
-        "fields": {
-            "data_item": 20,
-            "sub_data_item": 14,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 6,
-        "fields": {
-            "data_item": 21,
-            "sub_data_item": 14,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 7,
-        "fields": {
-            "data_item": 22,
-            "sub_data_item": 14,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 8,
-        "fields": {
-            "data_item": 23,
-            "sub_data_item": 14,
             "order": 10
         }
     },
@@ -752,15 +773,6 @@
     },
     {
         "model": "design.dataitemconsists",
-        "pk": 34,
-        "fields": {
-            "data_item": 16,
-            "sub_data_item": 51,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
         "pk": 35,
         "fields": {
             "data_item": 16,
@@ -770,11 +782,41 @@
     },
     {
         "model": "design.dataitemconsists",
-        "pk": 36,
+        "pk": 39,
         "fields": {
-            "data_item": 58,
-            "sub_data_item": 30,
+            "data_item": 16,
+            "sub_data_item": 51,
             "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 40,
+        "fields": {
+            "data_item": 63,
+            "sub_data_item": 65,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 41,
+        "fields": {
+            "data_item": 63,
+            "sub_data_item": 66,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.project",
+        "pk": 1,
+        "fields": {
+            "label": "Maor",
+            "name": "Maor",
+            "pym": "maor",
+            "erpsys_id": "a481c3d4-39d5-11ef-98d6-0e586f6f8a1e",
+            "domain": "127.0.0.1",
+            "description": null
         }
     }
 ]

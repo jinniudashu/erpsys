@@ -1,38 +1,17 @@
 from design.specification import GLOBAL_INITIAL_STATES
 
-ProjectName = 'Maor'
-
 ScriptFileHeader = {
     'models_file_head': f"""from django.db import models
 from django.contrib.auth.models import User
-import uuid
-import re
-from pypinyin import Style, lazy_pinyin
 
-from design.models import Service
+from design.models import ERPSysBase
+\n""",
 
-class {ProjectName}Base(models.Model):
-    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
-    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
-    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
-    {ProjectName.lower()}_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    'Form_Reserved_body_script': """    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+""",
 
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return str(self.label)
-
-    def save(self, *args, **kwargs):
-        if self.{ProjectName.lower()}_id is None:
-            self.{ProjectName.lower()}_id = uuid.uuid1()
-        if self.label and self.name is None:
-            label = re.sub(r'[^\u4e00-\u9fa5]', '', self.label)
-            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
-            # 使用正则表达式过滤掉label非汉字内容, 截取到8个汉字以内
-            self.name = "_".join(lazy_pinyin(label[:8]))
-            self.label = label
-        super().save(*args, **kwargs)\n\n""",
+    'Service_Reserved_body_script': """    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+""",
 
     'admin_file_head': f"""from django.contrib import admin
 from .models import *
@@ -57,7 +36,53 @@ class MaorSite(admin.AdminSite):
         # user = User.objects.get(username=request.user).customer
         return super().index(request, extra_context=extra_context)
 
-maor_site = MaorSite(name = 'MaorSite')\n\n""",
+maor_site = MaorSite(name = 'MaorSite')
+
+# class ServiceAttributesInline(admin.TabularInline):
+#     model = ServiceAttributes
+#     extra = 0
+
+# class ResourceDependencyInline(admin.TabularInline):
+#     model = ResourceDependency
+#     extra = 0
+
+# class ServiceConsistsInline(admin.TabularInline):
+#     model = ServiceConsists
+#     fk_name = 'service'  # 指定使用的外键字段名
+#     extra = 0
+#     autocomplete_fields = ['service', 'sub_service']
+
+# @admin.register(Service)
+# class ServiceAdmin(admin.ModelAdmin):
+#     list_display = ['label', 'name', 'form', 'subject', 'work_order', 'route_to', 'program', 'service_type', ]
+#     list_display_links = ['label', 'name',]
+#     inlines = [ServiceConsistsInline, ResourceDependencyInline, ServiceAttributesInline]
+#     search_fields = ['label', 'name', 'pym']
+#     autocomplete_fields = ['form', 'subject', 'work_order', 'route_to']
+
+# class FormComponentsInline(admin.TabularInline):
+#     model = FormComponents
+#     extra = 0
+#     autocomplete_fields = ['data_item']
+
+# class FormComponentsConfigInline(admin.TabularInline):
+#     model = FormComponentsConfig
+#     extra = 0
+#     autocomplete_fields = ['data_item']
+
+# @admin.register(Form)
+# class FormAdmin(admin.ModelAdmin):
+#     list_display = [field.name for field in Form._meta.fields]
+#     list_display_links = ['label', 'name',]
+#     inlines = [FormComponentsInline, FormComponentsConfigInline]
+#     search_fields = ['label', 'name', 'pym']
+
+# @admin.register(Event)
+# class EventAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'label', 'name', 'pym', 'rule']
+#     list_display_links = ['label', 'name',]
+#     search_fields = ['label', 'name', 'pym']
+\n\n""",
 
     'fields_type_head': '''app_types = ''',
 }

@@ -2,13 +2,19 @@ from django.contrib import admin
 
 from .models import *
 
+@admin.register(SystemInstruction)
+class SystemInstructionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'sys_call', 'parameters']
+    list_display_links = ['id', 'name',]
+    search_fields = ['name', 'pym']
+
 @admin.register(Process)
 class ProcessAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Process._meta.fields]
     list_display_links = ['pid', 'service',]
     search_fields = ['pid', 'service', 'state']
     list_filter = ['state', 'service']
-    autocomplete_fields = ['service', 'parent']
+    # autocomplete_fields = ['service', 'parent']
     readonly_fields = ['pid', 'created_time', 'updated_time']
     fieldsets = (
         (None, {
