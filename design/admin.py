@@ -23,6 +23,12 @@ class OperatorAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Operator._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Material._meta.fields]
@@ -59,8 +65,20 @@ class EventAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
+@admin.register(Information)
+class InformationAdmin(admin.ModelAdmin):
+    list_display = ['id', 'label', 'name', 'pym']
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
 @admin.register(WorkOrder)
 class WorkOrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'label', 'name', 'pym']
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(Knowledge)
+class KnowledgeAdmin(admin.ModelAdmin):
     list_display = ['id', 'label', 'name', 'pym']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']

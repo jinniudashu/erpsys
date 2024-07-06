@@ -1,21 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models import Q
-from django.db.utils import IntegrityError
-from django.apps import apps
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
 
 import uuid
 import re
-import json
 
 from pypinyin import Style, lazy_pinyin
 
 from design.types import FieldType, ChoiceType, SystemObject, ImplementType, ServiceType
-from design.specification import GLOBAL_INITIAL_STATES
 from design.script_file_header import ScriptFileHeader
 
 # ERPSys基类
@@ -210,7 +201,13 @@ class DataItemConsists(models.Model):
 
 class Operator(ERPSysBase):
     class Meta:
-        verbose_name = "操作员"
+        verbose_name = "人员"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Role(ERPSysBase):
+    class Meta:
+        verbose_name = "角色"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -250,11 +247,26 @@ class Event(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
+class Information(ERPSysBase):
+    class Meta:
+        verbose_name = "信息"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+
 class WorkOrder(ERPSysBase):
     class Meta:
         verbose_name = "工单"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+class Knowledge(ERPSysBase):
+    zhi_shi_wen_jian = models.FileField(blank=True, null=True, verbose_name='知识文件')
+    zhi_shi_wen_ben = models.TextField(blank=True, null=True, verbose_name='知识文本')
+
+    class Meta:
+        verbose_name = "知识"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
 
 class Form(ERPSysBase):
     consists_config = models.ManyToManyField(DataItem, through='FormComponentsConfig', related_name='root_form', verbose_name="字段配置")
@@ -385,6 +397,23 @@ class SourceCode(models.Model):
         verbose_name = "项目源码"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+
+DESIGN_CLASS_MAPPING = {
+    "Role": Role,
+    "Operator": Operator,
+    "Material": Material,
+    "Equipment": Equipment,
+    "Device": Device,
+    "Capital": Capital,
+    "Space": Space,
+    "Information": Information,
+    "WorkOrder": WorkOrder,
+    "Form": Form,
+    "Knowledge": Knowledge,
+    "Event": Event,
+    "Service": Service,
+}
 
 """
 客户	姓名	年龄	性别	初诊日期			

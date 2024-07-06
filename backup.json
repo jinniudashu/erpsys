@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-07-06T07:43:40.676Z",
+            "last_login": "2024-07-06T08:30:23.549Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -72,7 +72,7 @@
             "field_type": "Reserved",
             "business_type": 16,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -94,7 +94,7 @@
             "field_type": "Reserved",
             "business_type": 18,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -116,7 +116,7 @@
             "field_type": "Reserved",
             "business_type": 19,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -138,7 +138,7 @@
             "field_type": "Reserved",
             "business_type": 20,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -160,7 +160,7 @@
             "field_type": "Reserved",
             "business_type": 21,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -182,7 +182,7 @@
             "field_type": "Reserved",
             "business_type": 22,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -204,7 +204,7 @@
             "field_type": "Reserved",
             "business_type": 23,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -248,7 +248,7 @@
             "field_type": "Reserved",
             "business_type": 30,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -285,14 +285,14 @@
         "model": "design.dataitem",
         "pk": 39,
         "fields": {
-            "label": "\u5c97\u4f4d",
-            "name": "gang_wei",
+            "label": "\u89d2\u8272",
+            "name": "Role",
             "pym": "gw",
             "erpsys_id": "c26877c0-2c6b-11ef-81c5-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": null,
+            "field_type": "Reserved",
+            "business_type": 39,
             "implement_type": "Model",
-            "dependency_order": 0,
+            "dependency_order": 5,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -300,7 +300,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": "[{\"\u4e2d\u6587\u540d\u79f0\": \"\u533b\u751f\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"\u62a4\u58eb\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"\u5ba2\u670d\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"\u7ba1\u7406\u5458\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"\u5ba2\u6237\"}]"
+            "init_content": "[{\"\u4e2d\u6587\u540d\u79f0\": \"\u533b\u751f\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"\u62a4\u58eb\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"\u5ba2\u670d\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"\u7ba1\u7406\u5458\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"\u5ba2\u6237\"}, {\"\u4e2d\u6587\u540d\u79f0\": \"System\"}]"
         }
     },
     {
@@ -512,7 +512,7 @@
             "field_type": "TypeField",
             "business_type": null,
             "implement_type": "Model",
-            "dependency_order": 2,
+            "dependency_order": 20,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -534,7 +534,7 @@
             "field_type": "Reserved",
             "business_type": 58,
             "implement_type": "Model",
-            "dependency_order": 3,
+            "dependency_order": 30,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -600,7 +600,7 @@
             "field_type": "Reserved",
             "business_type": 61,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -644,7 +644,7 @@
             "field_type": "Reserved",
             "business_type": 63,
             "implement_type": "Model",
-            "dependency_order": 1,
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -689,6 +689,28 @@
             "business_type": null,
             "implement_type": "Field",
             "dependency_order": 0,
+            "bind_system_object": null,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 67,
+        "fields": {
+            "label": "\u4e8b\u4ef6",
+            "name": "Event",
+            "pym": "sj",
+            "erpsys_id": "d9467f38-3b6f-11ef-bf7d-0e586f6f8a1e",
+            "field_type": "Reserved",
+            "business_type": 67,
+            "implement_type": "Model",
+            "dependency_order": 10,
             "bind_system_object": null,
             "default_value": null,
             "is_multivalued": false,
@@ -805,6 +827,126 @@
             "data_item": 63,
             "sub_data_item": 66,
             "order": 10
+        }
+    },
+    {
+        "model": "design.operator",
+        "pk": 1,
+        "fields": {
+            "label": "\u81ea\u52a8\u8c03\u5ea6",
+            "name": "SystemSchedler",
+            "pym": null,
+            "erpsys_id": "c803e508-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.role",
+        "pk": 1,
+        "fields": {
+            "label": "\u533b\u751f",
+            "name": "yi_sheng",
+            "pym": "ys",
+            "erpsys_id": "c8051374-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.role",
+        "pk": 2,
+        "fields": {
+            "label": "\u62a4\u58eb",
+            "name": "hu_shi",
+            "pym": "hs",
+            "erpsys_id": "c80520e4-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.role",
+        "pk": 3,
+        "fields": {
+            "label": "\u5ba2\u670d",
+            "name": "ke_fu",
+            "pym": "kf",
+            "erpsys_id": "c8052cd8-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.role",
+        "pk": 4,
+        "fields": {
+            "label": "\u7ba1\u7406\u5458",
+            "name": "guan_li_yuan",
+            "pym": "gly",
+            "erpsys_id": "c8053854-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.role",
+        "pk": 5,
+        "fields": {
+            "label": "\u5ba2\u6237",
+            "name": "ke_hu",
+            "pym": "kh",
+            "erpsys_id": "c805443e-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.role",
+        "pk": 6,
+        "fields": {
+            "label": "System",
+            "name": "System",
+            "pym": "System",
+            "erpsys_id": "c8055384-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 1,
+        "fields": {
+            "label": "100\u5355\u4f4d\u4fdd\u59a5\u9002",
+            "name": "100_dan_wei_bao_tuo_shi",
+            "pym": "100dwbts",
+            "erpsys_id": "c8044d2c-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 2,
+        "fields": {
+            "label": "50\u5355\u4f4d\u4fdd\u59a5\u9002",
+            "name": "50_dan_wei_bao_tuo_shi",
+            "pym": "50dwbts",
+            "erpsys_id": "c8048558-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 3,
+        "fields": {
+            "label": "\u55e8\u4f53",
+            "name": "hai_ti",
+            "pym": "ht",
+            "erpsys_id": "c80499e4-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 4,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "c804a740-3b74-11ef-b00d-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 5,
+        "fields": {
+            "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
+            "name": "yi_ci_xing_zhu_she_qi",
+            "pym": "ycxzsq",
+            "erpsys_id": "c804b5aa-3b74-11ef-b00d-0e586f6f8a1e"
         }
     },
     {

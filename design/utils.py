@@ -8,7 +8,8 @@ from collections import defaultdict
 
 from pypinyin import lazy_pinyin
 
-from design.models import *
+from design.models import DataItem, DESIGN_CLASS_MAPPING
+from design.specification import GLOBAL_INITIAL_STATES
 from design.script_file_header import ScriptFileHeader
 
 from maor.models import CLASS_MAPPING
@@ -76,13 +77,7 @@ def generate_source_code(project):
         #     print(f"Error migrating {app_name}: {e}")
 
     def import_init_data():
-        for item in DataItem.objects.filter(field_type__in = ['TypeField', 'Reserved'], init_content__isnull=False):
-            if item.field_type == 'Reserved':
-                class_name = item.name
-            else:
-                class_name = item.get_data_item_classname()
-            print(class_name, item.init_content)
-            model_class = CLASS_MAPPING.get(class_name)
+        def insert_to_model(model_class):
             if model_class:
                 model_class.objects.all().delete()
 
@@ -91,13 +86,25 @@ def generate_source_code(project):
                     name_dict = {}
                     for key in content_dict:
                         key_data_item = DataItem.objects.get(label=key)
-                        name_dict = {key_data_item.name: content_dict[key]}
+                        name_dict[key_data_item.name] = content_dict[key]
                         print(name_dict)
                     
                     model_class.objects.create(**name_dict)
             else:
                 # 处理未找到对应类的情况
                 print(f"Class not found for label: {item.label}")
+
+        for item in DataItem.objects.filter(field_type__in = ['TypeField', 'Reserved'], init_content__isnull=False):
+            if item.field_type == 'Reserved':
+                class_name = item.name
+                model_class = DESIGN_CLASS_MAPPING.get(class_name)
+                insert_to_model(model_class)
+            else:
+                class_name = item.get_data_item_classname()
+            model_class = CLASS_MAPPING.get(class_name)
+            insert_to_model(model_class)
+
+            print(class_name, item.init_content)
 
     # 生成models.py, admin.py脚本
     def generate_models_admin_script(query_set):

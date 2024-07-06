@@ -3,13 +3,6 @@ from django.contrib.auth.models import User
 
 from design.models import ERPSysBase
 
-class GangWei(ERPSysBase):
-
-    class Meta:
-        verbose_name = "Dict-岗位"
-        verbose_name_plural = verbose_name
-        ordering = ["id"]
-
 class FuWuLeiBie(ERPSysBase):
 
     class Meta:
@@ -24,10 +17,16 @@ class RuChuKuCaoZuo(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ["id"]
 
+class Role(ERPSysBase):
+
+    class Meta:
+        verbose_name = "Reserved-角色"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+
 class Operator(ERPSysBase):
     xing_ming = models.CharField(max_length=100, blank=True, null=True, verbose_name='姓名')
     xi_tong_yong_hu = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统用户')
-    gang_wei = models.ForeignKey(GangWei, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='岗位')
 
     class Meta:
         verbose_name = "Reserved-人员"
@@ -100,6 +99,13 @@ class Knowledge(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ["id"]
 
+class Event(ERPSysBase):
+
+    class Meta:
+        verbose_name = "Reserved-事件"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+
 class WuLiaoTaiZhang(ERPSysBase):
     you_xiao_qi = models.DateField(blank=True, null=True, verbose_name='有效期')
     ri_qi = models.DateTimeField(blank=True, null=True, verbose_name='入出库时间')
@@ -122,9 +128,9 @@ class Service(ERPSysBase):
         ordering = ["id"]
 
 CLASS_MAPPING = {
-    "GangWei": GangWei,
     "FuWuLeiBie": FuWuLeiBie,
     "RuChuKuCaoZuo": RuChuKuCaoZuo,
+    "Role": Role,
     "Operator": Operator,
     "Material": Material,
     "Equipment": Equipment,
@@ -135,6 +141,7 @@ CLASS_MAPPING = {
     "WorkOrder": WorkOrder,
     "Form": Form,
     "Knowledge": Knowledge,
+    "Event": Event,
     "WuLiaoTaiZhang": WuLiaoTaiZhang,
     "Service": Service,
 }

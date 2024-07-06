@@ -70,12 +70,6 @@ maor_site = MaorSite(name = 'MaorSite')
 
 
 
-@admin.register(GangWei)
-class GangWeiAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in GangWei._meta.fields]
-    list_display_links = ['id']
-maor_site.register(GangWei, GangWeiAdmin)
-
 @admin.register(FuWuLeiBie)
 class FuWuLeiBieAdmin(admin.ModelAdmin):
     list_display = [field.name for field in FuWuLeiBie._meta.fields]
@@ -87,6 +81,12 @@ class RuChuKuCaoZuoAdmin(admin.ModelAdmin):
     list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]
     list_display_links = ['id']
 maor_site.register(RuChuKuCaoZuo, RuChuKuCaoZuoAdmin)
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Role._meta.fields]
+    list_display_links = ['id']
+maor_site.register(Role, RoleAdmin)
 
 @admin.register(Operator)
 class OperatorAdmin(admin.ModelAdmin):
@@ -147,6 +147,12 @@ class KnowledgeAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Knowledge._meta.fields]
     list_display_links = ['id']
 maor_site.register(Knowledge, KnowledgeAdmin)
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Event._meta.fields]
+    list_display_links = ['id']
+maor_site.register(Event, EventAdmin)
 
 @admin.register(WuLiaoTaiZhang)
 class WuLiaoTaiZhangAdmin(admin.ModelAdmin):
