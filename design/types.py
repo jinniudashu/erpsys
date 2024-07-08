@@ -4,7 +4,7 @@ FieldType = [
     ('CharField', '单行文本'),
     ('IntegerField', '整数'),
     ('TypeField', '类型'),
-    ('InstanceField', '实例'),
+    ('BooleanField', '是否'),
     ('User', '系统用户'),
     ('Reserved', '系统保留'),
     ('DecimalField', '固定精度小数'),
@@ -35,6 +35,7 @@ SystemObject = [
 ImplementType = [
     ('Field', '字段'),
     ('Model', '数据表'),
+    ('KernelModel', '系统表'),
     ('Program', '程序'),
 ]
 

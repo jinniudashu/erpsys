@@ -6,13 +6,27 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth.models import User
 
-from design.models import ERPSysBase
+import uuid
+import re
+from pypinyin import Style, lazy_pinyin
+
+from kernel.models import Operator, Process
 \n""",
 
-    'Form_Reserved_body_script': """    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+    'class_base_fields': f"""
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, related_name='%(class)s_attributes', null=True, blank=True, verbose_name="隶属主体")
+    object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="隶属id")
+    content_object = GenericForeignKey('content_type', 'object_id')
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
 """,
 
-    'Service_Reserved_body_script': """    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+    'Profile_Reserved_body_script': """    operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="人员")
 """,
 
     'admin_file_head': f"""from django.contrib import admin
@@ -39,52 +53,37 @@ class MaorSite(admin.AdminSite):
         return super().index(request, extra_context=extra_context)
 
 maor_site = MaorSite(name = 'MaorSite')
-
-# class ServiceAttributesInline(admin.TabularInline):
-#     model = ServiceAttributes
-#     extra = 0
-
-# class ResourceDependencyInline(admin.TabularInline):
-#     model = ResourceDependency
-#     extra = 0
-
-# class ServiceConsistsInline(admin.TabularInline):
-#     model = ServiceConsists
-#     fk_name = 'service'  # 指定使用的外键字段名
-#     extra = 0
-#     autocomplete_fields = ['service', 'sub_service']
-
-# @admin.register(Service)
-# class ServiceAdmin(admin.ModelAdmin):
-#     list_display = ['label', 'name', 'form', 'subject', 'work_order', 'route_to', 'program', 'service_type', ]
-#     list_display_links = ['label', 'name',]
-#     inlines = [ServiceConsistsInline, ResourceDependencyInline, ServiceAttributesInline]
-#     search_fields = ['label', 'name', 'pym']
-#     autocomplete_fields = ['form', 'subject', 'work_order', 'route_to']
-
-# class FormComponentsInline(admin.TabularInline):
-#     model = FormComponents
-#     extra = 0
-#     autocomplete_fields = ['data_item']
-
-# class FormComponentsConfigInline(admin.TabularInline):
-#     model = FormComponentsConfig
-#     extra = 0
-#     autocomplete_fields = ['data_item']
-
-# @admin.register(Form)
-# class FormAdmin(admin.ModelAdmin):
-#     list_display = [field.name for field in Form._meta.fields]
-#     list_display_links = ['label', 'name',]
-#     inlines = [FormComponentsInline, FormComponentsConfigInline]
-#     search_fields = ['label', 'name', 'pym']
-
-# @admin.register(Event)
-# class EventAdmin(admin.ModelAdmin):
-#     list_display = ['id', 'label', 'name', 'pym', 'rule']
-#     list_display_links = ['label', 'name',]
-#     search_fields = ['label', 'name', 'pym']
-\n\n""",
+""",
 
     'fields_type_head': '''app_types = ''',
 }
+
+def get_model_footer(verbose_name):
+    return f'''
+    class Meta:
+        verbose_name = "{verbose_name}"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+    
+    def __str__(self):
+        return self.label
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    '''
+
+def get_admin_script(class_name):
+    return f'''
+@admin.register({class_name})
+class {class_name}Admin(admin.ModelAdmin):
+    list_display = [field.name for field in {class_name}._meta.fields]
+    list_display_links = ['id']
+maor_site.register({class_name}, {class_name}Admin)
+'''

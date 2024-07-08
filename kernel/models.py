@@ -1,16 +1,89 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
 import uuid
+import re
+from pypinyin import Style, lazy_pinyin
 
 from kernel.types import ProcessState
 from kernel.app_types import app_types
-from design.models import Service
-from maor.models import *
 
-class SystemInstruction(models.Model):
-    name = models.CharField(max_length=255, unique=True, verbose_name="名称")
+# ERPSys基类
+class ERPSysBase(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            # 使用正则表达式过滤掉label非汉字内容, 截取到10个汉字以内
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+
+class ERPSysBaseField(ERPSysBase):
+    class Meta:
+        verbose_name = "系统字段"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Role(ERPSysBase):
+    class Meta:
+        verbose_name = "角色"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Operator(ERPSysBase):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="用户")
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, related_name='operators', blank=True, null=True, verbose_name="角色")
+
+    class Meta:
+        verbose_name = "人员"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Resource(ERPSysBase):
+    class Meta:
+        verbose_name = "资源"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Form(ERPSysBase):
+    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+
+    class Meta:
+        verbose_name = "表单"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+
+class Service(ERPSysBase):
+    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+
+    class Meta:
+        verbose_name = "服务"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+
+class Event(ERPSysBase):
+    class Meta:
+        verbose_name = "事件"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+
+class SystemInstruction(ERPSysBase):
     sys_call = models.CharField(max_length=255, verbose_name="系统调用")
     parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
 
@@ -22,7 +95,7 @@ class SystemInstruction(models.Model):
     def __str__(self):
         return self.name
 
-class Process(models.Model):
+class Process(ERPSysBase):
     pid = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="进程id")
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name="child_instances", verbose_name="父进程")
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
@@ -110,13 +183,18 @@ class Process(models.Model):
     与过程相关的其他数据或状态信息    
     """
 
-class WorkOrder(models.Model):
+class WorkOrder(ERPSysBase):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
-    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
+    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="操作员")
     operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="操作员")
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划时间")
 
-class Stacks(models.Model):
+    class Meta:
+        verbose_name = "工单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Stacks(ERPSysBase):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
     stack = models.JSONField(blank=True, null=True, verbose_name="栈")
     heap = models.JSONField(blank=True, null=True, verbose_name="堆")

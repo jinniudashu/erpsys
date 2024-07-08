@@ -8,8 +8,8 @@ import re
 
 from pypinyin import Style, lazy_pinyin
 
-from design.types import FieldType, ChoiceType, SystemObject, ImplementType, ServiceType
-from design.script_file_header import ScriptFileHeader
+from design.types import FieldType, ChoiceType, ImplementType, ServiceType
+from design.script_file_header import ScriptFileHeader, get_admin_script, get_model_footer
 
 # ERPSys基类
 class ERPSysBase(models.Model):
@@ -65,22 +65,21 @@ class DataItem(ERPSysBase):
         if self.business_type is None:
             class_name = self.get_data_item_classname()
         else:
-            class_name = self.business_type.name
-        admin_script = f'''
-@admin.register({class_name})
-class {class_name}Admin(admin.ModelAdmin):
-    list_display = [field.name for field in {class_name}._meta.fields]
-    list_display_links = ['id']
-maor_site.register({class_name}, {class_name}Admin)
-'''        
+            class_name = self.name
+        admin_script = get_admin_script(class_name)
+        
         return admin_script
 
     def _generate_field_definitions(self):
         field_definitions = ''
         field_type_dict = {}
 
-        for consist_item in self.consists.all():
+        for item in self.subset.all():
+            consist_item = item.sub_data_item
             field_name = consist_item.name
+            # 如果字段有业务类型，使用业务类型的字段名，如：计划时间
+            if consist_item.business_type and consist_item.business_type.implement_type == 'Field' and consist_item.business_type.field_type == 'Reserved':
+                field_name = consist_item.business_type.name
             field_type = consist_item.field_type
             field_type_dict.update({field_name: field_type})
             match field_type:
@@ -90,6 +89,8 @@ maor_site.register({class_name}, {class_name}Admin)
                     field_definitions += f"    {field_name} = models.TextField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                 case 'IntegerField':
                     field_definitions += f"    {field_name} = models.IntegerField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                case 'BooleanField':
+                    field_definitions += f"    {field_name} = models.BooleanField(default=False, verbose_name='{consist_item.label}')\n"
                 case 'DecimalField':
                     field_definitions += f"    {field_name} = models.DecimalField(max_digits={consist_item.max_digits}, decimal_places={consist_item.decimal_places}, blank=True, null=True, verbose_name='{consist_item.label}')\n"
                 case 'DateTimeField':
@@ -114,9 +115,6 @@ maor_site.register({class_name}, {class_name}Admin)
                 case 'User':
                     field_definitions += f"    {field_name} = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     field_type_dict.update({field_name: 'User'})
-                case 'Service':
-                    field_definitions += f"    {field_name} = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
-                    field_type_dict.update({field_name: 'Service'})
                 case 'ComputedField':
                     pass
                 case _:
@@ -130,25 +128,19 @@ maor_site.register({class_name}, {class_name}Admin)
             verbose_name = f'{self.field_type}-{self.label}'
         if self.dependency_order == 0:
             verbose_name = f'Dict-{self.label}'
-        footer = f'''
-    class Meta:
-        verbose_name = "{verbose_name}"
-        verbose_name_plural = verbose_name
-        ordering = ["id"]
-'''
+        footer = get_model_footer(verbose_name)
+
         return footer
     
     def generate_script(self):
         if self.field_type == 'Reserved':
-            model_head = f'class {self.name}(ERPSysBase):\n'
-            match self.name:
-                # Add Reserved body script here
-                case 'Service':
-                    model_head = model_head + ScriptFileHeader['Service_Reserved_body_script']
-                case 'Form':
-                    model_head = model_head + ScriptFileHeader['Form_Reserved_body_script']
+            model_head = f'class {self.name}(models.Model):'
         else:
-            model_head = f'class {self.get_data_item_classname()}(ERPSysBase):\n'
+            model_head = f'class {self.get_data_item_classname()}(models.Model):'
+        model_head = model_head + ScriptFileHeader['class_base_fields']
+        match self.name:
+            case 'Profile':
+                model_head = model_head + ScriptFileHeader['Profile_Reserved_body_script']
         model_fields, fields_type_dict = self._generate_model_script()
         model_footer = self._generate_model_footer_script()
         model_script = f'{model_head}{model_fields}{model_footer}\n'
@@ -197,7 +189,7 @@ class DataItemConsists(models.Model):
     class Meta:
         verbose_name = "数据项组成"
         verbose_name_plural = verbose_name
-        ordering = ['id']
+        ordering = ['order', 'id']
         unique_together = ('data_item', 'sub_data_item')
 
 class Operator(ERPSysBase):
@@ -247,12 +239,6 @@ class Event(ERPSysBase):
         verbose_name = "事件"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
-class Information(ERPSysBase):
-    class Meta:
-        verbose_name = "信息"
-        verbose_name_plural = verbose_name
-        ordering = ["id"]
 
 class Knowledge(ERPSysBase):
     zhi_shi_wen_jian = models.FileField(blank=True, null=True, verbose_name='知识文件')
@@ -401,7 +387,6 @@ DESIGN_CLASS_MAPPING = {
     "Device": Device,
     "Capital": Capital,
     "Space": Space,
-    "Information": Information,
     "Form": Form,
     "Knowledge": Knowledge,
     "Event": Event,

@@ -2,6 +2,46 @@ from django.contrib import admin
 
 from .models import *
 
+@admin.register(ERPSysBaseField)
+class ERPSysBaseField(admin.ModelAdmin):
+    list_display = [field.name for field in ERPSysBaseField._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Role._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(Operator)
+class OperatorAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Operator._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Resource._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(Form)
+class FormAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Form._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Service._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Event._meta.fields]
+    list_display_links = ['id']
+
+@admin.register(WorkOrder)
+class WorkOrderAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in WorkOrder._meta.fields]
+    list_display_links = ['id']
+
 @admin.register(SystemInstruction)
 class SystemInstructionAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'sys_call', 'parameters']

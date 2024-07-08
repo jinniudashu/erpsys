@@ -23,53 +23,6 @@ class MaorSite(admin.AdminSite):
 
 maor_site = MaorSite(name = 'MaorSite')
 
-# class ServiceAttributesInline(admin.TabularInline):
-#     model = ServiceAttributes
-#     extra = 0
-
-# class ResourceDependencyInline(admin.TabularInline):
-#     model = ResourceDependency
-#     extra = 0
-
-# class ServiceConsistsInline(admin.TabularInline):
-#     model = ServiceConsists
-#     fk_name = 'service'  # 指定使用的外键字段名
-#     extra = 0
-#     autocomplete_fields = ['service', 'sub_service']
-
-# @admin.register(Service)
-# class ServiceAdmin(admin.ModelAdmin):
-#     list_display = ['label', 'name', 'form', 'subject', 'work_order', 'route_to', 'program', 'service_type', ]
-#     list_display_links = ['label', 'name',]
-#     inlines = [ServiceConsistsInline, ResourceDependencyInline, ServiceAttributesInline]
-#     search_fields = ['label', 'name', 'pym']
-#     autocomplete_fields = ['form', 'subject', 'work_order', 'route_to']
-
-# class FormComponentsInline(admin.TabularInline):
-#     model = FormComponents
-#     extra = 0
-#     autocomplete_fields = ['data_item']
-
-# class FormComponentsConfigInline(admin.TabularInline):
-#     model = FormComponentsConfig
-#     extra = 0
-#     autocomplete_fields = ['data_item']
-
-# @admin.register(Form)
-# class FormAdmin(admin.ModelAdmin):
-#     list_display = [field.name for field in Form._meta.fields]
-#     list_display_links = ['label', 'name',]
-#     inlines = [FormComponentsInline, FormComponentsConfigInline]
-#     search_fields = ['label', 'name', 'pym']
-
-# @admin.register(Event)
-# class EventAdmin(admin.ModelAdmin):
-#     list_display = ['id', 'label', 'name', 'pym', 'rule']
-#     list_display_links = ['label', 'name',]
-#     search_fields = ['label', 'name', 'pym']
-
-
-
 @admin.register(FuWuLeiBie)
 class FuWuLeiBieAdmin(admin.ModelAdmin):
     list_display = [field.name for field in FuWuLeiBie._meta.fields]
@@ -82,17 +35,17 @@ class RuChuKuCaoZuoAdmin(admin.ModelAdmin):
     list_display_links = ['id']
 maor_site.register(RuChuKuCaoZuo, RuChuKuCaoZuoAdmin)
 
-@admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Role._meta.fields]
+@admin.register(KeHuLaiYuan)
+class KeHuLaiYuanAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in KeHuLaiYuan._meta.fields]
     list_display_links = ['id']
-maor_site.register(Role, RoleAdmin)
+maor_site.register(KeHuLaiYuan, KeHuLaiYuanAdmin)
 
-@admin.register(Operator)
-class OperatorAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Operator._meta.fields]
+@admin.register(ShiFouDaoDian)
+class ShiFouDaoDianAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ShiFouDaoDian._meta.fields]
     list_display_links = ['id']
-maor_site.register(Operator, OperatorAdmin)
+maor_site.register(ShiFouDaoDian, ShiFouDaoDianAdmin)
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
@@ -124,23 +77,17 @@ class SpaceAdmin(admin.ModelAdmin):
     list_display_links = ['id']
 maor_site.register(Space, SpaceAdmin)
 
-@admin.register(Information)
-class InformationAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Information._meta.fields]
-    list_display_links = ['id']
-maor_site.register(Information, InformationAdmin)
-
-@admin.register(Form)
-class FormAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Form._meta.fields]
-    list_display_links = ['id']
-maor_site.register(Form, FormAdmin)
-
 @admin.register(Knowledge)
 class KnowledgeAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Knowledge._meta.fields]
     list_display_links = ['id']
 maor_site.register(Knowledge, KnowledgeAdmin)
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Profile._meta.fields]
+    list_display_links = ['id']
+maor_site.register(Profile, ProfileAdmin)
 
 @admin.register(WuLiaoTaiZhang)
 class WuLiaoTaiZhangAdmin(admin.ModelAdmin):
@@ -148,14 +95,8 @@ class WuLiaoTaiZhangAdmin(admin.ModelAdmin):
     list_display_links = ['id']
 maor_site.register(WuLiaoTaiZhang, WuLiaoTaiZhangAdmin)
 
-@admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Service._meta.fields]
+@admin.register(YuYueJiLu)
+class YuYueJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in YuYueJiLu._meta.fields]
     list_display_links = ['id']
-maor_site.register(Service, ServiceAdmin)
-
-@admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Event._meta.fields]
-    list_display_links = ['id']
-maor_site.register(Event, EventAdmin)
+maor_site.register(YuYueJiLu, YuYueJiLuAdmin)

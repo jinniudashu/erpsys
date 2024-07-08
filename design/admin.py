@@ -17,18 +17,6 @@ class DataItemAdmin(admin.ModelAdmin):
     list_filter = ['field_type', 'implement_type', 'business_type']
     inlines = [DataItemConsistsInline]
 
-@admin.register(Operator)
-class OperatorAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Operator._meta.fields]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-
-@admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Operator._meta.fields]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Material._meta.fields]
@@ -65,12 +53,6 @@ class EventAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
-@admin.register(Information)
-class InformationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym']
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-
 @admin.register(Knowledge)
 class KnowledgeAdmin(admin.ModelAdmin):
     list_display = ['id', 'label', 'name', 'pym']
@@ -88,30 +70,6 @@ class FormAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     inlines = [FormComponentsConfigInline]
-
-class ServiceConsistsInline(admin.TabularInline):
-    model = ServiceConsists
-    fk_name = 'service'
-    extra = 0
-    autocomplete_fields = ['service', 'sub_service']
-
-class ResourceDependencyInline(admin.TabularInline):
-    model = ResourceDependency
-    extra = 0
-    autocomplete_fields = ['service']
-
-class ServiceAttributesInline(admin.TabularInline):
-    model = ServiceAttributes
-    extra = 0
-    autocomplete_fields = ['attribute']
-
-@admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['label', 'name', 'form', 'route_to', 'program', 'service_type', ]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['form', 'route_to']
-    inlines = [ServiceConsistsInline, ResourceDependencyInline, ServiceAttributesInline]
 
 class SourceCodeInline(admin.TabularInline):
     model = SourceCode
