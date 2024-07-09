@@ -102,14 +102,14 @@ class DataItem(ERPSysBase):
                 case 'FileField':
                     field_definitions += f"    {field_name} = models.FileField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                 case 'TypeField':
+                    _field_type = ''
                     if consist_item.business_type:
                         _field_type = consist_item.business_type.name
-                        if consist_item.is_multivalued:
-                            field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, related_name='{field_name}', blank=True, verbose_name='{consist_item.label}')\n"
-                        else:
-                            field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     else:
                         _field_type = consist_item.get_data_item_classname()
+                    if consist_item.is_multivalued:
+                        field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, related_name='{field_name}', blank=True, verbose_name='{consist_item.label}')\n"
+                    else:
                         field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     field_type_dict.update({field_name: _field_type})
                 case 'User':
@@ -124,10 +124,13 @@ class DataItem(ERPSysBase):
 
     def _generate_model_footer_script(self):
         verbose_name = self.label
-        if self.field_type == 'Reserved':
-            verbose_name = f'{self.field_type}-{self.label}'
         if self.dependency_order == 0:
             verbose_name = f'Dict-{self.label}'
+        else:
+            if self.field_type == 'Reserved':
+                verbose_name = f'{self.field_type}-{self.label}'
+            else:
+                verbose_name = f'App-{self.label}'
         footer = get_model_footer(verbose_name)
 
         return footer
@@ -228,12 +231,6 @@ class Device(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-class Space(ERPSysBase):
-    class Meta:
-        verbose_name = "资源-空间"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
 class Capital(ERPSysBase):
     class Meta:
         verbose_name = "资源-资金"
@@ -249,36 +246,10 @@ class Knowledge(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ["id"]
 
-# class Form(ERPSysBase):
-#     consists_config = models.ManyToManyField(DataItem, through='FormComponentsConfig', related_name='root_form', verbose_name="字段配置")
-
-#     class Meta:
-#         verbose_name = "表单"
-#         verbose_name_plural = verbose_name
-#         ordering = ['id']
-
-# class FormComponentsConfig(models.Model):
-#     form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
-#     data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="字段")
-#     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
-#     readonly = models.BooleanField(default=False, verbose_name="只读")
-#     is_required = models.BooleanField(default=False, verbose_name="必填")
-#     choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
-#     is_list = models.BooleanField(default=False, verbose_name="列表字段")
-#     expand_data_item = models.BooleanField(default=False, verbose_name="展开数据项")
-#     is_aggregate = models.BooleanField(default=False, verbose_name="聚合字段")
-#     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
-
-#     class Meta:
-#         verbose_name = "表单配置"
-#         verbose_name_plural = verbose_name
-#         ordering = ['id']
-        
 class Service(ERPSysBase):
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='价格')
     subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业记录")
-    # form = models.OneToOneField(Form, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
     form_config = models.ManyToManyField(DataItem, through='FormConfig', related_name='servicices_form_config', verbose_name="表单设置")
     authorize_roles = models.ManyToManyField(Role, related_name='roles_authorized', blank=True, verbose_name="允许角色")
     authorize_operators = models.ManyToManyField(Operator, related_name='operators_authorized', blank=True, verbose_name="允许操作员")
@@ -411,7 +382,6 @@ DESIGN_CLASS_MAPPING = {
     "Equipment": Equipment,
     "Device": Device,
     "Capital": Capital,
-    "Space": Space,
     "Knowledge": Knowledge,
     "Event": Event,
     "Service": Service,

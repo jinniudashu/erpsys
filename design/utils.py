@@ -10,7 +10,7 @@ from design.models import DataItem, DESIGN_CLASS_MAPPING
 from design.specification import GLOBAL_INITIAL_STATES
 from design.script_file_header import ScriptFileHeader
 
-from maor.models import CLASS_MAPPING
+from applications.models import CLASS_MAPPING
 
 # 生成脚本, 被design.admin调用
 def generate_source_code(project):
@@ -65,12 +65,12 @@ def generate_source_code(project):
         with open(file_name, 'w', encoding='utf-8') as f:
             f.write(content)
 
-    def migrate_app(app_name):
+    def migrate_app():
         # try:
-        print(f"Start migrating {app_name}...")
-        call_command('makemigrations', app_name)
-        call_command('migrate', app_name, interactive=False)
-        print(f"Successfully migrated {app_name}")
+        print(f"Start migrating applications...")
+        call_command('makemigrations', 'applications')
+        call_command('migrate', 'applications', interactive=False)
+        print(f"Successfully migrated applications")
         # except Exception as e:
         #     print(f"Error migrating {app_name}: {e}")
 
@@ -132,8 +132,6 @@ def generate_source_code(project):
 
         return models_script, admin_script, fields_type_script
 
-    project_name = project.name.lower()
-
     source_code = {
         'script': {},
         'data': {}
@@ -146,8 +144,8 @@ def generate_source_code(project):
 
     print('写入项目文件...')
     object_files = [
-        (f'./{project_name}/models.py', models_script),
-        (f'./{project_name}/admin.py', admin_script),
+        (f'./applications/models.py', models_script),
+        (f'./applications/admin.py', admin_script),
         (f'./kernel/app_types.py', fields_type_script),
     ]
     for filename, content in object_files:
@@ -163,7 +161,7 @@ def generate_source_code(project):
     # print(f'作业脚本写入数据库成功, id: {result}')
 
     # makemigrations & migrate
-    migrate_app(project_name)
+    migrate_app()
 
     # 写入初始业务数据
     import_init_data()

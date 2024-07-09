@@ -54,12 +54,6 @@ class DeviceAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
-# @admin.register(Space)
-# class SpaceAdmin(admin.ModelAdmin):
-#     list_display = [field.name for field in Space._meta.fields]
-#     list_display_links = ['label', 'name',]
-#     search_fields = ['label', 'name', 'pym']
-
 @admin.register(Capital)
 class CapitalAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Capital._meta.fields]

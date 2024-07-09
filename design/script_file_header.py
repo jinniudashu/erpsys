@@ -32,12 +32,12 @@ from kernel.models import Operator, Process, Service
     'admin_file_head': f"""from django.contrib import admin
 from .models import *
 
-class MaorSite(admin.AdminSite):
+class ApplicationsSite(admin.AdminSite):
     site_header = '{GLOBAL_INITIAL_STATES['Organization']}'
-    site_title = 'Maor'
+    site_title = '颜青诊所'
     index_title = '工作台'
     enable_nav_sidebar = False
-    index_template = 'admin/index_maor.html'
+    index_template = 'admin/index_applications.html'
     site_url = None
 
     def get_urls(self):
@@ -48,11 +48,11 @@ class MaorSite(admin.AdminSite):
 
     # 职员登录后的首页
     def index(self, request, extra_context=None):
-        print('MaorSite index:', request.user, extra_context)
+        print('ApplicationsSite index:', request.user, extra_context)
         # user = User.objects.get(username=request.user).customer
         return super().index(request, extra_context=extra_context)
 
-maor_site = MaorSite(name = 'MaorSite')
+applications_site = ApplicationsSite(name = 'ApplicationsSite')
 """,
 
     'fields_type_head': '''app_types = ''',
@@ -85,5 +85,5 @@ def get_admin_script(class_name):
 class {class_name}Admin(admin.ModelAdmin):
     list_display = [field.name for field in {class_name}._meta.fields]
     list_display_links = ['id']
-maor_site.register({class_name}, {class_name}Admin)
+applications_site.register({class_name}, {class_name}Admin)
 '''

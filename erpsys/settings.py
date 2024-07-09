@@ -4,8 +4,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-PROJECT_NAME = 'Maor'
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-nfzn20^tam-wv5x7^6mzzlu)6xvev)v1by7yjd7s7b)bwr#ly$'
 
@@ -28,7 +26,7 @@ INSTALLED_APPS = [
     # My apps
     'design',
     'kernel',
-    'maor',
+    'applications',
 ]
 
 MIDDLEWARE = [

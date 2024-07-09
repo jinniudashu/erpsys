@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-07-09T05:02:30.728Z",
+            "last_login": "2024-07-09T08:00:00.399Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -166,27 +166,6 @@
     },
     {
         "model": "design.dataitem",
-        "pk": 22,
-        "fields": {
-            "label": "\u7a7a\u95f4",
-            "name": "Space",
-            "pym": "kj",
-            "erpsys_id": "b7b59c78-2a30-11ef-8c28-0e586f6f8a1e",
-            "field_type": "Reserved",
-            "business_type": 93,
-            "implement_type": "Model",
-            "dependency_order": 10,
-            "default_value": null,
-            "is_multivalued": false,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitem",
         "pk": 24,
         "fields": {
             "label": "\u670d\u52a1\u9879\u76ee",
@@ -195,27 +174,6 @@
             "erpsys_id": "e66128a8-2a30-11ef-8c28-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 58,
-            "implement_type": "Field",
-            "dependency_order": 0,
-            "default_value": null,
-            "is_multivalued": false,
-            "max_length": 100,
-            "max_digits": 10,
-            "decimal_places": 2,
-            "computed_logic": "",
-            "init_content": null
-        }
-    },
-    {
-        "model": "design.dataitem",
-        "pk": 31,
-        "fields": {
-            "label": "\u8bca\u5ba4",
-            "name": "zhen_shi",
-            "pym": "zs",
-            "erpsys_id": "6adc9430-2a33-11ef-b9c0-0e586f6f8a1e",
-            "field_type": "TypeField",
-            "business_type": 22,
             "implement_type": "Field",
             "dependency_order": 0,
             "default_value": null,
@@ -1290,7 +1248,7 @@
             "implement_type": "Model",
             "dependency_order": 0,
             "default_value": null,
-            "is_multivalued": false,
+            "is_multivalued": true,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -1311,7 +1269,7 @@
             "implement_type": "Model",
             "dependency_order": 0,
             "default_value": null,
-            "is_multivalued": false,
+            "is_multivalued": true,
             "max_length": 100,
             "max_digits": 10,
             "decimal_places": 2,
@@ -1583,6 +1541,90 @@
             "business_type": null,
             "implement_type": "Model",
             "dependency_order": 20,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 117,
+        "fields": {
+            "label": "\u53d1\u9001\u6cbb\u7597\u6ce8\u610f\u4e8b\u9879\u8bb0\u5f55",
+            "name": "fa_song_zhi_liao_zhu_yi_shi_xiang_ji_lu",
+            "pym": "fszlzysxjl",
+            "erpsys_id": "e4a1b3b6-3dc7-11ef-a37e-0e586f6f8a1e",
+            "field_type": "TypeField",
+            "business_type": null,
+            "implement_type": "Model",
+            "dependency_order": 20,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 118,
+        "fields": {
+            "label": "\u7b7e\u7f72\u77e5\u60c5\u540c\u610f\u4e66\u8bb0\u5f55",
+            "name": "qian_shu_zhi_qing_tong_yi_shu_ji_lu",
+            "pym": "qszqtysjl",
+            "erpsys_id": "2a04da0a-3dc8-11ef-a37e-0e586f6f8a1e",
+            "field_type": "TypeField",
+            "business_type": null,
+            "implement_type": "Model",
+            "dependency_order": 20,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 119,
+        "fields": {
+            "label": "\u5df2\u53d1\u9001",
+            "name": "yi_fa_song",
+            "pym": "yfs",
+            "erpsys_id": "c9547eda-3dc8-11ef-a37e-0e586f6f8a1e",
+            "field_type": "BooleanField",
+            "business_type": null,
+            "implement_type": "Field",
+            "dependency_order": 0,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 120,
+        "fields": {
+            "label": "\u5df2\u7b7e\u7f72",
+            "name": "yi_qian_shu",
+            "pym": "yqs",
+            "erpsys_id": "d3e229f6-3dc8-11ef-a37e-0e586f6f8a1e",
+            "field_type": "CharField",
+            "business_type": null,
+            "implement_type": "Field",
+            "dependency_order": 0,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -2142,123 +2184,177 @@
         }
     },
     {
+        "model": "design.dataitemconsists",
+        "pk": 101,
+        "fields": {
+            "data_item": 117,
+            "sub_data_item": 105,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 102,
+        "fields": {
+            "data_item": 117,
+            "sub_data_item": 24,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 103,
+        "fields": {
+            "data_item": 117,
+            "sub_data_item": 119,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 104,
+        "fields": {
+            "data_item": 118,
+            "sub_data_item": 105,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 105,
+        "fields": {
+            "data_item": 118,
+            "sub_data_item": 24,
+            "order": 10
+        }
+    },
+    {
+        "model": "design.dataitemconsists",
+        "pk": 106,
+        "fields": {
+            "data_item": 118,
+            "sub_data_item": 120,
+            "order": 10
+        }
+    },
+    {
         "model": "design.role",
-        "pk": 331,
+        "pk": 391,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "abfa2d94-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b0e6630-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 332,
+        "pk": 392,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "abfa5a08-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b0e933a-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 333,
+        "pk": 393,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "abfa6da4-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b0e9f24-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 334,
+        "pk": 394,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "abfa7bd2-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b0eaabe-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 335,
+        "pk": 395,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "abfa8910-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b0eb63a-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 336,
+        "pk": 396,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "abfa94d2-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b0ec13e-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.operator",
-        "pk": 56,
+        "pk": 66,
         "fields": {
             "label": "\u81ea\u52a8\u8c03\u5ea6",
             "name": "SystemSchedler",
             "pym": null,
-            "erpsys_id": "abfa07ec-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b0e439e-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 276,
+        "pk": 326,
         "fields": {
             "label": "100\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "100_dan_wei_bao_tuo_shi",
             "pym": "100dwbts",
-            "erpsys_id": "abfbb416-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b106246-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 277,
+        "pk": 327,
         "fields": {
             "label": "50\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "50_dan_wei_bao_tuo_shi",
             "pym": "50dwbts",
-            "erpsys_id": "abfbc1e0-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b10709c-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 278,
+        "pk": 328,
         "fields": {
             "label": "\u55e8\u4f53",
             "name": "hai_ti",
             "pym": "ht",
-            "erpsys_id": "abfbce56-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b107dd0-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 279,
+        "pk": 329,
         "fields": {
             "label": "\u4e54\u96c5\u767b\u6781\u81f4",
             "name": "qiao_ya_deng_ji_zhi",
             "pym": "qydjz",
-            "erpsys_id": "abfbd9aa-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b1089a6-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 280,
+        "pk": 330,
         "fields": {
             "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
             "name": "yi_ci_xing_zhu_she_qi",
             "pym": "ycxzsq",
-            "erpsys_id": "abfbe620-3daf-11ef-b9ff-0e586f6f8a1e"
+            "erpsys_id": "1b1098d8-3dcb-11ef-9658-0e586f6f8a1e"
         }
     },
     {
@@ -2540,7 +2636,7 @@
             "pym": "fszlzysx",
             "erpsys_id": "a96d64c0-3d04-11ef-9c6e-0e586f6f8a1e",
             "price": null,
-            "subject": null,
+            "subject": 117,
             "route_to": null,
             "program": null,
             "service_type": "OPERATION",
@@ -2558,7 +2654,7 @@
             "pym": "qszqtys",
             "erpsys_id": "ba80a24a-3d04-11ef-9c6e-0e586f6f8a1e",
             "price": null,
-            "subject": null,
+            "subject": 118,
             "route_to": null,
             "program": null,
             "service_type": "OPERATION",
@@ -2604,12 +2700,30 @@
         }
     },
     {
+        "model": "design.service",
+        "pk": 20,
+        "fields": {
+            "label": "\u4efb\u52a1\u63d0\u9192",
+            "name": "ren_wu_ti_xing",
+            "pym": "rwtx",
+            "erpsys_id": "7d2eb35a-3dc7-11ef-a37e-0e586f6f8a1e",
+            "price": null,
+            "subject": null,
+            "route_to": null,
+            "program": null,
+            "service_type": "OPERATION",
+            "authorize_roles": [],
+            "authorize_operators": [],
+            "reference": []
+        }
+    },
+    {
         "model": "design.project",
         "pk": 1,
         "fields": {
-            "label": "Maor",
-            "name": "Maor",
-            "pym": "maor",
+            "label": "\u989c\u9752\u8bca\u6240",
+            "name": "YanQing",
+            "pym": "yqzs",
             "erpsys_id": "a481c3d4-39d5-11ef-98d6-0e586f6f8a1e",
             "domain": "127.0.0.1",
             "description": null
@@ -2813,16 +2927,6 @@
             "name": "Capital",
             "pym": null,
             "erpsys_id": "5b1c446e-3cda-11ef-8eab-0e586f6f8a1e"
-        }
-    },
-    {
-        "model": "kernel.resource",
-        "pk": 5,
-        "fields": {
-            "label": "\u7a7a\u95f4",
-            "name": "Space",
-            "pym": null,
-            "erpsys_id": "5b1c7484-3cda-11ef-8eab-0e586f6f8a1e"
         }
     },
     {

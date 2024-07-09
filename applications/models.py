@@ -312,36 +312,6 @@ class Capital(models.Model):
             self.label = label
         super().save(*args, **kwargs)
     
-class Space(models.Model):
-    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
-    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
-    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
-    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
-    content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, related_name='%(class)s_attributes', null=True, blank=True, verbose_name="隶属主体")
-    object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="隶属id")
-    content_object = GenericForeignKey('content_type', 'object_id')
-    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
-    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
-    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
-
-    class Meta:
-        verbose_name = "Reserved-空间"
-        verbose_name_plural = verbose_name
-        ordering = ["id"]
-    
-    def __str__(self):
-        return self.label
-
-    def save(self, *args, **kwargs):
-        if self.erpsys_id is None:
-            self.erpsys_id = uuid.uuid1()
-        if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
-            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
-            self.name = "_".join(lazy_pinyin(label[:10]))
-            self.label = label
-        super().save(*args, **kwargs)
-    
 class Knowledge(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
@@ -436,7 +406,7 @@ class WuLiaoTaiZhang(models.Model):
     qi_mo = models.IntegerField(blank=True, null=True, verbose_name='期末')
 
     class Meta:
-        verbose_name = "物料台账"
+        verbose_name = "App-物料台账"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -479,7 +449,7 @@ class YuYueJiLu(models.Model):
     bei_zhu = models.TextField(blank=True, null=True, verbose_name='备注')
 
     class Meta:
-        verbose_name = "预约记录"
+        verbose_name = "App-预约记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -515,7 +485,7 @@ class JianKangDiaoChaJiLu(models.Model):
     chang_zhu_di = models.CharField(max_length=100, blank=True, null=True, verbose_name='常驻地')
 
     class Meta:
-        verbose_name = "健康调查记录"
+        verbose_name = "App-健康调查记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -547,7 +517,7 @@ class ZhuanKePingGuJiLu(models.Model):
     zhu_su = models.TextField(blank=True, null=True, verbose_name='主诉')
 
     class Meta:
-        verbose_name = "专科评估记录"
+        verbose_name = "App-专科评估记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -576,12 +546,12 @@ class ZhenDuanJiChuLiYiJianJiLu(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
-    zheng_zhuang = models.ForeignKey(ZhengZhuang, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='症状')
-    zhen_duan = models.ForeignKey(ZhenDuan, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='诊断')
+    zheng_zhuang = models.ManyToManyField(ZhengZhuang, related_name='zheng_zhuang', blank=True, verbose_name='症状')
+    zhen_duan = models.ManyToManyField(ZhenDuan, related_name='zhen_duan', blank=True, verbose_name='诊断')
     jian_yi_fang_an = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='建议方案')
 
     class Meta:
-        verbose_name = "诊断及处理意见记录"
+        verbose_name = "App-诊断及处理意见记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -612,7 +582,7 @@ class RouDuSuZhiLiaoJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "肉毒素治疗记录"
+        verbose_name = "App-肉毒素治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -643,7 +613,7 @@ class ChaoShengPaoZhiLiaoJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "超声炮治疗记录"
+        verbose_name = "App-超声炮治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -674,7 +644,7 @@ class HuangJinWeiZhenZhiLiaoJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "黄金微针治疗记录"
+        verbose_name = "App-黄金微针治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -705,7 +675,7 @@ class DiaoQZhiLiaoJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "调Q治疗记录"
+        verbose_name = "App-调Q治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -736,7 +706,7 @@ class GuangZiZhiLiaoJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "光子治疗记录"
+        verbose_name = "App-光子治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -767,7 +737,7 @@ class GuoSuanZhiLiaoJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "果酸治疗记录"
+        verbose_name = "App-果酸治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -798,7 +768,7 @@ class ShuiGuangZhenZhiLiaoJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "水光针治疗记录"
+        verbose_name = "App-水光针治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -829,7 +799,7 @@ class ChongZhiJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "充值记录"
+        verbose_name = "App-充值记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -860,7 +830,7 @@ class XiaoFeiJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "消费记录"
+        verbose_name = "App-消费记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -891,7 +861,73 @@ class SuiFangJiLu(models.Model):
     ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
 
     class Meta:
-        verbose_name = "随访记录"
+        verbose_name = "App-随访记录"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+    
+    def __str__(self):
+        return self.label
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w一-龥]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    
+class FaSongZhiLiaoZhuYiShiXiangJiLu(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, related_name='%(class)s_attributes', null=True, blank=True, verbose_name="隶属主体")
+    object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="隶属id")
+    content_object = GenericForeignKey('content_type', 'object_id')
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
+    fu_wu_xiang_mu = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='服务项目')
+    yi_fa_song = models.BooleanField(default=False, verbose_name='已发送')
+
+    class Meta:
+        verbose_name = "App-发送治疗注意事项记录"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+    
+    def __str__(self):
+        return self.label
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w一-龥]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    
+class QianShuZhiQingTongYiShuJiLu(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, related_name='%(class)s_attributes', null=True, blank=True, verbose_name="隶属主体")
+    object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="隶属id")
+    content_object = GenericForeignKey('content_type', 'object_id')
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    ke_hu = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='客户')
+    fu_wu_xiang_mu = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='服务项目')
+    yi_qian_shu = models.CharField(max_length=100, blank=True, null=True, verbose_name='已签署')
+
+    class Meta:
+        verbose_name = "App-签署知情同意书记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -919,7 +955,6 @@ CLASS_MAPPING = {
     "Equipment": Equipment,
     "Device": Device,
     "Capital": Capital,
-    "Space": Space,
     "Knowledge": Knowledge,
     "Profile": Profile,
     "WuLiaoTaiZhang": WuLiaoTaiZhang,
@@ -937,5 +972,7 @@ CLASS_MAPPING = {
     "ChongZhiJiLu": ChongZhiJiLu,
     "XiaoFeiJiLu": XiaoFeiJiLu,
     "SuiFangJiLu": SuiFangJiLu,
+    "FaSongZhiLiaoZhuYiShiXiangJiLu": FaSongZhiLiaoZhuYiShiXiangJiLu,
+    "QianShuZhiQingTongYiShuJiLu": QianShuZhiQingTongYiShuJiLu,
 }
 
