@@ -10,7 +10,7 @@ import uuid
 import re
 from pypinyin import Style, lazy_pinyin
 
-from kernel.models import Operator, Process
+from kernel.models import Operator, Process, Service
 \n""",
 
     'class_base_fields': f"""

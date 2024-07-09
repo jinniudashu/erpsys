@@ -41,11 +41,23 @@ class KeHuLaiYuanAdmin(admin.ModelAdmin):
     list_display_links = ['id']
 maor_site.register(KeHuLaiYuan, KeHuLaiYuanAdmin)
 
-@admin.register(ShiFouDaoDian)
-class ShiFouDaoDianAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ShiFouDaoDian._meta.fields]
+@admin.register(HunFou)
+class HunFouAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in HunFou._meta.fields]
     list_display_links = ['id']
-maor_site.register(ShiFouDaoDian, ShiFouDaoDianAdmin)
+maor_site.register(HunFou, HunFouAdmin)
+
+@admin.register(ZhengZhuang)
+class ZhengZhuangAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ZhengZhuang._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ZhengZhuang, ZhengZhuangAdmin)
+
+@admin.register(ZhenDuan)
+class ZhenDuanAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ZhenDuan._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ZhenDuan, ZhenDuanAdmin)
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
@@ -100,3 +112,81 @@ class YuYueJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in YuYueJiLu._meta.fields]
     list_display_links = ['id']
 maor_site.register(YuYueJiLu, YuYueJiLuAdmin)
+
+@admin.register(JianKangDiaoChaJiLu)
+class JianKangDiaoChaJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in JianKangDiaoChaJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(JianKangDiaoChaJiLu, JianKangDiaoChaJiLuAdmin)
+
+@admin.register(ZhuanKePingGuJiLu)
+class ZhuanKePingGuJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ZhuanKePingGuJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ZhuanKePingGuJiLu, ZhuanKePingGuJiLuAdmin)
+
+@admin.register(ZhenDuanJiChuLiYiJianJiLu)
+class ZhenDuanJiChuLiYiJianJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ZhenDuanJiChuLiYiJianJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ZhenDuanJiChuLiYiJianJiLu, ZhenDuanJiChuLiYiJianJiLuAdmin)
+
+@admin.register(RouDuSuZhiLiaoJiLu)
+class RouDuSuZhiLiaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in RouDuSuZhiLiaoJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(RouDuSuZhiLiaoJiLu, RouDuSuZhiLiaoJiLuAdmin)
+
+@admin.register(ChaoShengPaoZhiLiaoJiLu)
+class ChaoShengPaoZhiLiaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ChaoShengPaoZhiLiaoJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ChaoShengPaoZhiLiaoJiLu, ChaoShengPaoZhiLiaoJiLuAdmin)
+
+@admin.register(HuangJinWeiZhenZhiLiaoJiLu)
+class HuangJinWeiZhenZhiLiaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in HuangJinWeiZhenZhiLiaoJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(HuangJinWeiZhenZhiLiaoJiLu, HuangJinWeiZhenZhiLiaoJiLuAdmin)
+
+@admin.register(DiaoQZhiLiaoJiLu)
+class DiaoQZhiLiaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in DiaoQZhiLiaoJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(DiaoQZhiLiaoJiLu, DiaoQZhiLiaoJiLuAdmin)
+
+@admin.register(GuangZiZhiLiaoJiLu)
+class GuangZiZhiLiaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in GuangZiZhiLiaoJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(GuangZiZhiLiaoJiLu, GuangZiZhiLiaoJiLuAdmin)
+
+@admin.register(GuoSuanZhiLiaoJiLu)
+class GuoSuanZhiLiaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in GuoSuanZhiLiaoJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(GuoSuanZhiLiaoJiLu, GuoSuanZhiLiaoJiLuAdmin)
+
+@admin.register(ShuiGuangZhenZhiLiaoJiLu)
+class ShuiGuangZhenZhiLiaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ShuiGuangZhenZhiLiaoJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ShuiGuangZhenZhiLiaoJiLu, ShuiGuangZhenZhiLiaoJiLuAdmin)
+
+@admin.register(ChongZhiJiLu)
+class ChongZhiJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ChongZhiJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(ChongZhiJiLu, ChongZhiJiLuAdmin)
+
+@admin.register(XiaoFeiJiLu)
+class XiaoFeiJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in XiaoFeiJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(XiaoFeiJiLu, XiaoFeiJiLuAdmin)
+
+@admin.register(SuiFangJiLu)
+class SuiFangJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in SuiFangJiLu._meta.fields]
+    list_display_links = ['id']
+maor_site.register(SuiFangJiLu, SuiFangJiLuAdmin)

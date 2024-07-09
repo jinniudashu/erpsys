@@ -16,6 +16,25 @@ class DataItemAdmin(admin.ModelAdmin):
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'implement_type', 'business_type']
     inlines = [DataItemConsistsInline]
+    autocomplete_fields = ['business_type']
+
+@admin.register(Operator)
+class OperatorAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Operator._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Role._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Resource._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
@@ -35,11 +54,11 @@ class DeviceAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
-@admin.register(Space)
-class SpaceAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Space._meta.fields]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
+# @admin.register(Space)
+# class SpaceAdmin(admin.ModelAdmin):
+#     list_display = [field.name for field in Space._meta.fields]
+#     list_display_links = ['label', 'name',]
+#     search_fields = ['label', 'name', 'pym']
 
 @admin.register(Capital)
 class CapitalAdmin(admin.ModelAdmin):
@@ -59,17 +78,47 @@ class KnowledgeAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
-class FormComponentsConfigInline(admin.TabularInline):
-    model = FormComponentsConfig
+# class FormComponentsConfigInline(admin.TabularInline):
+#     model = FormComponentsConfig
+#     extra = 0
+#     autocomplete_fields = ['data_item']
+
+# @admin.register(Form)
+# class FormAdmin(admin.ModelAdmin):
+#     list_display = [field.name for field in Form._meta.fields]
+#     list_display_links = ['label', 'name',]
+#     search_fields = ['label', 'name', 'pym']
+#     inlines = [FormComponentsConfigInline]
+
+class ServiceConsistsInline(admin.TabularInline):
+    model = ServiceConsists
+    extra = 0
+    autocomplete_fields = ['sub_service']
+    fk_name = 'service'
+
+class ResourceDependencyInline(admin.TabularInline):
+    model = ResourceDependency
+    extra = 0
+    autocomplete_fields = ['resource_object']
+
+class ServiceAttributesInline(admin.TabularInline):
+    model = ServiceAttributes
+    extra = 0
+    autocomplete_fields = ['attribute']
+
+class FormConfigInline(admin.TabularInline):
+    model = FormConfig
     extra = 0
     autocomplete_fields = ['data_item']
 
-@admin.register(Form)
-class FormAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Form._meta.fields]
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Service._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-    inlines = [FormComponentsConfigInline]
+    inlines = [ServiceConsistsInline, ResourceDependencyInline, ServiceAttributesInline, FormConfigInline]
+    autocomplete_fields = ['subject']
+    filter_horizontal = ['authorize_roles', 'authorize_operators', 'reference']
 
 class SourceCodeInline(admin.TabularInline):
     model = SourceCode

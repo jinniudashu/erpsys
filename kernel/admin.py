@@ -22,11 +22,6 @@ class ResourceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Resource._meta.fields]
     list_display_links = ['id']
 
-@admin.register(Form)
-class FormAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Form._meta.fields]
-    list_display_links = ['id']
-
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Service._meta.fields]
@@ -42,7 +37,7 @@ class WorkOrderAdmin(admin.ModelAdmin):
     list_display = [field.name for field in WorkOrder._meta.fields]
     list_display_links = ['id']
 
-@admin.register(SystemInstruction)
+@admin.register(Instruction)
 class SystemInstructionAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'sys_call', 'parameters']
     list_display_links = ['id', 'name',]
