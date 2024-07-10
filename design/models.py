@@ -1,6 +1,4 @@
 from django.db import models
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models import Q
 
 import uuid
@@ -9,7 +7,6 @@ import re
 from pypinyin import Style, lazy_pinyin
 
 from design.types import FieldType, ChoiceType, ImplementType, ServiceType, ResourceType
-from design.script_file_header import ScriptFileHeader, get_admin_script, get_model_footer
 
 # ERPSys基类
 class ERPSysBase(models.Model):

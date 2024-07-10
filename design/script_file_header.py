@@ -1,5 +1,3 @@
-from design.specification import GLOBAL_INITIAL_STATES
-
 ScriptFileHeader = {
     'models_file_head': f"""from django.db import models
 from django.contrib.contenttypes.models import ContentType
@@ -32,7 +30,7 @@ from kernel.models import Operator, Process, Service
 from .models import *
 
 class ApplicationsSite(admin.AdminSite):
-    site_header = '{GLOBAL_INITIAL_STATES['Organization']}'
+    site_header = '广州颜青医疗美容诊所'
     site_title = '颜青诊所'
     index_title = '工作台'
     enable_nav_sidebar = False

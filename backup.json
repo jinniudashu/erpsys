@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-07-10T02:00:48.662Z",
+            "last_login": "2024-07-10T02:31:58.543Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -2239,72 +2239,72 @@
     },
     {
         "model": "design.role",
-        "pk": 409,
+        "pk": 451,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "1d74bbbe-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c40788-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 410,
+        "pk": 452,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "1d74e7ce-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c435be-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 411,
+        "pk": 453,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "1d74f3ae-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c441d0-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 412,
+        "pk": 454,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "1d74ff7a-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c44d6a-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 413,
+        "pk": 455,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "1d751370-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c46142-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 414,
+        "pk": 456,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "1d752176-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c4702e-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.operator",
-        "pk": 69,
+        "pk": 76,
         "fields": {
             "label": "\u81ea\u52a8\u8c03\u5ea6",
             "name": "SystemSchedler",
             "pym": null,
-            "erpsys_id": "1d748e50-3dfc-11ef-acc0-0e586f6f8a1e",
+            "erpsys_id": "45c3dfc4-3e91-11ef-8700-0e586f6f8a1e",
             "role": null
         }
     },
@@ -2327,7 +2327,7 @@
             "name": "Equipment",
             "pym": null,
             "erpsys_id": "969f053e-3dee-11ef-b684-0e586f6f8a1e",
-            "res_type": "Consumption"
+            "res_type": "TDM"
         }
     },
     {
@@ -2338,7 +2338,7 @@
             "name": "Device",
             "pym": null,
             "erpsys_id": "969f2eb0-3dee-11ef-b684-0e586f6f8a1e",
-            "res_type": "Consumption"
+            "res_type": "Recycle"
         }
     },
     {
@@ -2360,57 +2360,57 @@
             "name": "Knowledge",
             "pym": null,
             "erpsys_id": "969f97ce-3dee-11ef-b684-0e586f6f8a1e",
-            "res_type": "Consumption"
+            "res_type": "Shared"
         }
     },
     {
         "model": "design.material",
-        "pk": 341,
+        "pk": 376,
         "fields": {
             "label": "100\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "100_dan_wei_bao_tuo_shi",
             "pym": "100dwbts",
-            "erpsys_id": "1d7641be-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c5a598-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 342,
+        "pk": 377,
         "fields": {
             "label": "50\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "50_dan_wei_bao_tuo_shi",
             "pym": "50dwbts",
-            "erpsys_id": "1d76501e-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c5bb00-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 343,
+        "pk": 378,
         "fields": {
             "label": "\u55e8\u4f53",
             "name": "hai_ti",
             "pym": "ht",
-            "erpsys_id": "1d765cbc-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c5cafa-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 344,
+        "pk": 379,
         "fields": {
             "label": "\u4e54\u96c5\u767b\u6781\u81f4",
             "name": "qiao_ya_deng_ji_zhi",
             "pym": "qydjz",
-            "erpsys_id": "1d766c2a-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c5d6bc-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 345,
+        "pk": 380,
         "fields": {
             "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
             "name": "yi_ci_xing_zhu_she_qi",
             "pym": "ycxzsq",
-            "erpsys_id": "1d767c06-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c5e904-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
@@ -2897,79 +2897,79 @@
     },
     {
         "model": "kernel.role",
-        "pk": 7,
+        "pk": 49,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "1d74bbbe-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c40788-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 8,
+        "pk": 50,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "1d74e7ce-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c435be-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 9,
+        "pk": 51,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "1d74f3ae-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c441d0-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 10,
+        "pk": 52,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "1d74ff7a-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c44d6a-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 11,
+        "pk": 53,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "1d751370-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c46142-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 12,
+        "pk": 54,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "1d752176-3dfc-11ef-acc0-0e586f6f8a1e"
+            "erpsys_id": "45c4702e-3e91-11ef-8700-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.operator",
-        "pk": 1,
+        "pk": 8,
         "fields": {
             "label": "\u81ea\u52a8\u8c03\u5ea6",
             "name": "SystemSchedler",
             "pym": null,
-            "erpsys_id": "1d748e50-3dfc-11ef-acc0-0e586f6f8a1e",
+            "erpsys_id": "45c3dfc4-3e91-11ef-8700-0e586f6f8a1e",
             "user": null,
             "role": null
         }
     },
     {
         "model": "kernel.resource",
-        "pk": 7,
+        "pk": 42,
         "fields": {
             "label": "\u7269\u6599",
             "name": "Material",
@@ -2979,7 +2979,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 8,
+        "pk": 43,
         "fields": {
             "label": "\u8bbe\u5907",
             "name": "Equipment",
@@ -2989,7 +2989,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 9,
+        "pk": 44,
         "fields": {
             "label": "\u5de5\u5177",
             "name": "Device",
@@ -2999,7 +2999,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 10,
+        "pk": 45,
         "fields": {
             "label": "\u8d44\u91d1",
             "name": "Capital",
@@ -3009,12 +3009,629 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 11,
+        "pk": 46,
         "fields": {
             "label": "\u77e5\u8bc6",
             "name": "Knowledge",
             "pym": null,
             "erpsys_id": "969f97ce-3dee-11ef-b684-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 121,
+        "fields": {
+            "label": "\u7269\u6599\u5165\u5e93",
+            "name": "wu_liao_ru_ku",
+            "pym": null,
+            "erpsys_id": "45c71b44-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "ef97f612-3b75-11ef-9ede-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "1a27c720-3844-11ef-80e6-0e586f6f8a1e",
+                    "name": "WuLiaoTaiZhang"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 122,
+        "fields": {
+            "label": "\u7269\u6599\u51fa\u5e93",
+            "name": "wu_liao_chu_ku",
+            "pym": null,
+            "erpsys_id": "45c771de-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "dcae1c46-3b77-11ef-a2ed-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "1a27c720-3844-11ef-80e6-0e586f6f8a1e",
+                    "name": "WuLiaoTaiZhang"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 123,
+        "fields": {
+            "label": "\u9884\u7ea6",
+            "name": "yu_yue",
+            "pym": null,
+            "erpsys_id": "45c7c652-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "ce926e82-3cf8-11ef-8490-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "fb689c22-3c0a-11ef-9c58-0e586f6f8a1e",
+                    "name": "YuYueJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 124,
+        "fields": {
+            "label": "\u9884\u7ea6\u5230\u8bca\u786e\u8ba4",
+            "name": "yu_yue_dao_zhen_que_ren",
+            "pym": null,
+            "erpsys_id": "45c8249e-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "ffd3a662-3cfa-11ef-8b98-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "fb689c22-3c0a-11ef-9c58-0e586f6f8a1e",
+                    "name": "YuYueJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 125,
+        "fields": {
+            "label": "\u4e2a\u4eba\u5065\u5eb7\u4fe1\u606f\u8c03\u67e5",
+            "name": "ge_ren_jian_kang_xin_xi_diao_cha",
+            "pym": null,
+            "erpsys_id": "45c890f0-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "9f572ffe-3d02-11ef-97d2-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "0c20c364-3d0f-11ef-a4a3-0e586f6f8a1e",
+                    "name": "JianKangDiaoChaJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 126,
+        "fields": {
+            "label": "\u9884\u5145\u503c",
+            "name": "yu_chong_zhi",
+            "pym": null,
+            "erpsys_id": "45c8e514-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "396f8c12-3d03-11ef-9f8b-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "56e1f028-3d9e-11ef-9bfc-0e586f6f8a1e",
+                    "name": "ChongZhiJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 127,
+        "fields": {
+            "label": "\u6536\u8d39",
+            "name": "shou_fei",
+            "pym": null,
+            "erpsys_id": "45c942a2-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "3f2757b6-3d03-11ef-9f8b-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "66536bcc-3d9e-11ef-9bfc-0e586f6f8a1e",
+                    "name": "XiaoFeiJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 128,
+        "fields": {
+            "label": "\u9762\u8bca\u8bc4\u4f30",
+            "name": "mian_zhen_ping_gu",
+            "pym": null,
+            "erpsys_id": "45c997c0-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "5850919e-3d03-11ef-9f8b-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "7b5cf414-3d0f-11ef-a4a3-0e586f6f8a1e",
+                    "name": "ZhuanKePingGuJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 129,
+        "fields": {
+            "label": "\u8089\u6bd2\u7d20\u6cbb\u7597",
+            "name": "rou_du_su_zhi_liao",
+            "pym": null,
+            "erpsys_id": "45c9eeaa-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "4bd03324-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "17252328-3d90-11ef-a31c-0e586f6f8a1e",
+                    "name": "RouDuSuZhiLiaoJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 130,
+        "fields": {
+            "label": "\u8d85\u58f0\u70ae\u6cbb\u7597",
+            "name": "chao_sheng_pao_zhi_liao",
+            "pym": null,
+            "erpsys_id": "45ca4a1c-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "52d0e8d0-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "57b4c93e-3d90-11ef-a31c-0e586f6f8a1e",
+                    "name": "ChaoShengPaoZhiLiaoJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 131,
+        "fields": {
+            "label": "\u9ec4\u91d1\u5fae\u9488\u6cbb\u7597",
+            "name": "huang_jin_wei_zhen_zhi_liao",
+            "pym": null,
+            "erpsys_id": "45ca9efe-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "5ae8c5b0-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "6dcfc61a-3d90-11ef-a31c-0e586f6f8a1e",
+                    "name": "HuangJinWeiZhenZhiLiaoJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 132,
+        "fields": {
+            "label": "\u8c03Q\u6cbb\u7597",
+            "name": "diao_Q_zhi_liao",
+            "pym": null,
+            "erpsys_id": "45cafa16-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "650f7a52-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "8442b06a-3d90-11ef-a31c-0e586f6f8a1e",
+                    "name": "DiaoQZhiLiaoJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 133,
+        "fields": {
+            "label": "\u5149\u5b50\u6cbb\u7597",
+            "name": "guang_zi_zhi_liao",
+            "pym": null,
+            "erpsys_id": "45cb55c4-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "6a1f70b0-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "bf9ee46c-3d90-11ef-a31c-0e586f6f8a1e",
+                    "name": "GuangZiZhiLiaoJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 134,
+        "fields": {
+            "label": "\u679c\u9178\u6cbb\u7597",
+            "name": "guo_suan_zhi_liao",
+            "pym": null,
+            "erpsys_id": "45cba90c-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "6e918eee-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "d3094556-3d90-11ef-a31c-0e586f6f8a1e",
+                    "name": "GuoSuanZhiLiaoJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 135,
+        "fields": {
+            "label": "\u6c34\u5149\u9488\u6cbb\u7597",
+            "name": "shui_guang_zhen_zhi_liao",
+            "pym": null,
+            "erpsys_id": "45cbfcb8-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "74a5a00e-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "16fe8226-3d91-11ef-a31c-0e586f6f8a1e",
+                    "name": "ShuiGuangZhenZhiLiaoJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 136,
+        "fields": {
+            "label": "\u53d1\u9001\u6cbb\u7597\u6ce8\u610f\u4e8b\u9879",
+            "name": "fa_song_zhi_liao_zhu_yi_shi_xiang",
+            "pym": null,
+            "erpsys_id": "45cc5884-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "a96d64c0-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "e4a1b3b6-3dc7-11ef-a37e-0e586f6f8a1e",
+                    "name": "FaSongZhiLiaoZhuYiShiXiangJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 137,
+        "fields": {
+            "label": "\u7b7e\u7f72\u77e5\u60c5\u540c\u610f\u4e66",
+            "name": "qian_shu_zhi_qing_tong_yi_shu",
+            "pym": null,
+            "erpsys_id": "45ccb14e-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "ba80a24a-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "2a04da0a-3dc8-11ef-a37e-0e586f6f8a1e",
+                    "name": "QianShuZhiQingTongYiShuJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 138,
+        "fields": {
+            "label": "\u968f\u8bbf",
+            "name": "sui_fang",
+            "pym": null,
+            "erpsys_id": "45cd05a4-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "ea681916-3d04-11ef-9c6e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "80351fea-3d9e-11ef-9bfc-0e586f6f8a1e",
+                    "name": "SuiFangJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 139,
+        "fields": {
+            "label": "\u8bca\u65ad\u53ca\u5904\u7406",
+            "name": "zhen_duan_ji_chu_li",
+            "pym": null,
+            "erpsys_id": "45cd5fc2-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "a6f93c20-3d11-11ef-9060-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "c1819c92-3d0f-11ef-a4a3-0e586f6f8a1e",
+                    "name": "ZhenDuanJiChuLiYiJianJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 140,
+        "fields": {
+            "label": "\u4efb\u52a1\u63d0\u9192",
+            "name": "ren_wu_ti_xing",
+            "pym": null,
+            "erpsys_id": "45cdba4e-3e91-11ef-8700-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "7d2eb35a-3dc7-11ef-a37e-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {},
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "OPERATION"
+            }
         }
     },
     {

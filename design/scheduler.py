@@ -1,3 +1,36 @@
+from enum import Enum, auto
+
+class SystemCall(Enum):
+    """系统调用枚举类"""
+    CreateService = auto()
+    CallService = auto()
+
+    def __str__(self):
+        return self.name
+
+class Scheduler:
+    def __init__(self):
+        self.job_handlers = {
+            SystemCall.CreateService: self.create_service,
+            SystemCall.CallService: self.call_service,
+        }
+
+    def schedule(self, sys_call, **kwargs):
+        handler = self.job_handlers.get(sys_call)
+        if handler:
+            return handler(**kwargs)
+        else:
+            raise ValueError(f"Unhandled job type: {sys_call}")
+
+    # Define job functions
+    def create_service(self, **kwargs):
+        print("Creating service...")
+        # Actual implementation here
+
+    def call_service(self, **kwargs):
+        print("Call service...")
+        # Actual implementation here
+
 class TuringMachine:
     def __init__(self, program, initial_state):
         self.program = program  # 程序是一个字典，键为(状态, 读取的值)，值为(写入的值, 移动方向, 下一个状态)
