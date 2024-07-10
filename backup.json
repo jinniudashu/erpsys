@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-07-09T08:00:00.399Z",
+            "last_login": "2024-07-10T02:00:48.662Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -2239,122 +2239,178 @@
     },
     {
         "model": "design.role",
-        "pk": 391,
+        "pk": 409,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "1b0e6630-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d74bbbe-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 392,
+        "pk": 410,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "1b0e933a-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d74e7ce-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 393,
+        "pk": 411,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "1b0e9f24-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d74f3ae-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 394,
+        "pk": 412,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "1b0eaabe-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d74ff7a-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 395,
+        "pk": 413,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "1b0eb63a-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d751370-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 396,
+        "pk": 414,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "1b0ec13e-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d752176-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.operator",
-        "pk": 66,
+        "pk": 69,
         "fields": {
             "label": "\u81ea\u52a8\u8c03\u5ea6",
             "name": "SystemSchedler",
             "pym": null,
-            "erpsys_id": "1b0e439e-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d748e50-3dfc-11ef-acc0-0e586f6f8a1e",
+            "role": null
+        }
+    },
+    {
+        "model": "design.resource",
+        "pk": 1,
+        "fields": {
+            "label": "\u7269\u6599",
+            "name": "Material",
+            "pym": null,
+            "erpsys_id": "969eb5f2-3dee-11ef-b684-0e586f6f8a1e",
+            "res_type": "Consumption"
+        }
+    },
+    {
+        "model": "design.resource",
+        "pk": 2,
+        "fields": {
+            "label": "\u8bbe\u5907",
+            "name": "Equipment",
+            "pym": null,
+            "erpsys_id": "969f053e-3dee-11ef-b684-0e586f6f8a1e",
+            "res_type": "Consumption"
+        }
+    },
+    {
+        "model": "design.resource",
+        "pk": 3,
+        "fields": {
+            "label": "\u5de5\u5177",
+            "name": "Device",
+            "pym": null,
+            "erpsys_id": "969f2eb0-3dee-11ef-b684-0e586f6f8a1e",
+            "res_type": "Consumption"
+        }
+    },
+    {
+        "model": "design.resource",
+        "pk": 4,
+        "fields": {
+            "label": "\u8d44\u91d1",
+            "name": "Capital",
+            "pym": null,
+            "erpsys_id": "969f5cfa-3dee-11ef-b684-0e586f6f8a1e",
+            "res_type": "Consumption"
+        }
+    },
+    {
+        "model": "design.resource",
+        "pk": 5,
+        "fields": {
+            "label": "\u77e5\u8bc6",
+            "name": "Knowledge",
+            "pym": null,
+            "erpsys_id": "969f97ce-3dee-11ef-b684-0e586f6f8a1e",
+            "res_type": "Consumption"
         }
     },
     {
         "model": "design.material",
-        "pk": 326,
+        "pk": 341,
         "fields": {
             "label": "100\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "100_dan_wei_bao_tuo_shi",
             "pym": "100dwbts",
-            "erpsys_id": "1b106246-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d7641be-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 327,
+        "pk": 342,
         "fields": {
             "label": "50\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "50_dan_wei_bao_tuo_shi",
             "pym": "50dwbts",
-            "erpsys_id": "1b10709c-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d76501e-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 328,
+        "pk": 343,
         "fields": {
             "label": "\u55e8\u4f53",
             "name": "hai_ti",
             "pym": "ht",
-            "erpsys_id": "1b107dd0-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d765cbc-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 329,
+        "pk": 344,
         "fields": {
             "label": "\u4e54\u96c5\u767b\u6781\u81f4",
             "name": "qiao_ya_deng_ji_zhi",
             "pym": "qydjz",
-            "erpsys_id": "1b1089a6-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d766c2a-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 330,
+        "pk": 345,
         "fields": {
             "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
             "name": "yi_ci_xing_zhu_she_qi",
             "pym": "ycxzsq",
-            "erpsys_id": "1b1098d8-3dcb-11ef-9658-0e586f6f8a1e"
+            "erpsys_id": "1d767c06-3dfc-11ef-acc0-0e586f6f8a1e"
         }
     },
     {
@@ -2830,113 +2886,135 @@
         }
     },
     {
+        "model": "kernel.erpsysbasefield",
+        "pk": 11,
+        "fields": {
+            "label": "\u8ba1\u5212\u65f6\u95f4",
+            "name": "scheduled_time",
+            "pym": "jhsj",
+            "erpsys_id": "74b8395a-3ded-11ef-91c1-0e586f6f8a1e"
+        }
+    },
+    {
         "model": "kernel.role",
+        "pk": 7,
+        "fields": {
+            "label": "\u533b\u751f",
+            "name": "yi_sheng",
+            "pym": "ys",
+            "erpsys_id": "1d74bbbe-3dfc-11ef-acc0-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "kernel.role",
+        "pk": 8,
+        "fields": {
+            "label": "\u62a4\u58eb",
+            "name": "hu_shi",
+            "pym": "hs",
+            "erpsys_id": "1d74e7ce-3dfc-11ef-acc0-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "kernel.role",
+        "pk": 9,
+        "fields": {
+            "label": "\u5ba2\u670d",
+            "name": "ke_fu",
+            "pym": "kf",
+            "erpsys_id": "1d74f3ae-3dfc-11ef-acc0-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "kernel.role",
+        "pk": 10,
+        "fields": {
+            "label": "\u7ba1\u7406\u5458",
+            "name": "guan_li_yuan",
+            "pym": "gly",
+            "erpsys_id": "1d74ff7a-3dfc-11ef-acc0-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "kernel.role",
+        "pk": 11,
+        "fields": {
+            "label": "\u5ba2\u6237",
+            "name": "ke_hu",
+            "pym": "kh",
+            "erpsys_id": "1d751370-3dfc-11ef-acc0-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "kernel.role",
+        "pk": 12,
+        "fields": {
+            "label": "System",
+            "name": "System",
+            "pym": "System",
+            "erpsys_id": "1d752176-3dfc-11ef-acc0-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "kernel.operator",
         "pk": 1,
         "fields": {
-            "label": null,
-            "name": null,
+            "label": "\u81ea\u52a8\u8c03\u5ea6",
+            "name": "SystemSchedler",
             "pym": null,
-            "erpsys_id": null
-        }
-    },
-    {
-        "model": "kernel.role",
-        "pk": 2,
-        "fields": {
-            "label": null,
-            "name": null,
-            "pym": null,
-            "erpsys_id": null
-        }
-    },
-    {
-        "model": "kernel.role",
-        "pk": 3,
-        "fields": {
-            "label": null,
-            "name": null,
-            "pym": null,
-            "erpsys_id": null
-        }
-    },
-    {
-        "model": "kernel.role",
-        "pk": 4,
-        "fields": {
-            "label": null,
-            "name": null,
-            "pym": null,
-            "erpsys_id": null
-        }
-    },
-    {
-        "model": "kernel.role",
-        "pk": 5,
-        "fields": {
-            "label": null,
-            "name": null,
-            "pym": null,
-            "erpsys_id": null
-        }
-    },
-    {
-        "model": "kernel.role",
-        "pk": 6,
-        "fields": {
-            "label": null,
-            "name": null,
-            "pym": null,
-            "erpsys_id": null
+            "erpsys_id": "1d748e50-3dfc-11ef-acc0-0e586f6f8a1e",
+            "user": null,
+            "role": null
         }
     },
     {
         "model": "kernel.resource",
-        "pk": 1,
+        "pk": 7,
         "fields": {
             "label": "\u7269\u6599",
             "name": "Material",
             "pym": null,
-            "erpsys_id": "5b1afe42-3cda-11ef-8eab-0e586f6f8a1e"
+            "erpsys_id": "969eb5f2-3dee-11ef-b684-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.resource",
-        "pk": 2,
+        "pk": 8,
         "fields": {
             "label": "\u8bbe\u5907",
             "name": "Equipment",
             "pym": null,
-            "erpsys_id": "5b1bdf42-3cda-11ef-8eab-0e586f6f8a1e"
+            "erpsys_id": "969f053e-3dee-11ef-b684-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.resource",
-        "pk": 3,
+        "pk": 9,
         "fields": {
             "label": "\u5de5\u5177",
             "name": "Device",
             "pym": null,
-            "erpsys_id": "5b1c0b52-3cda-11ef-8eab-0e586f6f8a1e"
+            "erpsys_id": "969f2eb0-3dee-11ef-b684-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.resource",
-        "pk": 4,
+        "pk": 10,
         "fields": {
             "label": "\u8d44\u91d1",
             "name": "Capital",
             "pym": null,
-            "erpsys_id": "5b1c446e-3cda-11ef-8eab-0e586f6f8a1e"
+            "erpsys_id": "969f5cfa-3dee-11ef-b684-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.resource",
-        "pk": 6,
+        "pk": 11,
         "fields": {
             "label": "\u77e5\u8bc6",
             "name": "Knowledge",
             "pym": null,
-            "erpsys_id": "5b1c9b4e-3cda-11ef-8eab-0e586f6f8a1e"
+            "erpsys_id": "969f97ce-3dee-11ef-b684-0e586f6f8a1e"
         }
     },
     {

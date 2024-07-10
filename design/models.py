@@ -8,7 +8,7 @@ import re
 
 from pypinyin import Style, lazy_pinyin
 
-from design.types import FieldType, ChoiceType, ImplementType, ServiceType
+from design.types import FieldType, ChoiceType, ImplementType, ServiceType, ResourceType
 from design.script_file_header import ScriptFileHeader, get_admin_script, get_model_footer
 
 # ERPSys基类
@@ -202,12 +202,15 @@ class Role(ERPSysBase):
         ordering = ['id']
 
 class Operator(ERPSysBase):
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="角色")
     class Meta:
         verbose_name = "服务-人员"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
 class Resource(ERPSysBase):
+    res_type = models.CharField(max_length=50, default='Consumption', choices=ResourceType, null=True, blank=True, verbose_name="资源类型")
+
     class Meta:
         verbose_name = "服务-资源"
         verbose_name_plural = verbose_name
@@ -248,8 +251,13 @@ class Knowledge(ERPSysBase):
 
 class Service(ERPSysBase):
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
+    material_requirements = models.ManyToManyField(Material, through='MaterialRequirements', verbose_name="物料需求")
+    equipment_requirements = models.ManyToManyField(Equipment, through='EquipmentRequirements', verbose_name="设备需求")
+    device_requirements = models.ManyToManyField(Device, through='DeviceRequirements', verbose_name="器材需求")
+    capital_requirements = models.ManyToManyField(Capital, through='CapitalRequirements', verbose_name="资金需求")
+    knowledge_requirements = models.ManyToManyField(Knowledge, through='KnowledgeRequirements', verbose_name="知识需求")
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='价格')
-    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, related_name='served_services', blank=True, null=True, verbose_name="作业记录")
+    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type='Model'), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
     form_config = models.ManyToManyField(DataItem, through='FormConfig', related_name='servicices_form_config', verbose_name="表单设置")
     authorize_roles = models.ManyToManyField(Role, related_name='roles_authorized', blank=True, verbose_name="允许角色")
     authorize_operators = models.ManyToManyField(Operator, related_name='operators_authorized', blank=True, verbose_name="允许操作员")
@@ -257,7 +265,6 @@ class Service(ERPSysBase):
     reference = models.ManyToManyField(DataItem, related_name='referenced_services', blank=True, verbose_name="引用")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], default='OPERATION', verbose_name="服务类型")
-    attributes = models.ManyToManyField(DataItem, through='ServiceAttributes', related_name='services_belonged', symmetrical=False, verbose_name="属性")
 
     class Meta:
         verbose_name = "服务"
@@ -278,34 +285,74 @@ class ServiceConsists(models.Model):
     def __str__(self):
         return self.service.name + '->' + self.sub_service.name
 
-class ResourceDependency(models.Model):
+class MaterialRequirements(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-    resource_object = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="资源对象")
+    resource_object = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name="资源对象")
     quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
     
     class Meta:
-        verbose_name = "资源组件"
+        verbose_name = "物料资源"
         verbose_name_plural = verbose_name
         ordering = ['id']
     
     def __str__(self):
         return self.service.name + '->' + self.resource_object.name
 
-class ServiceAttributes(models.Model):
+class EquipmentRequirements(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-    attribute = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="属性")
-
+    resource_object = models.ForeignKey(Equipment, on_delete=models.CASCADE, verbose_name="资源对象")
+    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
+    
     class Meta:
-        verbose_name = "服务属性"
+        verbose_name = "设备资源"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
+    
     def __str__(self):
-        return self.service.name + '->' + self.attribute.name
+        return self.service.name + '->' + self.resource_object.name
+
+class DeviceRequirements(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
+    resource_object = models.ForeignKey(Device, on_delete=models.CASCADE, verbose_name="资源对象")
+    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
+    
+    class Meta:
+        verbose_name = "器材资源"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.service.name + '->' + self.resource_object.name
+    
+class CapitalRequirements(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
+    resource_object = models.ForeignKey(Capital, on_delete=models.CASCADE, verbose_name="资源对象")
+    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
+    
+    class Meta:
+        verbose_name = "资金资源"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.service.name + '->' + self.resource_object.name
+
+class KnowledgeRequirements(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
+    resource_object = models.ForeignKey(Knowledge, on_delete=models.CASCADE, verbose_name="资源对象")
+    quantity = models.PositiveIntegerField(default=1)  # 默认为1，至少需要一个单位资源
+    
+    class Meta:
+        verbose_name = "知识资源"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.service.name + '->' + self.resource_object.name
 
 class FormConfig(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="数据项")
+    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, limit_choices_to=Q(implement_type='Field'), verbose_name="数据项")
     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     readonly = models.BooleanField(default=False, verbose_name="只读")
     is_required = models.BooleanField(default=False, verbose_name="必填")

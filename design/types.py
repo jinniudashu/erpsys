@@ -39,6 +39,13 @@ ImplementType = [
     ('Program', '程序'),
 ]
 
+ResourceType = [
+    ('Consumption', '消耗'),
+    ('TDM', '分时复用'),
+    ('Recycle', '回收'),
+    ('Shared', '共享'),
+]
+
 class SystemResourceType(Enum):
     """资源类型枚举类"""
     MATERIAL = ("物料", "Consumption")

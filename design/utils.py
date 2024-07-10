@@ -6,11 +6,24 @@ from django.utils import timezone
 import json
 from collections import defaultdict
 
-from design.models import DataItem, DESIGN_CLASS_MAPPING
 from design.specification import GLOBAL_INITIAL_STATES
 from design.script_file_header import ScriptFileHeader
+from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event
+from design.models import ServiceConsists, FormConfig, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
+from kernel.models import Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event
+from applications.models import CLASS_MAPPING, Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
-from applications.models import CLASS_MAPPING
+COPY_CLASS_MAPPING = {
+    "Role": (design_Role, kernel_Role),
+    "Operator": (design_Operator, kernel_Operator),
+    "Resource": (design_Resource, kernel_Resource),
+    "Event": (design_Event, kernel_Event),
+    "Material": (design_Material, applications_Material),
+    "Equipment": (design_Equipment, applications_Equipment),
+    "Device": (design_Device, applications_Device),
+    "Capital": (design_Capital, applications_Capital),
+    "Knowledge": (design_Knowledge, applications_Knowledge),
+}
 
 # 生成脚本, 被design.admin调用
 def generate_source_code(project):
@@ -74,36 +87,6 @@ def generate_source_code(project):
         # except Exception as e:
         #     print(f"Error migrating {app_name}: {e}")
 
-    def import_init_data():
-        def insert_to_model(model_class):
-            if model_class:
-                model_class.objects.all().delete()
-
-                init_content_list = json.loads(item.init_content)
-                for content_dict in init_content_list:
-                    name_dict = {}
-                    for key in content_dict:
-                        key_data_item = DataItem.objects.get(label=key)
-                        name_dict[key_data_item.name] = content_dict[key]
-                        print(name_dict)
-                    
-                    model_class.objects.create(**name_dict)
-            else:
-                # 处理未找到对应类的情况
-                print(f"Class not found for label: {item.label}")
-
-        for item in DataItem.objects.filter(field_type__in = ['TypeField', 'Reserved'], init_content__isnull=False):
-            if item.field_type == 'Reserved':
-                class_name = item.name
-                model_class = DESIGN_CLASS_MAPPING.get(class_name)
-                insert_to_model(model_class)
-            else:
-                class_name = item.get_data_item_classname()
-            model_class = CLASS_MAPPING.get(class_name)
-            insert_to_model(model_class)
-
-            print(class_name, item.init_content)
-
     # 生成models.py, admin.py脚本
     def generate_models_admin_script(query_set):
 
@@ -131,6 +114,126 @@ def generate_source_code(project):
         fields_type_script = f'{fields_type_script}{fields_type}'
 
         return models_script, admin_script, fields_type_script
+
+    def import_init_data_from_data_item():
+        def insert_to_model(model_class):
+            if model_class:
+                model_class.objects.all().delete()
+
+                init_content_list = json.loads(item.init_content)
+                for content_dict in init_content_list:
+                    name_dict = {}
+                    for key in content_dict:
+                        key_data_item = DataItem.objects.get(label=key)
+                        name_dict[key_data_item.name] = content_dict[key]
+                        print(name_dict)
+                    
+                    model_class.objects.create(**name_dict)
+            else:
+                # 处理未找到对应类的情况
+                print(f"Class not found for label: {item.label}")
+
+        for item in DataItem.objects.filter(field_type__in = ['TypeField', 'Reserved'], init_content__isnull=False):
+            if item.field_type == 'Reserved':
+                class_name = item.name
+                model_class = DESIGN_CLASS_MAPPING.get(class_name)
+                insert_to_model(model_class)
+            else:
+                class_name = item.get_data_item_classname()
+            model_class = CLASS_MAPPING.get(class_name)
+            insert_to_model(model_class)
+            print(class_name, item.init_content)
+
+    def copy_design_to_kernel():
+        for model_name, models in COPY_CLASS_MAPPING.items():
+            source_model, target_model = models
+            # 删除目标模型中的所有数据
+            target_model.objects.all().delete()
+            # 从源模型中读取所有实例
+            source_objects = source_model.objects.all()
+            target_objects = [
+                target_model(**{
+                    field.name: getattr(obj, field.name)
+                    for field in source_model._meta.fields
+                    if field.name in [f.name for f in target_model._meta.fields] and field.name != 'id'
+                })
+                for obj in source_objects
+            ]
+            # 批量创建数据，这里用到了bulk_create来优化性能
+            target_model.objects.bulk_create(target_objects)
+            print(f"Copied {len(target_objects)} records from {source_model.__name__} to {target_model.__name__}.")
+
+    def import_service_from_design():
+        services = design_Service.objects.all()
+        kernel_Service.objects.all().delete()
+        for service in services:
+            service_json = {
+                "erpsys_id": service.erpsys_id,
+                "consists": [
+                    {"erpsys_id": sub_service.sub_service.erpsys_id, "name": sub_service.sub_service.name, "quantity": sub_service.quantity}
+                    for sub_service in ServiceConsists.objects.filter(service=service)
+                ],
+                "material_requirements": [
+                    {"erpsys_id": req.resource_object.erpsys_id, "name": req.resource_object.name, "quantity": req.quantity}
+                    for req in MaterialRequirements.objects.filter(service=service)
+                ],
+                "equipment_requirements": [
+                    {"erpsys_id": req.resource_object.erpsys_id, "name": req.resource_object.name, "quantity": req.quantity}
+                    for req in EquipmentRequirements.objects.filter(service=service)
+                ],
+                "device_requirements": [
+                    {"erpsys_id": req.resource_object.erpsys_id, "name": req.resource_object.name, "quantity": req.quantity}
+                    for req in DeviceRequirements.objects.filter(service=service)
+                ],
+                "capital_requirements": [
+                    {"erpsys_id": req.resource_object.erpsys_id, "name": req.resource_object.name, "quantity": req.quantity}
+                    for req in CapitalRequirements.objects.filter(service=service)
+                ],
+                "knowledge_requirements": [
+                    {"erpsys_id": req.resource_object.erpsys_id, "name": req.resource_object.name, "quantity": req.quantity}
+                    for req in KnowledgeRequirements.objects.filter(service=service)
+                ],
+                "price": str(service.price),
+                "subject": {
+                    "erpsys_id": service.subject.erpsys_id,
+                    "name": service.subject.get_data_item_classname()
+                } if service.subject else {},
+                "form_config": [
+                    {
+                        "erpsys_id": config.data_item.erpsys_id,
+                        "name": config.data_item.name,
+                        "default_value": config.default_value,
+                        "readonly": config.readonly,
+                        "is_required": config.is_required
+                    }
+                    for config in FormConfig.objects.filter(service=service)
+                ],
+                "authorize_roles": [
+                    {"erpsys_id": role.erpsys_id, "name": role.name}
+                    for role in service.authorize_roles.all()
+                ],
+                "authorize_operators": [
+                    {"erpsys_id": operator.erpsys_id, "name": operator.name}
+                    for operator in service.authorize_operators.all()
+                ],
+                "route_to": {
+                    "erpsys_id": service.route_to.erpsys_id,
+                    "name": service.route_to.name
+                } if service.route_to else {},
+                "reference": [
+                    {"erpsys_id": item.erpsys_id, "name": item.name}
+                    for item in service.reference.all()
+                ],
+                "program": service.program,
+                "service_type": service.service_type
+            }
+
+            kernel_Service.objects.create(
+                name=service.name,
+                label=service.label,
+                config=service_json
+            )
+            print(f"Exported Service {service.name} to kernel")
 
     source_code = {
         'script': {},
@@ -163,8 +266,10 @@ def generate_source_code(project):
     # makemigrations & migrate
     migrate_app()
 
-    # 写入初始业务数据
-    import_init_data()
+    # 导入初始业务数据to kernel & applications
+    import_init_data_from_data_item()
+    import_service_from_design()
+    copy_design_to_kernel()
 
 # 抽取excel数据
 def abstract_excel_data(file_path="design/business_data/preprocessing/initial_data.xlsx"):

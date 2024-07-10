@@ -36,7 +36,7 @@ class ERPSysBase(models.Model):
 
 class ERPSysBaseField(ERPSysBase):
     class Meta:
-        verbose_name = "系统字段"
+        verbose_name = "系统保留字"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -48,7 +48,7 @@ class Role(ERPSysBase):
 
 class Operator(ERPSysBase):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="用户")
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, related_name='operators', blank=True, null=True, verbose_name="角色")
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="角色")
 
     class Meta:
         verbose_name = "服务-人员"

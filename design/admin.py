@@ -90,27 +90,37 @@ class ServiceConsistsInline(admin.TabularInline):
     autocomplete_fields = ['sub_service']
     fk_name = 'service'
 
-class ResourceDependencyInline(admin.TabularInline):
-    model = ResourceDependency
-    extra = 0
-    autocomplete_fields = ['resource_object']
-
-class ServiceAttributesInline(admin.TabularInline):
-    model = ServiceAttributes
-    extra = 0
-    autocomplete_fields = ['attribute']
-
 class FormConfigInline(admin.TabularInline):
     model = FormConfig
     extra = 0
     autocomplete_fields = ['data_item']
+
+class MaterialRequirementsInline(admin.TabularInline):
+    model = MaterialRequirements
+    extra = 0
+
+class EquipmentRequirementsInline(admin.TabularInline):
+    model = EquipmentRequirements
+    extra = 0
+
+class DeviceRequirementsInline(admin.TabularInline):
+    model = DeviceRequirements
+    extra = 0
+
+class CapitalRequirementsInline(admin.TabularInline):
+    model = CapitalRequirements
+    extra = 0
+
+class KnowledgeRequirementsInline(admin.TabularInline):
+    model = KnowledgeRequirements
+    extra = 0
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Service._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-    inlines = [ServiceConsistsInline, ResourceDependencyInline, ServiceAttributesInline, FormConfigInline]
+    inlines = [ServiceConsistsInline, FormConfigInline, MaterialRequirementsInline, EquipmentRequirementsInline, DeviceRequirementsInline, CapitalRequirementsInline, KnowledgeRequirementsInline]
     autocomplete_fields = ['subject']
     filter_horizontal = ['authorize_roles', 'authorize_operators', 'reference']
 
