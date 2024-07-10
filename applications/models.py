@@ -310,7 +310,7 @@ class Capital(models.Model):
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
-
+    
 class Knowledge(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
@@ -342,7 +342,7 @@ class Knowledge(models.Model):
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
-
+    
 class Profile(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
@@ -383,7 +383,7 @@ class Profile(models.Model):
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
-
+    
 class WuLiaoTaiZhang(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
@@ -532,7 +532,7 @@ class ZhuanKePingGuJiLu(models.Model):
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
-
+    
 class ZhenDuanJiChuLiYiJianJiLu(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
@@ -566,7 +566,7 @@ class ZhenDuanJiChuLiYiJianJiLu(models.Model):
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
-
+    
 class RouDuSuZhiLiaoJiLu(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
@@ -597,7 +597,7 @@ class RouDuSuZhiLiaoJiLu(models.Model):
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
-
+    
 class ChaoShengPaoZhiLiaoJiLu(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")

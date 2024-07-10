@@ -10,6 +10,8 @@ from design.specification import GLOBAL_INITIAL_STATES
 from design.script_file_header import ScriptFileHeader
 from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event
 from design.models import ServiceConsists, FormConfig, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
+from design.script_file_header import ScriptFileHeader, get_admin_script, get_model_footer
+
 from kernel.models import Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event
 from applications.models import CLASS_MAPPING, Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
@@ -25,96 +27,8 @@ COPY_CLASS_MAPPING = {
     "Knowledge": (design_Knowledge, applications_Knowledge),
 }
 
-# 生成脚本, 被design.admin调用
-def generate_source_code(project):
-    def sort_data_items(queryset):
-        # Function to build the inheritance tree
-        def build_inheritance_tree_with_depth(queryset):
-            tree = defaultdict(list)
-            root_items = []
-            depth_map = {}
-
-            for item in queryset:
-                if item.business_type is None:
-                    root_items.append(item)
-                    depth_map[item.id] = 0
-                else:
-                    tree[item.business_type_id].append(item)
-
-            return tree, root_items, depth_map
-
-        # Recursive function to get sorted items and update depth_map
-        def get_sorted_items_with_depth(tree, root_items, depth_map, current_depth=0):
-            sorted_items = []
-
-            def recurse(item, depth):
-                depth_map[item.id] = depth
-                sorted_items.append(item)
-                children = tree.get(item.id, [])
-                children.sort(key=lambda x: x.id)  # Sort children by id
-                for child in children:
-                    recurse(child, depth + 1)
-
-            root_items.sort(key=lambda x: x.id)  # Sort root items by id
-            for root_item in root_items:
-                recurse(root_item, current_depth)
-
-            return sorted_items, depth_map
-
-        tree, root_items, depth_map = build_inheritance_tree_with_depth(queryset)
-        sorted_items, depth_map = get_sorted_items_with_depth(tree, root_items, depth_map)
-
-        # 根据外键引用调整深度
-        for item in sorted_items:
-            print('根据外键引用调整深度')
-            print(item, depth_map[item.id])
-
-        # Sort the items by depth first, then by id
-        sorted_items.sort(key=lambda x: (depth_map[x.id], x.id))
-        print('sorted_items:', sorted_items)
-        return sorted_items
-
-    def write_project_file(file_name, content):
-        with open(file_name, 'w', encoding='utf-8') as f:
-            f.write(content)
-
-    def migrate_app():
-        # try:
-        print(f"Start migrating applications...")
-        call_command('makemigrations', 'applications')
-        call_command('migrate', 'applications', interactive=False)
-        print(f"Successfully migrated applications")
-        # except Exception as e:
-        #     print(f"Error migrating {app_name}: {e}")
-
-    # 生成models.py, admin.py脚本
-    def generate_models_admin_script(query_set):
-
-        models_script = ScriptFileHeader['models_file_head']
-        admin_script =  ScriptFileHeader['admin_file_head']
-        fields_type_script = ScriptFileHeader['fields_type_head']
-        fields_type = {}
-        class_mappings_str = """CLASS_MAPPING = {\n"""
-
-        for item in query_set:
-            _model_script, _admin_script, _fields_type_dict = item.generate_script()
-            models_script = f'{models_script}{_model_script}'
-            admin_script = f'{admin_script}{_admin_script}'
-
-            fields_type.update(_fields_type_dict)
-
-            if item.field_type == 'Reserved':
-                class_name = item.name
-            else:
-                class_name = item.get_data_item_classname()
-            class_mappings_str = f'{class_mappings_str}    "{class_name}": {class_name},\n'
-
-        class_mappings_str = class_mappings_str + '}\n\n'
-        models_script = models_script + class_mappings_str
-        fields_type_script = f'{fields_type_script}{fields_type}'
-
-        return models_script, admin_script, fields_type_script
-
+# 加载初始数据
+def init_data_loader():
     def import_init_data_from_data_item():
         def insert_to_model(model_class):
             if model_class:
@@ -235,15 +149,131 @@ def generate_source_code(project):
             )
             print(f"Exported Service {service.name} to kernel")
 
-    source_code = {
-        'script': {},
-        'data': {}
-    }
+    import_init_data_from_data_item()
+    import_service_from_design()
+    copy_design_to_kernel()
+
+# 生成脚本, 被design.admin调用
+def generate_source_code(project):
+    def write_project_file(file_name, content):
+        with open(file_name, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+    def migrate_app():
+        # try:
+        print(f"Start migrating applications...")
+        call_command('makemigrations', 'applications')
+        call_command('migrate', 'applications', interactive=False)
+        print(f"Successfully migrated applications")
+        # except Exception as e:
+        #     print(f"Error migrating {app_name}: {e}")
+
+    def generate_script(data_item):
+        def _generate_field_definitions(data_item):
+            field_definitions = ''
+            field_type_dict = {}
+
+            for item in data_item.subset.all():
+                consist_item = item.sub_data_item
+                field_name = consist_item.name
+                # 如果字段有业务类型，使用业务类型的字段名，如：计划时间
+                if consist_item.business_type and consist_item.business_type.implement_type == 'Field' and consist_item.business_type.field_type == 'Reserved':
+                    field_name = consist_item.business_type.name
+                field_type = consist_item.field_type
+                field_type_dict.update({field_name: field_type})
+                match field_type:
+                    case 'CharField':
+                        field_definitions += f"    {field_name} = models.CharField(max_length={consist_item.max_length}, blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'TextField':
+                        field_definitions += f"    {field_name} = models.TextField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'IntegerField':
+                        field_definitions += f"    {field_name} = models.IntegerField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'BooleanField':
+                        field_definitions += f"    {field_name} = models.BooleanField(default=False, verbose_name='{consist_item.label}')\n"
+                    case 'DecimalField':
+                        field_definitions += f"    {field_name} = models.DecimalField(max_digits={consist_item.max_digits}, decimal_places={consist_item.decimal_places}, blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'DateTimeField':
+                        field_definitions += f"    {field_name} = models.DateTimeField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'DateField':
+                        field_definitions += f"    {field_name} = models.DateField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'JSONField':
+                        field_definitions += f"    {field_name} = models.JSONField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'FileField':
+                        field_definitions += f"    {field_name} = models.FileField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'TypeField':
+                        _field_type = ''
+                        if consist_item.business_type:
+                            _field_type = consist_item.business_type.name
+                        else:
+                            _field_type = consist_item.get_data_item_classname()
+                        if consist_item.is_multivalued:
+                            field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, related_name='{field_name}', blank=True, verbose_name='{consist_item.label}')\n"
+                        else:
+                            field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                        field_type_dict.update({field_name: _field_type})
+                    case 'User':
+                        field_definitions += f"    {field_name} = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                        field_type_dict.update({field_name: 'User'})
+                    case 'ComputedField':
+                        pass
+                    case _:
+                        pass
+
+            return field_definitions, field_type_dict
+
+        def _generate_model_footer_script(data_item):
+            verbose_name = data_item.label
+            if data_item.dependency_order == 0:
+                verbose_name = f'Dict-{data_item.label}'
+            else:
+                if data_item.field_type == 'Reserved':
+                    verbose_name = f'{data_item.field_type}-{data_item.label}'
+                else:
+                    verbose_name = f'App-{data_item.label}'
+            return get_model_footer(verbose_name)
+
+        if data_item.field_type == 'Reserved':
+            model_head = f'class {data_item.name}(models.Model):'
+        else:
+            model_head = f'class {data_item.get_data_item_classname()}(models.Model):'
+        model_head = model_head + ScriptFileHeader['class_base_fields']
+        match data_item.name:
+            case 'Profile':
+                model_head = model_head + ScriptFileHeader['Profile_Reserved_body_script']
+        model_fields, fields_type_dict = _generate_field_definitions(data_item)
+        model_footer = _generate_model_footer_script(data_item)
+        model_script = f'{model_head}{model_fields}{model_footer}\n'
+
+        # construct admin script
+        if data_item.business_type is None:
+            class_name = data_item.get_data_item_classname()
+        else:
+            class_name = data_item.name
+        admin_script = get_admin_script(class_name)
+
+        return model_script, admin_script, fields_type_dict
 
     # 生成运行时数据结构代码
-    _queryset = DataItem.objects.filter(implement_type='Model').order_by('dependency_order')
-    # sorted_items = sort_data_items(_queryset)
-    models_script, admin_script, fields_type_script = generate_models_admin_script(_queryset)
+    models_script = ScriptFileHeader['models_file_head']
+    admin_script =  ScriptFileHeader['admin_file_head']
+    fields_type_script = ScriptFileHeader['fields_type_head']
+    fields_type = {}
+    class_mappings_str = """CLASS_MAPPING = {\n"""
+
+    for item in DataItem.objects.filter(implement_type='Model').order_by('dependency_order'):
+        _model_script, _admin_script, _fields_type_dict = generate_script(item)
+        models_script = f'{models_script}{_model_script}'
+        admin_script = f'{admin_script}{_admin_script}'
+        fields_type.update(_fields_type_dict)
+
+        if item.field_type == 'Reserved':
+            class_name = item.name
+        else:
+            class_name = item.get_data_item_classname()
+        class_mappings_str = f'{class_mappings_str}    "{class_name}": {class_name},\n'
+
+    models_script = models_script + class_mappings_str + '}\n\n'
+    fields_type_script = f'{fields_type_script}{fields_type}'
 
     print('写入项目文件...')
     object_files = [
@@ -254,6 +284,16 @@ def generate_source_code(project):
     for filename, content in object_files:
         write_project_file(filename, content)
 
+    # makemigrations & migrate
+    migrate_app()
+
+    # 导入初始业务数据to kernel & applications
+    init_data_loader()
+
+    # source_code = {
+    #     'script': {},
+    #     'data': {}
+    # }
     # source_code['script']['type']['models'] = models_script
     # source_code['script']['type']['admin'] = admin_script
     # result = SourceCode.objects.create(
@@ -262,14 +302,6 @@ def generate_source_code(project):
     #     code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
     # )
     # print(f'作业脚本写入数据库成功, id: {result}')
-
-    # makemigrations & migrate
-    migrate_app()
-
-    # 导入初始业务数据to kernel & applications
-    import_init_data_from_data_item()
-    import_service_from_design()
-    copy_design_to_kernel()
 
 # 抽取excel数据
 def abstract_excel_data(file_path="design/business_data/preprocessing/initial_data.xlsx"):
