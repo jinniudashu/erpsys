@@ -1,10 +1,7 @@
-from django.forms.models import model_to_dict
-from django.core.serializers.json import DjangoJSONEncoder
 from django.core.management import call_command
 from django.utils import timezone
 
 import json
-from collections import defaultdict
 
 from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event
 from design.models import ServiceConsists, FormConfig, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
@@ -26,7 +23,7 @@ COPY_CLASS_MAPPING = {
 }
 
 # 加载初始数据
-def init_data_loader():
+def load_init_data():
     def import_init_data_from_data_item():
         def insert_to_model(model_class):
             if model_class:
@@ -286,7 +283,7 @@ def generate_source_code(project):
     migrate_app()
 
     # 导入初始业务数据to kernel & applications
-    init_data_loader()
+    load_init_data()
 
     # source_code = {
     #     'script': {},

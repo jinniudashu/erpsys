@@ -181,18 +181,21 @@
                 const staffTodosListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/staff_todos_list/`);
                 staffTodosListSocket.onmessage = function (event) {
                     _this.staffTodos = JSON.parse(event.data)
+                    console.log('staffTodos:', _this.staffTodos)
                 };
 
                 // 建立信道：未分配服务进程
+                console.log('WebSocket url:', `${ws_scheme}://${window.location.host}/ws/unassigned_procs/`)
                 const unassignedProcsSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/unassigned_procs/`);
                 unassignedProcsSocket.onmessage = function (event) {
                     // 未分配服务进程unassignedProcs
                     _this.unassignedProcs = JSON.parse(event.data);
+                    console.log('unassignedProcs:', _this.unassignedProcs)
                 };
 
                 // 获取员工列表[{'id': 1, 'name': '张三', 'allow_services': [1,2,3]}, ...]
                 const domain = Cookies.get('environment') === 'dev' ? '127.0.0.1:8000' : 'clinic.tpacn.com';
-                const fetchEmployeesURL = `http://${domain}/core/api/get_employees/`;
+                const fetchEmployeesURL = `http://${domain}/api/get_employees/`;
                 const fetchEmployees = async () => {
                     try {
                         const response = await fetch(fetchEmployeesURL, {

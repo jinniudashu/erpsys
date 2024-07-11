@@ -27,6 +27,8 @@ from kernel.models import Operator, Process, Service
 """,
 
     'admin_file_head': f"""from django.contrib import admin
+from django.contrib.auth.models import User
+
 from .models import *
 
 class ApplicationsSite(admin.AdminSite):

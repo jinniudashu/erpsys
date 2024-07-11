@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
+
 from .models import *
 
 class ApplicationsSite(admin.AdminSite):
@@ -17,8 +19,8 @@ class ApplicationsSite(admin.AdminSite):
 
     # 职员登录后的首页
     def index(self, request, extra_context=None):
-        print('ApplicationsSite index:', request.user, extra_context)
-        # user = User.objects.get(username=request.user).customer
+        user = User.objects.get(username=request.user)
+        print('From ApplicationsSite.index:', request.user, extra_context, user)
         return super().index(request, extra_context=extra_context)
 
 applications_site = ApplicationsSite(name = 'ApplicationsSite')
