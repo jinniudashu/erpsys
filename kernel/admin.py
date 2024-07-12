@@ -2,9 +2,9 @@ from django.contrib import admin
 
 from .models import *
 
-@admin.register(ERPSysBaseField)
-class ERPSysBaseField(admin.ModelAdmin):
-    list_display = [field.name for field in ERPSysBaseField._meta.fields]
+@admin.register(ERPSysRegistry)
+class ERPSysRegistryAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ERPSysRegistry._meta.fields]
     list_display_links = ['id']
 
 @admin.register(Role)

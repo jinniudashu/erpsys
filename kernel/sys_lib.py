@@ -10,6 +10,12 @@ def send_channel_message(group_name, message):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(group_name, message)
 
+def get_task_list(operator):
+    task_list ={'public': [1,2,3], 'private': [1,2,3]}
+    # 发送channel_message给操作员
+    send_channel_message(operator.erpsys_id, {'type': 'send_tasks', 'data': task_list})
+
+
 def get_customer_profile_field_value(customer, field_name):
     # 获取客户基本信息表model和系统API字段，用于查询hssc_customer_number和hssc_name
     customer_entity = Resource.objects.get(name='Operator')
@@ -192,4 +198,4 @@ def update_customer_services_list(customer, history_days=0, history_service_name
         'history_services': history_services,
     }
     # 发送channel_message给操作员
-    send_channel_message(f'customer_services_{customer.id}', {'type': 'send_customer_services_list', 'data': servicesList})
+    send_channel_message(f'customer_services_{customer.id}', {'type': 'send_service_list', 'data': servicesList})

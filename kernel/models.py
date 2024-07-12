@@ -34,9 +34,10 @@ class ERPSysBase(models.Model):
             self.label = label
         super().save(*args, **kwargs)
 
-class ERPSysBaseField(ERPSysBase):
+class ERPSysRegistry(ERPSysBase):
+    sys_registry = models.JSONField(blank=True, null=True, verbose_name="系统注册表")
     class Meta:
-        verbose_name = "系统保留字"
+        verbose_name = "系统注册表"
         verbose_name_plural = verbose_name
         ordering = ['id']
 

@@ -52,16 +52,6 @@
         <hr>
         <br>
         
-        <h3>可选服务</h3>
-        <div v-for="service in recommendedServices" :key="service.id">
-            <a :href="'/clinic/new_service/' + service.customer_id + '/' + service.service_id + '/' + service.id + '/'">
-                {{ service.service_label }}
-                <span v-if="service.enable_queue_counter"> ({{ service.queue_count }})</span>
-            </a>
-        </div>
-        <br>
-        <hr>
-        <br>
         <div>
             <select v-model="history_days">
                 <option value=2>过去2天</option>
@@ -106,7 +96,6 @@
         const customerServiceApp = {
             data() {
                 return {
-                    recommendedServices: null,     // 可选服务
                     servicesList: {
                         'scheduled_services': [],  // 已安排服务
                         'history_services': [],    // 历史服务
@@ -132,14 +121,6 @@
 
                 permitted_services_id = Cookies.get('permitted_services_id').slice(1,-1).replace(/\\054 /g, ',').split(',')
                 this.permittedServicesId = permitted_services_id.map(id => parseInt(id))
-
-                var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws"
-
-                // 可选服务信道
-                const recommendedServicesSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/customer_recommended_services_list/${customerId}/`);
-                recommendedServicesSocket.onmessage = function (event) {
-                    _this.recommendedServices = JSON.parse(event.data);
-                }
 
                 this.refreshServicesList();
             },
@@ -173,7 +154,7 @@
                     }
 
                     // 重新建立 WebSocket 连接
-                    this.servicesListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/customer_services_list/${customerId}/${history_days}/${history_service_name}/`);
+                    this.servicesListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/service_list/${customerId}/${history_days}/${history_service_name}/`);
                     this.servicesListSocket.onmessage = (event) => {
                         this.servicesList = JSON.parse(event.data);
                     };

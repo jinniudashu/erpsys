@@ -64,15 +64,15 @@ DATABASES = {
 
 REDIS_HOST = 'redis://localhost:6379'
 CHANNEL_LAYERS = {
-    # 'default': {
-    #     'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    # }    
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [REDIS_HOST],
-        },
-    },
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }    
+    # "default": {
+    #     "BACKEND": "channels_redis.core.RedisChannelLayer",
+    #     "CONFIG": {
+    #         "hosts": [REDIS_HOST],
+    #     },
+    # },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
