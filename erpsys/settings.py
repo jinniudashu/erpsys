@@ -22,6 +22,9 @@ INSTALLED_APPS = [
     'design',
     'kernel',
     'applications',
+    # Celery apps
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -64,15 +67,12 @@ DATABASES = {
 
 REDIS_HOST = 'redis://localhost:6379'
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    }    
-    # "default": {
-    #     "BACKEND": "channels_redis.core.RedisChannelLayer",
-    #     "CONFIG": {
-    #         "hosts": [REDIS_HOST],
-    #     },
-    # },
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [REDIS_HOST],
+        },
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -101,3 +101,12 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CELERY SETTINGS
+CELERY_BROKER_URL = REDIS_HOST
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'Asia/Shanghai'
+# CELERY_RESULT_BACKEND = 'django-db'

@@ -7,7 +7,7 @@ from django.utils import timezone
 from enum import Enum, auto
 
 from kernel.signals import timer_signal, ux_input_signal
-from kernel.models import Process, ServiceRule
+from kernel.models import Process, Service, ServiceRule
 
 # 从两类四种Django信号解析业务事件
 # 一、全局信号
@@ -50,7 +50,21 @@ def preprocess_context(instance: Process, created: bool) -> dict:
 
 @receiver(user_logged_in)
 def on_user_login(sender, user, request, **kwargs):
-    print(f"有用户登录: {user.username}") 
+    print(f"用户{user.username}登录。。。") 
+    # 在Process表中创建一个新的Process实例, state=TERMINATED
+    if request.path == '/applications/login/':  # 后台登录
+        # 获得登陆作业进程参数
+        # event_name = 'doctor_login'
+        # login_service = Service.objects.get(name=event_name)
+        # operator = user.operator
+        print('职员登录', user)
+
+        # 创建一个状态为“已完成”的职员/客户登录作业进程
+        # new_proc=Process.objects.create(
+        #     service=login_service,
+        #     operator=operator,
+        #     state="TERMINATED",
+        # )
 
 @receiver(post_save, sender=Process, dispatch_uid="post_save_pcb")
 def schedule_process_updating(sender, instance: Process, created: bool, **kwargs) -> None:
@@ -78,6 +92,7 @@ def schedule_ux_input(**kwargs):
 
 @receiver(timer_signal)
 def schedule_timer(**kwargs):
+    # 将Celery的定时任务信号转译为业务事件
     """接收定时信号调度"""
     """
     操作系统时钟中断信号，
