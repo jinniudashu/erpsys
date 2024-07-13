@@ -32,6 +32,12 @@ class EventAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Event._meta.fields]
     list_display_links = ['id']
 
+@admin.register(ServiceRule)
+class ServiceRuleAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ServiceRule._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
 @admin.register(WorkOrder)
 class WorkOrderAdmin(admin.ModelAdmin):
     list_display = [field.name for field in WorkOrder._meta.fields]

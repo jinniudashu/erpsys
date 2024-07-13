@@ -943,6 +943,37 @@ class QianShuZhiQingTongYiShuJiLu(models.Model):
             self.label = label
         super().save(*args, **kwargs)
     
+class DengLuQianDaoJiLu(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, related_name='%(class)s_attributes', null=True, blank=True, verbose_name="隶属主体")
+    object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="隶属id")
+    content_object = GenericForeignKey('content_type', 'object_id')
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    qian_dao = models.BooleanField(default=False, verbose_name='签到')
+
+    class Meta:
+        verbose_name = "App-登录签到记录"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+    
+    def __str__(self):
+        return self.label
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w一-龥]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    
 CLASS_MAPPING = {
     "FuWuLeiBie": FuWuLeiBie,
     "RuChuKuCaoZuo": RuChuKuCaoZuo,
@@ -973,5 +1004,6 @@ CLASS_MAPPING = {
     "SuiFangJiLu": SuiFangJiLu,
     "FaSongZhiLiaoZhuYiShiXiangJiLu": FaSongZhiLiaoZhuYiShiXiangJiLu,
     "QianShuZhiQingTongYiShuJiLu": QianShuZhiQingTongYiShuJiLu,
+    "DengLuQianDaoJiLu": DengLuQianDaoJiLu,
 }
 

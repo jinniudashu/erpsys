@@ -34,7 +34,7 @@ class ServiceListConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(f'customer_services_{customer_id}', self.channel_name)
         await self.accept()
 
-        print('from CustomerServicesListConsumer:', self.scope['user'])
+        print('from ServiceListConsumer:', self.scope['user'])
         # 初始化更新客户可选服务列表
         customer = await sync_to_async(Operator.objects.get)(id=customer_id)
         await sync_to_async(update_customer_services_list)(customer, history_days, history_service_name)

@@ -71,10 +71,30 @@ class Service(ERPSysBase):
         ordering = ["id"]
 
 class Event(ERPSysBase):
+    description = models.TextField(max_length=255, blank=True, null=True, verbose_name="描述表达式")
+    expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式")
+    is_timer = models.BooleanField(default=False, verbose_name="定时事件")
+    parameters = models.JSONField(blank=True, null=True, verbose_name="事件参数")
+
     class Meta:
         verbose_name = "服务-事件"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ['id']
+
+class ServiceRule(ERPSysBase):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="服务")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,  blank=True, null=True, verbose_name="事件")
+    next_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_next_service", verbose_name="后续服务")
+    parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
+    order = models.SmallIntegerField(default=0, verbose_name="顺序")
+
+    class Meta:
+        verbose_name = "服务-规则"
+        verbose_name_plural = verbose_name
+        ordering = ['event', 'order']
+
+    def __str__(self):
+        return self.label
 
 class Instruction(ERPSysBase):
     sys_call = models.CharField(max_length=255, verbose_name="系统调用")
@@ -93,6 +113,8 @@ class Process(ERPSysBase):
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name="child_instances", verbose_name="父进程")
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
     state = models.CharField(max_length=50, choices=[(state.name, state.value) for state in ProcessState], default=ProcessState.NEW.name, verbose_name="状态")
+    scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划时间")
+    operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="操作员")
     program = models.JSONField(blank=True, null=True, verbose_name="程序")
     pc = models.PositiveIntegerField(blank=True, null=True, verbose_name="程序计数器")
     registers = models.JSONField(blank=True, null=True, verbose_name="寄存器")

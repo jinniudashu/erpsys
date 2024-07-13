@@ -60,29 +60,11 @@ class CapitalAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
-@admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym']
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-
 @admin.register(Knowledge)
 class KnowledgeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym']
+    list_display = [field.name for field in Knowledge._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-
-# class FormComponentsConfigInline(admin.TabularInline):
-#     model = FormComponentsConfig
-#     extra = 0
-#     autocomplete_fields = ['data_item']
-
-# @admin.register(Form)
-# class FormAdmin(admin.ModelAdmin):
-#     list_display = [field.name for field in Form._meta.fields]
-#     list_display_links = ['label', 'name',]
-#     search_fields = ['label', 'name', 'pym']
-#     inlines = [FormComponentsConfigInline]
 
 class ServiceConsistsInline(admin.TabularInline):
     model = ServiceConsists
@@ -123,6 +105,19 @@ class ServiceAdmin(admin.ModelAdmin):
     inlines = [ServiceConsistsInline, FormConfigInline, MaterialRequirementsInline, EquipmentRequirementsInline, DeviceRequirementsInline, CapitalRequirementsInline, KnowledgeRequirementsInline]
     autocomplete_fields = ['subject']
     filter_horizontal = ['authorize_roles', 'authorize_operators', 'reference']
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Event._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(ServiceRule)
+class ServiceRuleAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ServiceRule._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+    autocomplete_fields = ['event', 'service']
 
 class SourceCodeInline(admin.TabularInline):
     model = SourceCode

@@ -47,7 +47,6 @@ class ApplicationsSite(admin.AdminSite):
 
     # 职员登录后的首页
     def index(self, request, extra_context=None):
-        print('ApplicationsSite index:', request.user, extra_context)
         # user = User.objects.get(username=request.user).customer
         return super().index(request, extra_context=extra_context)
 

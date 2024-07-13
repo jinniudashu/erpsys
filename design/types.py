@@ -67,8 +67,8 @@ class SystemResourceType(Enum):
 
 class ServiceType(Enum):
     """服务类型枚举类"""
-    OPERATION = "作业"
-    SERVICE = "服务"
+    USER = "用户"
+    SYSTEM = "系统"
 
 class FormType(Enum):
     """表单类型枚举类"""

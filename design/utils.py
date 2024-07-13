@@ -3,11 +3,11 @@ from django.utils import timezone
 
 import json
 
-from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event
+from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, ServiceRule as design_ServiceRule
 from design.models import ServiceConsists, FormConfig, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
 from design.script_file_header import ScriptFileHeader, get_admin_script, get_model_footer
 
-from kernel.models import Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event
+from kernel.models import Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, ServiceRule as kernel_ServiceRule
 from applications.models import CLASS_MAPPING, Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
 COPY_CLASS_MAPPING = {
@@ -140,13 +140,35 @@ def load_init_data():
             kernel_Service.objects.create(
                 name=service.name,
                 label=service.label,
+                erpsys_id=service.erpsys_id,
                 config=service_json
             )
             print(f"Exported Service {service.name} to kernel")
 
+        service_rules = design_ServiceRule.objects.all()
+        kernel_ServiceRule.objects.all().delete()
+        for rule in service_rules:
+            kernel_rule = kernel_ServiceRule.objects.create(
+                name=rule.name,
+                label=rule.label,
+                pym=rule.pym,
+                erpsys_id=rule.erpsys_id,
+                parameter_values=rule.parameter_values,
+                order=rule.order,
+            )
+            print('!!! create kernel_rule success:', kernel_rule)
+            _service = kernel_Service.objects.get(erpsys_id=rule.service.erpsys_id)
+            kernel_rule.service = _service
+            event = kernel_Event.objects.get(erpsys_id=rule.event.erpsys_id)
+            kernel_rule.event = event
+            next_service = kernel_Service.objects.get(erpsys_id=rule.next_service.erpsys_id)
+            kernel_rule.next_service = next_service
+            kernel_rule.save()
+            print(f"Exported ServiceRule {kernel_rule} to kernel")
+
     import_init_data_from_data_item()
-    import_service_from_design()
     copy_design_to_kernel()
+    import_service_from_design()
 
 # 生成脚本, 被design.admin调用
 def generate_source_code(project):

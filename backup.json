@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-07-11T12:49:36.942Z",
+            "last_login": "2024-07-13T03:50:41.213Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -77,7 +77,7 @@
             "max_digits": 10,
             "decimal_places": 2,
             "computed_logic": "",
-            "init_content": "[{\"\u4e2d\u6587\u540d\u79f0\": \"\u81ea\u52a8\u8c03\u5ea6\", \"\u540d\u79f0\": \"SystemSchedler\" }]"
+            "init_content": null
         }
     },
     {
@@ -1635,6 +1635,48 @@
         }
     },
     {
+        "model": "design.dataitem",
+        "pk": 121,
+        "fields": {
+            "label": "\u7b7e\u5230",
+            "name": "qian_dao",
+            "pym": "qd",
+            "erpsys_id": "6d4db934-4003-11ef-8ef0-0e586f6f8a1e",
+            "field_type": "BooleanField",
+            "business_type": null,
+            "implement_type": "Field",
+            "dependency_order": 0,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
+        "model": "design.dataitem",
+        "pk": 122,
+        "fields": {
+            "label": "\u767b\u5f55\u7b7e\u5230\u8bb0\u5f55",
+            "name": "deng_lu_qian_dao_ji_lu",
+            "pym": "dlqdjl",
+            "erpsys_id": "83b1bdf6-4003-11ef-8ef0-0e586f6f8a1e",
+            "field_type": "TypeField",
+            "business_type": null,
+            "implement_type": "Model",
+            "dependency_order": 20,
+            "default_value": null,
+            "is_multivalued": false,
+            "max_length": 100,
+            "max_digits": 10,
+            "decimal_places": 2,
+            "computed_logic": "",
+            "init_content": null
+        }
+    },
+    {
         "model": "design.dataitemconsists",
         "pk": 26,
         "fields": {
@@ -2238,73 +2280,95 @@
         }
     },
     {
+        "model": "design.dataitemconsists",
+        "pk": 107,
+        "fields": {
+            "data_item": 122,
+            "sub_data_item": 121,
+            "order": 10
+        }
+    },
+    {
         "model": "design.role",
-        "pk": 457,
+        "pk": 529,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "5b07b5f4-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a00e958-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 458,
+        "pk": 530,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "5b07e312-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a0118f6-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 459,
+        "pk": 531,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "5b07ef2e-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a01265c-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 460,
+        "pk": 532,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "5b07fa5a-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a013304-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 461,
+        "pk": 533,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "5b080590-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a013f52-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 462,
+        "pk": 534,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "5b08106c-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a014db2-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.operator",
-        "pk": 77,
+        "pk": 78,
         "fields": {
             "label": "\u81ea\u52a8\u8c03\u5ea6",
             "name": "SystemSchedler",
             "pym": null,
-            "erpsys_id": "5b078e94-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "a263bb28-4003-11ef-8ef0-0e586f6f8a1e",
+            "user": null,
+            "role": null
+        }
+    },
+    {
+        "model": "design.operator",
+        "pk": 79,
+        "fields": {
+            "label": "\u7ecf\u7406",
+            "name": "Manager",
+            "pym": null,
+            "erpsys_id": "2e0e0d1a-400c-11ef-9a95-0e586f6f8a1e",
+            "user": 1,
             "role": null
         }
     },
@@ -2364,53 +2428,64 @@
         }
     },
     {
+        "model": "design.resource",
+        "pk": 6,
+        "fields": {
+            "label": "\u4eba\u5458",
+            "name": "Operator",
+            "pym": null,
+            "erpsys_id": "d2a1e8ce-40c0-11ef-8159-0e586f6f8a1e",
+            "res_type": "TDM"
+        }
+    },
+    {
         "model": "design.material",
-        "pk": 381,
+        "pk": 441,
         "fields": {
             "label": "100\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "100_dan_wei_bao_tuo_shi",
             "pym": "100dwbts",
-            "erpsys_id": "5b093712-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a02a55e-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 382,
+        "pk": 442,
         "fields": {
             "label": "50\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "50_dan_wei_bao_tuo_shi",
             "pym": "50dwbts",
-            "erpsys_id": "5b094b26-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a02b378-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 383,
+        "pk": 443,
         "fields": {
             "label": "\u55e8\u4f53",
             "name": "hai_ti",
             "pym": "ht",
-            "erpsys_id": "5b097650-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a02c048-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 384,
+        "pk": 444,
         "fields": {
             "label": "\u4e54\u96c5\u767b\u6781\u81f4",
             "name": "qiao_ya_deng_ji_zhi",
             "pym": "qydjz",
-            "erpsys_id": "5b099770-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a02cb92-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 385,
+        "pk": 445,
         "fields": {
             "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
             "name": "yi_ci_xing_zhu_she_qi",
             "pym": "ycxzsq",
-            "erpsys_id": "5b09b1b0-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a02d808-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
@@ -2425,7 +2500,7 @@
             "subject": 57,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2443,7 +2518,7 @@
             "subject": 57,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2461,7 +2536,7 @@
             "subject": 79,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2479,7 +2554,7 @@
             "subject": 79,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2497,7 +2572,7 @@
             "subject": 99,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2515,7 +2590,7 @@
             "subject": 114,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2533,7 +2608,7 @@
             "subject": 115,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2551,7 +2626,7 @@
             "subject": 100,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2569,7 +2644,7 @@
             "subject": 107,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2587,7 +2662,7 @@
             "subject": 108,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2605,7 +2680,7 @@
             "subject": 109,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2623,7 +2698,7 @@
             "subject": 110,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2641,7 +2716,7 @@
             "subject": 111,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2659,7 +2734,7 @@
             "subject": 112,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2677,7 +2752,7 @@
             "subject": 113,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2695,7 +2770,7 @@
             "subject": 117,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2713,7 +2788,7 @@
             "subject": 118,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2731,7 +2806,7 @@
             "subject": 116,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2749,7 +2824,7 @@
             "subject": 101,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
@@ -2767,10 +2842,93 @@
             "subject": null,
             "route_to": null,
             "program": null,
-            "service_type": "OPERATION",
+            "service_type": "USER",
             "authorize_roles": [],
             "authorize_operators": [],
             "reference": []
+        }
+    },
+    {
+        "model": "design.service",
+        "pk": 21,
+        "fields": {
+            "label": "\u7528\u6237\u767b\u5f55",
+            "name": "yong_hu_deng_lu",
+            "pym": "yhdl",
+            "erpsys_id": "b94e64e6-4067-11ef-9e4b-0e586f6f8a1e",
+            "price": null,
+            "subject": null,
+            "route_to": null,
+            "program": null,
+            "service_type": "SYSTEM",
+            "authorize_roles": [],
+            "authorize_operators": [],
+            "reference": []
+        }
+    },
+    {
+        "model": "design.service",
+        "pk": 22,
+        "fields": {
+            "label": "\u7528\u6237\u6ce8\u518c",
+            "name": "yong_hu_zhu_ce",
+            "pym": "yhzc",
+            "erpsys_id": "c7a3bb5e-4067-11ef-9e4b-0e586f6f8a1e",
+            "price": null,
+            "subject": null,
+            "route_to": null,
+            "program": null,
+            "service_type": "SYSTEM",
+            "authorize_roles": [],
+            "authorize_operators": [],
+            "reference": []
+        }
+    },
+    {
+        "model": "design.service",
+        "pk": 23,
+        "fields": {
+            "label": "\u767b\u5f55\u7b7e\u5230\u6d4b\u8bd5\u670d\u52a1",
+            "name": "deng_lu_qian_dao_ce_shi_fu_wu",
+            "pym": "dlqdcsfw",
+            "erpsys_id": "e87642c6-40c5-11ef-95e5-0e586f6f8a1e",
+            "price": null,
+            "subject": 122,
+            "route_to": null,
+            "program": null,
+            "service_type": "USER",
+            "authorize_roles": [],
+            "authorize_operators": [],
+            "reference": []
+        }
+    },
+    {
+        "model": "design.event",
+        "pk": 1,
+        "fields": {
+            "label": "\u5b8c\u6210",
+            "name": "completed",
+            "pym": null,
+            "erpsys_id": "e1b0fc5e-40c2-11ef-a996-0e586f6f8a1e",
+            "description": "",
+            "expression": "state=='TERMINATED'",
+            "is_timer": false,
+            "parameters": null
+        }
+    },
+    {
+        "model": "design.servicerule",
+        "pk": 1,
+        "fields": {
+            "label": "\u7528\u6237\u767b\u5f55\u5b8c\u6210",
+            "name": "logined",
+            "pym": "yhdlwc",
+            "erpsys_id": "9c286804-40c5-11ef-95e5-0e586f6f8a1e",
+            "service": 21,
+            "event": 1,
+            "next_service": 23,
+            "parameter_values": null,
+            "order": 0
         }
     },
     {
@@ -2792,7 +2950,8 @@
             "label": "\u4e2d\u6587\u540d\u79f0",
             "name": "label",
             "pym": "zwmc",
-            "erpsys_id": "291eee82-3cd3-11ef-8717-0e586f6f8a1e"
+            "erpsys_id": "291eee82-3cd3-11ef-8717-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2802,7 +2961,8 @@
             "label": "\u540d\u79f0",
             "name": "name",
             "pym": "mc",
-            "erpsys_id": "2bb4ca54-3cd3-11ef-8717-0e586f6f8a1e"
+            "erpsys_id": "2bb4ca54-3cd3-11ef-8717-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2812,7 +2972,8 @@
             "label": "\u62fc\u97f3\u7801",
             "name": "pym",
             "pym": "pym",
-            "erpsys_id": "457c7d82-3cd4-11ef-95d5-0e586f6f8a1e"
+            "erpsys_id": "457c7d82-3cd4-11ef-95d5-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2822,7 +2983,8 @@
             "label": "ERPSysID",
             "name": "erpsys_id",
             "pym": "erpsysid",
-            "erpsys_id": "621ef03c-3cd4-11ef-95d5-0e586f6f8a1e"
+            "erpsys_id": "621ef03c-3cd4-11ef-95d5-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2832,7 +2994,8 @@
             "label": "\u96b6\u5c5e\u4e3b\u4f53",
             "name": "content_type",
             "pym": "lszt",
-            "erpsys_id": "73f79566-3cd4-11ef-95d5-0e586f6f8a1e"
+            "erpsys_id": "73f79566-3cd4-11ef-95d5-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2842,7 +3005,8 @@
             "label": "\u4e3b\u4f53\u5b9e\u4f8bid",
             "name": "object_id",
             "pym": "ztslid",
-            "erpsys_id": "9e7bfaac-3cd4-11ef-95d5-0e586f6f8a1e"
+            "erpsys_id": "9e7bfaac-3cd4-11ef-95d5-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2852,7 +3016,8 @@
             "label": "\u4e3b\u4f53\u5b9e\u4f8b",
             "name": "content_object",
             "pym": "ztsl",
-            "erpsys_id": "aedeae4e-3cd4-11ef-95d5-0e586f6f8a1e"
+            "erpsys_id": "aedeae4e-3cd4-11ef-95d5-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2862,7 +3027,8 @@
             "label": "\u4f5c\u4e1a\u8fdb\u7a0b",
             "name": "pid",
             "pym": "zyjc",
-            "erpsys_id": "e587ab4e-3cd4-11ef-95d5-0e586f6f8a1e"
+            "erpsys_id": "e587ab4e-3cd4-11ef-95d5-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2872,7 +3038,8 @@
             "label": "\u521b\u5efa\u65f6\u95f4",
             "name": "created_time",
             "pym": "cjsj",
-            "erpsys_id": "1566fe0a-3cd5-11ef-95d5-0e586f6f8a1e"
+            "erpsys_id": "1566fe0a-3cd5-11ef-95d5-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2882,7 +3049,8 @@
             "label": "\u66f4\u65b0\u65f6\u95f4",
             "name": "updated_time",
             "pym": "gxsj",
-            "erpsys_id": "1eb5b028-3cd5-11ef-95d5-0e586f6f8a1e"
+            "erpsys_id": "1eb5b028-3cd5-11ef-95d5-0e586f6f8a1e",
+            "sys_registry": null
         }
     },
     {
@@ -2892,96 +3060,129 @@
             "label": "\u8ba1\u5212\u65f6\u95f4",
             "name": "scheduled_time",
             "pym": "jhsj",
-            "erpsys_id": "74b8395a-3ded-11ef-91c1-0e586f6f8a1e"
+            "erpsys_id": "74b8395a-3ded-11ef-91c1-0e586f6f8a1e",
+            "sys_registry": null
+        }
+    },
+    {
+        "model": "kernel.erpsysregistry",
+        "pk": 12,
+        "fields": {
+            "label": "\u5de5\u5355\u914d\u7f6e",
+            "name": "WorkOrderConf",
+            "pym": null,
+            "erpsys_id": "b9baeb0a-4000-11ef-895e-0e586f6f8a1e",
+            "sys_registry": [
+                {
+                    "field_name": "pid",
+                    "visible": true,
+                    "order": 10
+                },
+                {
+                    "field_name": "service",
+                    "visible": true,
+                    "order": 20
+                },
+                {
+                    "field_name": "operator",
+                    "visible": true,
+                    "order": 30
+                },
+                {
+                    "field_name": "scheduled_time",
+                    "visible": true,
+                    "order": 40
+                }
+            ]
         }
     },
     {
         "model": "kernel.role",
-        "pk": 55,
+        "pk": 127,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "5b07b5f4-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a00e958-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 56,
+        "pk": 128,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "5b07e312-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a0118f6-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 57,
+        "pk": 129,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "5b07ef2e-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a01265c-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 58,
+        "pk": 130,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "5b07fa5a-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a013304-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 59,
+        "pk": 131,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "5b080590-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a013f52-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 60,
+        "pk": 132,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "5b08106c-3eb4-11ef-815f-0e586f6f8a1e"
+            "erpsys_id": "7a014db2-40cb-11ef-a590-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.operator",
-        "pk": 9,
+        "pk": 32,
         "fields": {
             "label": "\u81ea\u52a8\u8c03\u5ea6",
             "name": "SystemSchedler",
             "pym": null,
-            "erpsys_id": "5b078e94-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "a263bb28-4003-11ef-8ef0-0e586f6f8a1e",
             "user": null,
             "role": null
         }
     },
     {
         "model": "kernel.operator",
-        "pk": 10,
+        "pk": 33,
         "fields": {
-            "label": "\u5f20\u4e09",
-            "name": "zhang_san",
-            "pym": "zs",
-            "erpsys_id": "9f6a14d0-3fea-11ef-97e6-0e586f6f8a1e",
+            "label": "\u7ecf\u7406",
+            "name": "Manager",
+            "pym": null,
+            "erpsys_id": "2e0e0d1a-400c-11ef-9a95-0e586f6f8a1e",
             "user": 1,
-            "role": 58
+            "role": null
         }
     },
     {
         "model": "kernel.resource",
-        "pk": 47,
+        "pk": 115,
         "fields": {
             "label": "\u7269\u6599",
             "name": "Material",
@@ -2991,7 +3192,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 48,
+        "pk": 116,
         "fields": {
             "label": "\u8bbe\u5907",
             "name": "Equipment",
@@ -3001,7 +3202,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 49,
+        "pk": 117,
         "fields": {
             "label": "\u5de5\u5177",
             "name": "Device",
@@ -3011,7 +3212,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 50,
+        "pk": 118,
         "fields": {
             "label": "\u8d44\u91d1",
             "name": "Capital",
@@ -3021,7 +3222,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 51,
+        "pk": 119,
         "fields": {
             "label": "\u77e5\u8bc6",
             "name": "Knowledge",
@@ -3030,13 +3231,79 @@
         }
     },
     {
+        "model": "kernel.resource",
+        "pk": 120,
+        "fields": {
+            "label": "\u4eba\u5458",
+            "name": "Operator",
+            "pym": null,
+            "erpsys_id": "d2a1e8ce-40c0-11ef-8159-0e586f6f8a1e"
+        }
+    },
+    {
         "model": "kernel.service",
-        "pk": 141,
+        "pk": 402,
+        "fields": {
+            "label": "\u7528\u6237\u767b\u5f55",
+            "name": "yong_hu_deng_lu",
+            "pym": null,
+            "erpsys_id": "b94e64e6-4067-11ef-9e4b-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "b94e64e6-4067-11ef-9e4b-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {},
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "SYSTEM"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 403,
+        "fields": {
+            "label": "\u7528\u6237\u6ce8\u518c",
+            "name": "yong_hu_zhu_ce",
+            "pym": null,
+            "erpsys_id": "c7a3bb5e-4067-11ef-9e4b-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "c7a3bb5e-4067-11ef-9e4b-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {},
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "SYSTEM"
+            }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 404,
         "fields": {
             "label": "\u7269\u6599\u5165\u5e93",
             "name": "wu_liao_ru_ku",
             "pym": null,
-            "erpsys_id": "5b0bb0d2-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "ef97f612-3b75-11ef-9ede-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "ef97f612-3b75-11ef-9ede-0e586f6f8a1e",
                 "consists": [],
@@ -3056,18 +3323,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 142,
+        "pk": 405,
         "fields": {
             "label": "\u7269\u6599\u51fa\u5e93",
             "name": "wu_liao_chu_ku",
             "pym": null,
-            "erpsys_id": "5b0c1284-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "dcae1c46-3b77-11ef-a2ed-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "dcae1c46-3b77-11ef-a2ed-0e586f6f8a1e",
                 "consists": [],
@@ -3087,18 +3354,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 143,
+        "pk": 406,
         "fields": {
             "label": "\u9884\u7ea6",
             "name": "yu_yue",
             "pym": null,
-            "erpsys_id": "5b0c756c-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "ce926e82-3cf8-11ef-8490-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "ce926e82-3cf8-11ef-8490-0e586f6f8a1e",
                 "consists": [],
@@ -3118,18 +3385,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 144,
+        "pk": 407,
         "fields": {
             "label": "\u9884\u7ea6\u5230\u8bca\u786e\u8ba4",
             "name": "yu_yue_dao_zhen_que_ren",
             "pym": null,
-            "erpsys_id": "5b0cd7c8-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "ffd3a662-3cfa-11ef-8b98-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "ffd3a662-3cfa-11ef-8b98-0e586f6f8a1e",
                 "consists": [],
@@ -3149,18 +3416,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 145,
+        "pk": 408,
         "fields": {
             "label": "\u4e2a\u4eba\u5065\u5eb7\u4fe1\u606f\u8c03\u67e5",
             "name": "ge_ren_jian_kang_xin_xi_diao_cha",
             "pym": null,
-            "erpsys_id": "5b0d2a84-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "9f572ffe-3d02-11ef-97d2-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "9f572ffe-3d02-11ef-97d2-0e586f6f8a1e",
                 "consists": [],
@@ -3180,18 +3447,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 146,
+        "pk": 409,
         "fields": {
             "label": "\u9884\u5145\u503c",
             "name": "yu_chong_zhi",
             "pym": null,
-            "erpsys_id": "5b0d7d90-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "396f8c12-3d03-11ef-9f8b-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "396f8c12-3d03-11ef-9f8b-0e586f6f8a1e",
                 "consists": [],
@@ -3211,18 +3478,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 147,
+        "pk": 410,
         "fields": {
             "label": "\u6536\u8d39",
             "name": "shou_fei",
             "pym": null,
-            "erpsys_id": "5b0dda56-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "3f2757b6-3d03-11ef-9f8b-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "3f2757b6-3d03-11ef-9f8b-0e586f6f8a1e",
                 "consists": [],
@@ -3242,18 +3509,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 148,
+        "pk": 411,
         "fields": {
             "label": "\u9762\u8bca\u8bc4\u4f30",
             "name": "mian_zhen_ping_gu",
             "pym": null,
-            "erpsys_id": "5b0e3118-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "5850919e-3d03-11ef-9f8b-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "5850919e-3d03-11ef-9f8b-0e586f6f8a1e",
                 "consists": [],
@@ -3273,18 +3540,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 149,
+        "pk": 412,
         "fields": {
             "label": "\u8089\u6bd2\u7d20\u6cbb\u7597",
             "name": "rou_du_su_zhi_liao",
             "pym": null,
-            "erpsys_id": "5b0e8dca-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "4bd03324-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "4bd03324-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3304,18 +3571,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 150,
+        "pk": 413,
         "fields": {
             "label": "\u8d85\u58f0\u70ae\u6cbb\u7597",
             "name": "chao_sheng_pao_zhi_liao",
             "pym": null,
-            "erpsys_id": "5b0ef454-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "52d0e8d0-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "52d0e8d0-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3335,18 +3602,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 151,
+        "pk": 414,
         "fields": {
             "label": "\u9ec4\u91d1\u5fae\u9488\u6cbb\u7597",
             "name": "huang_jin_wei_zhen_zhi_liao",
             "pym": null,
-            "erpsys_id": "5b0f4aa8-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "5ae8c5b0-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "5ae8c5b0-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3366,18 +3633,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 152,
+        "pk": 415,
         "fields": {
             "label": "\u8c03Q\u6cbb\u7597",
             "name": "diao_Q_zhi_liao",
             "pym": null,
-            "erpsys_id": "5b0f9e72-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "650f7a52-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "650f7a52-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3397,18 +3664,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 153,
+        "pk": 416,
         "fields": {
             "label": "\u5149\u5b50\u6cbb\u7597",
             "name": "guang_zi_zhi_liao",
             "pym": null,
-            "erpsys_id": "5b0ffc64-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "6a1f70b0-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "6a1f70b0-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3428,18 +3695,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 154,
+        "pk": 417,
         "fields": {
             "label": "\u679c\u9178\u6cbb\u7597",
             "name": "guo_suan_zhi_liao",
             "pym": null,
-            "erpsys_id": "5b105164-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "6e918eee-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "6e918eee-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3459,18 +3726,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 155,
+        "pk": 418,
         "fields": {
             "label": "\u6c34\u5149\u9488\u6cbb\u7597",
             "name": "shui_guang_zhen_zhi_liao",
             "pym": null,
-            "erpsys_id": "5b10a466-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "74a5a00e-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "74a5a00e-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3490,18 +3757,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 156,
+        "pk": 419,
         "fields": {
             "label": "\u53d1\u9001\u6cbb\u7597\u6ce8\u610f\u4e8b\u9879",
             "name": "fa_song_zhi_liao_zhu_yi_shi_xiang",
             "pym": null,
-            "erpsys_id": "5b10ffec-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "a96d64c0-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "a96d64c0-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3521,18 +3788,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 157,
+        "pk": 420,
         "fields": {
             "label": "\u7b7e\u7f72\u77e5\u60c5\u540c\u610f\u4e66",
             "name": "qian_shu_zhi_qing_tong_yi_shu",
             "pym": null,
-            "erpsys_id": "5b115c94-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "ba80a24a-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "ba80a24a-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3552,18 +3819,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 158,
+        "pk": 421,
         "fields": {
             "label": "\u968f\u8bbf",
             "name": "sui_fang",
             "pym": null,
-            "erpsys_id": "5b11aea6-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "ea681916-3d04-11ef-9c6e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "ea681916-3d04-11ef-9c6e-0e586f6f8a1e",
                 "consists": [],
@@ -3583,18 +3850,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 159,
+        "pk": 422,
         "fields": {
             "label": "\u8bca\u65ad\u53ca\u5904\u7406",
             "name": "zhen_duan_ji_chu_li",
             "pym": null,
-            "erpsys_id": "5b120d92-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "a6f93c20-3d11-11ef-9060-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "a6f93c20-3d11-11ef-9060-0e586f6f8a1e",
                 "consists": [],
@@ -3614,18 +3881,18 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
         }
     },
     {
         "model": "kernel.service",
-        "pk": 160,
+        "pk": 423,
         "fields": {
             "label": "\u4efb\u52a1\u63d0\u9192",
             "name": "ren_wu_ti_xing",
             "pym": null,
-            "erpsys_id": "5b1258d8-3eb4-11ef-815f-0e586f6f8a1e",
+            "erpsys_id": "7d2eb35a-3dc7-11ef-a37e-0e586f6f8a1e",
             "config": {
                 "erpsys_id": "7d2eb35a-3dc7-11ef-a37e-0e586f6f8a1e",
                 "consists": [],
@@ -3642,8 +3909,68 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "OPERATION"
+                "service_type": "USER"
             }
+        }
+    },
+    {
+        "model": "kernel.service",
+        "pk": 424,
+        "fields": {
+            "label": "\u767b\u5f55\u7b7e\u5230\u6d4b\u8bd5\u670d\u52a1",
+            "name": "deng_lu_qian_dao_ce_shi_fu_wu",
+            "pym": null,
+            "erpsys_id": "e87642c6-40c5-11ef-95e5-0e586f6f8a1e",
+            "config": {
+                "erpsys_id": "e87642c6-40c5-11ef-95e5-0e586f6f8a1e",
+                "consists": [],
+                "material_requirements": [],
+                "equipment_requirements": [],
+                "device_requirements": [],
+                "capital_requirements": [],
+                "knowledge_requirements": [],
+                "price": "None",
+                "subject": {
+                    "erpsys_id": "83b1bdf6-4003-11ef-8ef0-0e586f6f8a1e",
+                    "name": "DengLuQianDaoJiLu"
+                },
+                "form_config": [],
+                "authorize_roles": [],
+                "authorize_operators": [],
+                "route_to": {},
+                "reference": [],
+                "program": null,
+                "service_type": "USER"
+            }
+        }
+    },
+    {
+        "model": "kernel.event",
+        "pk": 8,
+        "fields": {
+            "label": "\u5b8c\u6210",
+            "name": "completed",
+            "pym": null,
+            "erpsys_id": "e1b0fc5e-40c2-11ef-a996-0e586f6f8a1e",
+            "description": "",
+            "expression": "state=='TERMINATED'",
+            "is_timer": false,
+            "parameters": null
+        }
+    },
+    {
+        "model": "kernel.servicerule",
+        "pk": 6,
+        "fields": {
+            "label": "\u7528\u6237\u767b\u5f55\u5b8c\u6210",
+            "name": "logined",
+            "pym": "yhdlwc",
+            "erpsys_id": "9c286804-40c5-11ef-95e5-0e586f6f8a1e",
+            "service": 402,
+            "event": 8,
+            "next_service": 424,
+            "parameter_values": null,
+            "order": 0
         }
     },
     {

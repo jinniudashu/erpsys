@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 import uuid
 import re
@@ -100,6 +101,7 @@ class Role(ERPSysBase):
         ordering = ['id']
 
 class Operator(ERPSysBase):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='design_operator', verbose_name="用户")
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="角色")
     class Meta:
         verbose_name = "服务-人员"
@@ -293,10 +295,27 @@ class ServiceBOM:
         return parent_services_info
 
 class Event(ERPSysBase):
+    description = models.TextField(max_length=255, blank=True, null=True, verbose_name="描述表达式")
+    expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式")
+    is_timer = models.BooleanField(default=False, verbose_name="定时事件")
+    parameters = models.JSONField(blank=True, null=True, verbose_name="事件参数")
+
     class Meta:
         verbose_name = "服务-事件"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+class ServiceRule(ERPSysBase):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="服务")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,  blank=True, null=True, verbose_name="事件")
+    next_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_next_service", verbose_name="后续服务")
+    parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
+    order = models.SmallIntegerField(default=0, verbose_name="顺序")
+
+    class Meta:
+        verbose_name = "服务-规则"
+        verbose_name_plural = verbose_name
+        ordering = ['event', 'event', 'order']
 
 class Project(ERPSysBase):
     domain = models.CharField(max_length=255, null=True, blank=True, verbose_name="域名")

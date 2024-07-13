@@ -19,8 +19,7 @@ class ApplicationsSite(admin.AdminSite):
 
     # 职员登录后的首页
     def index(self, request, extra_context=None):
-        user = User.objects.get(username=request.user)
-        print('From ApplicationsSite.index:', request.user, extra_context, user)
+        # user = User.objects.get(username=request.user).customer
         return super().index(request, extra_context=extra_context)
 
 applications_site = ApplicationsSite(name = 'ApplicationsSite')
@@ -198,3 +197,9 @@ class QianShuZhiQingTongYiShuJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in QianShuZhiQingTongYiShuJiLu._meta.fields]
     list_display_links = ['id']
 applications_site.register(QianShuZhiQingTongYiShuJiLu, QianShuZhiQingTongYiShuJiLuAdmin)
+
+@admin.register(DengLuQianDaoJiLu)
+class DengLuQianDaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in DengLuQianDaoJiLu._meta.fields]
+    list_display_links = ['id']
+applications_site.register(DengLuQianDaoJiLu, DengLuQianDaoJiLuAdmin)
