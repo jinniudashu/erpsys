@@ -6,8 +6,9 @@ from django.utils import timezone
 
 from enum import Enum, auto
 
-from kernel.signals import timer_signal, ux_input_signal
-from kernel.models import Process, Service, ServiceRule
+from kernel.signals import process_terminated_signal, ux_input_signal
+from kernel.models import Process, Service, ServiceRule, Operator
+from kernel.types import ProcessState
 
 # 从两类四种Django信号解析业务事件
 # 一、全局信号
@@ -19,67 +20,47 @@ from kernel.models import Process, Service, ServiceRule
 
 # 以业务事件为参数，查表ServiceRule，执行SOP
 
-def regular_routine_scheduler(instance: Process, rules: list[ServiceRule], context: dict) -> None:
-    """遍历规则，评估是否发生业务事件"""
-    for rule in rules:
-        # 向上下文添加业务规则附带的参数值
-        context.update(rule.parameter_values if rule.parameter_values else {})
-        context.update({"instance": instance})
-        
-        # 获取规则表达式
-        expression = rule.event.expression
-
-        print("")
-        print("检查服务规则：", rule)
-        print("规则表达式：", expression)
-        print("上下文：", context)
-        # 在给定的上下文中, 检测是否发生业务事件, 如果发生, 则执行SOP
-        if eval(expression, {}, context):
-            # 加载器 loader 执行sop代码
-            exec(rule.sop.program_code, None, context)
+@receiver(user_logged_in)
+def on_user_login(sender, user, request, **kwargs):
+    if request.path == '/applications/login/':  # 应用登录
+        # 创建一个登录进程, state=TERMINATED
+        params = {
+            'service': Service.objects.get(name='user_login'),
+            'operator': Operator.objects.get(user=user),
+            'state': ProcessState.TERMINATED.name,
+        }
+        Process.objects.create(**params)
 
 def preprocess_context(instance: Process, created: bool) -> dict:
     """预处理上下文"""
     pid_context = model_to_dict(instance)
-    model_context = model_to_dict(instance.content_object)
+    model_context = model_to_dict(instance.content_object) if instance.content_object else {}
     control_context = instance.control_context if instance.control_context else {}
     schedule_context = instance.schedule_context if instance.schedule_context else {}
     context = {**model_context, **pid_context, **control_context, **schedule_context}
+    context.update({"instance": instance})
     context.update({"created": created, "timezone_now": timezone.now()})
     return context
 
-@receiver(user_logged_in)
-def on_user_login(sender, user, request, **kwargs):
-    print(f"用户{user.username}登录。。。") 
-    # 在Process表中创建一个新的Process实例, state=TERMINATED
-    if request.path == '/applications/login/':  # 后台登录
-        # 获得登陆作业进程参数
-        # event_name = 'doctor_login'
-        # login_service = Service.objects.get(name=event_name)
-        # operator = user.operator
-        print('职员登录', user)
-
-        # 创建一个状态为“已完成”的职员/客户登录作业进程
-        # new_proc=Process.objects.create(
-        #     service=login_service,
-        #     operator=operator,
-        #     state="TERMINATED",
-        # )
-
-@receiver(post_save, sender=Process, dispatch_uid="post_save_pcb")
+@receiver(post_save, sender=Process, dispatch_uid="post_save_process")
 def schedule_process_updating(sender, instance: Process, created: bool, **kwargs) -> None:
     """接收Process实例更新信号, 调度作业"""
-    # 获取PCB实例对应的Model实例
-    model_instance = instance.content_object
-    # loaddata时model_instance为None, 避免loaddata时调用
-    if model_instance:
-        # 构造进程上下文
-        context = preprocess_context(instance, created)
-        rules = []
-        rules = ServiceRule.objects.filter(event__is_timer=False)
+    # 构造进程上下文
+    context = preprocess_context(instance, created)
 
-        # Schedule in regular routine
-        regular_routine_scheduler(instance, rules, context)
+    rules = ServiceRule.objects.filter(service=instance.service)
+    for rule in rules:
+        # 向上下文添加业务规则附带的参数值
+        # context.update(rule.parameter_values if rule.parameter_values else {})        
+        expression = rule.event.expression
+
+        print("检查服务规则：", rule)
+        print("规则表达式：", expression)
+        print("上下文：", context)
+        if eval(expression, {}, context):
+            # 加载器 loader 执行sop代码
+            print("发生", rule.event, "执行SOP", rule.next_service)
+            # exec(rule.sop.program_code, None, context)
 
 @receiver(ux_input_signal)
 def schedule_ux_input(**kwargs):
@@ -90,7 +71,6 @@ def schedule_ux_input(**kwargs):
     """
     pass
 
-@receiver(timer_signal)
 def schedule_timer(**kwargs):
     # 将Celery的定时任务信号转译为业务事件
     """接收定时信号调度"""

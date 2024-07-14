@@ -52,16 +52,11 @@ class SystemInstructionAdmin(admin.ModelAdmin):
 @admin.register(Process)
 class ProcessAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Process._meta.fields]
-    list_display_links = ['pid', 'service',]
-    search_fields = ['pid', 'service', 'state']
+    list_display_links = ['pid', 'name', 'service',]
+    search_fields = ['pid', 'name', 'service', 'state']
     list_filter = ['state', 'service']
-    # autocomplete_fields = ['service', 'parent']
-    readonly_fields = ['pid', 'created_time', 'updated_time']
-    fieldsets = (
-        (None, {
-            'fields': ('pid', 'service', 'parent', 'state', 'schedule_context', 'control_context', 'program', 'pcb', 'stack', 'heap', 'pc', 'content_type', 'object_id', 'start_time', 'end_time', 'updated_time', 'created_time')
-        }),
-    )
+    # autocomplete_fields = ['service']
+    readonly_fields = ['created_time', 'updated_time']
 
 @admin.register(Stacks)
 class StacksAdmin(admin.ModelAdmin):

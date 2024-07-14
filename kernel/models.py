@@ -21,7 +21,7 @@ class ERPSysBase(models.Model):
         abstract = True
 
     def __str__(self):
-        return str(self.label)
+        return self.label
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -70,10 +70,12 @@ class Service(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ["id"]
 
+    def __str__(self):
+        return self.label
+
 class Event(ERPSysBase):
     description = models.TextField(max_length=255, blank=True, null=True, verbose_name="描述表达式")
-    expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式")
-    is_timer = models.BooleanField(default=False, verbose_name="定时事件")
+    expression = models.CharField(max_length=255, blank=True, null=True, verbose_name="表达式")
     parameters = models.JSONField(blank=True, null=True, verbose_name="事件参数")
 
     class Meta:
@@ -108,8 +110,19 @@ class Instruction(ERPSysBase):
     def __str__(self):
         return self.name
 
-class Process(ERPSysBase):
-    pid = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="进程id")
+class PidField(models.IntegerField):
+    def pre_save(self, model_instance, add):
+        if add:
+            pid = Process.objects.all().last().pid + 1
+            setattr(model_instance, self.attname, pid)
+            return pid
+        else:
+            return super().pre_save(model_instance, add)
+
+class Process(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    pid = PidField(default=0, verbose_name="进程id")
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name="child_instances", verbose_name="父进程")
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
     state = models.CharField(max_length=50, choices=[(state.name, state.value) for state in ProcessState], default=ProcessState.NEW.name, verbose_name="状态")
@@ -141,12 +154,16 @@ class Process(ERPSysBase):
         ordering = ['id']
 
     def __str__(self):
-        return str(self.pid)
+        return self.name if self.name else str(self.pid)
 
     def save(self, *args, **kwargs):
-        if self.pid is None:
-            self.pid = uuid.uuid1()
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.service and self.operator:
+            self.name = f"{self.service} - {self.operator}"
 
+        return super().save(*args, **kwargs)
+    
     def get_all_children(self):
         children = []
         for child in self.child_instances.all():

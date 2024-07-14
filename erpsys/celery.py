@@ -13,11 +13,3 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # 自动从所有已注册的Django app中加载任务
 app.autodiscover_tasks()
-
-app.conf.beat_schedule = {
-    'add-every-5-seconds': {
-        'task': 'kernel.tasks.add',
-        'schedule': timedelta(seconds=5),  # 每5秒执行一次
-        'args': (12, 16)
-    },
-}

@@ -1,5 +1,9 @@
 from celery import shared_task
 
 @shared_task
-def add(x, y):
-    return x + y
+def timer_interrupt():
+    # get timer.pid
+    # get pid.stack
+    # get pid.stack.pc
+    # execute pid.stack.pc
+    return 'execute pid.stack.pc'
