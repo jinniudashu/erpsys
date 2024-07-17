@@ -5,49 +5,48 @@ from .models import *
 @admin.register(ERPSysRegistry)
 class ERPSysRegistryAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ERPSysRegistry._meta.fields]
-    list_display_links = ['id']
+    list_display_links = ['id', 'label', 'name',]
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Role._meta.fields]
-    list_display_links = ['id']
+    list_display_links = ['id', 'label', 'name',]
 
 @admin.register(Operator)
 class OperatorAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Operator._meta.fields]
-    list_display_links = ['id']
+    list_display_links = ['id', 'label', 'name',]
 
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Resource._meta.fields]
-    list_display_links = ['id']
+    list_display_links = ['id', 'label', 'name',]
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Service._meta.fields]
-    list_display_links = ['id']
+    list_display_links = ['id', 'label', 'name',]
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Event._meta.fields]
-    list_display_links = ['id']
+    list_display_links = ['id', 'label', 'name',]
+
+@admin.register(Instruction)
+class InstructionAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Instruction._meta.fields]
+    list_display_links = ['id', 'label', 'name',]
 
 @admin.register(ServiceRule)
 class ServiceRuleAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ServiceRule._meta.fields]
-    list_display_links = ['label', 'name',]
+    list_display_links = ['id', 'label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
 @admin.register(WorkOrder)
 class WorkOrderAdmin(admin.ModelAdmin):
     list_display = [field.name for field in WorkOrder._meta.fields]
-    list_display_links = ['id']
-
-@admin.register(Instruction)
-class SystemInstructionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'sys_call', 'parameters']
-    list_display_links = ['id', 'name',]
-    search_fields = ['name', 'pym']
+    list_display_links = ['id', 'label', 'name',]
 
 @admin.register(Process)
 class ProcessAdmin(admin.ModelAdmin):

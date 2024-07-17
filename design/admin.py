@@ -11,12 +11,12 @@ class DataItemConsistsInline(admin.TabularInline):
 
 @admin.register(DataItem)
 class DataItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'implement_type', 'dependency_order', 'default_value', 'is_multivalued']
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'sub_class', 'implement_type', 'dependency_order', 'affiliated_to', 'default_value', 'is_multivalued']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'implement_type', 'business_type']
     inlines = [DataItemConsistsInline]
-    autocomplete_fields = ['business_type']
+    autocomplete_fields = ['business_type', 'affiliated_to']
 
 @admin.register(Operator)
 class OperatorAdmin(admin.ModelAdmin):
@@ -109,6 +109,12 @@ class ServiceAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Event._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(Instruction)
+class InstructionAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Instruction._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 

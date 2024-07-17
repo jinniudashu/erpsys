@@ -3,11 +3,11 @@ from django.utils import timezone
 
 import json
 
-from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, ServiceRule as design_ServiceRule
+from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule
 from design.models import ServiceConsists, FormConfig, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
 from design.script_file_header import ScriptFileHeader, get_admin_script, get_model_footer
 
-from kernel.models import Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, ServiceRule as kernel_ServiceRule
+from kernel.models import Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule
 from applications.models import CLASS_MAPPING, Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
 COPY_CLASS_MAPPING = {
@@ -15,6 +15,7 @@ COPY_CLASS_MAPPING = {
     "Operator": (design_Operator, kernel_Operator),
     "Resource": (design_Resource, kernel_Resource),
     "Event": (design_Event, kernel_Event),
+    "Instruction": (design_Instruction, kernel_Instruction),
     "Material": (design_Material, applications_Material),
     "Equipment": (design_Equipment, applications_Equipment),
     "Device": (design_Device, applications_Device),
@@ -48,7 +49,7 @@ def load_init_data():
                 model_class = DESIGN_CLASS_MAPPING.get(class_name)
                 insert_to_model(model_class)
             else:
-                class_name = item.get_data_item_classname()
+                class_name = item.get_data_item_class_name()
             model_class = CLASS_MAPPING.get(class_name)
             insert_to_model(model_class)
             print(class_name, item.init_content)
@@ -102,11 +103,15 @@ def load_init_data():
                     {"erpsys_id": req.resource_object.erpsys_id, "name": req.resource_object.name, "quantity": req.quantity}
                     for req in KnowledgeRequirements.objects.filter(service=service)
                 ],
-                "price": str(service.price),
                 "subject": {
                     "erpsys_id": service.subject.erpsys_id,
-                    "name": service.subject.get_data_item_classname()
+                    "name": service.subject.get_data_item_class_name()
                 } if service.subject else {},
+                "master": {
+                    "erpsys_id": service.master.erpsys_id,
+                    "name": service.master.name
+                } if service.master else {},
+                "price": str(service.price),
                 "form_config": [
                     {
                         "erpsys_id": config.data_item.erpsys_id,
@@ -156,11 +161,12 @@ def load_init_data():
                 parameter_values=rule.parameter_values,
                 order=rule.order,
             )
-            print('!!! create kernel_rule success:', kernel_rule)
             _service = kernel_Service.objects.get(erpsys_id=rule.service.erpsys_id)
             kernel_rule.service = _service
             event = kernel_Event.objects.get(erpsys_id=rule.event.erpsys_id)
             kernel_rule.event = event
+            system_operand = kernel_Instruction.objects.get(erpsys_id=rule.system_operand.erpsys_id)
+            kernel_rule.system_operand = system_operand
             next_service = kernel_Service.objects.get(erpsys_id=rule.next_service.erpsys_id)
             kernel_rule.next_service = next_service
             kernel_rule.save()
@@ -222,7 +228,7 @@ def generate_source_code(project):
                         if consist_item.business_type:
                             _field_type = consist_item.business_type.name
                         else:
-                            _field_type = consist_item.get_data_item_classname()
+                            _field_type = consist_item.get_data_item_class_name()
                         if consist_item.is_multivalued:
                             field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, related_name='{field_name}', blank=True, verbose_name='{consist_item.label}')\n"
                         else:
@@ -252,7 +258,7 @@ def generate_source_code(project):
         if data_item.field_type == 'Reserved':
             model_head = f'class {data_item.name}(models.Model):'
         else:
-            model_head = f'class {data_item.get_data_item_classname()}(models.Model):'
+            model_head = f'class {data_item.get_data_item_class_name()}(models.Model):'
         model_head = model_head + ScriptFileHeader['class_base_fields']
         match data_item.name:
             case 'Profile':
@@ -263,7 +269,7 @@ def generate_source_code(project):
 
         # construct admin script
         if data_item.business_type is None:
-            class_name = data_item.get_data_item_classname()
+            class_name = data_item.get_data_item_class_name()
         else:
             class_name = data_item.name
         admin_script = get_admin_script(class_name)
@@ -286,7 +292,7 @@ def generate_source_code(project):
         if item.field_type == 'Reserved':
             class_name = item.name
         else:
-            class_name = item.get_data_item_classname()
+            class_name = item.get_data_item_class_name()
         class_mappings_str = f'{class_mappings_str}    "{class_name}": {class_name},\n'
 
     models_script = models_script + class_mappings_str + '}\n\n'

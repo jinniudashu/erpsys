@@ -3,6 +3,45 @@ import json
 from design.models import DataItem
 
 # 原始业务表单
+"""
+form数据结构说明
+1. 顶层结构
+    •	类型: form
+    •	标签: label
+    •	条目: entries（列表）
+2. 条目结构
+    •	类型: group 或 field
+    •	标签: label
+    •	条目: entries（仅适用于 group 类型）
+3. 字段结构
+    •	字段类型: field_type
+    •	String
+    •	String可能有enum值（仅适用于String类型）
+    •	Date
+    •	Boolean
+    •	Integer
+    •	Decimal
+    •	Text
+4. 嵌套结构
+    •	group 类型条目可以包含其他 group 和 field 类型的条目
+    •	field 类型条目只能包含字段相关信息
+
+从FORMS中导入数据的业务逻辑(至 DataItem, DataItemDict, DataItemDictDetail)
+1. 遍历FORMS的所有form
+2. 遍历form的所有entries里的所有条目
+3. 如果条目的type是field且没有enum, 且DataItem中没有label名相同的对象, 则创建新DataItem对象, 使用条目的label作为新DataItem对象的label, field_type作为field_type;
+4. 如果条目的type是field且有enum, 且DataItem中没有label名为label名+"名称"的对象, 则执行以下2个步骤: 
+    step-1 创建DataItemDict对象, 使用条目的label做为该DataItemDict对象的label, 获取或创建DataItem对象“值”加入到该Dictionary对象的多对多字段fields字段的值中, 将enum的值写入JSONField字段content中;
+    step-2 创建DataItem对象, 使用条目的label做为该DataItem对象的label, 该DataItem对象的field_type为'TypeField', 该DataItem对象的related_dictionary为step-2创建的Dictionary对象;
+5. field_type -> DataItem.field_type 映射关系：
+    •	String -> CharField
+    •	Date -> DateField
+    •	Boolean -> BooleanField
+    •	Integer -> IntegerField
+    •	Decimal -> DecimalField
+    •	Text    -> TextField
+
+"""
 OriginForms = [
     {
         "type": "form",

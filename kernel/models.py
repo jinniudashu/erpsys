@@ -25,7 +25,7 @@ class ERPSysBase(models.Model):
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
-            self.erpsys_id = uuid.uuid1()
+            self.erpsys_id = str(uuid.uuid1())
         if self.label and self.name is None:
             label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
@@ -73,6 +73,11 @@ class Service(ERPSysBase):
     def __str__(self):
         return self.label
 
+    def get_service_model_name(self):
+        pinyin_list = lazy_pinyin(self.label)
+        class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
+        return class_name
+
 class Event(ERPSysBase):
     description = models.TextField(max_length=255, blank=True, null=True, verbose_name="描述表达式")
     expression = models.CharField(max_length=255, blank=True, null=True, verbose_name="表达式")
@@ -83,9 +88,22 @@ class Event(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
+class Instruction(ERPSysBase):
+    sys_call = models.CharField(max_length=255, verbose_name="系统调用")
+    parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
+
+    class Meta:
+        verbose_name = "系统指令"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return self.label
+
 class ServiceRule(ERPSysBase):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="服务")
-    event = models.ForeignKey(Event, on_delete=models.CASCADE,  blank=True, null=True, verbose_name="事件")
+    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
+    event = models.ForeignKey(Event, on_delete=models.SET_NULL,  blank=True, null=True, verbose_name="事件")
+    system_operand = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
     next_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_next_service", verbose_name="后续服务")
     parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
     order = models.SmallIntegerField(default=0, verbose_name="顺序")
@@ -98,22 +116,13 @@ class ServiceRule(ERPSysBase):
     def __str__(self):
         return self.label
 
-class Instruction(ERPSysBase):
-    sys_call = models.CharField(max_length=255, verbose_name="系统调用")
-    parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
-
-    class Meta:
-        verbose_name = "系统指令"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return self.name
-
 class PidField(models.IntegerField):
     def pre_save(self, model_instance, add):
         if add:
-            pid = Process.objects.all().last().pid + 1
+            if Process.objects.all().count() == 0:
+                pid = 1
+            else:
+                pid = Process.objects.all().last().pid + 1
             setattr(model_instance, self.attname, pid)
             return pid
         else:
@@ -143,6 +152,7 @@ class Process(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
+    url = models.URLField(blank=True, null=True, verbose_name="URL")
     start_time = models.DateTimeField(blank=True, null=True, verbose_name="开始时间")
     end_time = models.DateTimeField(blank=True, null=True, verbose_name="结束时间")
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
@@ -158,10 +168,9 @@ class Process(models.Model):
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
-            self.erpsys_id = uuid.uuid1()
+            self.erpsys_id = str(uuid.uuid1())
         if self.service and self.operator:
             self.name = f"{self.service} - {self.operator}"
-
         return super().save(*args, **kwargs)
     
     def get_all_children(self):
@@ -405,46 +414,4 @@ SYS_unlink
 SYS_link
 SYS_mkdir
 SYS_close
-"""
-
-"""
-业务表单
-
-form数据结构说明
-1. 顶层结构
-    •	类型: form
-    •	标签: label
-    •	条目: entries（列表）
-2. 条目结构
-    •	类型: group 或 field
-    •	标签: label
-    •	条目: entries（仅适用于 group 类型）
-3. 字段结构
-    •	字段类型: field_type
-    •	String
-    •	String可能有enum值（仅适用于String类型）
-    •	Date
-    •	Boolean
-    •	Integer
-    •	Decimal
-    •	Text
-4. 嵌套结构
-    •	group 类型条目可以包含其他 group 和 field 类型的条目
-    •	field 类型条目只能包含字段相关信息
-
-从FORMS中导入数据的业务逻辑(至 DataItem, DataItemDict, DataItemDictDetail)
-1. 遍历FORMS的所有form
-2. 遍历form的所有entries里的所有条目
-3. 如果条目的type是field且没有enum, 且DataItem中没有label名相同的对象, 则创建新DataItem对象, 使用条目的label作为新DataItem对象的label, field_type作为field_type;
-4. 如果条目的type是field且有enum, 且DataItem中没有label名为label名+"名称"的对象, 则执行以下2个步骤: 
-    step-1 创建DataItemDict对象, 使用条目的label做为该DataItemDict对象的label, 获取或创建DataItem对象“值”加入到该Dictionary对象的多对多字段fields字段的值中, 将enum的值写入JSONField字段content中;
-    step-2 创建DataItem对象, 使用条目的label做为该DataItem对象的label, 该DataItem对象的field_type为'TypeField', 该DataItem对象的related_dictionary为step-2创建的Dictionary对象;
-5. field_type -> DataItem.field_type 映射关系：
-    •	String -> CharField
-    •	Date -> DateField
-    •	Boolean -> BooleanField
-    •	Integer -> IntegerField
-    •	Decimal -> DecimalField
-    •	Text    -> TextField
-
 """

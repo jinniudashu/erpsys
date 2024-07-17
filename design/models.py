@@ -37,6 +37,8 @@ class DataItem(ERPSysBase):
     consists = models.ManyToManyField('self', through='DataItemConsists', related_name='parent', symmetrical=False, verbose_name="数据项组成")
     field_type = models.CharField(max_length=50, default='CharField', choices=FieldType, null=True, blank=True, verbose_name="数据类型")
     business_type = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='instances', null=True, blank=True, verbose_name="业务类型")
+    sub_class = models.CharField(max_length=255, null=True, blank=True, verbose_name="子类")
+    affiliated_to = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='property_set', null=True, blank=True, verbose_name="业务隶属")
     implement_type = models.CharField(max_length=50, choices=ImplementType, default='Field', verbose_name="实现类型")
     dependency_order = models.PositiveSmallIntegerField(default=0, verbose_name="依赖顺序")
     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
@@ -52,7 +54,7 @@ class DataItem(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['implement_type', 'dependency_order', 'field_type', 'id']
 
-    def get_data_item_classname(self):
+    def get_data_item_class_name(self):
         pinyin_list = lazy_pinyin(self.label)
         class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
         return class_name
@@ -156,9 +158,9 @@ class Service(ERPSysBase):
     device_requirements = models.ManyToManyField(Device, through='DeviceRequirements', verbose_name="器材需求")
     capital_requirements = models.ManyToManyField(Capital, through='CapitalRequirements', verbose_name="资金需求")
     knowledge_requirements = models.ManyToManyField(Knowledge, through='KnowledgeRequirements', verbose_name="知识需求")
-    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='价格')
     subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type='Model'), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
-    form_config = models.ManyToManyField(DataItem, through='FormConfig', related_name='servicices_form_config', verbose_name="表单设置")
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='价格')
+    form_config = models.ManyToManyField(DataItem, through='FormConfig', related_name='services_form_config', verbose_name="表单设置")
     authorize_roles = models.ManyToManyField(Role, related_name='roles_authorized', blank=True, verbose_name="允许角色")
     authorize_operators = models.ManyToManyField(Operator, related_name='operators_authorized', blank=True, verbose_name="允许操作员")
     route_to = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='services_routed_from', blank=True, null=True, verbose_name="传递至")
@@ -305,9 +307,19 @@ class Event(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
+class Instruction(ERPSysBase):
+    sys_call = models.CharField(max_length=255, verbose_name="系统调用")
+    parameters = models.JSONField(blank=True, null=True, verbose_name="参数")
+
+    class Meta:
+        verbose_name = "系统指令"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
 class ServiceRule(ERPSysBase):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="服务")
     event = models.ForeignKey(Event, on_delete=models.CASCADE,  blank=True, null=True, verbose_name="事件")
+    system_operand = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
     next_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_next_service", verbose_name="后续服务")
     parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
     order = models.SmallIntegerField(default=0, verbose_name="顺序")

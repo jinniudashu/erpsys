@@ -1,10 +1,58 @@
 from django.db.models import Q
 from django.utils import timezone
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
+import json
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 from kernel.models import *
+from kernel.types import ProcessState
+
+from applications.models import *
+def sys_create_business_record(**kwargs):
+    print('running sys_create_service_instance:', kwargs)
+    service = kwargs.get('service')
+    model_name = service.config['subject']['name']
+    params = {
+        'label': service.label,
+        'pid': kwargs.get('instance'),
+    }
+    service_data_instance = eval(model_name).objects.create(**params)
+
+    return service_data_instance
+
+def sys_create_process(**kwargs):
+    print('running sys_create_process:', kwargs)
+    service = kwargs.get('service')
+    master = service.config['master']['name']
+    params = {
+        'parent': kwargs.get('instance'),
+        'service': service,
+        'state': ProcessState.NEW.name,
+    }
+    proc = Process.objects.create(**params)
+
+    kwargs['instance'] = proc
+    business_entity_instance = sys_create_business_record(**kwargs)
+    proc.content_object = business_entity_instance
+    # proc.url = 
+    proc.save()
+
+
+
+def add_periodic_task(every, task_name):
+    interval_schedule, created = IntervalSchedule.objects.get_or_create(
+        every=every,
+        period=IntervalSchedule.SECONDS,
+    )
+    periodic_task = PeriodicTask.objects.create(
+        name=task_name,
+        interval=interval_schedule,
+        task='kernel.tasks.timer_interrupt',
+        args=json.dumps([task_name]),  # 将任务名作为参数传递
+        one_off=True
+    )
 
 def send_channel_message(group_name, message):
     channel_layer = get_channel_layer()
@@ -14,7 +62,6 @@ def get_task_list(operator):
     task_list ={'public': [1,2,3], 'private': [1,2,3]}
     # 发送channel_message给操作员
     send_channel_message(operator.erpsys_id, {'type': 'send_tasks', 'data': task_list})
-
 
 def get_customer_profile_field_value(customer, field_name):
     # 获取客户基本信息表model和系统API字段，用于查询hssc_customer_number和hssc_name

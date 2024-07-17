@@ -23,7 +23,8 @@ call_command(
         'sessions.session',
         'admin.logentry',
         'contenttypes',
-        'applications'
+        'applications',
+        'kernel.process',  # 开发阶段不备份Process，以避免恢复时触发生成PERIODIC TASKS，导致恢复失败
     ]
 )
 

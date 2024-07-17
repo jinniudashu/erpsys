@@ -26,7 +26,7 @@ class FuWuLeiBie(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -56,7 +56,7 @@ class RuChuKuCaoZuo(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -86,7 +86,7 @@ class KeHuLaiYuan(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -116,7 +116,7 @@ class HunFou(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -146,7 +146,7 @@ class ZhengZhuang(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -176,7 +176,7 @@ class ZhenDuan(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -209,7 +209,7 @@ class Material(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -239,7 +239,7 @@ class Equipment(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -269,7 +269,7 @@ class Device(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -299,7 +299,7 @@ class Capital(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -331,7 +331,7 @@ class Knowledge(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -372,7 +372,7 @@ class Profile(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -410,7 +410,7 @@ class WuLiaoTaiZhang(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -453,7 +453,7 @@ class YuYueJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -489,7 +489,7 @@ class JianKangDiaoChaJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -521,7 +521,7 @@ class ZhuanKePingGuJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -555,7 +555,7 @@ class ZhenDuanJiChuLiYiJianJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -586,7 +586,7 @@ class RouDuSuZhiLiaoJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -617,7 +617,7 @@ class ChaoShengPaoZhiLiaoJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -648,7 +648,7 @@ class HuangJinWeiZhenZhiLiaoJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -679,7 +679,7 @@ class DiaoQZhiLiaoJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -710,7 +710,7 @@ class GuangZiZhiLiaoJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -741,7 +741,7 @@ class GuoSuanZhiLiaoJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -772,7 +772,7 @@ class ShuiGuangZhenZhiLiaoJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -803,7 +803,7 @@ class ChongZhiJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -834,7 +834,7 @@ class XiaoFeiJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -865,7 +865,7 @@ class SuiFangJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -898,7 +898,7 @@ class FaSongZhiLiaoZhuYiShiXiangJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -931,7 +931,7 @@ class QianShuZhiQingTongYiShuJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
@@ -962,7 +962,7 @@ class DengLuQianDaoJiLu(models.Model):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:

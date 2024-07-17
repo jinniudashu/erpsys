@@ -64,7 +64,7 @@ def get_model_footer(verbose_name):
         ordering = ["id"]
     
     def __str__(self):
-        return self.label
+        return self.label if self.label else ''
 
     def save(self, *args, **kwargs):
         if self.erpsys_id is None:
