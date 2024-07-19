@@ -1,0 +1,159 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">
+<link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+{% verbatim %}
+<div id="app">
+    <el-container>
+        <el-aside width="200px">
+            <el-menu
+                default-active="1"
+                class="el-menu-vertical-demo"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b">
+                <el-menu-item index="1">首页</el-menu-item>
+                <el-menu-item index="2">角色管理</el-menu-item>
+                <el-menu-item index="3">店铺管理</el-menu-item>
+                <el-submenu index="4">
+                    <template #title>财务管理</template>
+                    <el-menu-item index="4-1">店铺结算报表</el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </el-aside>
+
+        <el-container>
+            <el-header>
+                <filter-bar></filter-bar>
+            </el-header>
+
+            <el-main>
+                <data-table></data-table>
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+{% endverbatim %}
+{% endblock %}
+
+{% block extrahead %}
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/element-plus"></script>
+{% endblock %}
+
+{% block footer %}
+<script>
+const { createApp, ref, onMounted } = Vue;
+
+const FilterBar = {
+  template: `
+    <el-form :inline="true" :model="form">
+      <el-form-item label="品类">
+        <el-input v-model="form.category"></el-input>
+      </el-form-item>
+      <el-form-item label="客服">
+        <el-select v-model="form.customerService" placeholder="选择客服">
+          <el-option label="客服1" value="1"></el-option>
+          <el-option label="客服2" value="2"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSearch">查询</el-button>
+        <el-button @click="onReset">重置</el-button>
+      </el-form-item>
+    </el-form>
+  `,
+  setup() {
+    const form = ref({
+      category: '',
+      customerService: ''
+    });
+
+    const onSearch = () => {
+      // Implement search functionality
+    };
+
+    const onReset = () => {
+      form.value = {
+        category: '',
+        customerService: ''
+      };
+    };
+
+    return { form, onSearch, onReset };
+  }
+};
+
+const DataTable = {
+  template: `
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="100"></el-table-column>
+      <el-table-column prop="name" label="名称"></el-table-column>
+      <el-table-column prop="customerService" label="客服"></el-table-column>
+      <el-table-column prop="business" label="业务员"></el-table-column>
+      <el-table-column prop="storeScore" label="店铺评分"></el-table-column>
+      <el-table-column prop="creationTime" label="创建时间"></el-table-column>
+      <el-table-column prop="authorizationStatus" label="授权状态"></el-table-column>
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button @click="onEdit(scope.row)">修改</el-button>
+          <el-button @click="onSchedule(scope.row)">预约</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  `,
+  setup() {
+    const tableData = ref([]);
+
+    const fetchData = async () => {
+      const response = await fetch('/api/data-endpoint'); // Replace with your API endpoint
+      const data = await response.json();
+      tableData.value = data;
+    };
+
+    onMounted(() => {
+      fetchData();
+    });
+
+    const onEdit = (row) => {
+      // Implement edit functionality
+    };
+
+    const onSchedule = (row) => {
+      // Implement schedule functionality
+    };
+
+    return { tableData, onEdit, onSchedule };
+  }
+};
+
+const app = createApp({
+  components: {
+    FilterBar,
+    DataTable
+  }
+});
+
+// Globally register all components from Element Plus
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component);
+}
+
+app.use(ElementPlus);
+app.mount('#app');
+</script>
+{% endblock %}

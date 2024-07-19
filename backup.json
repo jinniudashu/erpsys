@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-07-17T06:25:04.879Z",
+            "last_login": "2024-07-18T06:33:44.209Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -27,10 +27,10 @@
             "erpsys_id": "360cc6d4-2a2f-11ef-a3b6-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -50,10 +50,10 @@
             "erpsys_id": "3c736910-2a2f-11ef-a3b6-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -73,10 +73,10 @@
             "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 16,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "KernelModel",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -96,10 +96,10 @@
             "erpsys_id": "6c35906e-2a30-11ef-8c28-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 93,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 10,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -119,10 +119,10 @@
             "erpsys_id": "793baa96-2a30-11ef-8c28-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 93,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 10,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -142,10 +142,10 @@
             "erpsys_id": "88656aca-2a30-11ef-8c28-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 93,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 10,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -165,10 +165,10 @@
             "erpsys_id": "9cc2ba4a-2a30-11ef-8c28-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 93,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 10,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -188,10 +188,10 @@
             "erpsys_id": "e66128a8-2a30-11ef-8c28-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 58,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -211,10 +211,10 @@
             "erpsys_id": "c26877c0-2c6b-11ef-81c5-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 39,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "KernelModel",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -234,10 +234,10 @@
             "erpsys_id": "c26b0d6e-2c6b-11ef-81c5-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -257,10 +257,10 @@
             "erpsys_id": "1a262aca-2c6c-11ef-a7db-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -280,10 +280,10 @@
             "erpsys_id": "2442df12-2c6c-11ef-a7db-0e586f6f8a1e",
             "field_type": "IntegerField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -303,10 +303,10 @@
             "erpsys_id": "dedac8a6-2eee-11ef-9033-0e586f6f8a1e",
             "field_type": "User",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -326,10 +326,10 @@
             "erpsys_id": "6ae389e6-2eef-11ef-9033-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -349,10 +349,10 @@
             "erpsys_id": "969da256-374b-11ef-8cb0-0e586f6f8a1e",
             "field_type": "DateTimeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": "ref(\u7cfb\u7edf\u65f6\u95f4)",
             "is_multivalued": false,
             "max_length": 100,
@@ -372,10 +372,10 @@
             "erpsys_id": "c07afc04-374b-11ef-8cb0-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 16,
+            "sub_class": "role__label__in=['\u533b\u751f','\u62a4\u58eb','\u5ba2\u670d']",
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": "role__label__in=['\u533b\u751f','\u62a4\u58eb','\u5ba2\u670d']",
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -395,10 +395,10 @@
             "erpsys_id": "3904dbe0-374c-11ef-8bb9-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 16,
+            "sub_class": "role__label='\u5ba2\u6237'",
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": "role__label='\u5ba2\u6237'",
             "default_value": null,
             "is_multivalued": true,
             "max_length": 100,
@@ -418,10 +418,10 @@
             "erpsys_id": "ad9b842c-374c-11ef-9964-0e586f6f8a1e",
             "field_type": "DateField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -441,10 +441,10 @@
             "erpsys_id": "1a27c720-3844-11ef-80e6-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 18,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 18,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -464,10 +464,10 @@
             "erpsys_id": "f37f2712-38e8-11ef-97ad-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 58,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "KernelModel",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -487,10 +487,10 @@
             "erpsys_id": "4a73d3fa-391c-11ef-b673-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -510,10 +510,10 @@
             "erpsys_id": "5920492e-391c-11ef-b673-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -533,10 +533,10 @@
             "erpsys_id": "f9f40dd6-3ac0-11ef-8ca9-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 16,
+            "sub_class": "role__label__in=['\u533b\u751f','\u62a4\u58eb','\u5ba2\u670d','\u7ba1\u7406\u5458','System']",
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": "role__label__in=['\u533b\u751f','\u62a4\u58eb','\u5ba2\u670d','\u7ba1\u7406\u5458','System']",
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -556,10 +556,10 @@
             "erpsys_id": "27d39a66-3b69-11ef-a6ee-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 93,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 10,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -579,10 +579,10 @@
             "erpsys_id": "58f8f38e-3b69-11ef-a6ee-0e586f6f8a1e",
             "field_type": "TextField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -602,10 +602,10 @@
             "erpsys_id": "6f30c140-3b69-11ef-a6ee-0e586f6f8a1e",
             "field_type": "FileField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -625,10 +625,10 @@
             "erpsys_id": "d9467f38-3b6f-11ef-bf7d-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 67,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "KernelModel",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -648,10 +648,10 @@
             "erpsys_id": "3dde70e6-3b92-11ef-a188-0e586f6f8a1e",
             "field_type": "IntegerField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -671,10 +671,10 @@
             "erpsys_id": "5e1494b2-3b92-11ef-a188-0e586f6f8a1e",
             "field_type": "IntegerField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -694,10 +694,10 @@
             "erpsys_id": "1a830c04-3b94-11ef-8912-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 58,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -717,10 +717,10 @@
             "erpsys_id": "d703481a-3b96-11ef-8779-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -740,10 +740,10 @@
             "erpsys_id": "e6c8345e-3b96-11ef-8779-0e586f6f8a1e",
             "field_type": "DecimalField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -763,10 +763,10 @@
             "erpsys_id": "f6e6c3fa-3b96-11ef-8779-0e586f6f8a1e",
             "field_type": "IntegerField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -786,10 +786,10 @@
             "erpsys_id": "51424c48-3b97-11ef-aa58-0e586f6f8a1e",
             "field_type": "IntegerField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -809,10 +809,10 @@
             "erpsys_id": "5a81d1d4-3b97-11ef-aa58-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -832,10 +832,10 @@
             "erpsys_id": "b95b8560-3b97-11ef-aa58-0e586f6f8a1e",
             "field_type": "DateField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -855,10 +855,10 @@
             "erpsys_id": "c4953e58-3c0a-11ef-9c58-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -878,10 +878,10 @@
             "erpsys_id": "fb689c22-3c0a-11ef-9c58-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -901,10 +901,10 @@
             "erpsys_id": "52649986-3c0b-11ef-9c58-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 80,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -924,10 +924,10 @@
             "erpsys_id": "cfb6bf76-3c0c-11ef-a3d8-0e586f6f8a1e",
             "field_type": "DateTimeField",
             "business_type": 80,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -947,10 +947,10 @@
             "erpsys_id": "fcec633e-3c10-11ef-9bc5-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -970,10 +970,10 @@
             "erpsys_id": "1b52f242-3c12-11ef-adf0-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -993,10 +993,10 @@
             "erpsys_id": "d8a58526-3c12-11ef-9c3f-0e586f6f8a1e",
             "field_type": "BooleanField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1016,10 +1016,10 @@
             "erpsys_id": "da28f1ca-3c13-11ef-ba98-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1039,10 +1039,10 @@
             "erpsys_id": "61f89178-3c14-11ef-ba98-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1062,10 +1062,10 @@
             "erpsys_id": "fefc8812-3c37-11ef-8d55-0e586f6f8a1e",
             "field_type": "TextField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1085,10 +1085,10 @@
             "erpsys_id": "b1dc79bc-3c3b-11ef-9d80-0e586f6f8a1e",
             "field_type": "DateTimeField",
             "business_type": 91,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": "ref(\u7cfb\u7edf\u65f6\u95f4)",
             "is_multivalued": false,
             "max_length": 100,
@@ -1108,10 +1108,10 @@
             "erpsys_id": "680fce14-3c3c-11ef-9d80-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 91,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1131,10 +1131,10 @@
             "erpsys_id": "ee7880c6-3c4c-11ef-b00e-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 16,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 10,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1154,10 +1154,10 @@
             "erpsys_id": "181d5dae-3cd7-11ef-9b00-0e586f6f8a1e",
             "field_type": "Reserved",
             "business_type": 93,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "KernelModel",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1177,10 +1177,10 @@
             "erpsys_id": "91880de8-3cf9-11ef-8490-0e586f6f8a1e",
             "field_type": "BooleanField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": "True",
             "is_multivalued": false,
             "max_length": 100,
@@ -1200,10 +1200,10 @@
             "erpsys_id": "ad100b24-3cf9-11ef-8490-0e586f6f8a1e",
             "field_type": "BooleanField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": "False",
             "is_multivalued": false,
             "max_length": 100,
@@ -1223,10 +1223,10 @@
             "erpsys_id": "908a69e0-3d0d-11ef-ba75-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 16,
+            "sub_class": "role__label='\u533b\u751f'",
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": "role__label='\u533b\u751f'",
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1246,10 +1246,10 @@
             "erpsys_id": "7a677936-3d0e-11ef-a4a3-0e586f6f8a1e",
             "field_type": "DateField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1269,10 +1269,10 @@
             "erpsys_id": "afff3c50-3d0e-11ef-a4a3-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1292,10 +1292,10 @@
             "erpsys_id": "0c20c364-3d0f-11ef-a4a3-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1315,10 +1315,10 @@
             "erpsys_id": "7b5cf414-3d0f-11ef-a4a3-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1338,10 +1338,10 @@
             "erpsys_id": "c1819c92-3d0f-11ef-a4a3-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1361,10 +1361,10 @@
             "erpsys_id": "e7fd7e7c-3d0f-11ef-a4a3-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": true,
             "max_length": 100,
@@ -1384,10 +1384,10 @@
             "erpsys_id": "f646c560-3d0f-11ef-a4a3-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Model",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": true,
             "max_length": 100,
@@ -1407,10 +1407,10 @@
             "erpsys_id": "0a8dd32e-3d10-11ef-a4a3-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 58,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1430,10 +1430,10 @@
             "erpsys_id": "5d719d54-3d8e-11ef-a31c-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": 16,
+            "sub_class": "role__label='\u5ba2\u6237'",
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": "role__label='\u5ba2\u6237'",
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1453,10 +1453,10 @@
             "erpsys_id": "66c291aa-3d8f-11ef-a31c-0e586f6f8a1e",
             "field_type": "TextField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1476,10 +1476,10 @@
             "erpsys_id": "17252328-3d90-11ef-a31c-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1499,10 +1499,10 @@
             "erpsys_id": "57b4c93e-3d90-11ef-a31c-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1522,10 +1522,10 @@
             "erpsys_id": "6dcfc61a-3d90-11ef-a31c-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1545,10 +1545,10 @@
             "erpsys_id": "8442b06a-3d90-11ef-a31c-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1568,10 +1568,10 @@
             "erpsys_id": "bf9ee46c-3d90-11ef-a31c-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1591,10 +1591,10 @@
             "erpsys_id": "d3094556-3d90-11ef-a31c-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1614,10 +1614,10 @@
             "erpsys_id": "16fe8226-3d91-11ef-a31c-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1637,10 +1637,10 @@
             "erpsys_id": "56e1f028-3d9e-11ef-9bfc-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1660,10 +1660,10 @@
             "erpsys_id": "66536bcc-3d9e-11ef-9bfc-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1683,10 +1683,10 @@
             "erpsys_id": "80351fea-3d9e-11ef-9bfc-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1706,10 +1706,10 @@
             "erpsys_id": "e4a1b3b6-3dc7-11ef-a37e-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1729,10 +1729,10 @@
             "erpsys_id": "2a04da0a-3dc8-11ef-a37e-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1752,10 +1752,10 @@
             "erpsys_id": "c9547eda-3dc8-11ef-a37e-0e586f6f8a1e",
             "field_type": "BooleanField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1775,10 +1775,10 @@
             "erpsys_id": "d3e229f6-3dc8-11ef-a37e-0e586f6f8a1e",
             "field_type": "CharField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1798,10 +1798,10 @@
             "erpsys_id": "6d4db934-4003-11ef-8ef0-0e586f6f8a1e",
             "field_type": "BooleanField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": null,
             "implement_type": "Field",
             "dependency_order": 0,
-            "affiliated_to": null,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1821,10 +1821,10 @@
             "erpsys_id": "83b1bdf6-4003-11ef-8ef0-0e586f6f8a1e",
             "field_type": "TypeField",
             "business_type": null,
+            "sub_class": null,
+            "affiliated_to": 105,
             "implement_type": "Model",
             "dependency_order": 20,
-            "affiliated_to": 105,
-            "sub_class": null,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 100,
@@ -1840,15 +1840,6 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 53,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 27,
-        "fields": {
-            "data_item": 57,
-            "sub_data_item": 18,
             "order": 10
         }
     },
@@ -2268,127 +2259,10 @@
     },
     {
         "model": "design.dataitemconsists",
-        "pk": 88,
-        "fields": {
-            "data_item": 101,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 89,
-        "fields": {
-            "data_item": 100,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
         "pk": 90,
         "fields": {
             "data_item": 100,
             "sub_data_item": 106,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 91,
-        "fields": {
-            "data_item": 107,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 92,
-        "fields": {
-            "data_item": 108,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 93,
-        "fields": {
-            "data_item": 109,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 94,
-        "fields": {
-            "data_item": 110,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 95,
-        "fields": {
-            "data_item": 111,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 96,
-        "fields": {
-            "data_item": 112,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 97,
-        "fields": {
-            "data_item": 113,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 98,
-        "fields": {
-            "data_item": 114,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 99,
-        "fields": {
-            "data_item": 115,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 100,
-        "fields": {
-            "data_item": 116,
-            "sub_data_item": 105,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 101,
-        "fields": {
-            "data_item": 117,
-            "sub_data_item": 105,
             "order": 10
         }
     },
@@ -2407,15 +2281,6 @@
         "fields": {
             "data_item": 117,
             "sub_data_item": 119,
-            "order": 10
-        }
-    },
-    {
-        "model": "design.dataitemconsists",
-        "pk": 104,
-        "fields": {
-            "data_item": 118,
-            "sub_data_item": 105,
             "order": 10
         }
     },
@@ -2448,62 +2313,62 @@
     },
     {
         "model": "design.role",
-        "pk": 571,
+        "pk": 619,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "bd8e4e4e-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc1288-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 572,
+        "pk": 620,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "bd8e8238-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc403c-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 573,
+        "pk": 621,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "bd8e93ea-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc4c9e-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 574,
+        "pk": 622,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "bd8ea452-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc58a6-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 575,
+        "pk": 623,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "bd8eb532-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc6472-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.role",
-        "pk": 576,
+        "pk": 624,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "bd8eccde-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc6fbc-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
@@ -2515,7 +2380,7 @@
             "pym": null,
             "erpsys_id": "a263bb28-4003-11ef-8ef0-0e586f6f8a1e",
             "user": null,
-            "role": 576
+            "role": null
         }
     },
     {
@@ -2527,7 +2392,7 @@
             "pym": null,
             "erpsys_id": "2e0e0d1a-400c-11ef-9a95-0e586f6f8a1e",
             "user": 1,
-            "role": 574
+            "role": null
         }
     },
     {
@@ -2598,52 +2463,52 @@
     },
     {
         "model": "design.material",
-        "pk": 476,
+        "pk": 516,
         "fields": {
             "label": "100\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "100_dan_wei_bao_tuo_shi",
             "pym": "100dwbts",
-            "erpsys_id": "bd903a06-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfdd078-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 477,
+        "pk": 517,
         "fields": {
             "label": "50\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "50_dan_wei_bao_tuo_shi",
             "pym": "50dwbts",
-            "erpsys_id": "bd904e88-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfddf82-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 478,
+        "pk": 518,
         "fields": {
             "label": "\u55e8\u4f53",
             "name": "hai_ti",
             "pym": "ht",
-            "erpsys_id": "bd905e14-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfdec84-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 479,
+        "pk": 519,
         "fields": {
             "label": "\u4e54\u96c5\u767b\u6781\u81f4",
             "name": "qiao_ya_deng_ji_zhi",
             "pym": "qydjz",
-            "erpsys_id": "bd9070a2-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfdf7e2-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "design.material",
-        "pk": 480,
+        "pk": 520,
         "fields": {
             "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
             "name": "yi_ci_xing_zhu_she_qi",
             "pym": "ycxzsq",
-            "erpsys_id": "bd9082ae-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfe0458-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
@@ -3251,67 +3116,67 @@
     },
     {
         "model": "kernel.role",
-        "pk": 169,
+        "pk": 217,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "bd8e4e4e-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc1288-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 170,
+        "pk": 218,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "bd8e8238-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc403c-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 171,
+        "pk": 219,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "bd8e93ea-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc4c9e-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 172,
+        "pk": 220,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "bd8ea452-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc58a6-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 173,
+        "pk": 221,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "bd8eb532-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc6472-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.role",
-        "pk": 174,
+        "pk": 222,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "bd8eccde-4379-11ef-b181-0e586f6f8a1e"
+            "erpsys_id": "8bfc6fbc-441b-11ef-b753-0e586f6f8a1e"
         }
     },
     {
         "model": "kernel.operator",
-        "pk": 46,
+        "pk": 62,
         "fields": {
             "label": "\u81ea\u52a8\u8c03\u5ea6",
             "name": "SystemSchedler",
@@ -3323,7 +3188,7 @@
     },
     {
         "model": "kernel.operator",
-        "pk": 47,
+        "pk": 63,
         "fields": {
             "label": "\u7ecf\u7406",
             "name": "Manager",
@@ -3335,7 +3200,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 157,
+        "pk": 205,
         "fields": {
             "label": "\u7269\u6599",
             "name": "Material",
@@ -3345,7 +3210,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 158,
+        "pk": 206,
         "fields": {
             "label": "\u8bbe\u5907",
             "name": "Equipment",
@@ -3355,7 +3220,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 159,
+        "pk": 207,
         "fields": {
             "label": "\u5de5\u5177",
             "name": "Device",
@@ -3365,7 +3230,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 160,
+        "pk": 208,
         "fields": {
             "label": "\u8d44\u91d1",
             "name": "Capital",
@@ -3375,7 +3240,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 161,
+        "pk": 209,
         "fields": {
             "label": "\u77e5\u8bc6",
             "name": "Knowledge",
@@ -3385,7 +3250,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 162,
+        "pk": 210,
         "fields": {
             "label": "\u4eba\u5458",
             "name": "Operator",
@@ -3395,7 +3260,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 563,
+        "pk": 739,
         "fields": {
             "label": "\u7528\u6237\u767b\u5f55",
             "name": "user_login",
@@ -3410,10 +3275,6 @@
                 "capital_requirements": [],
                 "knowledge_requirements": [],
                 "subject": {},
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3427,7 +3288,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 564,
+        "pk": 740,
         "fields": {
             "label": "\u7528\u6237\u6ce8\u518c",
             "name": "user_register",
@@ -3442,10 +3303,6 @@
                 "capital_requirements": [],
                 "knowledge_requirements": [],
                 "subject": {},
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3459,7 +3316,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 565,
+        "pk": 741,
         "fields": {
             "label": "\u7269\u6599\u5165\u5e93",
             "name": "wu_liao_ru_ku",
@@ -3477,10 +3334,6 @@
                     "erpsys_id": "1a27c720-3844-11ef-80e6-0e586f6f8a1e",
                     "name": "WuLiaoTaiZhang"
                 },
-                "master": {
-                    "erpsys_id": "6c35906e-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Material"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3494,7 +3347,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 566,
+        "pk": 742,
         "fields": {
             "label": "\u7269\u6599\u51fa\u5e93",
             "name": "wu_liao_chu_ku",
@@ -3512,10 +3365,6 @@
                     "erpsys_id": "1a27c720-3844-11ef-80e6-0e586f6f8a1e",
                     "name": "WuLiaoTaiZhang"
                 },
-                "master": {
-                    "erpsys_id": "6c35906e-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Material"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3529,7 +3378,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 567,
+        "pk": 743,
         "fields": {
             "label": "\u9884\u7ea6",
             "name": "yu_yue",
@@ -3547,10 +3396,6 @@
                     "erpsys_id": "fb689c22-3c0a-11ef-9c58-0e586f6f8a1e",
                     "name": "YuYueJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3564,7 +3409,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 568,
+        "pk": 744,
         "fields": {
             "label": "\u9884\u7ea6\u5230\u8bca\u786e\u8ba4",
             "name": "yu_yue_dao_zhen_que_ren",
@@ -3582,10 +3427,6 @@
                     "erpsys_id": "fb689c22-3c0a-11ef-9c58-0e586f6f8a1e",
                     "name": "YuYueJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3599,7 +3440,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 569,
+        "pk": 745,
         "fields": {
             "label": "\u4e2a\u4eba\u5065\u5eb7\u4fe1\u606f\u8c03\u67e5",
             "name": "ge_ren_jian_kang_xin_xi_diao_cha",
@@ -3617,10 +3458,6 @@
                     "erpsys_id": "0c20c364-3d0f-11ef-a4a3-0e586f6f8a1e",
                     "name": "JianKangDiaoChaJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3634,7 +3471,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 570,
+        "pk": 746,
         "fields": {
             "label": "\u9884\u5145\u503c",
             "name": "yu_chong_zhi",
@@ -3652,10 +3489,6 @@
                     "erpsys_id": "56e1f028-3d9e-11ef-9bfc-0e586f6f8a1e",
                     "name": "ChongZhiJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3669,7 +3502,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 571,
+        "pk": 747,
         "fields": {
             "label": "\u6536\u8d39",
             "name": "shou_fei",
@@ -3687,10 +3520,6 @@
                     "erpsys_id": "66536bcc-3d9e-11ef-9bfc-0e586f6f8a1e",
                     "name": "XiaoFeiJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3704,7 +3533,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 572,
+        "pk": 748,
         "fields": {
             "label": "\u9762\u8bca\u8bc4\u4f30",
             "name": "mian_zhen_ping_gu",
@@ -3722,10 +3551,6 @@
                     "erpsys_id": "7b5cf414-3d0f-11ef-a4a3-0e586f6f8a1e",
                     "name": "ZhuanKePingGuJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3739,7 +3564,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 573,
+        "pk": 749,
         "fields": {
             "label": "\u8089\u6bd2\u7d20\u6cbb\u7597",
             "name": "rou_du_su_zhi_liao",
@@ -3757,10 +3582,6 @@
                     "erpsys_id": "17252328-3d90-11ef-a31c-0e586f6f8a1e",
                     "name": "RouDuSuZhiLiaoJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3774,7 +3595,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 574,
+        "pk": 750,
         "fields": {
             "label": "\u8d85\u58f0\u70ae\u6cbb\u7597",
             "name": "chao_sheng_pao_zhi_liao",
@@ -3792,10 +3613,6 @@
                     "erpsys_id": "57b4c93e-3d90-11ef-a31c-0e586f6f8a1e",
                     "name": "ChaoShengPaoZhiLiaoJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3809,7 +3626,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 575,
+        "pk": 751,
         "fields": {
             "label": "\u9ec4\u91d1\u5fae\u9488\u6cbb\u7597",
             "name": "huang_jin_wei_zhen_zhi_liao",
@@ -3827,10 +3644,6 @@
                     "erpsys_id": "6dcfc61a-3d90-11ef-a31c-0e586f6f8a1e",
                     "name": "HuangJinWeiZhenZhiLiaoJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3844,7 +3657,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 576,
+        "pk": 752,
         "fields": {
             "label": "\u8c03Q\u6cbb\u7597",
             "name": "diao_Q_zhi_liao",
@@ -3862,10 +3675,6 @@
                     "erpsys_id": "8442b06a-3d90-11ef-a31c-0e586f6f8a1e",
                     "name": "DiaoQZhiLiaoJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3879,7 +3688,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 577,
+        "pk": 753,
         "fields": {
             "label": "\u5149\u5b50\u6cbb\u7597",
             "name": "guang_zi_zhi_liao",
@@ -3897,10 +3706,6 @@
                     "erpsys_id": "bf9ee46c-3d90-11ef-a31c-0e586f6f8a1e",
                     "name": "GuangZiZhiLiaoJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3914,7 +3719,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 578,
+        "pk": 754,
         "fields": {
             "label": "\u679c\u9178\u6cbb\u7597",
             "name": "guo_suan_zhi_liao",
@@ -3932,10 +3737,6 @@
                     "erpsys_id": "d3094556-3d90-11ef-a31c-0e586f6f8a1e",
                     "name": "GuoSuanZhiLiaoJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3949,7 +3750,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 579,
+        "pk": 755,
         "fields": {
             "label": "\u6c34\u5149\u9488\u6cbb\u7597",
             "name": "shui_guang_zhen_zhi_liao",
@@ -3967,10 +3768,6 @@
                     "erpsys_id": "16fe8226-3d91-11ef-a31c-0e586f6f8a1e",
                     "name": "ShuiGuangZhenZhiLiaoJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -3984,7 +3781,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 580,
+        "pk": 756,
         "fields": {
             "label": "\u53d1\u9001\u6cbb\u7597\u6ce8\u610f\u4e8b\u9879",
             "name": "fa_song_zhi_liao_zhu_yi_shi_xiang",
@@ -4002,10 +3799,6 @@
                     "erpsys_id": "e4a1b3b6-3dc7-11ef-a37e-0e586f6f8a1e",
                     "name": "FaSongZhiLiaoZhuYiShiXiangJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -4019,7 +3812,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 581,
+        "pk": 757,
         "fields": {
             "label": "\u7b7e\u7f72\u77e5\u60c5\u540c\u610f\u4e66",
             "name": "qian_shu_zhi_qing_tong_yi_shu",
@@ -4037,10 +3830,6 @@
                     "erpsys_id": "2a04da0a-3dc8-11ef-a37e-0e586f6f8a1e",
                     "name": "QianShuZhiQingTongYiShuJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -4054,7 +3843,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 582,
+        "pk": 758,
         "fields": {
             "label": "\u968f\u8bbf",
             "name": "sui_fang",
@@ -4072,10 +3861,6 @@
                     "erpsys_id": "80351fea-3d9e-11ef-9bfc-0e586f6f8a1e",
                     "name": "SuiFangJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -4089,7 +3874,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 583,
+        "pk": 759,
         "fields": {
             "label": "\u8bca\u65ad\u53ca\u5904\u7406",
             "name": "zhen_duan_ji_chu_li",
@@ -4107,10 +3892,6 @@
                     "erpsys_id": "c1819c92-3d0f-11ef-a4a3-0e586f6f8a1e",
                     "name": "ZhenDuanJiChuLiYiJianJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -4124,7 +3905,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 584,
+        "pk": 760,
         "fields": {
             "label": "\u767b\u5f55\u7b7e\u5230\u6d4b\u8bd5\u670d\u52a1",
             "name": "deng_lu_qian_dao_ce_shi_fu_wu",
@@ -4142,10 +3923,6 @@
                     "erpsys_id": "83b1bdf6-4003-11ef-8ef0-0e586f6f8a1e",
                     "name": "DengLuQianDaoJiLu"
                 },
-                "master": {
-                    "erpsys_id": "1e675d54-2a30-11ef-8c28-0e586f6f8a1e",
-                    "name": "Operator"
-                },
                 "price": "None",
                 "form_config": [],
                 "authorize_roles": [],
@@ -4159,7 +3936,7 @@
     },
     {
         "model": "kernel.event",
-        "pk": 15,
+        "pk": 23,
         "fields": {
             "label": "\u5b8c\u6210",
             "name": "completed",
@@ -4172,7 +3949,7 @@
     },
     {
         "model": "kernel.instruction",
-        "pk": 10,
+        "pk": 18,
         "fields": {
             "label": "\u521b\u5efa\u8fdb\u7a0b",
             "name": "create_process",
@@ -4184,16 +3961,16 @@
     },
     {
         "model": "kernel.servicerule",
-        "pk": 13,
+        "pk": 21,
         "fields": {
             "label": "\u7528\u6237\u767b\u5f55\u5b8c\u6210",
             "name": "logined",
             "pym": "yhdlwc",
             "erpsys_id": "9c286804-40c5-11ef-95e5-0e586f6f8a1e",
-            "service": 563,
-            "event": 15,
-            "system_operand": 10,
-            "next_service": 584,
+            "service": 739,
+            "event": 23,
+            "system_operand": 18,
+            "next_service": 760,
             "parameter_values": null,
             "order": 0
         }
@@ -4238,7 +4015,7 @@
         "model": "django_celery_beat.periodictasks",
         "pk": 1,
         "fields": {
-            "last_update": "2024-07-17T06:24:35.535Z"
+            "last_update": "2024-07-17T06:53:15.108Z"
         }
     },
     {

@@ -15,15 +15,9 @@ from kernel.models import Operator, Process, Service
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
     pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
     erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
-    content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, related_name='%(class)s_attributes', null=True, blank=True, verbose_name="隶属主体")
-    object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="隶属id")
-    content_object = GenericForeignKey('content_type', 'object_id')
     pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
     created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
-""",
-
-    'Profile_Reserved_body_script': """    operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="人员")
 """,
 
     'admin_file_head': f"""from django.contrib import admin
@@ -57,7 +51,7 @@ applications_site = ApplicationsSite(name = 'ApplicationsSite')
 }
 
 def get_model_footer(verbose_name):
-    return f'''
+    return f"""
     class Meta:
         verbose_name = "{verbose_name}"
         verbose_name_plural = verbose_name
@@ -75,13 +69,17 @@ def get_model_footer(verbose_name):
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
-    '''
+    """
+
+def get_master_field_script(data_item, master):
+    return f"""    master = models.ForeignKey({master.name}, on_delete=models.SET_NULL, related_name='property_set_{data_item.name}', blank=True, null=True, verbose_name="{data_item.affiliated_to.label}")
+"""
 
 def get_admin_script(class_name):
-    return f'''
+    return f"""
 @admin.register({class_name})
 class {class_name}Admin(admin.ModelAdmin):
     list_display = [field.name for field in {class_name}._meta.fields]
     list_display_links = ['id']
 applications_site.register({class_name}, {class_name}Admin)
-'''
+"""

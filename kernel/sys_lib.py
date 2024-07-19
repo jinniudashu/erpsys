@@ -25,7 +25,6 @@ def sys_create_business_record(**kwargs):
 def sys_create_process(**kwargs):
     print('running sys_create_process:', kwargs)
     service = kwargs.get('service')
-    master = service.config['master']['name']
     params = {
         'parent': kwargs.get('instance'),
         'service': service,

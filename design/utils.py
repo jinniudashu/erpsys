@@ -5,7 +5,7 @@ import json
 
 from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule
 from design.models import ServiceConsists, FormConfig, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
-from design.script_file_header import ScriptFileHeader, get_admin_script, get_model_footer
+from design.script_file_header import ScriptFileHeader, get_master_field_script, get_admin_script, get_model_footer
 
 from kernel.models import Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule
 from applications.models import CLASS_MAPPING, Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
@@ -107,10 +107,6 @@ def load_init_data():
                     "erpsys_id": service.subject.erpsys_id,
                     "name": service.subject.get_data_item_class_name()
                 } if service.subject else {},
-                "master": {
-                    "erpsys_id": service.master.erpsys_id,
-                    "name": service.master.name
-                } if service.master else {},
                 "price": str(service.price),
                 "form_config": [
                     {
@@ -260,9 +256,14 @@ def generate_source_code(project):
         else:
             model_head = f'class {data_item.get_data_item_class_name()}(models.Model):'
         model_head = model_head + ScriptFileHeader['class_base_fields']
-        match data_item.name:
-            case 'Profile':
-                model_head = model_head + ScriptFileHeader['Profile_Reserved_body_script']
+
+        # 添加master ForeignKey
+        if data_item.affiliated_to is not None:
+            master = data_item.affiliated_to
+            while master.implement_type == 'Field':
+                master = master.business_type
+            model_head = model_head + get_master_field_script(data_item, master)
+        
         model_fields, fields_type_dict = _generate_field_definitions(data_item)
         model_footer = _generate_model_footer_script(data_item)
         model_script = f'{model_head}{model_fields}{model_footer}\n'
