@@ -205,7 +205,7 @@
 
                 // 获取员工列表[{'id': 1, 'name': '张三', 'allow_services': [1,2,3]}, ...]
                 const domain = Cookies.get('environment') === 'dev' ? '127.0.0.1:8000' : 'clinic.tpacn.com';
-                const fetchEmployeesURL = `http://${domain}/api/get_employees/`;
+                const fetchEmployeesURL = `http://${domain}/basic-api/get_employees/`;
                 const fetchEmployees = async () => {
                     try {
                         const response = await fetch(fetchEmployeesURL, {
