@@ -43,7 +43,7 @@ class DataItem(ERPSysBase):
     dependency_order = models.PositiveSmallIntegerField(default=0, verbose_name="依赖顺序")
     default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     is_multivalued= models.BooleanField(default=False, verbose_name="多值")
-    max_length = models.PositiveSmallIntegerField(default=100, null=True, blank=True, verbose_name="最大长度")
+    max_length = models.PositiveSmallIntegerField(default=255, null=True, blank=True, verbose_name="最大长度")
     max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
     decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
     computed_logic = models.TextField(null=True, blank=True, verbose_name="计算逻辑")

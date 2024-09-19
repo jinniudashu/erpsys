@@ -1,7 +1,10 @@
 from django.core.management import call_command
 from django.utils import timezone
 from django.db.models import Count
+from django.utils.dateparse import parse_time, parse_date, parse_datetime
+from django.core.exceptions import ValidationError
 
+import logging
 import json
 
 from design.models import DataItem, DESIGN_CLASS_MAPPING, Customer as design_Customer, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule
@@ -29,6 +32,37 @@ COPY_CLASS_MAPPING = {
 # 加载初始数据
 def load_init_data():
     def import_init_data_from_data_item():
+        def convert_value(value, field_type, dict_model_class):
+            """
+            转换数据类型
+            """
+            match field_type:
+                case 'CharField', 'TextField':
+                    return str(value)
+                case 'IntegerField':
+                    return int(value)
+                case 'FloatField', 'DecimalField':
+                    print('DecimalField:', value)
+                    return float(value)
+                case 'BooleanField':
+                    return bool(value)
+                case 'TimeField':
+                    return parse_time(value)
+                case 'DateField':
+                    return parse_date(value)
+                case 'DateTimeField':
+                    return parse_datetime(value)
+                case 'TypeField':
+                    # 外键类型,返回dict_model_class.objects.get(label=value)的实例，
+                    if value and dict_model_class:
+                        try:
+                            return dict_model_class.objects.get(label=value)
+                        except model_class.DoesNotExist:
+                            logging.warning(f"No {class_name} instance found with label '{value}'. Returning None.")
+                            return None
+                case _:
+                    return value  # 对于其他类型，保持原样
+
         def insert_to_model(model_class):
             if model_class:
                 model_class.objects.all().delete()
@@ -36,12 +70,41 @@ def load_init_data():
                 init_content_list = json.loads(item.init_content)
                 for content_dict in init_content_list:
                     name_dict = {}
-                    for key in content_dict:
-                        key_data_item = DataItem.objects.get(label=key)
-                        name_dict[key_data_item.name] = content_dict[key]
-                        print(name_dict)
+                    for key, value in content_dict.items():
+                        try:
+                            key_data_item = DataItem.objects.get(label=key)
+                            field_name = key_data_item.name
+                            field_type = key_data_item.field_type
+                            
+                            class_name, dict_model_class = None, None
+                            # 如果字段类型是'TypeField'且实现类型是'Model', 使用data_item类名；如果实现类型是'Field', 使用data_item.business_type的类名
+                            if field_type == 'TypeField':
+                                if key_data_item.implement_type == 'Model':
+                                    class_name = key_data_item.get_data_item_class_name()
+                                elif key_data_item.implement_type == 'Field':
+                                    class_name = key_data_item.business_type.get_data_item_class_name()
+                                # 获取类名对应的模型类
+                                dict_model_class = CLASS_MAPPING.get(class_name, None)
+
+                            converted_value = convert_value(value, field_type, dict_model_class)
+                            name_dict[field_name] = converted_value
+                        except DataItem.DoesNotExist:
+                            logging.warning(f"DataItem with label '{key}' not found. Skipping this field.")
+                        except ValueError as e:
+                            logging.error(f"Error converting value for field '{key}': {str(e)}")
                     
-                    model_class.objects.create(**name_dict)
+                    if name_dict:
+                        try:
+                            instance = model_class(**name_dict)
+                            instance.full_clean()  # 验证所有字段
+                            instance.save()
+                            logging.info(f"Created new {model_class.__name__} instance: {name_dict}")
+                        except ValidationError as e:
+                            logging.error(f"Validation error creating {model_class.__name__} instance: {str(e)}")
+                        except Exception as e:
+                            logging.error(f"Error creating {model_class.__name__} instance: {str(e)}")
+                    else:
+                        logging.warning(f"No valid fields found for {model_class.__name__}. Skipping creation.")
             else:
                 # 处理未找到对应类的情况
                 print(f"Class not found for label: {item.label}")
@@ -50,12 +113,12 @@ def load_init_data():
             if item.field_type == 'Reserved':
                 class_name = item.name
                 model_class = DESIGN_CLASS_MAPPING.get(class_name)
-                insert_to_model(model_class)
             else:
                 class_name = item.get_data_item_class_name()
-            model_class = CLASS_MAPPING.get(class_name)
+                model_class = CLASS_MAPPING.get(class_name)
+
+            print('插入初始数据：', class_name, item.init_content)
             insert_to_model(model_class)
-            print(class_name, item.init_content)
 
     def copy_design_to_kernel():
         for model_name, models in COPY_CLASS_MAPPING.items():
@@ -182,13 +245,13 @@ def generate_source_code(project):
             f.write(content)
 
     def migrate_app():
-        # try:
-        print(f"Start migrating applications...")
-        call_command('makemigrations', 'applications')
-        call_command('migrate', 'applications', interactive=False)
-        print(f"Successfully migrated applications")
-        # except Exception as e:
-        #     print(f"Error migrating {app_name}: {e}")
+        try:
+            print(f"Start migrating applications...")
+            call_command('makemigrations', 'applications')
+            call_command('migrate', 'applications')
+            print(f"Successfully migrated applications")
+        except Exception as e:
+            print(f"Error migrating 'applications': {e}")
 
     def generate_script(data_item):
         def _generate_field_definitions(data_item):
