@@ -1,0 +1,64 @@
+name: Build and Deploy Docker image to Server
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 手动触发器
+
+jobs:
+  build_and_deploy:
+    name: Build and Deploy Docker image
+    runs-on: ubuntu-latest
+
+    steps:
+    # 检查出代码仓库
+    - name: Check out the repo
+      uses: actions/checkout@v3
+      
+    # 创建 .env 文件（从 GitHub Secrets 中获取内容）
+    - name: Create .env file from Secrets
+      run: |
+        echo "${{ secrets.ENV_FILE }}" > .env
+        
+    # 构建 Docker 镜像
+    - name: Build Docker image
+      run: |
+        docker build -t cxerp:latest .
+
+    # 保存 Docker 镜像为 .tar 文件
+    - name: Save Docker image to file
+      run: |
+        docker save cxerp:latest -o cxerp.tar
+
+    # 使用 SCP 将 .tar 文件传输到远程服务器（通过 SSH 密钥）
+    - name: Copy image to remote server via SSH
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        source: "cxerp.tar"
+        target: "/root/"
+
+    # 通过 SSH 连接到远程服务器，加载并运行镜像（通过 SSH 密钥）
+    - name: Load and run Docker image on server
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          # 加载传输的 cxerp Docker 镜像
+          docker load -i /root/cxerp.tar
+    
+          # 使用 Docker Compose 停止当前的服务，允许失败以避免脚本中断
+          docker-compose down --volumes || true
+    
+          # 清理未被使用的旧镜像
+          docker image prune -f
+    
+          # 使用 Docker Compose 启动所有服务
+          docker-compose up -d

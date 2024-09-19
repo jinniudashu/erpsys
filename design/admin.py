@@ -24,11 +24,24 @@ class OperatorAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Organization._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Customer._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Role._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
+    filter_horizontal = ['services']
 
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
@@ -72,11 +85,6 @@ class ServiceConsistsInline(admin.TabularInline):
     autocomplete_fields = ['sub_service']
     fk_name = 'service'
 
-class FormConfigInline(admin.TabularInline):
-    model = FormConfig
-    extra = 0
-    autocomplete_fields = ['data_item']
-
 class MaterialRequirementsInline(admin.TabularInline):
     model = MaterialRequirements
     extra = 0
@@ -102,9 +110,9 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Service._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-    inlines = [ServiceConsistsInline, FormConfigInline, MaterialRequirementsInline, EquipmentRequirementsInline, DeviceRequirementsInline, CapitalRequirementsInline, KnowledgeRequirementsInline]
+    inlines = [ServiceConsistsInline, MaterialRequirementsInline, EquipmentRequirementsInline, DeviceRequirementsInline, CapitalRequirementsInline, KnowledgeRequirementsInline]
     autocomplete_fields = ['subject']
-    filter_horizontal = ['authorize_roles', 'authorize_operators', 'reference']
+    filter_horizontal = ['reference']
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
@@ -124,6 +132,39 @@ class ServiceRuleAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     autocomplete_fields = ['event', 'service']
+
+class FormFieldsInline(admin.TabularInline):
+    model = FormFields
+    extra = 0
+
+@admin.register(Form)
+class FormAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Form._meta.fields]
+    list_display_links = ['id', 'label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+    inlines = [FormFieldsInline]
+
+class ApiFieldsInline(admin.TabularInline):
+    model = ApiFields
+    extra = 0
+
+@admin.register(Api)
+class ApiAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Api._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+    inlines = [ApiFieldsInline]
+
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = ['name', 'parent', 'path', 'form']
+    list_filter = ['parent']
+    search_fields = ['name', 'path']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(MenuItemAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['parent'].queryset = MenuItem.objects.filter(parent__isnull=True)
+        return form
 
 class SourceCodeInline(admin.TabularInline):
     model = SourceCode

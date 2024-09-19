@@ -55,3 +55,5 @@ pip-wheel-metadata
 
 poetry/core/*
 .aider*
+
+app.log

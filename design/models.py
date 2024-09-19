@@ -54,7 +54,12 @@ class DataItem(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['implement_type', 'dependency_order', 'field_type', 'id']
 
+    def __str__(self):
+        return self.label
+
     def get_data_item_class_name(self):
+        if self.field_type == 'Reserved':
+            return self.name
         pinyin_list = lazy_pinyin(self.label)
         class_name = ''.join(word[0].upper() + word[1:] for word in pinyin_list)
         return class_name
@@ -89,6 +94,8 @@ class DataItemConsists(models.Model):
     data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='subset', null=True, verbose_name="数据项")
     sub_data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, related_name='superset', null=True, verbose_name="子数据项")
     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
+    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
+    map_api_field = models.ForeignKey('ApiFields', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="映射API字段")
 
     class Meta:
         verbose_name = "数据项组成"
@@ -96,7 +103,23 @@ class DataItemConsists(models.Model):
         ordering = ['order', 'id']
         unique_together = ('data_item', 'sub_data_item')
 
+    def __str__(self):
+        return self.sub_data_item.label
+
+class Organization(ERPSysBase):
+    class Meta:
+        verbose_name = "服务-组织"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Customer(ERPSysBase):
+    class Meta:
+        verbose_name = "服务-客户"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
 class Role(ERPSysBase):
+    services = models.ManyToManyField('Service', related_name='roles', blank=True, verbose_name="服务项目")
     class Meta:
         verbose_name = "服务-角色"
         verbose_name_plural = verbose_name
@@ -105,6 +128,8 @@ class Role(ERPSysBase):
 class Operator(ERPSysBase):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='design_operator', verbose_name="用户")
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="角色")
+    organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")
+
     class Meta:
         verbose_name = "服务-人员"
         verbose_name_plural = verbose_name
@@ -160,9 +185,8 @@ class Service(ERPSysBase):
     knowledge_requirements = models.ManyToManyField(Knowledge, through='KnowledgeRequirements', verbose_name="知识需求")
     subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type='Model'), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='价格')
-    form_config = models.ManyToManyField(DataItem, through='FormConfig', related_name='services_form_config', verbose_name="表单设置")
-    authorize_roles = models.ManyToManyField(Role, related_name='roles_authorized', blank=True, verbose_name="允许角色")
-    authorize_operators = models.ManyToManyField(Operator, related_name='operators_authorized', blank=True, verbose_name="允许操作员")
+    # authorize_roles = models.ManyToManyField(Role, related_name='roles_authorized', blank=True, verbose_name="允许角色")
+    # authorize_operators = models.ManyToManyField(Operator, related_name='operators_authorized', blank=True, verbose_name="允许操作员")
     route_to = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='services_routed_from', blank=True, null=True, verbose_name="传递至")
     reference = models.ManyToManyField(DataItem, related_name='referenced_services', blank=True, verbose_name="引用")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
@@ -252,23 +276,6 @@ class KnowledgeRequirements(models.Model):
     def __str__(self):
         return self.service.name + '->' + self.resource_object.name
 
-class FormConfig(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-    data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE, limit_choices_to=Q(implement_type='Field'), verbose_name="数据项")
-    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
-    readonly = models.BooleanField(default=False, verbose_name="只读")
-    is_required = models.BooleanField(default=False, verbose_name="必填")
-    choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
-    is_list = models.BooleanField(default=False, verbose_name="列表字段")
-    expand_data_item = models.BooleanField(default=False, verbose_name="展开数据项")
-    is_aggregate = models.BooleanField(default=False, verbose_name="聚合字段")
-    order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
-
-    class Meta:
-        verbose_name = "表单设置"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
 class ServiceBOM:
     @staticmethod
     def add_sub_service(name):
@@ -328,6 +335,81 @@ class ServiceRule(ERPSysBase):
         verbose_name = "服务-规则"
         verbose_name_plural = verbose_name
         ordering = ['event', 'event', 'order']
+
+class Form(ERPSysBase):
+    service = models.OneToOneField(Service, on_delete=models.CASCADE, verbose_name="服务")
+    fields = models.ManyToManyField(DataItem, through='FormFields', verbose_name="表单字段")
+    is_list = models.BooleanField(default=False, verbose_name="列表")
+
+    class Meta:
+        verbose_name = "表单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class FormFields(models.Model):
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, verbose_name="表单")
+    field = models.ForeignKey(DataItem, on_delete=models.CASCADE, verbose_name="字段")
+    expand_data_item = models.BooleanField(default=False, verbose_name="展开数据项")
+    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
+    readonly = models.BooleanField(default=False, verbose_name="只读")
+    is_required = models.BooleanField(default=False, verbose_name="必填")
+    choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
+    is_aggregate = models.BooleanField(default=False, verbose_name="聚合字段")
+    order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
+
+    class Meta:
+        verbose_name = "表单字段"
+        verbose_name_plural = verbose_name
+        ordering = ['order', 'id']
+        unique_together = ('form', 'field')
+
+class Api(ERPSysBase):
+    provider = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="提供者")
+    url = models.CharField(max_length=255, null=True, blank=True, verbose_name="URL")
+    RequestMethod = [('GET', 'GET'), ('POST', 'POST'), ('PUT', 'PUT'), ('DELETE', 'DELETE')]
+    request_method = models.CharField(max_length=10, null=True, blank=True, choices=RequestMethod, default='POST', verbose_name="请求方法")
+    content_type = models.CharField(max_length=100, null=True, blank=True, verbose_name="内容类型")
+    response_type = models.CharField(max_length=100, null=True, blank=True, verbose_name="响应类型")
+    document_url = models.CharField(max_length=255, null=True, blank=True, verbose_name="文档URL")
+
+    class Meta:
+        verbose_name = "外部API"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return self.label if self.label else ''
+
+class ApiFields(ERPSysBase):
+    api = models.ForeignKey(Api, on_delete=models.CASCADE, verbose_name="API")
+    ReqRes = [('Request', '请求'), ('Response', '响应')]
+    req_res = models.CharField(max_length=50, null=True, blank=True, choices=ReqRes, default='Response', verbose_name="请求/响应")
+    field_name = models.CharField(max_length=255, null=True, blank=True, verbose_name="字段名称")
+    field_type = models.CharField(max_length=50, null=True, blank=True, verbose_name="字段类型")
+    default_value = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
+
+    class Meta:
+        verbose_name = "API字段"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return (f'{self.api.label}_{self.label}') if self.label else ''
+
+class MenuItem(ERPSysBase):
+    form = models.OneToOneField(Form, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="表单")
+    path = models.CharField(max_length=100, null=True, blank=True, verbose_name="路径")
+    title = models.CharField(max_length=100, null=True, blank=True, verbose_name="标题")
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', verbose_name="父菜单")
+    icon = models.CharField(max_length=50, blank=True, null=True, verbose_name="图标名称")
+    redirect = models.CharField(max_length=100, null=True, blank=True, verbose_name="默认子菜单项")
+    hide_in_menu = models.BooleanField(default=False, verbose_name="隐藏菜单")
+    hide_breadcrumb = models.BooleanField(default=False, verbose_name="隐藏面包屑")
+
+    class Meta:
+        verbose_name = "菜单项"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
 
 class Project(ERPSysBase):
     domain = models.CharField(max_length=255, null=True, blank=True, verbose_name="域名")

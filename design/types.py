@@ -11,6 +11,7 @@ FieldType = [
     ('TextField', '多行文本'),
     ('DateTimeField', '日期时间'),
     ('DateField', '日期'),
+    ('TimeField', '时间'),
     ('JSONField', 'JSON'),
     ('FileField', '文件'),
     ('ComputedField', '计算字段'),
@@ -35,6 +36,8 @@ SystemObject = [
 ImplementType = [
     ('Field', '字段'),
     ('Model', '数据表'),
+    ('View', '视图'),
+    ('MenuItem', '菜单项'),
     ('KernelModel', '系统表'),
     ('Program', '程序'),
 ]

@@ -8,7 +8,7 @@ class ApplicationsSite(admin.AdminSite):
     site_title = '颜青诊所'
     index_title = '工作台'
     enable_nav_sidebar = False
-    index_template = 'admin/index_test.html'
+    index_template = 'admin/index_applications.html'
     site_url = None
 
     def get_urls(self):

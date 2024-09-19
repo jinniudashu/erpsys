@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$600000$KzGsVmdaCn1iGxs77aoIwP$zuCQKkpa1M0XOQd1vKmZZHKGBFNhjZYISwDB31phQYs=",
-            "last_login": "2024-07-18T06:33:44.209Z",
+            "last_login": "2024-09-07T15:32:49.117Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -13,6 +13,42 @@
             "is_staff": true,
             "is_active": true,
             "date_joined": "2024-06-11T12:12:13.483Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$34Nbzlb2hra3aBvl32Ydlz$rGlyZhc5g/eSgVEzz9a4y3TgJxQYRXCc+uqR5Lc8dxU=",
+            "last_login": "2024-07-29T09:22:15.156Z",
+            "is_superuser": true,
+            "username": "admin-test",
+            "first_name": "NING",
+            "last_name": "JIANG",
+            "email": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-07-28T03:27:20Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Ypo1KvgQpbMkJR4PUMCxhv$PaFlnQ7DdxV9WobEPHsXeDdUx/Okmx98XqG+uuVY3vk=",
+            "last_login": "2024-07-31T14:14:10.085Z",
+            "is_superuser": true,
+            "username": "vben",
+            "first_name": "vben",
+            "last_name": "vue",
+            "email": "admin@vben.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-07-30T08:28:44Z",
             "groups": [],
             "user_permissions": []
         }
@@ -1840,7 +1876,9 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 53,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1849,7 +1887,9 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 48,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1858,7 +1898,9 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 49,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1867,7 +1909,9 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 56,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1876,7 +1920,9 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 55,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1885,7 +1931,9 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 54,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1894,7 +1942,9 @@
         "fields": {
             "data_item": 16,
             "sub_data_item": 39,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1903,7 +1953,9 @@
         "fields": {
             "data_item": 16,
             "sub_data_item": 51,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1912,7 +1964,9 @@
         "fields": {
             "data_item": 63,
             "sub_data_item": 65,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1921,7 +1975,9 @@
         "fields": {
             "data_item": 63,
             "sub_data_item": 66,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1930,7 +1986,9 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 68,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1939,7 +1997,9 @@
         "fields": {
             "data_item": 57,
             "sub_data_item": 69,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1948,7 +2008,9 @@
         "fields": {
             "data_item": 18,
             "sub_data_item": 72,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1957,7 +2019,9 @@
         "fields": {
             "data_item": 18,
             "sub_data_item": 74,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1966,7 +2030,9 @@
         "fields": {
             "data_item": 18,
             "sub_data_item": 73,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1975,7 +2041,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 15,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1984,7 +2052,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 78,
-            "order": 15
+            "order": 15,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -1993,7 +2063,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 81,
-            "order": 30
+            "order": 30,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2002,7 +2074,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 75,
-            "order": 20
+            "order": 20,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2011,7 +2085,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 82,
-            "order": 25
+            "order": 25,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2020,7 +2096,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 84,
-            "order": 28
+            "order": 28,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2029,7 +2107,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 85,
-            "order": 40
+            "order": 40,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2038,7 +2118,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 87,
-            "order": 45
+            "order": 45,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2047,7 +2129,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 94,
-            "order": 35
+            "order": 35,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2056,7 +2140,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 89,
-            "order": 50
+            "order": 50,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2065,7 +2151,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 15,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2074,7 +2162,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 76,
-            "order": 15
+            "order": 15,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2083,7 +2173,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 75,
-            "order": 20
+            "order": 20,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2092,7 +2184,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 78,
-            "order": 25
+            "order": 25,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2101,7 +2195,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 83,
-            "order": 30
+            "order": 30,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2110,7 +2206,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 82,
-            "order": 35
+            "order": 35,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2119,7 +2217,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 52,
-            "order": 40
+            "order": 40,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2128,7 +2228,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 85,
-            "order": 45
+            "order": 45,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2137,7 +2239,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 87,
-            "order": 50
+            "order": 50,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2146,7 +2250,9 @@
         "fields": {
             "data_item": 92,
             "sub_data_item": 89,
-            "order": 60
+            "order": 60,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2155,7 +2261,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 24,
-            "order": 32
+            "order": 32,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2164,7 +2272,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 95,
-            "order": 37
+            "order": 37,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2173,7 +2283,9 @@
         "fields": {
             "data_item": 79,
             "sub_data_item": 96,
-            "order": 33
+            "order": 33,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2182,7 +2294,9 @@
         "fields": {
             "data_item": 99,
             "sub_data_item": 15,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2191,7 +2305,9 @@
         "fields": {
             "data_item": 99,
             "sub_data_item": 76,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2200,7 +2316,9 @@
         "fields": {
             "data_item": 99,
             "sub_data_item": 97,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2209,7 +2327,9 @@
         "fields": {
             "data_item": 99,
             "sub_data_item": 98,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2218,7 +2338,9 @@
         "fields": {
             "data_item": 99,
             "sub_data_item": 78,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2227,7 +2349,9 @@
         "fields": {
             "data_item": 99,
             "sub_data_item": 82,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2236,7 +2360,9 @@
         "fields": {
             "data_item": 101,
             "sub_data_item": 102,
-            "order": 20
+            "order": 20,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2245,7 +2371,9 @@
         "fields": {
             "data_item": 101,
             "sub_data_item": 103,
-            "order": 30
+            "order": 30,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2254,7 +2382,9 @@
         "fields": {
             "data_item": 101,
             "sub_data_item": 104,
-            "order": 40
+            "order": 40,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2263,7 +2393,9 @@
         "fields": {
             "data_item": 100,
             "sub_data_item": 106,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2272,7 +2404,9 @@
         "fields": {
             "data_item": 117,
             "sub_data_item": 24,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2281,7 +2415,9 @@
         "fields": {
             "data_item": 117,
             "sub_data_item": 119,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2290,7 +2426,9 @@
         "fields": {
             "data_item": 118,
             "sub_data_item": 24,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2299,7 +2437,9 @@
         "fields": {
             "data_item": 118,
             "sub_data_item": 120,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
@@ -2308,67 +2448,75 @@
         "fields": {
             "data_item": 122,
             "sub_data_item": 121,
-            "order": 10
+            "order": 10,
+            "default_value": null,
+            "map_api_field": null
         }
     },
     {
         "model": "design.role",
-        "pk": 619,
+        "pk": 625,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "8bfc1288-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67ed97c-56cc-11ef-a574-0e586f6f8a1d",
+            "services": []
         }
     },
     {
         "model": "design.role",
-        "pk": 620,
+        "pk": 626,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "8bfc403c-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f0ab4-56cc-11ef-a574-0e586f6f8a1d",
+            "services": []
         }
     },
     {
         "model": "design.role",
-        "pk": 621,
+        "pk": 627,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "8bfc4c9e-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f17b6-56cc-11ef-a574-0e586f6f8a1d",
+            "services": []
         }
     },
     {
         "model": "design.role",
-        "pk": 622,
+        "pk": 628,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "8bfc58a6-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f2404-56cc-11ef-a574-0e586f6f8a1d",
+            "services": []
         }
     },
     {
         "model": "design.role",
-        "pk": 623,
+        "pk": 629,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "8bfc6472-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f37b4-56cc-11ef-a574-0e586f6f8a1d",
+            "services": []
         }
     },
     {
         "model": "design.role",
-        "pk": 624,
+        "pk": 630,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "8bfc6fbc-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f45ce-56cc-11ef-a574-0e586f6f8a1d",
+            "services": []
         }
     },
     {
@@ -2380,7 +2528,8 @@
             "pym": null,
             "erpsys_id": "a263bb28-4003-11ef-8ef0-0e586f6f8a1e",
             "user": null,
-            "role": null
+            "role": null,
+            "organization": null
         }
     },
     {
@@ -2392,7 +2541,8 @@
             "pym": null,
             "erpsys_id": "2e0e0d1a-400c-11ef-9a95-0e586f6f8a1e",
             "user": 1,
-            "role": null
+            "role": null,
+            "organization": null
         }
     },
     {
@@ -2463,52 +2613,52 @@
     },
     {
         "model": "design.material",
-        "pk": 516,
+        "pk": 521,
         "fields": {
             "label": "100\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "100_dan_wei_bao_tuo_shi",
             "pym": "100dwbts",
-            "erpsys_id": "8bfdd078-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c6808b3c-56cc-11ef-a574-0e586f6f8a1d"
         }
     },
     {
         "model": "design.material",
-        "pk": 517,
+        "pk": 522,
         "fields": {
             "label": "50\u5355\u4f4d\u4fdd\u59a5\u9002",
             "name": "50_dan_wei_bao_tuo_shi",
             "pym": "50dwbts",
-            "erpsys_id": "8bfddf82-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c6809da2-56cc-11ef-a574-0e586f6f8a1d"
         }
     },
     {
         "model": "design.material",
-        "pk": 518,
+        "pk": 523,
         "fields": {
             "label": "\u55e8\u4f53",
             "name": "hai_ti",
             "pym": "ht",
-            "erpsys_id": "8bfdec84-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c680ab8a-56cc-11ef-a574-0e586f6f8a1d"
         }
     },
     {
         "model": "design.material",
-        "pk": 519,
+        "pk": 524,
         "fields": {
             "label": "\u4e54\u96c5\u767b\u6781\u81f4",
             "name": "qiao_ya_deng_ji_zhi",
             "pym": "qydjz",
-            "erpsys_id": "8bfdf7e2-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c680c1ec-56cc-11ef-a574-0e586f6f8a1d"
         }
     },
     {
         "model": "design.material",
-        "pk": 520,
+        "pk": 525,
         "fields": {
             "label": "\u4e00\u6b21\u6027\u6ce8\u5c04\u5668",
             "name": "yi_ci_xing_zhu_she_qi",
             "pym": "ycxzsq",
-            "erpsys_id": "8bfe0458-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c680d204-56cc-11ef-a574-0e586f6f8a1d"
         }
     },
     {
@@ -2524,8 +2674,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2542,8 +2690,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2560,8 +2706,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2578,8 +2722,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2596,8 +2738,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2614,8 +2754,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2632,8 +2770,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2650,8 +2786,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2668,8 +2802,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2686,8 +2818,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2704,8 +2834,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2722,8 +2850,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2740,8 +2866,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2758,8 +2882,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2776,8 +2898,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2794,8 +2914,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2812,8 +2930,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2830,8 +2946,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2848,8 +2962,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2866,8 +2978,6 @@
             "route_to": null,
             "program": null,
             "service_type": "SYSTEM",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2884,8 +2994,6 @@
             "route_to": null,
             "program": null,
             "service_type": "SYSTEM",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -2902,8 +3010,6 @@
             "route_to": null,
             "program": null,
             "service_type": "USER",
-            "authorize_roles": [],
-            "authorize_operators": [],
             "reference": []
         }
     },
@@ -3116,91 +3222,99 @@
     },
     {
         "model": "kernel.role",
-        "pk": 217,
+        "pk": 223,
         "fields": {
             "label": "\u533b\u751f",
             "name": "yi_sheng",
             "pym": "ys",
-            "erpsys_id": "8bfc1288-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67ed97c-56cc-11ef-a574-0e586f6f8a1d",
+            "service_items": []
         }
     },
     {
         "model": "kernel.role",
-        "pk": 218,
+        "pk": 224,
         "fields": {
             "label": "\u62a4\u58eb",
             "name": "hu_shi",
             "pym": "hs",
-            "erpsys_id": "8bfc403c-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f0ab4-56cc-11ef-a574-0e586f6f8a1d",
+            "service_items": []
         }
     },
     {
         "model": "kernel.role",
-        "pk": 219,
+        "pk": 225,
         "fields": {
             "label": "\u5ba2\u670d",
             "name": "ke_fu",
             "pym": "kf",
-            "erpsys_id": "8bfc4c9e-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f17b6-56cc-11ef-a574-0e586f6f8a1d",
+            "service_items": []
         }
     },
     {
         "model": "kernel.role",
-        "pk": 220,
+        "pk": 226,
         "fields": {
             "label": "\u7ba1\u7406\u5458",
             "name": "guan_li_yuan",
             "pym": "gly",
-            "erpsys_id": "8bfc58a6-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f2404-56cc-11ef-a574-0e586f6f8a1d",
+            "service_items": []
         }
     },
     {
         "model": "kernel.role",
-        "pk": 221,
+        "pk": 227,
         "fields": {
             "label": "\u5ba2\u6237",
             "name": "ke_hu",
             "pym": "kh",
-            "erpsys_id": "8bfc6472-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f37b4-56cc-11ef-a574-0e586f6f8a1d",
+            "service_items": []
         }
     },
     {
         "model": "kernel.role",
-        "pk": 222,
+        "pk": 228,
         "fields": {
             "label": "System",
             "name": "System",
             "pym": "System",
-            "erpsys_id": "8bfc6fbc-441b-11ef-b753-0e586f6f8a1e"
+            "erpsys_id": "c67f45ce-56cc-11ef-a574-0e586f6f8a1d",
+            "service_items": []
         }
     },
     {
         "model": "kernel.operator",
-        "pk": 62,
+        "pk": 64,
         "fields": {
             "label": "\u81ea\u52a8\u8c03\u5ea6",
             "name": "SystemSchedler",
             "pym": null,
             "erpsys_id": "a263bb28-4003-11ef-8ef0-0e586f6f8a1e",
             "user": null,
-            "role": null
+            "role": null,
+            "organization": null
         }
     },
     {
         "model": "kernel.operator",
-        "pk": 63,
+        "pk": 65,
         "fields": {
             "label": "\u7ecf\u7406",
             "name": "Manager",
             "pym": null,
             "erpsys_id": "2e0e0d1a-400c-11ef-9a95-0e586f6f8a1e",
             "user": 1,
-            "role": null
+            "role": null,
+            "organization": null
         }
     },
     {
         "model": "kernel.resource",
-        "pk": 205,
+        "pk": 211,
         "fields": {
             "label": "\u7269\u6599",
             "name": "Material",
@@ -3210,7 +3324,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 206,
+        "pk": 212,
         "fields": {
             "label": "\u8bbe\u5907",
             "name": "Equipment",
@@ -3220,7 +3334,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 207,
+        "pk": 213,
         "fields": {
             "label": "\u5de5\u5177",
             "name": "Device",
@@ -3230,7 +3344,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 208,
+        "pk": 214,
         "fields": {
             "label": "\u8d44\u91d1",
             "name": "Capital",
@@ -3240,7 +3354,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 209,
+        "pk": 215,
         "fields": {
             "label": "\u77e5\u8bc6",
             "name": "Knowledge",
@@ -3250,7 +3364,7 @@
     },
     {
         "model": "kernel.resource",
-        "pk": 210,
+        "pk": 216,
         "fields": {
             "label": "\u4eba\u5458",
             "name": "Operator",
@@ -3260,7 +3374,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 739,
+        "pk": 761,
         "fields": {
             "label": "\u7528\u6237\u767b\u5f55",
             "name": "user_login",
@@ -3288,7 +3402,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 740,
+        "pk": 762,
         "fields": {
             "label": "\u7528\u6237\u6ce8\u518c",
             "name": "user_register",
@@ -3316,7 +3430,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 741,
+        "pk": 763,
         "fields": {
             "label": "\u7269\u6599\u5165\u5e93",
             "name": "wu_liao_ru_ku",
@@ -3347,7 +3461,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 742,
+        "pk": 764,
         "fields": {
             "label": "\u7269\u6599\u51fa\u5e93",
             "name": "wu_liao_chu_ku",
@@ -3378,7 +3492,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 743,
+        "pk": 765,
         "fields": {
             "label": "\u9884\u7ea6",
             "name": "yu_yue",
@@ -3409,7 +3523,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 744,
+        "pk": 766,
         "fields": {
             "label": "\u9884\u7ea6\u5230\u8bca\u786e\u8ba4",
             "name": "yu_yue_dao_zhen_que_ren",
@@ -3440,7 +3554,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 745,
+        "pk": 767,
         "fields": {
             "label": "\u4e2a\u4eba\u5065\u5eb7\u4fe1\u606f\u8c03\u67e5",
             "name": "ge_ren_jian_kang_xin_xi_diao_cha",
@@ -3471,7 +3585,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 746,
+        "pk": 768,
         "fields": {
             "label": "\u9884\u5145\u503c",
             "name": "yu_chong_zhi",
@@ -3502,7 +3616,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 747,
+        "pk": 769,
         "fields": {
             "label": "\u6536\u8d39",
             "name": "shou_fei",
@@ -3533,7 +3647,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 748,
+        "pk": 770,
         "fields": {
             "label": "\u9762\u8bca\u8bc4\u4f30",
             "name": "mian_zhen_ping_gu",
@@ -3564,7 +3678,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 749,
+        "pk": 771,
         "fields": {
             "label": "\u8089\u6bd2\u7d20\u6cbb\u7597",
             "name": "rou_du_su_zhi_liao",
@@ -3595,7 +3709,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 750,
+        "pk": 772,
         "fields": {
             "label": "\u8d85\u58f0\u70ae\u6cbb\u7597",
             "name": "chao_sheng_pao_zhi_liao",
@@ -3626,7 +3740,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 751,
+        "pk": 773,
         "fields": {
             "label": "\u9ec4\u91d1\u5fae\u9488\u6cbb\u7597",
             "name": "huang_jin_wei_zhen_zhi_liao",
@@ -3657,7 +3771,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 752,
+        "pk": 774,
         "fields": {
             "label": "\u8c03Q\u6cbb\u7597",
             "name": "diao_Q_zhi_liao",
@@ -3688,7 +3802,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 753,
+        "pk": 775,
         "fields": {
             "label": "\u5149\u5b50\u6cbb\u7597",
             "name": "guang_zi_zhi_liao",
@@ -3719,7 +3833,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 754,
+        "pk": 776,
         "fields": {
             "label": "\u679c\u9178\u6cbb\u7597",
             "name": "guo_suan_zhi_liao",
@@ -3750,7 +3864,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 755,
+        "pk": 777,
         "fields": {
             "label": "\u6c34\u5149\u9488\u6cbb\u7597",
             "name": "shui_guang_zhen_zhi_liao",
@@ -3781,7 +3895,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 756,
+        "pk": 778,
         "fields": {
             "label": "\u53d1\u9001\u6cbb\u7597\u6ce8\u610f\u4e8b\u9879",
             "name": "fa_song_zhi_liao_zhu_yi_shi_xiang",
@@ -3812,7 +3926,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 757,
+        "pk": 779,
         "fields": {
             "label": "\u7b7e\u7f72\u77e5\u60c5\u540c\u610f\u4e66",
             "name": "qian_shu_zhi_qing_tong_yi_shu",
@@ -3843,7 +3957,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 758,
+        "pk": 780,
         "fields": {
             "label": "\u968f\u8bbf",
             "name": "sui_fang",
@@ -3874,7 +3988,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 759,
+        "pk": 781,
         "fields": {
             "label": "\u8bca\u65ad\u53ca\u5904\u7406",
             "name": "zhen_duan_ji_chu_li",
@@ -3905,7 +4019,7 @@
     },
     {
         "model": "kernel.service",
-        "pk": 760,
+        "pk": 782,
         "fields": {
             "label": "\u767b\u5f55\u7b7e\u5230\u6d4b\u8bd5\u670d\u52a1",
             "name": "deng_lu_qian_dao_ce_shi_fu_wu",
@@ -3936,7 +4050,7 @@
     },
     {
         "model": "kernel.event",
-        "pk": 23,
+        "pk": 24,
         "fields": {
             "label": "\u5b8c\u6210",
             "name": "completed",
@@ -3949,7 +4063,7 @@
     },
     {
         "model": "kernel.instruction",
-        "pk": 18,
+        "pk": 19,
         "fields": {
             "label": "\u521b\u5efa\u8fdb\u7a0b",
             "name": "create_process",
@@ -3961,16 +4075,16 @@
     },
     {
         "model": "kernel.servicerule",
-        "pk": 21,
+        "pk": 22,
         "fields": {
             "label": "\u7528\u6237\u767b\u5f55\u5b8c\u6210",
             "name": "logined",
             "pym": "yhdlwc",
             "erpsys_id": "9c286804-40c5-11ef-95e5-0e586f6f8a1e",
-            "service": 739,
-            "event": 23,
-            "system_operand": 18,
-            "next_service": 760,
+            "service": 761,
+            "event": 24,
+            "system_operand": 19,
+            "next_service": 782,
             "parameter_values": null,
             "order": 0
         }
@@ -4015,7 +4129,7 @@
         "model": "django_celery_beat.periodictasks",
         "pk": 1,
         "fields": {
-            "last_update": "2024-07-17T06:53:15.108Z"
+            "last_update": "2024-07-19T09:01:09.729Z"
         }
     },
     {

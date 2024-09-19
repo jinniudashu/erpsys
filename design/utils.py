@@ -1,26 +1,29 @@
 from django.core.management import call_command
 from django.utils import timezone
+from django.db.models import Count
 
 import json
 
-from design.models import DataItem, DESIGN_CLASS_MAPPING, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule
-from design.models import ServiceConsists, FormConfig, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
+from design.models import DataItem, DESIGN_CLASS_MAPPING, Customer as design_Customer, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule
+from design.models import ServiceConsists, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
 from design.script_file_header import ScriptFileHeader, get_master_field_script, get_admin_script, get_model_footer
 
-from kernel.models import Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule
-from applications.models import CLASS_MAPPING, Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
+from kernel.models import Customer as kernel_Customer, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule
+from applications.models import CLASS_MAPPING
+# Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
 COPY_CLASS_MAPPING = {
+    "Customer": (design_Customer, kernel_Customer),
     "Role": (design_Role, kernel_Role),
     "Operator": (design_Operator, kernel_Operator),
     "Resource": (design_Resource, kernel_Resource),
     "Event": (design_Event, kernel_Event),
     "Instruction": (design_Instruction, kernel_Instruction),
-    "Material": (design_Material, applications_Material),
-    "Equipment": (design_Equipment, applications_Equipment),
-    "Device": (design_Device, applications_Device),
-    "Capital": (design_Capital, applications_Capital),
-    "Knowledge": (design_Knowledge, applications_Knowledge),
+    # "Material": (design_Material, applications_Material),
+    # "Equipment": (design_Equipment, applications_Equipment),
+    # "Device": (design_Device, applications_Device),
+    # "Capital": (design_Capital, applications_Capital),
+    # "Knowledge": (design_Knowledge, applications_Knowledge),
 }
 
 # 加载初始数据
@@ -108,24 +111,24 @@ def load_init_data():
                     "name": service.subject.get_data_item_class_name()
                 } if service.subject else {},
                 "price": str(service.price),
-                "form_config": [
-                    {
-                        "erpsys_id": config.data_item.erpsys_id,
-                        "name": config.data_item.name,
-                        "default_value": config.default_value,
-                        "readonly": config.readonly,
-                        "is_required": config.is_required
-                    }
-                    for config in FormConfig.objects.filter(service=service)
-                ],
-                "authorize_roles": [
-                    {"erpsys_id": role.erpsys_id, "name": role.name}
-                    for role in service.authorize_roles.all()
-                ],
-                "authorize_operators": [
-                    {"erpsys_id": operator.erpsys_id, "name": operator.name}
-                    for operator in service.authorize_operators.all()
-                ],
+                # "form_config": [
+                #     {
+                #         "erpsys_id": config.data_item.erpsys_id,
+                #         "name": config.data_item.name,
+                #         "default_value": config.default_value,
+                #         "readonly": config.readonly,
+                #         "is_required": config.is_required
+                #     }
+                #     for config in FormConfig.objects.filter(service=service)
+                # ],
+                # "authorize_roles": [
+                #     {"erpsys_id": role.erpsys_id, "name": role.name}
+                #     for role in service.authorize_roles.all()
+                # ],
+                # "authorize_operators": [
+                #     {"erpsys_id": operator.erpsys_id, "name": operator.name}
+                #     for operator in service.authorize_operators.all()
+                # ],
                 "route_to": {
                     "erpsys_id": service.route_to.erpsys_id,
                     "name": service.route_to.name
@@ -192,7 +195,13 @@ def generate_source_code(project):
             field_definitions = ''
             field_type_dict = {}
 
-            for item in data_item.subset.all():
+            data_item_consists = data_item.subset.all().order_by('order')
+            
+            sub_data_items = DataItem.objects.filter(id__in=data_item_consists.values_list('sub_data_item', flat=True))
+            _items_with_non_unique_business_type = sub_data_items.values('business_type').annotate(business_type_count=Count('id')).filter(business_type_count__gt=1)
+            fields_need_related_name = sub_data_items.filter(business_type__in=[item['business_type'] for item in _items_with_non_unique_business_type])
+
+            for item in data_item_consists:
                 consist_item = item.sub_data_item
                 field_name = consist_item.name
                 # 如果字段有业务类型，使用业务类型的字段名，如：计划时间
@@ -215,20 +224,25 @@ def generate_source_code(project):
                         field_definitions += f"    {field_name} = models.DateTimeField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     case 'DateField':
                         field_definitions += f"    {field_name} = models.DateField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                    case 'TimeField':
+                        field_definitions += f"    {field_name} = models.TimeField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     case 'JSONField':
                         field_definitions += f"    {field_name} = models.JSONField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     case 'FileField':
                         field_definitions += f"    {field_name} = models.FileField(blank=True, null=True, verbose_name='{consist_item.label}')\n"
                     case 'TypeField':
                         _field_type = ''
+                        _related_name = ''
                         if consist_item.business_type:
-                            _field_type = consist_item.business_type.name
+                            _field_type = consist_item.business_type.get_data_item_class_name()
+                            if consist_item in fields_need_related_name:
+                                _related_name =  f"related_name='{field_name}_{data_item.name}', "
                         else:
                             _field_type = consist_item.get_data_item_class_name()
                         if consist_item.is_multivalued:
                             field_definitions += f"    {field_name} = models.ManyToManyField({_field_type}, related_name='{field_name}', blank=True, verbose_name='{consist_item.label}')\n"
                         else:
-                            field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
+                            field_definitions += f"    {field_name} = models.ForeignKey({_field_type}, on_delete=models.SET_NULL, blank=True, null=True, {_related_name}verbose_name='{consist_item.label}')\n"
                         field_type_dict.update({field_name: _field_type})
                     case 'User':
                         field_definitions += f"    {field_name} = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
@@ -240,17 +254,19 @@ def generate_source_code(project):
 
             return field_definitions, field_type_dict
 
-        def _generate_model_footer_script(data_item):
+        def _generate_model_footer_script(data_item, is_dict):
             verbose_name = data_item.label
-            if data_item.dependency_order == 0:
+            if is_dict:
                 verbose_name = f'Dict-{data_item.label}'
             else:
                 if data_item.field_type == 'Reserved':
                     verbose_name = f'{data_item.field_type}-{data_item.label}'
                 else:
-                    verbose_name = f'App-{data_item.label}'
+                    verbose_name = f'{data_item.label}'
             return get_model_footer(verbose_name)
 
+        is_dict = (data_item.dependency_order < 20)
+    
         if data_item.field_type == 'Reserved':
             model_head = f'class {data_item.name}(models.Model):'
         else:
@@ -262,10 +278,10 @@ def generate_source_code(project):
             master = data_item.affiliated_to
             while master.implement_type == 'Field':
                 master = master.business_type
-            model_head = model_head + get_master_field_script(data_item, master)
+            model_head = model_head + get_master_field_script(data_item, master.get_data_item_class_name())
         
         model_fields, fields_type_dict = _generate_field_definitions(data_item)
-        model_footer = _generate_model_footer_script(data_item)
+        model_footer = _generate_model_footer_script(data_item, is_dict)
         model_script = f'{model_head}{model_fields}{model_footer}\n'
 
         # construct admin script
@@ -273,7 +289,7 @@ def generate_source_code(project):
             class_name = data_item.get_data_item_class_name()
         else:
             class_name = data_item.name
-        admin_script = get_admin_script(class_name)
+        admin_script = get_admin_script(class_name, is_dict)
 
         return model_script, admin_script, fields_type_dict
 
@@ -309,9 +325,11 @@ def generate_source_code(project):
         write_project_file(filename, content)
 
     # makemigrations & migrate
+    print('迁移应用...')
     migrate_app()
 
     # 导入初始业务数据to kernel & applications
+    print('导入初始业务数据...')
     load_init_data()
 
     # source_code = {

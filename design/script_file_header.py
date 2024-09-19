@@ -7,7 +7,7 @@ import uuid
 import re
 from pypinyin import Style, lazy_pinyin
 
-from kernel.models import Operator, Process, Service
+from kernel.models import Operator, Process, Service, Customer, Organization
 \n""",
 
     'class_base_fields': f"""
@@ -22,12 +22,25 @@ from kernel.models import Operator, Process, Service
 
     'admin_file_head': f"""from django.contrib import admin
 from django.contrib.auth.models import User
+from django.urls import path
 
 from .models import *
+from .views import update_order_status, CustomTokenObtainPairView, CustomTokenRefreshView
+
+def hide_fields(fields):
+    exclude_fields = ['id', 'created_time', 'label', 'name', 'pym', 'erpsys_id', 'pid', 'updated_time']
+    for field in exclude_fields:
+        if field in fields:
+            fields.remove(field)
+    fields.extend(['created_time', 'id'])
+
+admin.site.site_header = "铖杏科技运营平台"
+admin.site.site_title = "铖杏科技"
+admin.site.index_title = "工作台"
 
 class ApplicationsSite(admin.AdminSite):
-    site_header = '广州颜青医疗美容诊所'
-    site_title = '颜青诊所'
+    site_header = '铖杏运营平台'
+    site_title = '铖杏'
     index_title = '工作台'
     enable_nav_sidebar = False
     index_template = 'admin/index_applications.html'
@@ -36,6 +49,9 @@ class ApplicationsSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
+            path('api/updateOrderStatus/', update_order_status, name='update_order_status'),
+            path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+            path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
         ]
         return my_urls + urls
 
@@ -71,15 +87,21 @@ def get_model_footer(verbose_name):
         super().save(*args, **kwargs)
     """
 
-def get_master_field_script(data_item, master):
-    return f"""    master = models.ForeignKey({master.name}, on_delete=models.SET_NULL, related_name='property_set_{data_item.name}', blank=True, null=True, verbose_name="{data_item.affiliated_to.label}")
+def get_master_field_script(data_item, master_class_name):
+    return f"""    master = models.ForeignKey({master_class_name}, on_delete=models.SET_NULL, related_name='property_set_{data_item.name}', blank=True, null=True, verbose_name="{data_item.affiliated_to.label}")
 """
 
-def get_admin_script(class_name):
+def get_admin_script(class_name, is_dict):
+    if is_dict:
+        hide_fields = ''
+    else:
+        hide_fields = f"""\n    hide_fields(list_display)"""
+
     return f"""
 @admin.register({class_name})
 class {class_name}Admin(admin.ModelAdmin):
-    list_display = [field.name for field in {class_name}._meta.fields]
-    list_display_links = ['id']
+    list_display = [field.name for field in {class_name}._meta.fields]{hide_fields}
+    list_display_links = list_display
+    list_filter = list_display
 applications_site.register({class_name}, {class_name}Admin)
-"""
+    """

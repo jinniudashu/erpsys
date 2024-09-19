@@ -4,7 +4,22 @@
 {% block extrastyle %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">
-<link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+<link rel="stylesheet" href="{% static 'frontend/assets/index-DL8ruDOS.css' %}">
+<!-- <style>
+    html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    #content, #app {
+        height: 100%;
+        width: 100%;  /* 确保宽度也是100% */
+        margin: 0;
+        padding: 0;
+    }
+</style> -->
 {% endblock %}
 
 {% block coltype %}colMS{% endblock %}
@@ -16,5 +31,13 @@
 {% block nav-sidebar %}{% endblock %}
 
 {% block content %}
-<iframe src="{% static "frontend/index.html" %}" width="100%" height="500px" style="border:none;"></iframe>
+<script>
+    window.Django = {
+      'username': '{{ request.user.username }}',
+      'isAuthenticated': {{ request.user.is_authenticated|yesno:"true,false" }}
+    };
+  </script>
+
+<div id="app"></div> <!-- Vue 应用的挂载点 -->
+<script type="module" src="{% static 'frontend/assets/entry/index-DHKmWnTz.js' %}"></script>
 {% endblock %}

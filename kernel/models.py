@@ -7,7 +7,7 @@ import uuid
 import re
 from pypinyin import Style, lazy_pinyin
 
-from kernel.types import ProcessState
+from kernel.types import ProcessState, ChoiceType
 from kernel.app_types import app_types
 
 # ERPSys基类
@@ -41,7 +41,20 @@ class ERPSysRegistry(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
+class Organization(ERPSysBase):
+    class Meta:
+        verbose_name = "服务-组织"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Customer(ERPSysBase):
+    class Meta:
+        verbose_name = "服务-客户"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
 class Role(ERPSysBase):
+    service_items = models.ManyToManyField('Service', related_name='roles', blank=True, verbose_name="服务项目")
     class Meta:
         verbose_name = "服务-角色"
         verbose_name_plural = verbose_name
@@ -50,6 +63,7 @@ class Role(ERPSysBase):
 class Operator(ERPSysBase):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="用户")
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="角色")
+    organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")
 
     class Meta:
         verbose_name = "服务-人员"
@@ -210,6 +224,15 @@ class WorkOrder(ERPSysBase):
 
     class Meta:
         verbose_name = "进程工单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class SysParams(ERPSysBase):
+    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+    expires_in = models.PositiveIntegerField(default=8, verbose_name="过期时间")
+
+    class Meta:
+        verbose_name = "系统参数"
         verbose_name_plural = verbose_name
         ordering = ['id']
 

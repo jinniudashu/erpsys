@@ -1,11 +1,28 @@
 from django.contrib import admin
+from django.contrib.sessions.models import Session
 
 from .models import *
+
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    list_display = ['session_key', 'session_data', 'expire_date']
 
 @admin.register(ERPSysRegistry)
 class ERPSysRegistryAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ERPSysRegistry._meta.fields]
     list_display_links = ['id', 'label', 'name',]
+
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Organization._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Customer._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
@@ -64,3 +81,9 @@ class StacksAdmin(admin.ModelAdmin):
     search_fields = ['id', 'process']
     list_filter = ['process']
     readonly_fields = ['id', 'created_time', 'updated_time']
+
+@admin.register(SysParams)
+class SysParamsAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in SysParams._meta.fields]
+    list_display_links = ['id', 'label', 'name',]
+    search_fields = ['label', 'name', 'pym']

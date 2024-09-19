@@ -1,0 +1,55 @@
+services:
+  app:
+    image: cxerp:latest  # 使用已加载的Django镜像
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    user: root
+    command: >
+      sh -c "chmod +x ./wait-for-it.sh &&
+      ./wait-for-it.sh db:5432 -- 
+      python dev_initial.py &&
+      python manage.py migrate &&
+      daphne -b 0.0.0.0 -p 8000 cxerp.asgi:application"
+
+  db:
+    image: postgres:latest  # 使用已加载的Postgres镜像
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:latest  # 使用已加载的Redis镜像
+    ports:
+      - "6379:6379"
+    restart: always
+
+  celery_worker:
+    image: cxerp:latest
+    command: celery -A cxerp worker -l info
+    depends_on:
+      - db
+      - redis
+      - app
+    restart: always
+
+  celery_beat:
+    image: cxerp:latest
+    command: celery -A cxerp beat -l info
+    depends_on:
+      - db
+      - redis
+      - app
+      - celery_worker
+    restart: always
+
+volumes:
+  postgres_data:
