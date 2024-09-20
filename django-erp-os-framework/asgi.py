@@ -6,7 +6,7 @@ from channels.auth import AuthMiddlewareStack
 
 from kernel.routing import ws_urlpatterns
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erpsys.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django-erp-os-framework.settings')
 
 # application = get_asgi_application()
 application = ProtocolTypeRouter({

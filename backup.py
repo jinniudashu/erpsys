@@ -5,7 +5,7 @@ from io import StringIO
 from django.core.management import call_command
 
 # 设置Django的环境
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erpsys.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django-erp-os-framework.settings')
 django.setup()
 
 
@@ -23,7 +23,7 @@ call_command(
         'sessions.session',
         'admin.logentry',
         'contenttypes',
-        'applications',
+        # 'applications',
         'kernel.process',  # 开发阶段不备份Process，以避免恢复时触发生成PERIODIC TASKS，导致恢复失败
     ]
 )

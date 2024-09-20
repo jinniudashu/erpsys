@@ -6,7 +6,7 @@ import uuid
 import re
 from pypinyin import Style, lazy_pinyin
 
-from kernel.models import Operator, Process, Service
+from kernel.models import Operator, Process, Service, Customer, Organization
 
 class FuWuLeiBie(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
@@ -183,7 +183,7 @@ class Material(models.Model):
     jia_ge = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='价格')
 
     class Meta:
-        verbose_name = "Reserved-物料"
+        verbose_name = "Dict-物料"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -210,7 +210,7 @@ class Equipment(models.Model):
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
 
     class Meta:
-        verbose_name = "Reserved-设备"
+        verbose_name = "Dict-设备"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -237,7 +237,7 @@ class Device(models.Model):
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
 
     class Meta:
-        verbose_name = "Reserved-工具"
+        verbose_name = "Dict-工具"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -264,7 +264,7 @@ class Capital(models.Model):
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
 
     class Meta:
-        verbose_name = "Reserved-资金"
+        verbose_name = "Dict-资金"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -293,7 +293,7 @@ class Knowledge(models.Model):
     zhi_shi_wen_jian = models.FileField(blank=True, null=True, verbose_name='知识文件')
 
     class Meta:
-        verbose_name = "Reserved-知识"
+        verbose_name = "Dict-知识"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -331,7 +331,7 @@ class Profile(models.Model):
     bei_zhu = models.TextField(blank=True, null=True, verbose_name='备注')
 
     class Meta:
-        verbose_name = "Reserved-个人资料"
+        verbose_name = "Dict-个人资料"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -362,12 +362,12 @@ class WuLiaoTaiZhang(models.Model):
     shu_liang = models.IntegerField(blank=True, null=True, verbose_name='数量')
     you_xiao_qi = models.DateField(blank=True, null=True, verbose_name='有效期')
     shi_yong_ren = models.ManyToManyField(Operator, related_name='shi_yong_ren', blank=True, verbose_name='使用人')
-    ling_yong_ren = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='领用人')
+    ling_yong_ren = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, related_name='ling_yong_ren_wu_liao_tai_zhang', verbose_name='领用人')
     qi_chu = models.IntegerField(blank=True, null=True, verbose_name='期初')
     qi_mo = models.IntegerField(blank=True, null=True, verbose_name='期末')
 
     class Meta:
-        verbose_name = "App-物料台账"
+        verbose_name = "物料台账"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -408,7 +408,7 @@ class YuYueJiLu(models.Model):
     bei_zhu = models.TextField(blank=True, null=True, verbose_name='备注')
 
     class Meta:
-        verbose_name = "App-预约记录"
+        verbose_name = "预约记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -442,7 +442,7 @@ class JianKangDiaoChaJiLu(models.Model):
     chang_zhu_di = models.CharField(max_length=100, blank=True, null=True, verbose_name='常驻地')
 
     class Meta:
-        verbose_name = "App-健康调查记录"
+        verbose_name = "健康调查记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -471,7 +471,7 @@ class ZhuanKePingGuJiLu(models.Model):
     zhu_su = models.TextField(blank=True, null=True, verbose_name='主诉')
 
     class Meta:
-        verbose_name = "App-专科评估记录"
+        verbose_name = "专科评估记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -502,7 +502,7 @@ class ZhenDuanJiChuLiYiJianJiLu(models.Model):
     jian_yi_fang_an = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='建议方案')
 
     class Meta:
-        verbose_name = "App-诊断及处理意见记录"
+        verbose_name = "诊断及处理意见记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -530,7 +530,7 @@ class RouDuSuZhiLiaoJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_rou_du_su_zhi_liao_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-肉毒素治疗记录"
+        verbose_name = "肉毒素治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -558,7 +558,7 @@ class ChaoShengPaoZhiLiaoJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_chao_sheng_pao_zhi_liao_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-超声炮治疗记录"
+        verbose_name = "超声炮治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -586,7 +586,7 @@ class HuangJinWeiZhenZhiLiaoJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_huang_jin_wei_zhen_zhi_liao_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-黄金微针治疗记录"
+        verbose_name = "黄金微针治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -614,7 +614,7 @@ class DiaoQZhiLiaoJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_diao_Q_zhi_liao_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-调Q治疗记录"
+        verbose_name = "调Q治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -642,7 +642,7 @@ class GuangZiZhiLiaoJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_guang_zi_zhi_liao_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-光子治疗记录"
+        verbose_name = "光子治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -670,7 +670,7 @@ class GuoSuanZhiLiaoJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_guo_suan_zhi_liao_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-果酸治疗记录"
+        verbose_name = "果酸治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -698,7 +698,7 @@ class ShuiGuangZhenZhiLiaoJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_shui_guang_zhen_zhi_liao_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-水光针治疗记录"
+        verbose_name = "水光针治疗记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -726,7 +726,7 @@ class ChongZhiJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_chong_zhi_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-充值记录"
+        verbose_name = "充值记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -754,7 +754,7 @@ class XiaoFeiJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_xiao_fei_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-消费记录"
+        verbose_name = "消费记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -782,7 +782,7 @@ class SuiFangJiLu(models.Model):
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_sui_fang_ji_lu', blank=True, null=True, verbose_name="客户")
 
     class Meta:
-        verbose_name = "App-随访记录"
+        verbose_name = "随访记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -812,7 +812,7 @@ class FaSongZhiLiaoZhuYiShiXiangJiLu(models.Model):
     yi_fa_song = models.BooleanField(default=False, verbose_name='已发送')
 
     class Meta:
-        verbose_name = "App-发送治疗注意事项记录"
+        verbose_name = "发送治疗注意事项记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -842,7 +842,7 @@ class QianShuZhiQingTongYiShuJiLu(models.Model):
     yi_qian_shu = models.CharField(max_length=100, blank=True, null=True, verbose_name='已签署')
 
     class Meta:
-        verbose_name = "App-签署知情同意书记录"
+        verbose_name = "签署知情同意书记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     
@@ -871,7 +871,7 @@ class DengLuQianDaoJiLu(models.Model):
     qian_dao = models.BooleanField(default=False, verbose_name='签到')
 
     class Meta:
-        verbose_name = "App-登录签到记录"
+        verbose_name = "登录签到记录"
         verbose_name_plural = verbose_name
         ordering = ["id"]
     

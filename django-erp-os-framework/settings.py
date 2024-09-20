@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'erpsys.urls'
+ROOT_URLCONF = 'django-erp-os-framework.urls'
 
 TEMPLATES = [
     {
@@ -80,8 +80,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'erpsys.wsgi.application'
-ASGI_APPLICATION = 'erpsys.asgi.application'
+WSGI_APPLICATION = 'django-erp-os-framework.wsgi.application'
+ASGI_APPLICATION = 'django-erp-os-framework.asgi.application'
 
 DJANGO_ENV = env('DJANGO_ENV')
 if DJANGO_ENV == 'dev':

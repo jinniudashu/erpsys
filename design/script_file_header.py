@@ -25,7 +25,7 @@ from django.contrib.auth.models import User
 from django.urls import path
 
 from .models import *
-from .views import update_order_status, CustomTokenObtainPairView, CustomTokenRefreshView
+from .views import CustomTokenObtainPairView, CustomTokenRefreshView
 
 def hide_fields(fields):
     exclude_fields = ['id', 'created_time', 'label', 'name', 'pym', 'erpsys_id', 'pid', 'updated_time']
@@ -34,13 +34,13 @@ def hide_fields(fields):
             fields.remove(field)
     fields.extend(['created_time', 'id'])
 
-admin.site.site_header = "铖杏科技运营平台"
-admin.site.site_title = "铖杏科技"
+admin.site.site_header = "..运营平台"
+admin.site.site_title = ".."
 admin.site.index_title = "工作台"
 
 class ApplicationsSite(admin.AdminSite):
-    site_header = '铖杏运营平台'
-    site_title = '铖杏'
+    site_header = '..运营平台'
+    site_title = '..'
     index_title = '工作台'
     enable_nav_sidebar = False
     index_template = 'admin/index_applications.html'
@@ -49,7 +49,6 @@ class ApplicationsSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path('api/updateOrderStatus/', update_order_status, name='update_order_status'),
             path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
             path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
         ]

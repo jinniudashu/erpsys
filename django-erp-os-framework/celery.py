@@ -5,9 +5,9 @@ from datetime import timedelta
 from celery.schedules import crontab
 
 # 设置Django的环境变量
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erpsys.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django-erp-os-framework.settings')
 
-app = Celery('erpsys')
+app = Celery('django-erp-os-framework')
 
 # 使用Redis作为消息代理
 app.config_from_object('django.conf:settings', namespace='CELERY')

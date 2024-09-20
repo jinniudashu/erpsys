@@ -1,1 +1,1 @@
-# erpsys
+# django-erp-os-framework
