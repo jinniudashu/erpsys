@@ -294,13 +294,13 @@ class ServiceBOM:
     @staticmethod
     def direct_children(component_name):
         service = Service.objects.get(name=component_name)
-        sub_services_info = [{{'sub_service': relationship.sub_service.name, 'quantity': relationship.quantity}} for relationship in service.sub_services.all()]
+        sub_services_info = [{'sub_service': relationship.sub_service.name, 'quantity': relationship.quantity} for relationship in service.sub_services.all()]
         return sub_services_info
 
     @staticmethod
     def direct_parents(component_name):
         service = Service.objects.get(name=component_name)
-        parent_services_info = [{{'service': relationship.service.name, 'quantity': relationship.quantity}} for relationship in service.parent_services.all()]
+        parent_services_info = [{'service': relationship.service.name, 'quantity': relationship.quantity} for relationship in service.parent_services.all()]
         return parent_services_info
 
 class Event(ERPSysBase):
