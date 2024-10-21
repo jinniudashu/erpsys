@@ -86,7 +86,7 @@ ASGI_APPLICATION = 'django-erp-os-framework.asgi.application'
 DJANGO_ENV = env('DJANGO_ENV')
 if DJANGO_ENV == 'dev':
     DEBUG = True
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ["*"]
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -146,7 +146,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # 前后端分离不需要设置
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # 前后端分离不需要设置
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -217,3 +217,5 @@ CELERY_TIMEZONE = 'Asia/Shanghai'
 # CELERY_ACCEPT_CONTENT = ['application/json']
 # CELERY_RESULT_SERIALIZER = 'json'
 # CELERY_TASK_SERIALIZER = 'json'
+
+CUSTOMER_SITE_NAME = 'erp'

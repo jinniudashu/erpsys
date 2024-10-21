@@ -8,6 +8,8 @@ services:
       - redis
     env_file:
       - .env
+    volumes:
+      - ./backup_data:/app/backup_data
     user: root
     command: >
       sh -c "chmod +x ./wait-for-it.sh &&
@@ -53,3 +55,4 @@ services:
 
 volumes:
   postgres_data:
+  backup_data:

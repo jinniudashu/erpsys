@@ -1,43 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django.urls import path
 
+from kernel.admin import applications_site, hide_fields
 from .models import *
-from .views import CustomTokenObtainPairView, CustomTokenRefreshView
 
-def hide_fields(fields):
-    exclude_fields = ['id', 'created_time', 'label', 'name', 'pym', 'erpsys_id', 'pid', 'updated_time']
-    for field in exclude_fields:
-        if field in fields:
-            fields.remove(field)
-    fields.extend(['created_time', 'id'])
-
-admin.site.site_header = "..运营平台"
-admin.site.site_title = ".."
-admin.site.index_title = "工作台"
-
-class ApplicationsSite(admin.AdminSite):
-    site_header = '..运营平台'
-    site_title = '..'
-    index_title = '工作台'
-    enable_nav_sidebar = False
-    index_template = 'admin/index_applications.html'
-    site_url = None
-
-    def get_urls(self):
-        urls = super().get_urls()
-        my_urls = [
-            path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-            path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
-        ]
-        return my_urls + urls
-
-    # 职员登录后的首页
-    def index(self, request, extra_context=None):
-        # user = User.objects.get(username=request.user).customer
-        return super().index(request, extra_context=extra_context)
-
-applications_site = ApplicationsSite(name = 'ApplicationsSite')
 
 @admin.register(FuWuLeiBie)
 class FuWuLeiBieAdmin(admin.ModelAdmin):

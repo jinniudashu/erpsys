@@ -127,8 +127,9 @@ class Role(ERPSysBase):
 
 class Operator(ERPSysBase):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='design_operator', verbose_name="用户")
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="角色")
+    role = models.ManyToManyField(Role, blank=True, verbose_name="角色")
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")
+    related_staff = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="关系人")
 
     class Meta:
         verbose_name = "服务-人员"
@@ -178,12 +179,16 @@ class Knowledge(ERPSysBase):
 
 class Service(ERPSysBase):
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
+    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type='Model'), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
+    form = models.ForeignKey("Form", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
+    action_func_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='动作函数名')
+    action_api = models.ForeignKey("Api", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="API")
+    action_api_params = models.JSONField(blank=True, null=True, verbose_name="API参数")
     material_requirements = models.ManyToManyField(Material, through='MaterialRequirements', verbose_name="物料需求")
     equipment_requirements = models.ManyToManyField(Equipment, through='EquipmentRequirements', verbose_name="设备需求")
     device_requirements = models.ManyToManyField(Device, through='DeviceRequirements', verbose_name="器材需求")
     capital_requirements = models.ManyToManyField(Capital, through='CapitalRequirements', verbose_name="资金需求")
     knowledge_requirements = models.ManyToManyField(Knowledge, through='KnowledgeRequirements', verbose_name="知识需求")
-    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type='Model'), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='价格')
     # authorize_roles = models.ManyToManyField(Role, related_name='roles_authorized', blank=True, verbose_name="允许角色")
     # authorize_operators = models.ManyToManyField(Operator, related_name='operators_authorized', blank=True, verbose_name="允许操作员")
@@ -336,10 +341,31 @@ class ServiceRule(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['event', 'event', 'order']
 
+class WorkOrder(ERPSysBase):
+    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+
+    class Meta:
+        verbose_name = "工单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class WorkOrderFields(models.Model):
+    work_order = models.ForeignKey(WorkOrder, on_delete=models.CASCADE, verbose_name="工单")
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    value_expression = models.CharField(max_length=255, blank=True, null=True, verbose_name="值表达式")
+    visible = models.BooleanField(default=True, verbose_name="可见")
+    order = models.SmallIntegerField(default=10, verbose_name="顺序")
+
+    class Meta:
+        verbose_name = "工单字段"
+        verbose_name_plural = verbose_name
+        ordering = ['order']
+    
 class Form(ERPSysBase):
-    service = models.OneToOneField(Service, on_delete=models.CASCADE, verbose_name="服务")
     fields = models.ManyToManyField(DataItem, through='FormFields', verbose_name="表单字段")
     is_list = models.BooleanField(default=False, verbose_name="列表")
+    config = models.JSONField(blank=True, null=True, verbose_name="配置")
 
     class Meta:
         verbose_name = "表单"
@@ -355,6 +381,7 @@ class FormFields(models.Model):
     is_required = models.BooleanField(default=False, verbose_name="必填")
     choice_type = models.CharField(max_length=50, choices=ChoiceType, null=True, blank=True, verbose_name="选择类型")
     is_aggregate = models.BooleanField(default=False, verbose_name="聚合字段")
+    visible = models.BooleanField(default=True, verbose_name="可见")
     order = models.PositiveSmallIntegerField(default=10, verbose_name="顺序")
 
     class Meta:

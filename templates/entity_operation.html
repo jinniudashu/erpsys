@@ -1,0 +1,183 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+<head>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+{% verbatim %}
+<div id="entity_operation">
+    <div style="display: flex; justify-content: space-between;">
+        <h3>客户信息</h3>
+        <input type="submit" value="任务看板" onclick="location.href='/erp/'"/>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <label>服务: </label> 
+    <input class="form-control" type="search" 
+        v-model="searchText" 
+        @input="debounceSearch"
+        placeholder="查找...">
+    <div v-if="profile_list.length > 0">
+        <table class="table table-hover">
+            <!-- <thead>
+                <tr>
+                    <th v-for="header in profile_header_visible" :key="header.name" scope="col">
+                        {{ header.label }}
+                    </th>
+                </tr>
+            </thead> -->
+            <tbody>
+                <tr v-for="profile in profile_list" :key="profile.erysys_id">
+                    <td v-for="header in profile_header_visible" :key="header.name">
+                        {{ profile[header.name] }}
+                    </td>
+                    <td>
+                        <input type="submit" value="安排" @click="assignService(profile.erysys_id)"/>
+                    </td>
+                    <td>
+                        <input type="submit" value="执行" @click="executeService(profile.erysys_id)"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+        <br>
+    <hr>
+    <br>
+    <div v-for="item in taskList" :key="item.title">
+        <div v-if="item.task_list.length > 0">
+            <h3>{{ item.group_title }}</h3>
+            <br>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name" scope="col">
+                            {{ header.label }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="task in item.task_list" :key="task.service_id">
+                        <td v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name">
+                            <template v-if="task.path !== ''">
+                                <a :href="task.path">
+                                    {{ task[header.name] }}
+                                </a>
+                            </template>
+                            <template v-else>
+                                {{ task[header.name] }}
+                            </template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+    {% endverbatim %}
+    
+    <script src="{% static 'js/vue.global.js' %}"></script>
+    <script src="{% static 'js/js.cookie.min.js' %}"></script>
+
+    <script>
+        const { createApp } = Vue;
+
+        const customerServiceApp = {
+            data() {
+                return {
+                    searchText: "",
+                    debounceTimeout: null,
+                    profile_list: [],
+                    profile_header: [],
+                    profile_header_visible: [],
+                    taskList: [],
+                    allowedServicesId: [],  // 当前操作员可以操作的服务id
+                    operatorId: null,
+                    entityId: null,
+                }
+            },
+
+            created() {
+                // 从当前href获取entityId
+                const urlWithoutParams = window.location.href.split('?')[0].split('#')[0];
+                const segments = urlWithoutParams.split('/');
+                segments.pop();  // 删除最后一个''元素, 源于Django路由返回的url最后会带一个'/'
+                this.entityId = segments.pop();
+
+                this.operatorId = Cookies.get('operator_id')
+                this.allowedServicesId = Cookies.get('allowed_services_id').split('\\')
+                
+                const ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+                const taskListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/entity_task_list/${this.entityId}/`);
+                taskListSocket.onmessage = (event) => {
+                    const parsedData = JSON.parse(event.data);
+                    this.taskList = parsedData.task_list;
+                    console.log('taskList：', this.taskList);
+                };
+            },
+            
+            methods: {
+                async search(text) {
+                    const searchURL = `${window.location.origin}/erp/search/?search_content=service&search_text=${text}`;
+                    try {
+                        const response = await fetch(searchURL, {
+                            headers: {
+                                'Accept': 'application/json',
+                            }
+                        });
+                        if (!response.ok) {
+                            throw new Error('HTTP error ' + response.status);
+                        }
+                        const result = await response.json();
+                        this.profile_list = result.profile_list;
+                        this.profile_header = result.profile_header;
+                        this.profile_header_visible = this.profile_header.filter(header => header.visible)
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                },
+
+                debounceSearch() {
+                    clearTimeout(this.debounceTimeout);
+                    this.debounceTimeout = setTimeout(() => {
+                        this.search(this.searchText);
+                    }, 500);
+                },
+
+                getSortedVisibleHeaders(taskHead) {
+                    return taskHead
+                        .filter(header => header.visible)
+                        .sort((a, b) => a.order - b.order);
+                },
+
+                assignService(id) {
+                    console.log('安排服务')
+                },
+
+                executeService(id) {
+                    console.log('执行服务')
+                },
+            },            
+            
+        };
+
+        createApp(customerServiceApp).mount('#entity_operation');
+
+    </script>
+
+{% endblock %}

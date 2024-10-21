@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 from .models import Operator, Service
 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 # 获取员工列表，过滤掉操作员自己，用于排班
 def get_employees(request):
     # operator = User.objects.get(username=request.user).customer.staff
@@ -13,3 +15,11 @@ def get_employees(request):
     #     shift_employees.append({'id': staff.customer.id, 'name': staff.name, 'allowed_services': allowed_services})
     # return JsonResponse(shift_employees, safe=False)
     return JsonResponse([{'id': '1', 'name': 'test', 'allowed_services': []}], safe=False)
+
+# URL：127.0.0.1/api/token/
+class CustomTokenObtainPairView(TokenObtainPairView):
+    pass
+
+# URL：127.0.0.1/api/token/refresh/
+class CustomTokenRefreshView(TokenRefreshView):
+    pass

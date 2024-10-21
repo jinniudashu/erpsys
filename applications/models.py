@@ -318,7 +318,7 @@ class Profile(models.Model):
     pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
     created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
-    master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_Profile', blank=True, null=True, verbose_name="客户")
+    master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_Profile', blank=True, null=True, verbose_name="人员")
     xing_ming = models.CharField(max_length=100, blank=True, null=True, verbose_name='姓名')
     xing_bie = models.CharField(max_length=100, blank=True, null=True, verbose_name='性别')
     nian_ling = models.IntegerField(blank=True, null=True, verbose_name='年龄')

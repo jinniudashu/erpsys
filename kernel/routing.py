@@ -1,9 +1,9 @@
-from django.urls import path, re_path
+from django.urls import path
 
-from kernel.consumers import TaskListConsumer, ServiceListConsumer
+from kernel.consumers import PrivateTaskListConsumer, PublicTaskListConsumer, EntityTaskListConsumer
 
-print('routing.....')
 ws_urlpatterns = [
-    path('ws/task_list/', TaskListConsumer.as_asgi()),
-    path('ws/service_list/<int:customer_id>/<int:history_days>/<str:history_service_name>/', ServiceListConsumer.as_asgi()),
+    path('entity_task_list/<str:entity_id>/', EntityTaskListConsumer.as_asgi()),
+    path('private_task_list/', PrivateTaskListConsumer.as_asgi()),
+    path('public_task_list/', PublicTaskListConsumer.as_asgi()),
 ]

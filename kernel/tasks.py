@@ -1,6 +1,12 @@
 from celery import shared_task
 from django_celery_beat.models import PeriodicTask
 
+import subprocess
+
+@shared_task
+def task_backup_data():
+    subprocess.run(['python', 'backup.py', 'crontab'])
+
 @shared_task
 def timer_interrupt(task_name):
     # get timer.pid

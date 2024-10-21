@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.signals import user_logged_in
 from django.forms.models import model_to_dict
 from django.utils import timezone
-from datetime import timedelta
+from django.conf import settings
 
+from datetime import timedelta
 from enum import Enum, auto
 
 from kernel.signals import process_terminated_signal, ux_input_signal
@@ -16,12 +17,15 @@ from kernel.sys_lib import sys_create_process, add_periodic_task
 
 @receiver(user_logged_in)
 def on_user_login(sender, user, request, **kwargs):
-    if request.path == '/applications/login/':  # 应用登录
+    if request.path == f'/{settings.CUSTOMER_SITE_NAME}/login/':  # 应用登录
         # 创建一个登录进程, state=TERMINATED
+        customer = Operator.objects.get(user=user)
         params = {
             'service': Service.objects.get(name='user_login'),
-            'operator': Operator.objects.get(user=user),
+            'customer': customer,
+            'operator': customer,
             'state': ProcessState.TERMINATED.name,
+            'priority': 0
         }
         Process.objects.create(**params)
 
@@ -192,6 +196,7 @@ def preprocess_context(instance: Process, created: bool) -> dict:
     schedule_context = instance.schedule_context if instance.schedule_context else {}
     context = {**model_context, **pid_context, **control_context, **schedule_context}
     context.update({"instance": instance})
+    context.update({"customer": instance.customer})
     context.update({"created": created, "timezone_now": timezone.now()})
     return context
 

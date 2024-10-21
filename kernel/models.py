@@ -54,7 +54,7 @@ class Customer(ERPSysBase):
         ordering = ['id']
 
 class Role(ERPSysBase):
-    service_items = models.ManyToManyField('Service', related_name='roles', blank=True, verbose_name="服务项目")
+    services = models.ManyToManyField('Service', related_name='roles', blank=True, verbose_name="服务项目")
     class Meta:
         verbose_name = "服务-角色"
         verbose_name_plural = verbose_name
@@ -62,13 +62,20 @@ class Role(ERPSysBase):
 
 class Operator(ERPSysBase):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="用户")
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="角色")
+    role = models.ManyToManyField(Role, blank=True, verbose_name="角色")
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")
+    related_staff = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="关系人")
 
     class Meta:
         verbose_name = "服务-人员"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+    def allowed_services(self):
+        return list(set(service for role in self.role.all() for service in role.services.all()))
+
+    def get_task_list(self, state_set):
+        return Process.objects.filter(customer=self, state__in=state_set)
 
 class Resource(ERPSysBase):
     class Meta:
@@ -130,6 +137,23 @@ class ServiceRule(ERPSysBase):
     def __str__(self):
         return self.label
 
+class WorkOrder(ERPSysBase):
+    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+
+    class Meta:
+        verbose_name = "工单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class Form(ERPSysBase):
+    is_list = models.BooleanField(default=False, verbose_name="列表")
+    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+
+    class Meta:
+        verbose_name = "表单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
 class PidField(models.IntegerField):
     def pre_save(self, model_instance, add):
         if add:
@@ -149,8 +173,13 @@ class Process(models.Model):
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name="child_instances", verbose_name="父进程")
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
     state = models.CharField(max_length=50, choices=[(state.name, state.value) for state in ProcessState], default=ProcessState.NEW.name, verbose_name="状态")
+    priority = models.PositiveSmallIntegerField(default=0, verbose_name="优先级")
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划时间")
-    operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="操作员")
+    time_window = models.DurationField(blank=True, null=True, verbose_name='时间窗')
+    operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, related_name="as_operator_process", verbose_name="操作员")
+    customer = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, related_name="as_customer_process", verbose_name="客户")
+    work_order = models.ForeignKey(WorkOrder, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="工单")
+    path = models.CharField(max_length=512, blank=True, null=True, verbose_name="路径")
     program = models.JSONField(blank=True, null=True, verbose_name="程序")
     pc = models.PositiveIntegerField(blank=True, null=True, verbose_name="程序计数器")
     registers = models.JSONField(blank=True, null=True, verbose_name="寄存器")
@@ -166,7 +195,6 @@ class Process(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
-    url = models.URLField(blank=True, null=True, verbose_name="URL")
     start_time = models.DateTimeField(blank=True, null=True, verbose_name="开始时间")
     end_time = models.DateTimeField(blank=True, null=True, verbose_name="结束时间")
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
@@ -199,6 +227,37 @@ class Process(models.Model):
             return Process.objects.filter(parent=self.parent).exclude(id=self.id)
         else:
             return Process.objects.none()
+        
+    def receive_task(self, operator):
+        # 获取作业任务
+        self.operator = operator
+        self.save()
+
+    def rollback_task(self):
+        # 作业任务回退
+        self.operator = None
+        self.state = ProcessState.NEW.name
+        self.save()
+
+    def cancel_task(self, operator):
+        # 作业进程撤销
+        self.operator = operator
+        self.state = ProcessState.TERMINATED.name
+        self.save()
+
+    def suspend_or_resume_task(self):
+        # 作业进程挂起或恢复
+        if self.state == ProcessState.WAITING.name:
+            self.state = ProcessState.READY.name
+        else:
+            self.state = ProcessState.WAITING.name
+        self.save()
+
+    def shift_task(self, operator):
+        # 作业进程转移操作员
+        self.operator = operator
+        self.state = ProcessState.READY.name
+        self.save()
 
 class Stacks(ERPSysBase):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
@@ -215,17 +274,6 @@ class Stacks(ERPSysBase):
 
     def __str__(self):
         return str(self.process)
-
-class WorkOrder(ERPSysBase):
-    process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
-    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务项目")
-    operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="操作员")
-    scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划时间")
-
-    class Meta:
-        verbose_name = "进程工单"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
 
 class SysParams(ERPSysBase):
     config = models.JSONField(blank=True, null=True, verbose_name="配置")

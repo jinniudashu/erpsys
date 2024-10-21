@@ -1,0 +1,356 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+    {% verbatim %}
+    <div id="app">
+        <label>搜索：</label>
+        <input class="form-control" type="search" 
+               v-model="searchText" 
+               @input="debounceSearch"
+               placeholder="查找...">
+        <div v-if="profile_list.length > 0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th v-for="header in profile_header_visible" :key="header.name" scope="col">
+                            {{ header.label }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="profile in profile_list" :key="profile.id">
+                        <td v-for="header in profile_header_visible" :key="header.name">
+                            <a :href="'entity_operation/' + profile.id">
+                            {{ profile[header.name] }}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>        
+        <hr>
+        <br>
+        <div v-for="item in privateTaskList" :key="item.title">
+            <div v-if="item.task_list.length > 0">
+                <h3>{{ item.title }}</h3>
+                <br>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name" scope="col">
+                                {{ header.label }}
+                            </th>
+                            <!-- <th scope="col">操作</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="task in item.task_list" :key="task.id">
+                            <td v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name">
+                                <template v-if="header.name === 'customer_name'">
+                                    <a :href="'entity_operation/' + task.customer_id">
+                                        {{ task[header.name] }}
+                                    </a>
+                                </template>
+                                <template v-else>
+                                    <a :href="task.path">
+                                        {{ task[header.name] }}
+                                    </a>
+                                </template>
+                            </td>
+                            <!-- <td v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name">
+                                <a :href="task.path">
+                                    {{ task[header.name] }}
+                                </a>
+                            </td> -->
+
+                            <!-- <td>
+                                <span @click.stop="openMenu(task.id)">...</span>
+                                <div v-if="openMenuTodoId === task.id" class="dropdown-menu">
+                                    <a href="#" @click.stop.prevent="openSwapMenu(task)">
+                                        换班 <span class="triangle">&#9654;</span>
+                                        <div v-if="openSwapMenuTodoId === task.id" class="sub-menu">
+                                            <a v-for="employee in shiftEmployees" :key="employee.id" href="#" @click.stop.prevent="handleShift(task.id, employee.id)">
+                                                {{ employee.name }}
+                                            </a>
+                                        </div>
+                                    </a>
+                                    <a href="#" @click="handleProcOperation(task.id, 'ROLLBACK')">退回</a>
+                                    <a href="#" @click="handleProcOperation(task.id, 'SUSPEND_OR_RESUME')">{{ task.state==3? '恢复' : '挂起'}}</a>
+                                    <a href="#" @click="handleProcOperation(task.id, 'CANCEL')">撤销</a>
+                                </div>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <br>
+        <div v-for="item in publicTaskList" :key="item.title">
+            <div v-if="item.task_list.length > 0">
+                <h3>{{ item.title }}</h3>
+                <br>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name" scope="col">
+                                {{ header.label }}
+                            </th>
+                            <th v-if="item.title != '公共任务'" scope="col">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="task in item.task_list" :key="task.id">
+                            <td v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name">
+                                <a href="#" @click="handleProcOperation(task.pid, 'RECEIVE')">
+                                    {{ task[header.name] }}
+                                </a>
+                            </td>
+                            <!-- <td v-if="item.title != '公共任务'" >
+                                <a href="#" @click="handleProcOperation(task.id, 'CANCEL')">撤销</a>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+            </div>
+            <br>
+            <hr>
+            <br>
+        </div>
+        <div v-if="showConfirmation" class="confirmation-box">
+            <p>确认要进行换班操作吗？</p>
+            <button @click="confirmShift">确认</button>
+            <button @click="cancelShift">取消</button>
+        </div>
+    </div>
+    {% endverbatim %}
+    <script src="{% static 'js/vue.global.js' %}"></script>
+    <script src="{% static 'js/js.cookie.min.js' %}"></script>
+
+    <script>
+        const { createApp } = Vue;
+
+        const customerServiceApp = {
+            data() {
+                return {
+                    privateTaskList: [],
+                    publicTaskList: [],
+                    profile_list: [],
+                    profile_header_visible: [],
+                    searchText: '',
+                    debounceTimeout: null,
+                    shiftEmployees: [],
+                    allEmployees: [],
+                    openMenuTodoId: null,
+                    openSwapMenuTodoId: null,
+                    showConfirmation: false,
+                    currentEmployeeId: null,
+                }
+            },
+
+            methods: {
+                async search(text) {
+                    const searchURL = `${window.location.origin}/erp/search/?search_content=entity&search_text=${text}`;
+                    try {
+                        const response = await fetch(searchURL, {
+                            headers: {
+                                'Accept': 'application/json',
+                            }
+                        });
+                        if (!response.ok) {
+                            throw new Error('HTTP error ' + response.status);
+                        }
+                        const result = await response.json();
+                        this.profile_list = result.profile_list;
+                        profile_header = result.profile_header;
+                        this.profile_header_visible = profile_header.filter(header => header.visible)
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                },
+
+                debounceSearch() {
+                    clearTimeout(this.debounceTimeout);
+                    this.debounceTimeout = setTimeout(() => {
+                        this.search(this.searchText);
+                    }, 500);
+                },
+
+                getSortedVisibleHeaders(taskHead) {
+                    return taskHead
+                        .filter(header => header.visible)
+                        .sort((a, b) => a.order - b.order);
+                },
+
+                handleProcOperation(id, opCode) {
+                    window.location.href = 'manage_task/?pid=' + id + '&op_code=' + opCode
+                },
+                
+                openMenu(id) {
+                    this.openMenuTodoId = id;
+                },
+                
+                openSwapMenu(task) {
+                    this.openSwapMenuTodoId = task.id;
+                    // 筛选出允许服务当前服务项目的员工
+                    this.shiftEmployees = this.allEmployees.filter(employee => employee.allowed_services.includes(task.service_id));
+                },
+                
+                handleShift(todoId, employeeId) {
+                    this.currentEmployeeId = employeeId;                    
+                    // this.showConfirmation = true;
+                    window.location.href = 'manage_task/?proc_id=' + todoId + '&op_code=SHIFT&operator_id=' + employeeId;
+                },                
+                
+                confirmShift() {
+                    console.log('确认换班到员工ID:', this.currentEmployeeId);
+                    // 这里处理换班的逻辑
+
+                    this.showConfirmation = false;  // 关闭确认框
+                    this.openSwapMenuTodoId = null; // 关闭子菜单
+                    this.openMenuTodoId = null;     // 关闭主菜单
+                },
+                
+                cancelShift() {
+                    this.showConfirmation = false;  // 只关闭确认框
+                },
+                
+                handleOutsideClick(event) {
+                    // 隐藏主菜单、子菜单
+                    this.openMenuTodoId = null;
+                    this.openSwapMenuTodoId = null;
+                },
+            },
+
+            created() {
+                let _this = this;
+                var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws"
+
+                // 建立信道 - 操作员任务列表
+                const privateTaskList = new WebSocket(`${ws_scheme}://${window.location.host}/private_task_list/`);
+                privateTaskList.onmessage = function (event) {
+                    _this.privateTaskList = JSON.parse(event.data)
+                    console.log('privateTaskList:', _this.privateTaskList)
+                };
+
+                // 建立信道 - 公共任务列表
+                const publicTaskList = new WebSocket(`${ws_scheme}://${window.location.host}/public_task_list/`);
+                publicTaskList.onmessage = function (event) {
+                    _this.publicTaskList = JSON.parse(event.data);
+                    console.log('publicTaskList:', _this.publicTaskList)
+                };
+
+                // 获取员工列表[{'id': 1, 'name': '张三', 'allow_services': [1,2,3]}, ...]
+                const fetchEmployeesURL = `${window.location.origin}/basic-api/get_employees/`;
+                const fetchEmployees = async () => {
+                    try {
+                        const response = await fetch(fetchEmployeesURL, {
+                            headers: {
+                                'Accept': 'application/json',
+                            }
+                        });
+                        if (!response.ok) {
+                            throw new Error('HTTP error ' + response.status);
+                        }
+                        const result = await response.json();
+                        _this.allEmployees = result;
+                        console.log('allEmployees:', result)
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+                fetchEmployees();
+            },
+
+            mounted() {
+                document.addEventListener('click', this.handleOutsideClick);
+            },
+
+            beforeDestroy() {
+                document.removeEventListener('click', this.handleOutsideClick);
+            },
+        };
+
+        createApp(customerServiceApp).mount('#app');
+    </script>
+
+    <style type="text/css">
+        .red{            
+            color: red;
+        }
+        .dropdown-menu {
+            display: block;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            z-index: 1;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+        .dropdown-menu a:hover {
+            background-color: #eee;
+        }
+        .sub-menu {
+            display: block;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            left: 100%;
+            top: 0;
+            z-index: 2;
+            white-space: nowrap; /* 确保子菜单项中的文字不会换行 */
+        }
+        .triangle {
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        .sub-menu-open .triangle {
+            transform: rotate(90deg);
+        }       
+        .confirmation-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            z-index: 3; /* 确保确认框在其他菜单上面 */
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .confirmation-box button {
+            padding: 5px 15px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            transition: background-color 0.3s;
+        }
+
+        .confirmation-box button:hover {
+            background-color: #ddd;
+        }        
+        
+    </style>
+
+{% endblock %}

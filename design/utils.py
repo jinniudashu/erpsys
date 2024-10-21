@@ -3,25 +3,29 @@ from django.utils import timezone
 from django.db.models import Count
 from django.utils.dateparse import parse_time, parse_date, parse_datetime
 from django.core.exceptions import ValidationError
+from django.db import models
 
 import logging
 import json
 
-from design.models import DataItem, DESIGN_CLASS_MAPPING, Customer as design_Customer, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule
+from design.models import DataItem, DESIGN_CLASS_MAPPING, Organization as design_Organization, Customer as design_Customer, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule, WorkOrder as design_WorkOrder, Form as design_Form
 from design.models import ServiceConsists, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
 from design.script_file_header import ScriptFileHeader, get_master_field_script, get_admin_script, get_model_footer
 
-from kernel.models import Customer as kernel_Customer, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule
+from kernel.models import Organization as kernel_Organization, Customer as kernel_Customer, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule, WorkOrder as kernel_WorkOrder, Form as kernel_Form
 from applications.models import CLASS_MAPPING
 # Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
 COPY_CLASS_MAPPING = {
+    "Organization": (design_Organization, kernel_Organization),
     "Customer": (design_Customer, kernel_Customer),
     "Role": (design_Role, kernel_Role),
     "Operator": (design_Operator, kernel_Operator),
     "Resource": (design_Resource, kernel_Resource),
     "Event": (design_Event, kernel_Event),
     "Instruction": (design_Instruction, kernel_Instruction),
+    "WorkOrder": (design_WorkOrder, kernel_WorkOrder),
+    "Form": (design_Form, kernel_Form),
     # "Material": (design_Material, applications_Material),
     # "Equipment": (design_Equipment, applications_Equipment),
     # "Device": (design_Device, applications_Device),
@@ -31,6 +35,7 @@ COPY_CLASS_MAPPING = {
 
 # 加载初始数据
 def load_init_data():
+    # 将设计内容添加到design和applications
     def import_init_data_from_data_item():
         def convert_value(value, field_type, dict_model_class):
             """
@@ -120,28 +125,58 @@ def load_init_data():
             print('插入初始数据：', class_name, item.init_content)
             insert_to_model(model_class)
 
+    # 将设计内容加载到运行时kernel
     def copy_design_to_kernel():
-        for model_name, models in COPY_CLASS_MAPPING.items():
-            source_model, target_model = models
+        def handle_foreign_key(field, value):
+            if value is None:
+                return None
+            related_model = field.related_model
+            if related_model.__name__ in COPY_CLASS_MAPPING:
+                _, target_related_model = COPY_CLASS_MAPPING[related_model.__name__]
+                try:
+                    return target_related_model.objects.get(erpsys_id=value.erpsys_id)
+                except target_related_model.DoesNotExist:
+                    return None
+            return value
+
+        for model_name, models_tuple in COPY_CLASS_MAPPING.items():
+            source_model, target_model = models_tuple
             # 删除目标模型中的所有数据
             target_model.objects.all().delete()
             # 从源模型中读取所有实例
             source_objects = source_model.objects.all()
-            target_objects = [
-                target_model(**{
-                    field.name: getattr(obj, field.name)
-                    for field in source_model._meta.fields
-                    if field.name in [f.name for f in target_model._meta.fields] and field.name != 'id'
-                })
-                for obj in source_objects
-            ]
-            # 批量创建数据，这里用到了bulk_create来优化性能
-            target_model.objects.bulk_create(target_objects)
-            print(f"Copied {len(target_objects)} records from {source_model.__name__} to {target_model.__name__}.")
+            
+            # 用于存储新旧对象的映射关系
+            object_mapping = {}
+            
+            for obj in source_objects:
+                new_obj = target_model()
+                for field in source_model._meta.fields:
+                    if field.name in [f.name for f in target_model._meta.fields] and field.name != 'id':
+                        value = getattr(obj, field.name)
+                        if isinstance(field, models.ForeignKey):
+                            value = handle_foreign_key(field, value)
+                        setattr(new_obj, field.name, value)
+                new_obj.save()
+                object_mapping[obj] = new_obj
+            
+            # 处理多对多字段
+            for obj in source_objects:
+                new_obj = object_mapping[obj]
+                for field in source_model._meta.many_to_many:
+                    if field.name in [f.name for f in target_model._meta.many_to_many]:
+                        
+                        source_related_objects = getattr(obj, field.name).all()
+                        target_related_objects = [
+                            handle_foreign_key(field.remote_field, related_obj)
+                            for related_obj in source_related_objects
+                        ]
+                        getattr(new_obj, field.name).set(target_related_objects)
+            
+            print(f"Copied {source_model.objects.count()} records from {source_model.__name__} to {target_model.__name__}.")
 
     def import_service_from_design():
         services = design_Service.objects.all()
-        kernel_Service.objects.all().delete()
         for service in services:
             service_json = {
                 "erpsys_id": service.erpsys_id,
@@ -149,6 +184,11 @@ def load_init_data():
                     {"erpsys_id": sub_service.sub_service.erpsys_id, "name": sub_service.sub_service.name, "quantity": sub_service.quantity}
                     for sub_service in ServiceConsists.objects.filter(service=service)
                 ],
+                "action": {
+                    "action_func_name": service.action_func_name,
+                    "action_api_url": service.action_api.url if service.action_api else None,
+                    "action_api_params": service.action_api_params
+                },
                 "material_requirements": [
                     {"erpsys_id": req.resource_object.erpsys_id, "name": req.resource_object.name, "quantity": req.quantity}
                     for req in MaterialRequirements.objects.filter(service=service)
@@ -204,11 +244,13 @@ def load_init_data():
                 "service_type": service.service_type
             }
 
-            kernel_Service.objects.create(
-                name=service.name,
-                label=service.label,
+            kernel_Service.objects.update_or_create(
                 erpsys_id=service.erpsys_id,
-                config=service_json
+                defaults={
+                    "name": service.name,
+                    "label": service.label,
+                    "config": service_json
+                }
             )
             print(f"Exported Service {service.name} to kernel")
 
@@ -237,6 +279,8 @@ def load_init_data():
     import_init_data_from_data_item()
     copy_design_to_kernel()
     import_service_from_design()
+
+
 
 # 生成脚本, 被design.admin调用
 def generate_source_code(project):

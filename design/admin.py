@@ -133,6 +133,38 @@ class ServiceRuleAdmin(admin.ModelAdmin):
     search_fields = ['label', 'name', 'pym']
     autocomplete_fields = ['event', 'service']
 
+class WorkOrderFieldsInline(admin.TabularInline):
+    model = WorkOrderFields
+    extra = 0
+
+@admin.register(WorkOrder)
+class WorkOrderAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in WorkOrder._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+    inlines = [WorkOrderFieldsInline]
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        
+        # 当保存主表单时，遍历相关联的 WorkOrderField 数据
+        fields = WorkOrderFields.objects.filter(work_order=obj)
+        
+        # 构建新的配置JSON
+        config_data = []
+        for field in fields:
+            config_data.append({
+                'label': field.label,
+                'name': field.name,
+                'value_expression': field.value_expression,
+                'visible': field.visible,
+                'order': field.order
+            })
+
+        # 将生成的JSON写入 config 字段
+        obj.config = config_data
+        obj.save()
+
 class FormFieldsInline(admin.TabularInline):
     model = FormFields
     extra = 0
@@ -143,6 +175,32 @@ class FormAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'label', 'name',]
     search_fields = ['label', 'name', 'pym']
     inlines = [FormFieldsInline]
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        
+        # 当保存主表单时，遍历相关联的 FormFields 数据
+        fields = FormFields.objects.filter(form=obj)
+        
+        # 构建新的配置JSON
+        config_data = []
+        for field in fields:
+            config_data.append({
+                'label': field.field.label,
+                'name': field.field.name,
+                'expand_data_item': field.expand_data_item,
+                'default_value': field.default_value,
+                'readonly': field.readonly,
+                'is_required': field.is_required,
+                'choice_type': field.choice_type,
+                'is_aggregate': field.is_aggregate,
+                'visible': field.visible,
+                'order': field.order
+            })
+        
+        # 将生成的JSON写入 config 字段
+        obj.config = config_data
+        obj.save()
 
 class ApiFieldsInline(admin.TabularInline):
     model = ApiFields

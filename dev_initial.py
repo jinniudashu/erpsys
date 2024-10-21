@@ -60,7 +60,7 @@ os.system("python manage.py migrate")
 
 # loaddata
 print("初始化系统配置 loaddata")
-os.system("python manage.py loaddata backup.json")
+os.system(f"python manage.py loaddata backup.json")
 
 # 创建管理员
 load_dotenv() 
