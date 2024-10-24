@@ -46,6 +46,13 @@ class ZhenDuanAdmin(admin.ModelAdmin):
     list_filter = list_display
 applications_site.register(ZhenDuan, ZhenDuanAdmin)
     
+@admin.register(ShouFeiLeiXing)
+class ShouFeiLeiXingAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ShouFeiLeiXing._meta.fields]
+    list_display_links = list_display
+    list_filter = list_display
+applications_site.register(ShouFeiLeiXing, ShouFeiLeiXingAdmin)
+    
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Material._meta.fields]
@@ -231,4 +238,28 @@ class DengLuQianDaoJiLuAdmin(admin.ModelAdmin):
     list_display_links = list_display
     list_filter = list_display
 applications_site.register(DengLuQianDaoJiLu, DengLuQianDaoJiLuAdmin)
+    
+@admin.register(YuYueTiXingJiLu)
+class YuYueTiXingJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in YuYueTiXingJiLu._meta.fields]
+    hide_fields(list_display)
+    list_display_links = list_display
+    list_filter = list_display
+applications_site.register(YuYueTiXingJiLu, YuYueTiXingJiLuAdmin)
+    
+@admin.register(ShouFeiJiLu)
+class ShouFeiJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ShouFeiJiLu._meta.fields]
+    hide_fields(list_display)
+    list_display_links = list_display
+    list_filter = list_display
+applications_site.register(ShouFeiJiLu, ShouFeiJiLuAdmin)
+    
+@admin.register(ZhiLiaoXiangMuHeXiaoJiLu)
+class ZhiLiaoXiangMuHeXiaoJiLuAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ZhiLiaoXiangMuHeXiaoJiLu._meta.fields]
+    hide_fields(list_display)
+    list_display_links = list_display
+    list_filter = list_display
+applications_site.register(ZhiLiaoXiangMuHeXiaoJiLu, ZhiLiaoXiangMuHeXiaoJiLuAdmin)
     

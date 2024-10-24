@@ -15,6 +15,7 @@ FieldType = [
     ('JSONField', 'JSON'),
     ('FileField', '文件'),
     ('ComputedField', '计算字段'),
+    ('Process', '进程')
 ]
 
 ChoiceType = [
@@ -29,8 +30,9 @@ SystemObject = [
     ('DateTime', '系统时间'),
     ('Timer', '系统计时器'),
     ('Service', '服务'),
+    ('Process', '进程'),
     ('CreateService', '创建服务'),
-    ('CallService', '调用服务'),
+    ('CallService', '调用服务')
 ]
 
 ImplementType = [
@@ -40,6 +42,7 @@ ImplementType = [
     ('MenuItem', '菜单项'),
     ('KernelModel', '系统表'),
     ('Program', '程序'),
+    ('Log', '日志')
 ]
 
 ResourceType = [
@@ -71,6 +74,7 @@ class SystemResourceType(Enum):
 class ServiceType(Enum):
     """服务类型枚举类"""
     USER = "用户"
+    AGENT = "代理"
     SYSTEM = "系统"
 
 class FormType(Enum):

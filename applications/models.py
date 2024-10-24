@@ -170,6 +170,33 @@ class ZhenDuan(models.Model):
             self.label = label
         super().save(*args, **kwargs)
     
+class ShouFeiLeiXing(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+
+    class Meta:
+        verbose_name = "Dict-收费类型"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+    
+    def __str__(self):
+        return self.label if self.label else ''
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w一-龥]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    
 class Material(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
@@ -780,6 +807,8 @@ class SuiFangJiLu(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
     master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_sui_fang_ji_lu', blank=True, null=True, verbose_name="客户")
+    zhi_liao_xiang_mu = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='治疗项目')
+    sui_fang_nei_rong = models.TextField(blank=True, null=True, verbose_name='随访内容')
 
     class Meta:
         verbose_name = "随访记录"
@@ -888,6 +917,97 @@ class DengLuQianDaoJiLu(models.Model):
             self.label = label
         super().save(*args, **kwargs)
     
+class YuYueTiXingJiLu(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_yu_yue_ti_xing_ji_lu', blank=True, null=True, verbose_name="客户")
+    yi_ti_xing = models.BooleanField(default=False, verbose_name='已提醒')
+
+    class Meta:
+        verbose_name = "预约提醒记录"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+    
+    def __str__(self):
+        return self.label if self.label else ''
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w一-龥]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    
+class ShouFeiJiLu(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_shou_fei_ji_lu', blank=True, null=True, verbose_name="客户")
+    shou_fei_xiang_mu = models.CharField(max_length=255, blank=True, null=True, verbose_name='收费项目')
+    ying_shou = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='应收')
+    zhe_kou = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='折扣')
+    shi_shou = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='实收')
+    shou_fei_lei_xing = models.ForeignKey(ShouFeiLeiXing, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='收费类型')
+
+    class Meta:
+        verbose_name = "收费记录"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+    
+    def __str__(self):
+        return self.label if self.label else ''
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w一-龥]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    
+class ZhiLiaoXiangMuHeXiaoJiLu(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    master = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='property_set_zhi_liao_xiang_mu_he_xiao_ji_lu', blank=True, null=True, verbose_name="客户")
+    zhi_liao_xiang_mu = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='治疗项目')
+
+    class Meta:
+        verbose_name = "治疗项目核销记录"
+        verbose_name_plural = verbose_name
+        ordering = ["id"]
+    
+    def __str__(self):
+        return self.label if self.label else ''
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w一-龥]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    
 CLASS_MAPPING = {
     "FuWuLeiBie": FuWuLeiBie,
     "RuChuKuCaoZuo": RuChuKuCaoZuo,
@@ -895,6 +1015,7 @@ CLASS_MAPPING = {
     "HunFou": HunFou,
     "ZhengZhuang": ZhengZhuang,
     "ZhenDuan": ZhenDuan,
+    "ShouFeiLeiXing": ShouFeiLeiXing,
     "Material": Material,
     "Equipment": Equipment,
     "Device": Device,
@@ -919,5 +1040,8 @@ CLASS_MAPPING = {
     "FaSongZhiLiaoZhuYiShiXiangJiLu": FaSongZhiLiaoZhuYiShiXiangJiLu,
     "QianShuZhiQingTongYiShuJiLu": QianShuZhiQingTongYiShuJiLu,
     "DengLuQianDaoJiLu": DengLuQianDaoJiLu,
+    "YuYueTiXingJiLu": YuYueTiXingJiLu,
+    "ShouFeiJiLu": ShouFeiJiLu,
+    "ZhiLiaoXiangMuHeXiaoJiLu": ZhiLiaoXiangMuHeXiaoJiLu,
 }
 

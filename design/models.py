@@ -179,7 +179,7 @@ class Knowledge(ERPSysBase):
 
 class Service(ERPSysBase):
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
-    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type='Model'), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
+    subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type__in = ['Model', 'Log']), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
     form = models.ForeignKey("Form", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
     action_func_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='动作函数名')
     action_api = models.ForeignKey("Api", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="API")

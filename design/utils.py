@@ -354,6 +354,9 @@ def generate_source_code(project):
                     case 'User':
                         field_definitions += f"    {field_name} = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
                         field_type_dict.update({field_name: 'User'})
+                    # case 'Process':
+                    #     field_definitions += f"    {field_name} = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='{field_name}', verbose_name='{consist_item.label}')\n"
+                    #     field_type_dict.update({field_name: 'Process'})
                     case 'ComputedField':
                         pass
                     case _:
