@@ -7,7 +7,7 @@ import uuid
 import re
 from pypinyin import Style, lazy_pinyin
 
-from kernel.models import Operator, Process, Service, Customer, Organization
+from kernel.models import Operator, Process, Service, Organization
 \n""",
 
     'class_base_fields': f"""
@@ -35,7 +35,7 @@ def get_model_footer(verbose_name):
     class Meta:
         verbose_name = "{verbose_name}"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -66,6 +66,7 @@ def get_admin_script(class_name, is_dict):
 class {class_name}Admin(admin.ModelAdmin):
     list_display = [field.name for field in {class_name}._meta.fields]{hide_fields}
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register({class_name}, {class_name}Admin)
     """

@@ -47,12 +47,6 @@ class Organization(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-class Customer(ERPSysBase):
-    class Meta:
-        verbose_name = "服务-客户"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
 class Role(ERPSysBase):
     services = models.ManyToManyField('Service', related_name='roles', blank=True, verbose_name="服务项目")
     class Meta:
@@ -227,7 +221,7 @@ class Process(models.Model):
             return Process.objects.filter(parent=self.parent).exclude(id=self.id)
         else:
             return Process.objects.none()
-        
+
     def receive_task(self, operator):
         # 获取作业任务
         self.operator = operator
@@ -376,7 +370,6 @@ for _ in range(10):
 
 # Vocabulary
 Organization
-Customer
 Contract
 
 Service

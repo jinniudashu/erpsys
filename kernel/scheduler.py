@@ -19,11 +19,11 @@ from kernel.sys_lib import sys_create_process, add_periodic_task
 def on_user_login(sender, user, request, **kwargs):
     if request.path == f'/{settings.CUSTOMER_SITE_NAME}/login/':  # 应用登录
         # 创建一个登录进程, state=TERMINATED
-        customer = Operator.objects.get(user=user)
+        operator = Operator.objects.get(user=user)
         params = {
             'service': Service.objects.get(name='user_login'),
-            'customer': customer,
-            'operator': customer,
+            'customer': operator,
+            'operator': operator,
             'state': ProcessState.TERMINATED.name,
             'priority': 0
         }
@@ -133,12 +133,6 @@ def schedule(rule, **kwargs):
         # 如果有服务作业人员列表，按服务作业人员生成服务作业进程
         if operators:
             for operator in operators:
-                if isinstance(operator, VirtualStaff):
-                    params['operator'] = operator.staff.customer
-                elif isinstance(operator, Staff):
-                    params['operator'] = operator.customer
-                elif isinstance(operator, Customer):
-                    params['operator'] = operator
                 if schedule_times:
                     for schedule_time in schedule_times:
                         # 估算计划执行时间
@@ -246,37 +240,6 @@ def schedule_timer(**kwargs):
     for rule in rules:
         pass
 
-class SystemCall(Enum):
-    """系统调用枚举类"""
-    CreateService = auto()
-    CallService = auto()
-
-    def __str__(self):
-        return self.name
-
-class Scheduler:
-    def __init__(self):
-        self.job_handlers = {
-            SystemCall.CreateService: self.create_service,
-            SystemCall.CallService: self.call_service,
-        }
-
-    def schedule(self, sys_call, **kwargs):
-        handler = self.job_handlers.get(sys_call)
-        if handler:
-            return handler(**kwargs)
-        else:
-            raise ValueError(f"Unhandled job type: {sys_call}")
-
-    # Define job functions
-    def create_service(self, **kwargs):
-        print("Creating service...")
-        # Actual implementation here
-
-    def call_service(self, **kwargs):
-        print("Call service...")
-        # Actual implementation here
-
 class TuringMachine:
     def __init__(self, program, initial_state):
         self.program = program  # 程序是一个字典，键为(状态, 读取的值)，值为(写入的值, 移动方向, 下一个状态)
@@ -318,3 +281,34 @@ class TuringMachine:
 # }
 # tm = TuringMachine(program, 0)
 # tm.run()
+
+class SystemCall(Enum):
+    """系统调用枚举类"""
+    CreateService = auto()
+    CallService = auto()
+
+    def __str__(self):
+        return self.name
+
+class Scheduler:
+    def __init__(self):
+        self.job_handlers = {
+            SystemCall.CreateService: self.create_service,
+            SystemCall.CallService: self.call_service,
+        }
+
+    def schedule(self, sys_call, **kwargs):
+        handler = self.job_handlers.get(sys_call)
+        if handler:
+            return handler(**kwargs)
+        else:
+            raise ValueError(f"Unhandled job type: {sys_call}")
+
+    # Define job functions
+    def create_service(self, **kwargs):
+        print("Creating service...")
+        # Actual implementation here
+
+    def call_service(self, **kwargs):
+        print("Call service...")
+        # Actual implementation here

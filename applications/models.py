@@ -6,7 +6,7 @@ import uuid
 import re
 from pypinyin import Style, lazy_pinyin
 
-from kernel.models import Operator, Process, Service, Customer, Organization
+from kernel.models import Operator, Process, Service, Organization
 
 class FuWuLeiBie(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")

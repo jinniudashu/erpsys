@@ -34,9 +34,9 @@
 <script>
     window.Django = {
       'username': '{{ request.user.username }}',
-      'isAuthenticated': {{ request.user.is_authenticated|yesno:"true,false" }}
+      'isAuthenticated': '{{ request.user.is_authenticated|yesno:"true,false" }}'
     };
-  </script>
+</script>
 
 <div id="app"></div> <!-- Vue 应用的挂载点 -->
 <script type="module" src="{% static 'frontend/assets/entry/index-DHKmWnTz.js' %}"></script>

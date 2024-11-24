@@ -11,7 +11,7 @@ class DataItemConsistsInline(admin.TabularInline):
 
 @admin.register(DataItem)
 class DataItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'sub_class', 'implement_type', 'dependency_order', 'affiliated_to', 'default_value', 'is_multivalued']
+    list_display = ['id', 'label', 'name', 'pym', 'field_type', 'business_type', 'sub_class', 'implement_type', 'dependency_order', 'affiliated_to', 'default_value', 'init_content', 'is_multivalued']
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
     list_filter = ['field_type', 'implement_type', 'business_type']
@@ -27,12 +27,6 @@ class OperatorAdmin(admin.ModelAdmin):
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Organization._meta.fields]
-    list_display_links = ['label', 'name',]
-    search_fields = ['label', 'name', 'pym']
-
-@admin.register(Customer)
-class CustomerAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Customer._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
 

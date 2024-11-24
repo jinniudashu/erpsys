@@ -8,33 +8,41 @@ from django.db import models
 import logging
 import json
 
-from design.models import DataItem, DESIGN_CLASS_MAPPING, Organization as design_Organization, Customer as design_Customer, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule, WorkOrder as design_WorkOrder, Form as design_Form
+from design.models import DataItem, DESIGN_CLASS_MAPPING, Organization as design_Organization, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceRule as design_ServiceRule, WorkOrder as design_WorkOrder, Form as design_Form
 from design.models import ServiceConsists, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
 from design.script_file_header import ScriptFileHeader, get_master_field_script, get_admin_script, get_model_footer
 
-from kernel.models import Organization as kernel_Organization, Customer as kernel_Customer, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule, WorkOrder as kernel_WorkOrder, Form as kernel_Form
+from kernel.models import Organization as kernel_Organization, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule, WorkOrder as kernel_WorkOrder, Form as kernel_Form
 from applications.models import CLASS_MAPPING
 # Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
 COPY_CLASS_MAPPING = {
+    # 基础模型（无依赖）
     "Organization": (design_Organization, kernel_Organization),
-    "Customer": (design_Customer, kernel_Customer),
-    "Role": (design_Role, kernel_Role),
-    "Operator": (design_Operator, kernel_Operator),
     "Resource": (design_Resource, kernel_Resource),
     "Event": (design_Event, kernel_Event),
     "Instruction": (design_Instruction, kernel_Instruction),
-    "WorkOrder": (design_WorkOrder, kernel_WorkOrder),
     "Form": (design_Form, kernel_Form),
     # "Material": (design_Material, applications_Material),
     # "Equipment": (design_Equipment, applications_Equipment),
     # "Device": (design_Device, applications_Device),
     # "Capital": (design_Capital, applications_Capital),
     # "Knowledge": (design_Knowledge, applications_Knowledge),
+    
+    # 一级依赖
+    "Service": (design_Service, kernel_Service),      # 先复制Service，因为Role依赖它
+    "Role": (design_Role, kernel_Role),              # Role依赖Service
+    
+    # 二级依赖
+    "Operator": (design_Operator, kernel_Operator),   # 依赖Organization和Role
+    "ServiceRule": (design_ServiceRule, kernel_ServiceRule),  # 依赖Service、Event和Instruction
+    
+    # 三级依赖
+    "WorkOrder": (design_WorkOrder, kernel_WorkOrder),  # 业务上依赖Service
 }
 
-# 加载初始数据
-def load_init_data():
+# 生成脚本, 被design.admin调用
+def generate_source_code(project):
     # 将设计内容添加到design和applications
     def import_init_data_from_data_item():
         def convert_value(value, field_type, dict_model_class):
@@ -58,61 +66,70 @@ def load_init_data():
                 case 'DateTimeField':
                     return parse_datetime(value)
                 case 'TypeField':
-                    # 外键类型,返回dict_model_class.objects.get(label=value)的实例，
+                    # 外键类型,返回dict_model_class.objects.get(label=value)的实例
                     if value and dict_model_class:
                         try:
                             return dict_model_class.objects.get(label=value)
-                        except model_class.DoesNotExist:
-                            logging.warning(f"No {class_name} instance found with label '{value}'. Returning None.")
+                        except dict_model_class.DoesNotExist:
+                            logging.warning(f"No {dict_model_class.__name__} instance found with label '{value}'. Returning None.")
                             return None
                 case _:
                     return value  # 对于其他类型，保持原样
 
         def insert_to_model(model_class):
-            if model_class:
-                model_class.objects.all().delete()
-
-                init_content_list = json.loads(item.init_content)
-                for content_dict in init_content_list:
-                    name_dict = {}
-                    for key, value in content_dict.items():
-                        try:
-                            key_data_item = DataItem.objects.get(label=key)
-                            field_name = key_data_item.name
-                            field_type = key_data_item.field_type
-                            
-                            class_name, dict_model_class = None, None
-                            # 如果字段类型是'TypeField'且实现类型是'Model', 使用data_item类名；如果实现类型是'Field', 使用data_item.business_type的类名
-                            if field_type == 'TypeField':
-                                if key_data_item.implement_type == 'Model':
-                                    class_name = key_data_item.get_data_item_class_name()
-                                elif key_data_item.implement_type == 'Field':
-                                    class_name = key_data_item.business_type.get_data_item_class_name()
-                                # 获取类名对应的模型类
-                                dict_model_class = CLASS_MAPPING.get(class_name, None)
-
-                            converted_value = convert_value(value, field_type, dict_model_class)
-                            name_dict[field_name] = converted_value
-                        except DataItem.DoesNotExist:
-                            logging.warning(f"DataItem with label '{key}' not found. Skipping this field.")
-                        except ValueError as e:
-                            logging.error(f"Error converting value for field '{key}': {str(e)}")
-                    
-                    if name_dict:
-                        try:
-                            instance = model_class(**name_dict)
-                            instance.full_clean()  # 验证所有字段
-                            instance.save()
-                            logging.info(f"Created new {model_class.__name__} instance: {name_dict}")
-                        except ValidationError as e:
-                            logging.error(f"Validation error creating {model_class.__name__} instance: {str(e)}")
-                        except Exception as e:
-                            logging.error(f"Error creating {model_class.__name__} instance: {str(e)}")
-                    else:
-                        logging.warning(f"No valid fields found for {model_class.__name__}. Skipping creation.")
-            else:
-                # 处理未找到对应类的情况
+            if not model_class:
                 print(f"Class not found for label: {item.label}")
+                return
+
+            init_content_list = json.loads(item.init_content)
+            for content_dict in init_content_list:
+                name_dict = {}
+                lookup_fields = {}  # 用于查找已存在记录的字段
+
+                for key, value in content_dict.items():
+                    try:
+                        key_data_item = DataItem.objects.get(label=key)
+                        field_name = key_data_item.name
+                        field_type = key_data_item.field_type
+                        
+                        class_name, dict_model_class = None, None
+                        # 如果字段类型是'TypeField'且实现类型是'Model', 使用data_item类名；如果实现类型是'Field', 使用data_item.business_type的类名
+                        if field_type == 'TypeField':
+                            if key_data_item.implement_type == 'Model':
+                                class_name = key_data_item.get_data_item_class_name()
+                            elif key_data_item.implement_type == 'Field':
+                                class_name = key_data_item.business_type.get_data_item_class_name()
+                            dict_model_class = CLASS_MAPPING.get(class_name, None)
+
+                        converted_value = convert_value(value, field_type, dict_model_class)
+                        name_dict[field_name] = converted_value
+
+                        # 使用label作为查找条件
+                        if field_name == 'label' and converted_value:
+                            lookup_fields[field_name] = converted_value
+
+                    except DataItem.DoesNotExist:
+                        logging.warning(f"DataItem with label '{key}' not found. Skipping this field.")
+                    except ValueError as e:
+                        logging.error(f"Error converting value for field '{key}': {str(e)}")
+                
+                if name_dict:
+                    try:
+                        # 使用label查找或创建
+                        instance, created = model_class.objects.update_or_create(
+                            label=lookup_fields['label'],
+                            defaults=name_dict
+                        )
+
+                        action = "Created" if created else "Updated"
+                        logging.info(f"{action} {model_class.__name__} instance: {name_dict}")
+                        
+                    except ValidationError as e:
+                        logging.error(f"Validation error for {model_class.__name__} instance: {str(e)}")
+                    except Exception as e:
+                        logging.error(f"Error handling {model_class.__name__} instance: {str(e)}")
+                else:
+                    logging.warning(f"No valid fields found for {model_class.__name__}. Skipping creation.")
 
         for item in DataItem.objects.filter(field_type__in = ['TypeField', 'Reserved'], init_content__isnull=False):
             if item.field_type == 'Reserved':
@@ -122,7 +139,7 @@ def load_init_data():
                 class_name = item.get_data_item_class_name()
                 model_class = CLASS_MAPPING.get(class_name)
 
-            print('插入初始数据：', class_name, item.init_content)
+            print('导入初始数据：', class_name, item.init_content)
             insert_to_model(model_class)
 
     # 将设计内容加载到运行时kernel
@@ -134,55 +151,19 @@ def load_init_data():
             if related_model.__name__ in COPY_CLASS_MAPPING:
                 _, target_related_model = COPY_CLASS_MAPPING[related_model.__name__]
                 try:
+                    # 使用 erpsys_id 查找对应的目标模型实例
                     return target_related_model.objects.get(erpsys_id=value.erpsys_id)
                 except target_related_model.DoesNotExist:
+                    print(f"Warning: No matching {target_related_model.__name__} found for erpsys_id={value.erpsys_id}")
                     return None
             return value
 
-        for model_name, models_tuple in COPY_CLASS_MAPPING.items():
-            source_model, target_model = models_tuple
-            # 删除目标模型中的所有数据
-            target_model.objects.all().delete()
-            # 从源模型中读取所有实例
-            source_objects = source_model.objects.all()
-            
-            # 用于存储新旧对象的映射关系
-            object_mapping = {}
-            
-            for obj in source_objects:
-                new_obj = target_model()
-                for field in source_model._meta.fields:
-                    if field.name in [f.name for f in target_model._meta.fields] and field.name != 'id':
-                        value = getattr(obj, field.name)
-                        if isinstance(field, models.ForeignKey):
-                            value = handle_foreign_key(field, value)
-                        setattr(new_obj, field.name, value)
-                new_obj.save()
-                object_mapping[obj] = new_obj
-            
-            # 处理多对多字段
-            for obj in source_objects:
-                new_obj = object_mapping[obj]
-                for field in source_model._meta.many_to_many:
-                    if field.name in [f.name for f in target_model._meta.many_to_many]:
-                        
-                        source_related_objects = getattr(obj, field.name).all()
-                        target_related_objects = [
-                            handle_foreign_key(field.remote_field, related_obj)
-                            for related_obj in source_related_objects
-                        ]
-                        getattr(new_obj, field.name).set(target_related_objects)
-            
-            print(f"Copied {source_model.objects.count()} records from {source_model.__name__} to {target_model.__name__}.")
-
-    def import_service_from_design():
-        services = design_Service.objects.all()
-        for service in services:
-            service_json = {
+        def prepare_service_config(service):
+            return {
                 "erpsys_id": service.erpsys_id,
                 "consists": [
-                    {"erpsys_id": sub_service.sub_service.erpsys_id, "name": sub_service.sub_service.name, "quantity": sub_service.quantity}
-                    for sub_service in ServiceConsists.objects.filter(service=service)
+                    {"erpsys_id": sub.sub_service.erpsys_id, "name": sub.sub_service.name, "quantity": sub.quantity}
+                    for sub in ServiceConsists.objects.filter(service=service)
                 ],
                 "action": {
                     "action_func_name": service.action_func_name,
@@ -214,24 +195,6 @@ def load_init_data():
                     "name": service.subject.get_data_item_class_name()
                 } if service.subject else {},
                 "price": str(service.price),
-                # "form_config": [
-                #     {
-                #         "erpsys_id": config.data_item.erpsys_id,
-                #         "name": config.data_item.name,
-                #         "default_value": config.default_value,
-                #         "readonly": config.readonly,
-                #         "is_required": config.is_required
-                #     }
-                #     for config in FormConfig.objects.filter(service=service)
-                # ],
-                # "authorize_roles": [
-                #     {"erpsys_id": role.erpsys_id, "name": role.name}
-                #     for role in service.authorize_roles.all()
-                # ],
-                # "authorize_operators": [
-                #     {"erpsys_id": operator.erpsys_id, "name": operator.name}
-                #     for operator in service.authorize_operators.all()
-                # ],
                 "route_to": {
                     "erpsys_id": service.route_to.erpsys_id,
                     "name": service.route_to.name
@@ -244,59 +207,68 @@ def load_init_data():
                 "service_type": service.service_type
             }
 
-            kernel_Service.objects.update_or_create(
-                erpsys_id=service.erpsys_id,
-                defaults={
-                    "name": service.name,
-                    "label": service.label,
-                    "config": service_json
-                }
-            )
-            print(f"Exported Service {service.name} to kernel")
+        # 按照依赖顺序复制模型
+        for model_name, models_tuple in COPY_CLASS_MAPPING.items():
+            source_model, target_model = models_tuple
+            source_objects = source_model.objects.all()
+            object_mapping = {}
+            
+            print(f"\nProcessing {model_name}...")
+            
+            # 首先复制基本字段
+            for obj in source_objects:
+                defaults = {}
+                for field in source_model._meta.fields:
+                    if field.name in [f.name for f in target_model._meta.fields] and field.name != 'id':
+                        value = getattr(obj, field.name)
+                        if isinstance(field, models.ForeignKey):
+                            value = handle_foreign_key(field, value)
+                        defaults[field.name] = value
+                
+                # 特殊处理Service模型的config字段
+                if model_name == "Service":
+                    defaults["config"] = prepare_service_config(obj)
+                
+                new_obj, created = target_model.objects.update_or_create(
+                    erpsys_id=obj.erpsys_id,
+                    defaults=defaults
+                )
+                object_mapping[obj] = new_obj
+                print(f"{'Created' if created else 'Updated'} {model_name}: {obj.label}")
+            
+            # 处理多对多字段的关系复制
+            for obj in source_objects:
+                new_obj = object_mapping[obj]  # 获取之前创建的新对象实例
+                # 遍历源模型中的所有多对多字段
+                for field in source_model._meta.many_to_many:
+                    # 检查目标模型是否也有这个多对多字段
+                    if field.name in [f.name for f in target_model._meta.many_to_many]:
+                        # 获取源对象中该字段关联的所有对象
+                        source_related_objects = getattr(obj, field.name).all()
+                        target_related_objects = []
 
-        service_rules = design_ServiceRule.objects.all()
-        kernel_ServiceRule.objects.all().delete()
-        for rule in service_rules:
-            kernel_rule = kernel_ServiceRule.objects.create(
-                name=rule.name,
-                label=rule.label,
-                pym=rule.pym,
-                erpsys_id=rule.erpsys_id,
-                parameter_values=rule.parameter_values,
-                order=rule.order,
-            )
-            _service = kernel_Service.objects.get(erpsys_id=rule.service.erpsys_id)
-            kernel_rule.service = _service
-            event = kernel_Event.objects.get(erpsys_id=rule.event.erpsys_id)
-            kernel_rule.event = event
-            system_operand = kernel_Instruction.objects.get(erpsys_id=rule.system_operand.erpsys_id)
-            kernel_rule.system_operand = system_operand
-            next_service = kernel_Service.objects.get(erpsys_id=rule.next_service.erpsys_id)
-            kernel_rule.next_service = next_service
-            kernel_rule.save()
-            print(f"Exported ServiceRule {kernel_rule} to kernel")
+                        # 遍历源对象的每个关联对象
+                        for related_obj in source_related_objects:
+                            if related_obj:
+                                # 获取关联对象的模型类
+                                related_model = field.related_model
+                                # 检查关联模型是否在需要复制的模型映射中
+                                if related_model.__name__ in COPY_CLASS_MAPPING:
+                                    # 获取目标关联模型类
+                                    _, target_related_model = COPY_CLASS_MAPPING[related_model.__name__]
+                                    try:
+                                        # 通过 erpsys_id 在目标模型中查找对应的关联对象
+                                        target_related_obj = target_related_model.objects.get(erpsys_id=related_obj.erpsys_id)
+                                        target_related_objects.append(target_related_obj)
+                                        print(f"Added {field.name} relation: {related_obj.label} -> {target_related_obj.label}")
+                                    except target_related_model.DoesNotExist:
+                                        print(f"Warning: No matching {target_related_model.__name__} found for erpsys_id={related_obj.erpsys_id}")
 
-    import_init_data_from_data_item()
-    copy_design_to_kernel()
-    import_service_from_design()
+                        # 如果找到了对应的目标关联对象，则建立多对多关系
+                        if target_related_objects:
+                            getattr(new_obj, field.name).set(target_related_objects)
 
-
-
-# 生成脚本, 被design.admin调用
-def generate_source_code(project):
-    def write_project_file(file_name, content):
-        with open(file_name, 'w', encoding='utf-8') as f:
-            f.write(content)
-
-    def migrate_app():
-        try:
-            print(f"Start migrating applications...")
-            call_command('makemigrations', 'applications')
-            call_command('migrate', 'applications')
-            print(f"Successfully migrated applications")
-        except Exception as e:
-            print(f"Error migrating 'applications': {e}")
-
+    # 生成脚本
     def generate_script(data_item):
         def _generate_field_definitions(data_item):
             field_definitions = ''
@@ -354,9 +326,6 @@ def generate_source_code(project):
                     case 'User':
                         field_definitions += f"    {field_name} = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='{consist_item.label}')\n"
                         field_type_dict.update({field_name: 'User'})
-                    # case 'Process':
-                    #     field_definitions += f"    {field_name} = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='{field_name}', verbose_name='{consist_item.label}')\n"
-                    #     field_type_dict.update({field_name: 'Process'})
                     case 'ComputedField':
                         pass
                     case _:
@@ -369,10 +338,7 @@ def generate_source_code(project):
             if is_dict:
                 verbose_name = f'Dict-{data_item.label}'
             else:
-                if data_item.field_type == 'Reserved':
-                    verbose_name = f'{data_item.field_type}-{data_item.label}'
-                else:
-                    verbose_name = f'{data_item.label}'
+                verbose_name = f'{data_item.label}'
             return get_model_footer(verbose_name)
 
         is_dict = (data_item.dependency_order < 20)
@@ -431,26 +397,24 @@ def generate_source_code(project):
         (f'./applications/admin.py', admin_script),
         (f'./kernel/app_types.py', fields_type_script),
     ]
-    for filename, content in object_files:
-        write_project_file(filename, content)
+    for file_name, content in object_files:
+        with open(file_name, 'w', encoding='utf-8') as f:
+            f.write(content)
 
-    # makemigrations & migrate
-    print('迁移应用...')
-    migrate_app()
+    # migrate applications 数据库
+    try:
+        print(f"开始迁移应用...")
+        call_command('makemigrations', 'applications', '--noinput')
+        print(f"创建迁移脚本成功")
+        call_command('migrate', 'applications', '--noinput')
+        print(f"迁移applications数据库成功")
+    except Exception as e:
+        print(f"Error migrating 'applications': {e}")
+        return f"Error migrating 'applications': {e}"
 
     # 导入初始业务数据to kernel & applications
     print('导入初始业务数据...')
-    load_init_data()
-
-    # source_code = {
-    #     'script': {},
-    #     'data': {}
-    # }
-    # source_code['script']['type']['models'] = models_script
-    # source_code['script']['type']['admin'] = admin_script
-    # result = SourceCode.objects.create(
-    #     name = timezone.now().strftime('%Y%m%d%H%M%S'),
-    #     project = project,
-    #     code = json.dumps(source_code, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
-    # )
-    # print(f'作业脚本写入数据库成功, id: {result}')
+    # 将设计内容加载到运行时kernel
+    copy_design_to_kernel()
+    # 根据 DataItem 的 field_type，将初始数据导入到对应的 design 或 applications 模型中
+    import_init_data_from_data_item()

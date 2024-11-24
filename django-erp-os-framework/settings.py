@@ -86,7 +86,7 @@ ASGI_APPLICATION = 'django-erp-os-framework.asgi.application'
 DJANGO_ENV = env('DJANGO_ENV')
 if DJANGO_ENV == 'dev':
     DEBUG = True
-    ALLOWED_HOSTS = ["*"]
+    ALLOWED_HOSTS = []
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -219,3 +219,10 @@ CELERY_TIMEZONE = 'Asia/Shanghai'
 # CELERY_TASK_SERIALIZER = 'json'
 
 CUSTOMER_SITE_NAME = 'erp'
+
+# Weichat mini-program API
+WECHAT_APP_ID = env('WECHAT_APP_ID')
+WECHAT_APP_SECRET = env('WECHAT_APP_SECRET')
+WECHAT_MCH_ID = env('WECHAT_MCH_ID')
+WECHAT_MCH_KEY = env('WECHAT_MCH_KEY')
+WECHAT_NOTIFY_URL = env('WECHAT_NOTIFY_URL')

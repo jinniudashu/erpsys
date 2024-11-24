@@ -15,8 +15,7 @@ def timer_interrupt(task_name):
     # execute pid.stack.pc
     try:
         task = PeriodicTask.objects.get(name=task_name)
-        # 现在你可以访问任务实例的所有字段
         print("Task arguments:", task.args)
     except PeriodicTask.DoesNotExist:
         print("Task not found")    
-    return task_name
+    return task

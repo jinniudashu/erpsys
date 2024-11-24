@@ -112,12 +112,6 @@ class Organization(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-class Customer(ERPSysBase):
-    class Meta:
-        verbose_name = "服务-客户"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
 class Role(ERPSysBase):
     services = models.ManyToManyField('Service', related_name='roles', blank=True, verbose_name="服务项目")
     class Meta:
