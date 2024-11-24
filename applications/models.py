@@ -20,7 +20,7 @@ class FuWuLeiBie(models.Model):
     class Meta:
         verbose_name = "Dict-服务类别"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -47,7 +47,7 @@ class RuChuKuCaoZuo(models.Model):
     class Meta:
         verbose_name = "Dict-入出库操作"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -74,7 +74,7 @@ class KeHuLaiYuan(models.Model):
     class Meta:
         verbose_name = "Dict-客户来源"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -101,7 +101,7 @@ class HunFou(models.Model):
     class Meta:
         verbose_name = "Dict-婚否"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -128,7 +128,7 @@ class ZhengZhuang(models.Model):
     class Meta:
         verbose_name = "Dict-症状"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -155,7 +155,7 @@ class ZhenDuan(models.Model):
     class Meta:
         verbose_name = "Dict-诊断"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -182,7 +182,7 @@ class ShouFeiLeiXing(models.Model):
     class Meta:
         verbose_name = "Dict-收费类型"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -212,7 +212,7 @@ class Material(models.Model):
     class Meta:
         verbose_name = "Dict-物料"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -239,7 +239,7 @@ class Equipment(models.Model):
     class Meta:
         verbose_name = "Dict-设备"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -266,7 +266,7 @@ class Device(models.Model):
     class Meta:
         verbose_name = "Dict-工具"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -293,7 +293,7 @@ class Capital(models.Model):
     class Meta:
         verbose_name = "Dict-资金"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -322,7 +322,7 @@ class Knowledge(models.Model):
     class Meta:
         verbose_name = "Dict-知识"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -360,7 +360,7 @@ class Profile(models.Model):
     class Meta:
         verbose_name = "Dict-个人资料"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -396,7 +396,7 @@ class WuLiaoTaiZhang(models.Model):
     class Meta:
         verbose_name = "物料台账"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -437,7 +437,7 @@ class YuYueJiLu(models.Model):
     class Meta:
         verbose_name = "预约记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -471,7 +471,7 @@ class JianKangDiaoChaJiLu(models.Model):
     class Meta:
         verbose_name = "健康调查记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -500,7 +500,7 @@ class ZhuanKePingGuJiLu(models.Model):
     class Meta:
         verbose_name = "专科评估记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -531,7 +531,7 @@ class ZhenDuanJiChuLiYiJianJiLu(models.Model):
     class Meta:
         verbose_name = "诊断及处理意见记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -559,7 +559,7 @@ class RouDuSuZhiLiaoJiLu(models.Model):
     class Meta:
         verbose_name = "肉毒素治疗记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -587,7 +587,7 @@ class ChaoShengPaoZhiLiaoJiLu(models.Model):
     class Meta:
         verbose_name = "超声炮治疗记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -615,7 +615,7 @@ class HuangJinWeiZhenZhiLiaoJiLu(models.Model):
     class Meta:
         verbose_name = "黄金微针治疗记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -643,7 +643,7 @@ class DiaoQZhiLiaoJiLu(models.Model):
     class Meta:
         verbose_name = "调Q治疗记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -671,7 +671,7 @@ class GuangZiZhiLiaoJiLu(models.Model):
     class Meta:
         verbose_name = "光子治疗记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -699,7 +699,7 @@ class GuoSuanZhiLiaoJiLu(models.Model):
     class Meta:
         verbose_name = "果酸治疗记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -727,7 +727,7 @@ class ShuiGuangZhenZhiLiaoJiLu(models.Model):
     class Meta:
         verbose_name = "水光针治疗记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -755,7 +755,7 @@ class ChongZhiJiLu(models.Model):
     class Meta:
         verbose_name = "充值记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -783,7 +783,7 @@ class XiaoFeiJiLu(models.Model):
     class Meta:
         verbose_name = "消费记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -813,7 +813,7 @@ class SuiFangJiLu(models.Model):
     class Meta:
         verbose_name = "随访记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -843,7 +843,7 @@ class FaSongZhiLiaoZhuYiShiXiangJiLu(models.Model):
     class Meta:
         verbose_name = "发送治疗注意事项记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -873,7 +873,7 @@ class QianShuZhiQingTongYiShuJiLu(models.Model):
     class Meta:
         verbose_name = "签署知情同意书记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -902,7 +902,7 @@ class DengLuQianDaoJiLu(models.Model):
     class Meta:
         verbose_name = "登录签到记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -931,7 +931,7 @@ class YuYueTiXingJiLu(models.Model):
     class Meta:
         verbose_name = "预约提醒记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -964,7 +964,7 @@ class ShouFeiJiLu(models.Model):
     class Meta:
         verbose_name = "收费记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''
@@ -993,7 +993,7 @@ class ZhiLiaoXiangMuHeXiaoJiLu(models.Model):
     class Meta:
         verbose_name = "治疗项目核销记录"
         verbose_name_plural = verbose_name
-        ordering = ["id"]
+        ordering = ["-id"]
     
     def __str__(self):
         return self.label if self.label else ''

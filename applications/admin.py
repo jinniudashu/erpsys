@@ -8,6 +8,7 @@ from .models import *
 class FuWuLeiBieAdmin(admin.ModelAdmin):
     list_display = [field.name for field in FuWuLeiBie._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(FuWuLeiBie, FuWuLeiBieAdmin)
     
@@ -15,6 +16,7 @@ applications_site.register(FuWuLeiBie, FuWuLeiBieAdmin)
 class RuChuKuCaoZuoAdmin(admin.ModelAdmin):
     list_display = [field.name for field in RuChuKuCaoZuo._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(RuChuKuCaoZuo, RuChuKuCaoZuoAdmin)
     
@@ -22,6 +24,7 @@ applications_site.register(RuChuKuCaoZuo, RuChuKuCaoZuoAdmin)
 class KeHuLaiYuanAdmin(admin.ModelAdmin):
     list_display = [field.name for field in KeHuLaiYuan._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(KeHuLaiYuan, KeHuLaiYuanAdmin)
     
@@ -29,6 +32,7 @@ applications_site.register(KeHuLaiYuan, KeHuLaiYuanAdmin)
 class HunFouAdmin(admin.ModelAdmin):
     list_display = [field.name for field in HunFou._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(HunFou, HunFouAdmin)
     
@@ -36,6 +40,7 @@ applications_site.register(HunFou, HunFouAdmin)
 class ZhengZhuangAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ZhengZhuang._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ZhengZhuang, ZhengZhuangAdmin)
     
@@ -43,6 +48,7 @@ applications_site.register(ZhengZhuang, ZhengZhuangAdmin)
 class ZhenDuanAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ZhenDuan._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ZhenDuan, ZhenDuanAdmin)
     
@@ -50,6 +56,7 @@ applications_site.register(ZhenDuan, ZhenDuanAdmin)
 class ShouFeiLeiXingAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ShouFeiLeiXing._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ShouFeiLeiXing, ShouFeiLeiXingAdmin)
     
@@ -57,6 +64,7 @@ applications_site.register(ShouFeiLeiXing, ShouFeiLeiXingAdmin)
 class MaterialAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Material._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(Material, MaterialAdmin)
     
@@ -64,6 +72,7 @@ applications_site.register(Material, MaterialAdmin)
 class EquipmentAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Equipment._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(Equipment, EquipmentAdmin)
     
@@ -71,6 +80,7 @@ applications_site.register(Equipment, EquipmentAdmin)
 class DeviceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Device._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(Device, DeviceAdmin)
     
@@ -78,6 +88,7 @@ applications_site.register(Device, DeviceAdmin)
 class CapitalAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Capital._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(Capital, CapitalAdmin)
     
@@ -85,6 +96,7 @@ applications_site.register(Capital, CapitalAdmin)
 class KnowledgeAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Knowledge._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(Knowledge, KnowledgeAdmin)
     
@@ -92,6 +104,7 @@ applications_site.register(Knowledge, KnowledgeAdmin)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Profile._meta.fields]
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(Profile, ProfileAdmin)
     
@@ -100,6 +113,7 @@ class WuLiaoTaiZhangAdmin(admin.ModelAdmin):
     list_display = [field.name for field in WuLiaoTaiZhang._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(WuLiaoTaiZhang, WuLiaoTaiZhangAdmin)
     
@@ -108,6 +122,7 @@ class YuYueJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in YuYueJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(YuYueJiLu, YuYueJiLuAdmin)
     
@@ -116,6 +131,7 @@ class JianKangDiaoChaJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in JianKangDiaoChaJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(JianKangDiaoChaJiLu, JianKangDiaoChaJiLuAdmin)
     
@@ -124,6 +140,7 @@ class ZhuanKePingGuJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ZhuanKePingGuJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ZhuanKePingGuJiLu, ZhuanKePingGuJiLuAdmin)
     
@@ -132,6 +149,7 @@ class ZhenDuanJiChuLiYiJianJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ZhenDuanJiChuLiYiJianJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ZhenDuanJiChuLiYiJianJiLu, ZhenDuanJiChuLiYiJianJiLuAdmin)
     
@@ -140,6 +158,7 @@ class RouDuSuZhiLiaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in RouDuSuZhiLiaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(RouDuSuZhiLiaoJiLu, RouDuSuZhiLiaoJiLuAdmin)
     
@@ -148,6 +167,7 @@ class ChaoShengPaoZhiLiaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ChaoShengPaoZhiLiaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ChaoShengPaoZhiLiaoJiLu, ChaoShengPaoZhiLiaoJiLuAdmin)
     
@@ -156,6 +176,7 @@ class HuangJinWeiZhenZhiLiaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in HuangJinWeiZhenZhiLiaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(HuangJinWeiZhenZhiLiaoJiLu, HuangJinWeiZhenZhiLiaoJiLuAdmin)
     
@@ -164,6 +185,7 @@ class DiaoQZhiLiaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in DiaoQZhiLiaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(DiaoQZhiLiaoJiLu, DiaoQZhiLiaoJiLuAdmin)
     
@@ -172,6 +194,7 @@ class GuangZiZhiLiaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in GuangZiZhiLiaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(GuangZiZhiLiaoJiLu, GuangZiZhiLiaoJiLuAdmin)
     
@@ -180,6 +203,7 @@ class GuoSuanZhiLiaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in GuoSuanZhiLiaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(GuoSuanZhiLiaoJiLu, GuoSuanZhiLiaoJiLuAdmin)
     
@@ -188,6 +212,7 @@ class ShuiGuangZhenZhiLiaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ShuiGuangZhenZhiLiaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ShuiGuangZhenZhiLiaoJiLu, ShuiGuangZhenZhiLiaoJiLuAdmin)
     
@@ -196,6 +221,7 @@ class ChongZhiJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ChongZhiJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ChongZhiJiLu, ChongZhiJiLuAdmin)
     
@@ -204,6 +230,7 @@ class XiaoFeiJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in XiaoFeiJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(XiaoFeiJiLu, XiaoFeiJiLuAdmin)
     
@@ -212,6 +239,7 @@ class SuiFangJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in SuiFangJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(SuiFangJiLu, SuiFangJiLuAdmin)
     
@@ -220,6 +248,7 @@ class FaSongZhiLiaoZhuYiShiXiangJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in FaSongZhiLiaoZhuYiShiXiangJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(FaSongZhiLiaoZhuYiShiXiangJiLu, FaSongZhiLiaoZhuYiShiXiangJiLuAdmin)
     
@@ -228,6 +257,7 @@ class QianShuZhiQingTongYiShuJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in QianShuZhiQingTongYiShuJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(QianShuZhiQingTongYiShuJiLu, QianShuZhiQingTongYiShuJiLuAdmin)
     
@@ -236,6 +266,7 @@ class DengLuQianDaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in DengLuQianDaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(DengLuQianDaoJiLu, DengLuQianDaoJiLuAdmin)
     
@@ -244,6 +275,7 @@ class YuYueTiXingJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in YuYueTiXingJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(YuYueTiXingJiLu, YuYueTiXingJiLuAdmin)
     
@@ -252,6 +284,7 @@ class ShouFeiJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ShouFeiJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ShouFeiJiLu, ShouFeiJiLuAdmin)
     
@@ -260,6 +293,7 @@ class ZhiLiaoXiangMuHeXiaoJiLuAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ZhiLiaoXiangMuHeXiaoJiLu._meta.fields]
     hide_fields(list_display)
     list_display_links = list_display
+    search_fields = ['label', 'name', 'pym']
     list_filter = list_display
 applications_site.register(ZhiLiaoXiangMuHeXiaoJiLu, ZhiLiaoXiangMuHeXiaoJiLuAdmin)
     

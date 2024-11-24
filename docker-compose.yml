@@ -45,7 +45,7 @@ services:
 
   celery_beat:
     image: cxerp:latest
-    command: celery -A cxerp beat -l info
+    command: celery -A cxerp beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     depends_on:
       - db
       - redis

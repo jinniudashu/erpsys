@@ -20,9 +20,9 @@ app.conf.update(
 # 自动从所有已注册的Django app中加载任务
 app.autodiscover_tasks()
 
-app.conf.beat_schedule = {
-    'backup-data-daily': {
-        'task': 'kernel.tasks.task_backup_data',
-        'schedule': crontab(hour=0, minute=0),  # 每天0点运行
-    },
-}
+# app.conf.beat_schedule = {
+#     'backup-data-daily': {
+#         'task': 'kernel.tasks.task_backup_data',
+#         'schedule': crontab(hour=0, minute=0),  # 每天0点运行
+#     },
+# }
