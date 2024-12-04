@@ -253,6 +253,24 @@ class Process(models.Model):
         self.state = ProcessState.READY.name
         self.save()
 
+class ProcessFrameState(ERPSysBase):
+    """进程栈帧状态模型"""
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
+    parent_frame = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="父栈帧")
+    status = models.CharField(max_length=50, verbose_name="状态")
+    local_vars = models.JSONField(null=True, blank=True, verbose_name="本地变量")
+    inherited_context = models.JSONField(null=True, blank=True, verbose_name="继承上下文")
+    return_value = models.JSONField(null=True, blank=True, verbose_name="返回值")
+    timestamp = models.DateTimeField(auto_now=True, verbose_name="时间戳")
+
+    class Meta:
+        verbose_name = "进程栈帧状态"
+        verbose_name_plural = verbose_name
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"{self.process} - {self.status} ({self.timestamp})"
+
 class Stacks(ERPSysBase):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
     stack = models.JSONField(blank=True, null=True, verbose_name="栈")
@@ -277,205 +295,3 @@ class SysParams(ERPSysBase):
         verbose_name = "系统参数"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
-"""
-进程控制块 - ProcessControlBlock, 用于在多个语义层级上管理业务进程
-每个层级是独立的语义空间, 都有各自的独立业务上下文, 有适宜本层语义空间的Assistants Manager对当前层次的进程依照本层级业务规则进行特定操作, 包括：业务事件、调度规则、现场调度控制、初始化进程
-1. 跟踪合约进程的状态，确定特定会员的合约执行接下来要做什么？为其中的哪位客户进行哪个服务项目？输出一个服务序列
-2. 跟踪服务进程的状态，确定特定客户的服务项目接下来要做什么，什么时候做，谁做？输出一个任务序列
-3. 跟踪任务进程的状态，确定特定任务接下来的操作序列是什么？输出一个操作序列
-
-schedule_context: 
-进程的优先级
-估计或测量的执行时间
-截止日期或其他时间限制
-资源需求（CPU、内存、I/O 等）
-安全或访问控制信息
-其他调度策略或参数
-
-control_context:
-进程标识和属性（例如 PID、父进程、用户 ID、组 ID）
-进程状态（例如，运行、暂停、终止）
-进程调度参数（例如，量子、优先级提升、抢占）
-进程资源使用情况（例如 CPU 时间、内存、I/O）
-进程通信通道（例如管道、套接字、共享内存）
-处理安全和访问控制信息
-其他过程控制参数或标志
-
-process_program:
-解释性语言（例如 Python、Ruby、JavaScript）的字节码文件
-shell 或命令语言（例如 Bash、PowerShell、cmd）中的脚本文件
-
-process_data:
-程序中定义的全局或静态变量
-在运行时分配的动态或堆变量
-过程的输入或输出参数
-进程使用的临时或中间数据
-进程的配置或设置
-进程的元数据或统计信息（例如创建时间、修改时间、访问时间）
-与过程相关的其他数据或状态信息    
-"""
-
-"""
-# 结合时间戳和序列号来生成一个唯一且有序的数字ID
-
-import time
-import threading
-
-class TimestampIDGenerator:
-    def __init__(self):
-        self.last_timestamp = None
-        self.sequence = 0
-        # 用于确保线程安全
-        self.lock = threading.Lock()
-        # 序列号的最大值，这里假设每个时间戳下最多生成 1000 个唯一ID
-        self.SEQUENCE_MASK = 999
-
-    def _current_millis(self):
-        # 返回当前时间的毫秒数
-        return int(time.time() * 1000)
-
-    def generate_id(self):
-        # 生成一个基于时间戳的唯一ID
-        with self.lock:
-            current_timestamp = self._current_millis()
-
-            if self.last_timestamp == current_timestamp:
-                self.sequence = (self.sequence + 1) % (self.SEQUENCE_MASK + 1)
-                if self.sequence == 0:
-                    # 如果序列号超出范围，等待下一个时间戳
-                    while current_timestamp <= self.last_timestamp:
-                        current_timestamp = self._current_millis()
-            else:
-                # 如果当前时间戳与上一次不同，重置序列号
-                self.sequence = 0
-
-            self.last_timestamp = current_timestamp
-
-            # 将时间戳和序列号结合生成ID
-            id = (current_timestamp * 1000) + self.sequence
-            return id
-
-# 示例使用
-generator = TimestampIDGenerator()
-for _ in range(10):
-    print(generator.generate_id())
-
-"""
-
-"""
-1. 业务对象描述
-2. 业务过程描述
-3. 初始数据(initial_data.xlsx, Forms)
-
-# Vocabulary
-Organization
-Contract
-
-Service
-- Operation
-Process
-Status
-WorkOrder
-Workpiece
-Metrics
-Event
-Rule
-
-Form
-Field
-
-Resource
-- Staff
-- Equipment
-- Material
-- Capital
-- Knowledge
-
-Guide
-Instruction
-Tutorial
-Document
-Sample
-
-Schedule
-Dashboard
-
-Role
-Membership
-Account(充值记录，消费记录)
-ServiceType(["光电类", "护肤品类", "化学焕肤", "手术类", "仪器类", "注射填充类"])
-TreatmentRecord
-InformedConsent
-Precautions
-Bill
-
-LaborHours = GenerateTimeSlot([Staff], Calendar, {'Work-hourUnit': config})
-EquipmentHours = GenerateTimeSlot([Equipment], Calendar, {'Work-hourUnit': config})
-
-[('超声炮', 'EQUIPMENT'), ('肉毒素注射', 'KNOWLEDGE'), ('超声软组织理疗', 'KNOWLEDGE'), ('Q开关激光', 'KNOWLEDGE'), ('保妥适100单位', 'MATERIAL'), ('超声炮刀头', 'MATERIAL'), ('超声炮炮头', 'MATERIAL'), ('乔雅登极致0.8ml', 'MATERIAL'), ('医生', 'OPERATOR'), ('护士', 'OPERATOR'), ('客服', 'OPERATOR'), ('治疗', 'SKILL'), ('随访', 'SKILL'), ('预约', 'SKILL'), ('备料', 'SKILL')]
-
-# CPU -> 总线 -> 内存、I/O设备...
-# 总线提供I/O设备的虚拟化，负责注册、转发
-# PCIE总线自带中断控制器
-# PCIE总线 -> USB总线 -> USB设备
-
-# 设备驱动程序除了读写, 还要处理配置, 非数据的设备功能依赖ioctl
-
-# Linux命令 taskset => 把进程和特定的CPU绑定在一起
-# 公平分享CPU资源 Round-Robin
-# 医生每位患者面诊15分钟，是一种轮转调度算法
-# 动态优先级调度算法 MLFQ(Multi-Level Feedback Queue)
-# Linux调度算法 CFS(Completely Fair Scheduler)
-# 调度参数：nice值，优先级（权重？），实时性，时间片大小，调度策略
-# 不同岗位的操作员 => 异构处理器
-
-Operating System Services Provide:
-1. User Interface: CLI, GUI
-2. Program Execution: Source code -> Compiler -> Object code -> Executor
-3. I/O Operations
-4. File System Manipulation
-5. Communications: Inter-process communication, Networking
-6. Error Detection: Hardware, Software
-7. Resource Allocation: CPU, Memory, I/O devices
-8. Accounting: Usage statistics, Billing information -- Which users use how much and what kinds of resources
-9. Protection and Security: User authentication, File permissions, Encryption
-
-Types of System Calls
-1. Process Control
-2. File Manipulation
-3. Device Management
-4. Information Maintenance
-5. Communications
-
-Types of System Programs
-1. File Management
-2. Status Information
-3. File Modification
-4. Programming Language Support
-5. Program Loading and Execution
-6. Communications
-
-syscalls[num]():
-SYS_fork
-SYS_exit
-SYS_wait
-SYS_pipe
-SYS_read
-SYS_kill
-SYS_exec
-SYS_fstat
-SYS_chdir
-SYS_dup
-SYS_getpid
-SYS_sbrk
-SYS_sleep
-SYS_uptime
-SYS_open
-SYS_write
-SYS_mknod
-SYS_unlink
-SYS_link
-SYS_mkdir
-SYS_close
-"""

@@ -125,7 +125,7 @@ class ServiceRuleAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ServiceRule._meta.fields]
     list_display_links = ['label', 'name',]
     search_fields = ['label', 'name', 'pym']
-    autocomplete_fields = ['event', 'service']
+    autocomplete_fields = ['event', 'service', 'next_service']
 
 class WorkOrderFieldsInline(admin.TabularInline):
     model = WorkOrderFields

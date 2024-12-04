@@ -1,12 +1,22 @@
-from enum import Enum
+from enum import Enum, auto
 
 class ProcessState(Enum):
-    """Process状态枚举类"""
-    NEW = "新建"
-    READY = "就绪"
-    EXECUTING = "执行中"
-    WAITING = "等待"
-    TERMINATED = "终止"
+    """进程状态枚举"""
+    NEW = auto()
+    READY = auto()
+    RUNNING = auto()
+    WAITING = auto()
+    TERMINATED = auto()
+
+    @property
+    def description(self):
+        return {
+            ProcessState.NEW: "新建",
+            ProcessState.READY: "就绪",
+            ProcessState.RUNNING: "执行中",
+            ProcessState.WAITING: "等待",
+            ProcessState.TERMINATED: "终止"
+        }[self]
 
 ChoiceType = [
     ('Select', '下拉单选'),

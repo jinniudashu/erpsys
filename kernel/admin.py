@@ -206,6 +206,12 @@ class ProcessAdmin(admin.ModelAdmin):
     autocomplete_fields = ['service']
     readonly_fields = ['created_time', 'updated_time']
 
+@admin.register(ProcessFrameState)
+class ProcessFrameStateAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ProcessFrameState._meta.fields]
+    list_display_links = ['id', 'label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+
 @admin.register(Stacks)
 class StacksAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Stacks._meta.fields]

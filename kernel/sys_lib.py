@@ -7,15 +7,54 @@ import json
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from datetime import datetime, timedelta
+from enum import Enum, auto
 
 from kernel.models import Service, Process, WorkOrder
 from kernel.types import ProcessState
 
 from applications.models import *
 
+
+# 系统调用入口函数
+def sys_call(sys_call_str, **kwargs):
+    def create_process(**kwargs):
+        # 准备新的服务作业进程参数
+        # operation_proc = kwargs['operation_proc']
+        # customer = operation_proc.customer
+        # current_operator = kwargs['operator']
+
+        # 创建新的服务作业进程
+        proc = sys_create_process(**kwargs)
+
+        return proc
+    
+    def create_batch_process(**kwargs):
+        pass
+        return f'创建n个服务作业进程'
+
+    def send_back(**kwargs):
+        '''
+        退单
+        '''
+        # 获取当前进程的父进程
+        proc = kwargs['operation_proc']
+        parent_proc = proc.parent_proc
+        if parent_proc and parent_proc.service == kwargs['next_service']:  # 如果父进程服务是规则指定的下一个服务，执行退单
+            parent_proc.return_form()
+            print('退回表单 至:', parent_proc)
+
+    SysCall = {
+        'create_process': create_process,
+        'create_batch_process': create_batch_process,
+        'send_back': send_back,
+    }
+
+    return SysCall[sys_call_str](**kwargs)
+
+
 # 创建业务记录
 def sys_create_business_record(**kwargs):
-    service = kwargs.get('service')
+    service = kwargs.get('sys_call_operand')
     model_name = service.config['subject']['name']
     params = {
         'label': service.label,
@@ -28,7 +67,7 @@ def sys_create_business_record(**kwargs):
 
 # 创建进程
 def sys_create_process(**kwargs):
-    service = kwargs.get('service')
+    service = kwargs.get('sys_call_operand')
     parent = kwargs.get('instance')
     operator = kwargs.get('operator')
     customer = kwargs.get('customer')
@@ -121,11 +160,20 @@ def update_entity_task_list(entity):
 def search_profiles(search_content, search_text, operator):
     match search_content:
         case 'entity':
-            instances = Operator.objects.filter(label__icontains=search_text)
+            # 使用Q对象组合多个字段的模糊匹配条件
+            instances = Operator.objects.filter(
+                Q(label__icontains=search_text) |
+                Q(name__icontains=search_text) |
+                Q(pym__icontains=search_text)
+            )
             work_order_head = WorkOrder.objects.get(label='个人基本信息').config
         case 'service':
             allowed_services = operator.allowed_services()
-            instances = Service.objects.filter(label__icontains=search_text)
+            instances = Service.objects.filter(
+                Q(label__icontains=search_text) |
+                Q(name__icontains=search_text) |
+                Q(pym__icontains=search_text)
+            )
             work_order_head = WorkOrder.objects.get(label='服务基本信息').config
 
     # 构造work-order represent list
