@@ -195,13 +195,13 @@ class RuleEvaluator:
     def _execute_action(self, rule: ServiceRule, context: Dict[str, Any]):
         """执行规则动作"""
         try:
-            if rule.system_operand:
+            if rule.system_instruction:
                 # 执行系统操作
-                self._execute_system_operand(rule.system_operand, context)
+                self._execute_system_operand(rule.system_instruction, context)
             
-            # if rule.next_service:
+            # if rule.operand_service:
             #     # 创建下一个服务进程
-            #     self._create_next_service_process(rule.next_service, context)
+            #     self._create_next_service_process(rule.operand_service, context)
         except Exception as e:
             print(f"规则动作执行错误: {e}")
 
@@ -291,9 +291,9 @@ def on_process_save(sender, instance: Process, created: bool, **kwargs):
         print("检查服务规则：", rule, " | 规则表达式：", rule.event.expression)
         print("上下文：", context)
         if eval(rule.event.expression, {}, context):
-            print("发生--", rule.service, rule.event, "执行->", rule.system_operand, rule.next_service)
-            sys_call_str = rule.system_operand.sys_call
-            context['sys_call_operand'] = rule.next_service
+            print("发生--", rule.service, rule.event, "执行->", rule.system_instruction, rule.operand_service)
+            sys_call_str = rule.system_instruction.sys_call
+            context['sys_call_operand'] = rule.operand_service
             sys_call(sys_call_str, **context)
 
     # *************************************************

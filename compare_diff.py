@@ -17,8 +17,8 @@ def compare_files(file_pairs):
         subprocess.run(["git", "diff", "--no-index", file1, file2])
 
 # 项目路径
-project1_app_path = "/Users/miles/Documents/JiangNing/cxerp/src/cxerp"
-project2_app_path = "/Users/miles/Documents/JiangNing/django-erp-os-framework/src/django-erp-os-framework"
+project1_app_path = "/Users/miles/Documents/JiangNing/cxerp/src/kernel"
+project2_app_path = "/Users/miles/Documents/JiangNing/django-erp-os-framework/src/kernel"
 
 # 找出同名文件
 common_files = find_common_files(project1_app_path, project2_app_path)

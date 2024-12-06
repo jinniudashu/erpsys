@@ -13,7 +13,6 @@ from kernel.models import Process, Service, ServiceRule, Operator
 from kernel.types import ProcessState
 from kernel.sys_lib import sys_call
 
-
 @receiver(user_logged_in)
 def on_user_login(sender, user, request, **kwargs):
     if request.path == f'/{settings.CUSTOMER_SITE_NAME}/login/':  # 应用登录
@@ -55,9 +54,9 @@ def schedule_process_updating(sender, instance: Process, created: bool, **kwargs
         print("规则表达式：", rule.event.expression)
         print("上下文：", context)
         if eval(rule.event.expression, {}, context):
-            print("发生--", rule.service, rule.event, "执行->", rule.system_operand, rule.next_service)
-            sys_call_str = rule.system_operand.sys_call
-            context['sys_call_operand'] = rule.next_service
+            print("发生--", rule.service, rule.event, "执行->", rule.system_instruction, rule.operand_service)
+            sys_call_str = rule.system_instruction.sys_call
+            context['sys_call_operand'] = rule.operand_service
             sys_call(sys_call_str, **context)
 
     # *************************************************

@@ -118,8 +118,8 @@ class Instruction(ERPSysBase):
 class ServiceRule(ERPSysBase):
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
     event = models.ForeignKey(Event, on_delete=models.SET_NULL,  blank=True, null=True, verbose_name="事件")
-    system_operand = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
-    next_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_next_service", verbose_name="后续服务")
+    system_instruction = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
+    operand_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_next_service", verbose_name="后续服务")
     parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
     order = models.SmallIntegerField(default=0, verbose_name="顺序")
 

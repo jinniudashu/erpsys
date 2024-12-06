@@ -28,6 +28,9 @@ def sys_call(sys_call_str, **kwargs):
 
         return proc
     
+    def return_upper_level_service(**kwargs):
+        pass
+
     def create_batch_process(**kwargs):
         pass
         return f'创建n个服务作业进程'
@@ -39,18 +42,18 @@ def sys_call(sys_call_str, **kwargs):
         # 获取当前进程的父进程
         proc = kwargs['operation_proc']
         parent_proc = proc.parent_proc
-        if parent_proc and parent_proc.service == kwargs['next_service']:  # 如果父进程服务是规则指定的下一个服务，执行退单
+        if parent_proc and parent_proc.service == kwargs['operand_service']:  # 如果父进程服务是规则指定的下一个服务，执行退单
             parent_proc.return_form()
             print('退回表单 至:', parent_proc)
 
     SysCall = {
         'create_process': create_process,
         'create_batch_process': create_batch_process,
+        'return_upper_level_service': return_upper_level_service,
         'send_back': send_back,
     }
 
     return SysCall[sys_call_str](**kwargs)
-
 
 # 创建业务记录
 def sys_create_business_record(**kwargs):
@@ -87,7 +90,7 @@ def sys_create_process(**kwargs):
     kwargs['instance'] = proc
     business_entity_instance = sys_create_business_record(**kwargs)
     proc.content_object = business_entity_instance
-    proc.path = f'/{settings.CUSTOMER_SITE_NAME}/applications/{service.config['subject']['name'].lower()}/{business_entity_instance.id}/change/'
+    proc.path = f"/{settings.CUSTOMER_SITE_NAME}/applications/{service.config['subject']['name'].lower()}/{business_entity_instance.id}/change/"
     proc.save()
 
 # 更新操作员任务列表
@@ -126,7 +129,7 @@ def update_entity_task_list(entity):
     # 任务分组条件
     group_condition = [
         {"group_title": "已安排", "state_set": {ProcessState.NEW.name, ProcessState.READY.name}},
-        {"group_title": "执行中", "state_set": {ProcessState.EXECUTING.name}},
+        {"group_title": "执行中", "state_set": {ProcessState.RUNNING.name}},
         {"group_title": "暂停", "state_set": {ProcessState.WAITING.name}},
         {"group_title": "已完成", "state_set": {ProcessState.TERMINATED.name}}        
     ]
