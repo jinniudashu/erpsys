@@ -18,60 +18,49 @@
 {% verbatim %}
 <div id="entity_operation">
     <div style="display: flex; justify-content: space-between;">
-        <h3>客户信息</h3>
-        <input type="submit" value="任务看板" onclick="location.href='/erp/'"/>
+        <div>
+            <h3>客户信息</h3>
+            <div v-if="entityContext.profile.header">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th v-for="header in sortedProfileHeaders" 
+                                :key="header.name">
+                                {{ header.label }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td v-for="header in sortedProfileHeaders" 
+                                :key="header.name">
+                                {{ entityContext.profile.content[header.name] }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a href="/erp/">-> 返回任务看板</a>
     </div>
     <br>
     <hr>
     <br>
-    <label>服务: </label> 
-    <input class="form-control" type="search" 
-        v-model="searchText" 
-        @input="debounceSearch"
-        placeholder="查找...">
-    <div v-if="profile_list.length > 0">
-        <table class="table table-hover">
-            <!-- <thead>
-                <tr>
-                    <th v-for="header in profile_header_visible" :key="header.name" scope="col">
-                        {{ header.label }}
-                    </th>
-                </tr>
-            </thead> -->
-            <tbody>
-                <tr v-for="profile in profile_list" :key="profile.erysys_id">
-                    <td v-for="header in profile_header_visible" :key="header.name">
-                        {{ profile[header.name] }}
-                    </td>
-                    <td>
-                        <input type="submit" value="安排" @click="assignService(profile.erysys_id)"/>
-                    </td>
-                    <td>
-                        <input type="submit" value="执行" @click="executeService(profile.erysys_id)"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-        <br>
-    <hr>
-    <br>
-    <div v-for="item in taskList" :key="item.title">
-        <div v-if="item.task_list.length > 0">
-            <h3>{{ item.group_title }}</h3>
+    <div v-for="group in tasks.groups" :key="group.title">
+        <div v-if="group.task_list.length > 0">
+            <h3>{{ group.group_title }}</h3>
             <br>
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name" scope="col">
+                        <th v-for="header in getSortedVisibleHeaders(group.task_head)" :key="header.name" scope="col">
                             {{ header.label }}
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="task in item.task_list" :key="task.service_id">
-                        <td v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name">
+                    <tr v-for="task in group.task_list" :key="task.service_id">
+                        <td v-for="header in getSortedVisibleHeaders(group.task_head)" :key="header.name">
                             <template v-if="task.path !== ''">
                                 <a :href="task.path">
                                     {{ task[header.name] }}
@@ -86,7 +75,38 @@
             </table>
         </div>
     </div>
-
+    <br>
+    <hr>
+    <br>
+    <label>服务: </label> 
+    <input class="form-control" type="search" 
+        v-model="services.searchText" 
+        @input="debounceSearch"
+        placeholder="查找...">
+    <div v-if="services.list.length > 0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th v-for="header in services.headerVisible" :key="header.name" scope="col">
+                        {{ header.label }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="profile in services.list" :key="profile.erysys_id">
+                    <td v-for="header in services.headerVisible" :key="header.name">
+                        {{ profile[header.name] }}
+                    </td>
+                    <td>
+                        <a :href="'/erp/new_service_process/' + entityContext.id + '/' + profile.erysys_id + '/'">执行</a>
+                    </td>
+                    <td>
+                        <a :href="'/erp/new_service_process_schedule/' + entityContext.id + '/' + profile.erysys_id + '/'">安排</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
     {% endverbatim %}
@@ -100,80 +120,141 @@
         const customerServiceApp = {
             data() {
                 return {
-                    searchText: "",
-                    debounceTimeout: null,
-                    profile_list: [],
-                    profile_header: [],
-                    profile_header_visible: [],
-                    taskList: [],
-                    allowedServicesId: [],  // 当前操作员可以操作的服务id
-                    operatorId: null,
-                    entityId: null,
+                    // 实体上下文，包含所有实体相关信息
+                    entityContext: {
+                        type: null,
+                        id: null,
+                        profile: {
+                            header: [],  // profile_header
+                            content: {}  // profile_content
+                        }
+                    },
+                    // 服务相关
+                    services: {
+                        list: [],
+                        header: [],
+                        headerVisible: [],
+                        searchText: "",
+                        searchTimeout: null
+                    },
+                    // 任务相关
+                    tasks: {
+                        groups: [],
+                        socket: null
+                    },
+                    // 操作员信息
+                    operator: {
+                        id: null,
+                        allowedServices: []
+                    },
+                    isLoading: false
                 }
             },
-
-            created() {
-                // 从当前href获取entityId
-                const urlWithoutParams = window.location.href.split('?')[0].split('#')[0];
-                const segments = urlWithoutParams.split('/');
-                segments.pop();  // 删除最后一个''元素, 源于Django路由返回的url最后会带一个'/'
-                this.entityId = segments.pop();
-
-                this.operatorId = Cookies.get('operator_id')
-                this.allowedServicesId = Cookies.get('allowed_services_id').split('\\')
-                
-                const ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-                const taskListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/entity_task_list/${this.entityId}/`);
-                taskListSocket.onmessage = (event) => {
-                    const parsedData = JSON.parse(event.data);
-                    this.taskList = parsedData.task_list;
-                    console.log('taskList：', this.taskList);
-                };
-            },
-            
             methods: {
-                async search(text) {
-                    const searchURL = `${window.location.origin}/erp/search/?search_content=service&search_text=${text}`;
+                async fetchURL(url) {
                     try {
-                        const response = await fetch(searchURL, {
+                        const response = await fetch(url, {
                             headers: {
                                 'Accept': 'application/json',
                             }
                         });
                         if (!response.ok) {
-                            throw new Error('HTTP error ' + response.status);
+                            throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
                         }
-                        const result = await response.json();
-                        this.profile_list = result.profile_list;
-                        this.profile_header = result.profile_header;
-                        this.profile_header_visible = this.profile_header.filter(header => header.visible)
+                        return await response.json();
                     } catch (error) {
-                        console.error('Error:', error);
+                        console.error(`Error fetching ${url}:`, error);
+                        throw error;
+                    }
+                },
+
+                async fetchInitialData() {
+                    this.isLoading = true;
+                    try {
+                        const data = await this.fetchURL(`${window.location.origin}/erp/entity_context/${this.entityContext.id}/`);
+                        console.log('entityContext:', data);
+                        // 直接使用服务器返回的profile结构
+                        this.entityContext.profile = {
+                            header: data.profile.profile_header || [],
+                            content: data.profile.profile_content || {}
+                        };
+                    } catch (error) {
+                        console.error('Failed to fetch initial data:', error);
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+
+                async search(text) {
+                    try {
+                        const searchURL = `${window.location.origin}/erp/search/?search_content=service&search_text=${text}`;
+                        const result = await this.fetchURL(searchURL);
+                        this.services.list = result.profile_list;
+                        this.services.header = result.profile_header;
+                        this.services.headerVisible = this.services.header.filter(header => header.visible);
+                    } catch (error) {
+                        console.error('Search failed:', error);
                     }
                 },
 
                 debounceSearch() {
-                    clearTimeout(this.debounceTimeout);
-                    this.debounceTimeout = setTimeout(() => {
-                        this.search(this.searchText);
+                    clearTimeout(this.services.searchTimeout);
+                    this.services.searchTimeout = setTimeout(() => {
+                        this.search(this.services.searchText);
                     }, 500);
                 },
 
-                getSortedVisibleHeaders(taskHead) {
-                    return taskHead
+                getSortedVisibleHeaders(headers) {
+                    return headers
                         .filter(header => header.visible)
                         .sort((a, b) => a.order - b.order);
                 },
 
-                assignService(id) {
-                    console.log('安排服务')
-                },
+                initWebSocket() {
+                    const ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+                    this.tasks.socket = new WebSocket(
+                        `${ws_scheme}://${window.location.host}/entity_task_list/${this.entityContext.id}/`
+                    );
+                    this.tasks.socket.onmessage = (event) => {
+                        const parsedData = JSON.parse(event.data);
+                        this.tasks.groups = parsedData.task_list;
+                        console.log('taskGroups:', this.tasks.groups);
+                    };
+                }
+            },
+            computed: {
+                sortedProfileHeaders() {
+                    return this.entityContext.profile.header ? 
+                        this.getSortedVisibleHeaders(this.entityContext.profile.header) : [];
+                }
+            },
+            created() {
+                // 解析URL获取实体信息
+                const urlWithoutParams = window.location.href.split('?')[0].split('#')[0];
+                const segments = urlWithoutParams.split('/');
+                segments.pop();  // 删除最后一个''元素
+                
+                this.entityContext.id = segments.pop();
+                this.entityContext.type = segments.pop();
+                console.log('Entity:', this.entityContext);
 
-                executeService(id) {
-                    console.log('执行服务')
-                },
-            },            
-            
+                // 获取操作员信息
+                this.operator.id = Cookies.get('operator_id');
+                this.operator.allowedServices = Cookies.get('allowed_services_id').split('\\');
+                console.log('Operator:', this.operator);
+
+                // 初始化WebSocket连接
+                this.initWebSocket();
+
+                // 获取初始数据
+                this.fetchInitialData();
+            },
+            beforeUnmount() {
+                // 清理WebSocket连接
+                if (this.tasks.socket) {
+                    this.tasks.socket.close();
+                }
+            }
         };
 
         createApp(customerServiceApp).mount('#entity_operation');

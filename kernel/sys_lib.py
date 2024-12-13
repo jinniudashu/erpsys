@@ -14,10 +14,12 @@ from kernel.types import ProcessState
 
 from applications.models import *
 
-
-# 系统调用入口函数
 def sys_call(sys_call_str, **kwargs):
-    def create_process(**kwargs):
+    """
+    系统调用入口函数
+    """
+
+    def start_one_service(**kwargs):
         # 准备新的服务作业进程参数
         # operation_proc = kwargs['operation_proc']
         # customer = operation_proc.customer
@@ -27,8 +29,14 @@ def sys_call(sys_call_str, **kwargs):
         proc = sys_create_process(**kwargs)
 
         return proc
-    
-    def return_upper_level_service(**kwargs):
+
+    def start_batch_service(**kwargs):
+        pass
+
+    def end_service_program(**kwargs):
+        pass
+
+    def return_calling_service(**kwargs):
         pass
 
     def create_batch_process(**kwargs):
@@ -47,10 +55,10 @@ def sys_call(sys_call_str, **kwargs):
             print('退回表单 至:', parent_proc)
 
     SysCall = {
-        'create_process': create_process,
-        'create_batch_process': create_batch_process,
-        'return_upper_level_service': return_upper_level_service,
-        'send_back': send_back,
+        'start_one_service': start_one_service,  # 开始一个服务
+        'start_batch_service': start_batch_service,  # 开始多个服务
+        'end_service_program': end_service_program,  # 结束服务程序
+        'return_calling_service': return_calling_service,  # 返回调用服务
     }
 
     return SysCall[sys_call_str](**kwargs)
@@ -64,6 +72,8 @@ def sys_create_business_record(**kwargs):
         'pid': kwargs.get('instance'),
         'master': kwargs.get('customer')
     }
+
+    # 创建业务记录
     service_data_instance = eval(model_name).objects.create(**params)
 
     return service_data_instance
@@ -71,26 +81,31 @@ def sys_create_business_record(**kwargs):
 # 创建进程
 def sys_create_process(**kwargs):
     service = kwargs.get('sys_call_operand')
-    parent = kwargs.get('instance')
+    parent = kwargs.get('parent')
+    previous = kwargs.get('instance')
     operator = kwargs.get('operator')
-    customer = kwargs.get('customer')
+    entity_content_object = kwargs.get('entity_content_object')
     state = kwargs.get('state')
     priority = kwargs.get('priority')
 
     params = {
         'name': service.label,
         'parent': parent,
+        'previous': previous,
         'service': service,
-        'customer': parent.customer,
+        'entity_content_object': entity_content_object,
         'state': ProcessState.NEW.name,
         'priority': 0
     }
     proc = Process.objects.create(**params)
+    kwargs['instance'] = proc  # 传递新创建的进程实例
 
-    kwargs['instance'] = proc
-    business_entity_instance = sys_create_business_record(**kwargs)
-    proc.content_object = business_entity_instance
-    proc.path = f"/{settings.CUSTOMER_SITE_NAME}/applications/{service.config['subject']['name'].lower()}/{business_entity_instance.id}/change/"
+    # 创建业务记录
+    business_form_instance = sys_create_business_record(**kwargs)
+
+    # 更新进程表单信息
+    proc.form_content_object = business_form_instance
+    proc.form_url = f"/{settings.CUSTOMER_SITE_NAME}/applications/{service.config['subject']['name'].lower()}/{business_form_instance.id}/change/"
     proc.save()
 
 # 更新操作员任务列表
@@ -105,9 +120,9 @@ def update_task_list(operator, is_public):
     processes = processes.filter(operator__isnull=True) if is_public else processes.filter(operator=operator)
 
     label = '公共任务' if is_public else '私有任务'
-    work_order_head = WorkOrder.objects.get(label=label).config
+    work_order = WorkOrder.objects.get(label=label).config
 
-    task_list, work_order_head_filtered = get_represent_list(processes, work_order_head)
+    task_list, work_order_head_filtered = get_represent_list(processes, work_order)
 
     # 构造channel_message
     if is_public:
@@ -124,8 +139,10 @@ def update_task_list(operator, is_public):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(channel_group_name, message)
 
-# 更新实体作业任务列表
-def update_entity_task_list(entity):
+def update_entity_task_group_list(entity):
+    """
+    更新实体作业任务分组列表
+    """
     # 任务分组条件
     group_condition = [
         {"group_title": "已安排", "state_set": {ProcessState.NEW.name, ProcessState.READY.name}},
@@ -134,12 +151,12 @@ def update_entity_task_list(entity):
         {"group_title": "已完成", "state_set": {ProcessState.TERMINATED.name}}        
     ]
 
-    work_order_head = WorkOrder.objects.get(label='客户服务作业清单').config
+    work_order = WorkOrder.objects.get(label='实体作业任务清单').config
 
     task_list = []
     for condition in group_condition:
         processes = entity.get_task_list(condition['state_set'])
-        group_tasks, work_order_head_filtered = get_represent_list(processes, work_order_head)
+        group_tasks, work_order_head_filtered = get_represent_list(processes, work_order)
 
         task_list.append({
             'group_title': condition['group_title'],
@@ -163,43 +180,52 @@ def update_entity_task_list(entity):
 def search_profiles(search_content, search_text, operator):
     match search_content:
         case 'entity':
-            # 使用Q对象组合多个字段的模糊匹配条件
-            instances = Operator.objects.filter(
+            operators = Operator.objects.all()
+            instances = operators.filter(
                 Q(label__icontains=search_text) |
                 Q(name__icontains=search_text) |
                 Q(pym__icontains=search_text)
-            )
-            work_order_head = WorkOrder.objects.get(label='个人基本信息').config
+            ) if search_text else operators
+            work_order = WorkOrder.objects.get(label='搜索个人表头').config
         case 'service':
             allowed_services = operator.allowed_services()
-            instances = Service.objects.filter(
+            services = Service.objects.all()
+            instances = services.filter(
                 Q(label__icontains=search_text) |
                 Q(name__icontains=search_text) |
                 Q(pym__icontains=search_text)
-            )
-            work_order_head = WorkOrder.objects.get(label='服务基本信息').config
+            ) if search_text else services
+            work_order = WorkOrder.objects.get(label='搜索服务表头').config
 
     # 构造work-order represent list
-    return get_represent_list(instances, work_order_head)
+    return get_represent_list(instances, work_order)
 
-# 获取个人基本信息列表和表头
-def get_operator_profile(operator):
-    work_order_head = WorkOrder.objects.get(label='个人基本信息').config
-    work_order_content, work_order_head_filtered = get_represent_list([operator], work_order_head)
+def get_entity_profile(entity):
+    """
+    根据实体类型获取对应工单配置
+    返回实体基本信息列表和表头
+    """
+    # 如果entity是Operator实例
+    if isinstance(entity, Operator):
+        work_order = WorkOrder.objects.get(label='客户Profile表头').config
+    else:
+        raise ValueError("实体类型不支持")
+
+    work_order_content, work_order_head_filtered = get_represent_list([entity], work_order)
     return {'profile_content': work_order_content[0], 'profile_header': work_order_head_filtered}
 
 # 根据工单返回内容列表和表头
-def get_represent_list(instances, work_order_head):
+def get_represent_list(instances, work_order):
     represent_list = []
     for instance in instances:
         work_order_content = {}
-        for work_order_field in work_order_head:
+        for work_order_field in work_order:
             work_order_content[work_order_field['name']] = get_nested_field_value(instance, work_order_field['value_expression'])
 
         represent_list.append(work_order_content)
 
-    # 剔除 work_order_head 列表中每个字典元素中的value_expression键值对，以免传到前端
-    work_order_head_filtered = [{k: v for k, v in item.items() if k != 'value_expression'} for item in work_order_head]
+    # 剔除 work_order 列表中每个字典元素中的value_expression键值对，以免传到前端
+    work_order_head_filtered = [{k: v for k, v in item.items() if k != 'value_expression'} for item in work_order]
 
     return represent_list, work_order_head_filtered
 

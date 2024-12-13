@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 import uuid
 import re
@@ -43,14 +45,14 @@ class ERPSysRegistry(ERPSysBase):
 
 class Organization(ERPSysBase):
     class Meta:
-        verbose_name = "服务-组织"
+        verbose_name = "组织"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
 class Role(ERPSysBase):
     services = models.ManyToManyField('Service', related_name='roles', blank=True, verbose_name="服务项目")
     class Meta:
-        verbose_name = "服务-角色"
+        verbose_name = "角色"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -59,9 +61,14 @@ class Operator(ERPSysBase):
     role = models.ManyToManyField(Role, blank=True, verbose_name="角色")
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")
     related_staff = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="关系人")
+    context = models.JSONField(blank=True, null=True, verbose_name="上下文")
+    processes = GenericRelation('Process', 
+                               content_type_field='entity_content_type',
+                               object_id_field='entity_object_id',
+                               related_query_name='entity')
 
     class Meta:
-        verbose_name = "服务-人员"
+        verbose_name = "人员"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -69,11 +76,11 @@ class Operator(ERPSysBase):
         return list(set(service for role in self.role.all() for service in role.services.all()))
 
     def get_task_list(self, state_set):
-        return Process.objects.filter(customer=self, state__in=state_set)
+        return self.processes.filter(state__in=state_set)
 
 class Resource(ERPSysBase):
     class Meta:
-        verbose_name = "服务-资源"
+        verbose_name = "资源"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -99,7 +106,7 @@ class Event(ERPSysBase):
     parameters = models.JSONField(blank=True, null=True, verbose_name="事件参数")
 
     class Meta:
-        verbose_name = "服务-事件"
+        verbose_name = "事件"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -124,9 +131,9 @@ class ServiceRule(ERPSysBase):
     order = models.SmallIntegerField(default=0, verbose_name="顺序")
 
     class Meta:
-        verbose_name = "服务-规则"
+        verbose_name = "规则"
         verbose_name_plural = verbose_name
-        ordering = ['event', 'order']
+        ordering = ['order', 'service', 'event', 'id']
 
     def __str__(self):
         return self.label
@@ -165,37 +172,39 @@ class Process(models.Model):
     erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
     pid = PidField(default=0, verbose_name="进程id")
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name="child_instances", verbose_name="父进程")
+    previous = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, related_name="next_instances", verbose_name="前一个进程")
+    entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, related_name="as_entity_process")
+    entity_object_id = models.PositiveIntegerField(null=True, blank=True)
+    entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
     state = models.CharField(max_length=50, choices=[(state.name, state.value) for state in ProcessState], default=ProcessState.NEW.name, verbose_name="状态")
     priority = models.PositiveSmallIntegerField(default=0, verbose_name="优先级")
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划时间")
     time_window = models.DurationField(blank=True, null=True, verbose_name='时间窗')
     operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, related_name="as_operator_process", verbose_name="操作员")
-    customer = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, related_name="as_customer_process", verbose_name="客户")
     work_order = models.ForeignKey(WorkOrder, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="工单")
-    path = models.CharField(max_length=512, blank=True, null=True, verbose_name="路径")
+    form_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    form_object_id = models.PositiveIntegerField(null=True, blank=True)
+    form_content_object = GenericForeignKey('form_content_type', 'form_object_id')
+    form_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="路径")
+    start_time = models.DateTimeField(blank=True, null=True, verbose_name="开始时间")
+    end_time = models.DateTimeField(blank=True, null=True, verbose_name="结束时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    accounting = models.JSONField(blank=True, null=True, verbose_name="帐务")
+    schedule_context = models.JSONField(blank=True, null=True, verbose_name="调度上下文")  # 涉及到决定进程执行顺序、分配CPU时间等方面的信息
+    control_context = models.JSONField(blank=True, null=True, verbose_name="控制上下文")  # 涉及到进程的状态管理、进程间通信、同步等方面的信息
+    stack = models.JSONField(blank=True, null=True, verbose_name="栈")  # 存储局部变量、函数参数以及程序的控制流（例如，函数调用时的返回地址）
     program = models.JSONField(blank=True, null=True, verbose_name="程序")
     pc = models.PositiveIntegerField(blank=True, null=True, verbose_name="程序计数器")
     registers = models.JSONField(blank=True, null=True, verbose_name="寄存器")
     io_status = models.JSONField(blank=True, null=True, verbose_name="I/O状态")
     cpu_scheduling = models.JSONField(blank=True, null=True, verbose_name="CPU调度")
-    accounting = models.JSONField(blank=True, null=True, verbose_name="帐务")
     sp = models.PositiveIntegerField(blank=True, null=True, verbose_name="栈指针")
     pcb = models.JSONField(blank=True, null=True, verbose_name="进程控制块")
-    stack = models.JSONField(blank=True, null=True, verbose_name="栈")  # 存储局部变量、函数参数以及程序的控制流（例如，函数调用时的返回地址）
-    heap = models.JSONField(blank=True, null=True, verbose_name="堆")
-    schedule_context = models.JSONField(blank=True, null=True, verbose_name="调度上下文")  # 涉及到决定进程执行顺序、分配CPU时间等方面的信息
-    control_context = models.JSONField(blank=True, null=True, verbose_name="控制上下文")  # 涉及到进程的状态管理、进程间通信、同步等方面的信息
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_object = GenericForeignKey('content_type', 'object_id')
-    start_time = models.DateTimeField(blank=True, null=True, verbose_name="开始时间")
-    end_time = models.DateTimeField(blank=True, null=True, verbose_name="结束时间")
-    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
-    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
 
     class Meta:
-        verbose_name = "服务-进程"
+        verbose_name = "进程"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -271,6 +280,15 @@ class ProcessFrameState(ERPSysBase):
     def __str__(self):
         return f"{self.process} - {self.status} ({self.timestamp})"
 
+class SysParams(ERPSysBase):
+    config = models.JSONField(blank=True, null=True, verbose_name="配置")
+    expires_in = models.PositiveIntegerField(default=8, verbose_name="过期时间")
+
+    class Meta:
+        verbose_name = "系统参数"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
 class Stacks(ERPSysBase):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
     stack = models.JSONField(blank=True, null=True, verbose_name="栈")
@@ -286,12 +304,3 @@ class Stacks(ERPSysBase):
 
     def __str__(self):
         return str(self.process)
-
-class SysParams(ERPSysBase):
-    config = models.JSONField(blank=True, null=True, verbose_name="配置")
-    expires_in = models.PositiveIntegerField(default=8, verbose_name="过期时间")
-
-    class Meta:
-        verbose_name = "系统参数"
-        verbose_name_plural = verbose_name
-        ordering = ['id']

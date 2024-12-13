@@ -4,7 +4,7 @@ from asgiref.sync import sync_to_async
 import json
 
 from kernel.models import Operator
-from kernel.sys_lib import update_task_list, update_entity_task_list
+from kernel.sys_lib import update_task_list, update_entity_task_group_list
 
 # 个人任务列表
 class PrivateTaskListConsumer(AsyncWebsocketConsumer):
@@ -51,7 +51,7 @@ class EntityTaskListConsumer(AsyncWebsocketConsumer):
         await self.accept()
         # 初始化更新实体服务列表
         entity = await sync_to_async(Operator.objects.get)(erpsys_id=entity_id)
-        await sync_to_async(update_entity_task_list)(entity)
+        await sync_to_async(update_entity_task_group_list)(entity)
 
     async def disconnect(self, close_code):
         entity_id = self.scope['url_route']['kwargs']['entity_id']

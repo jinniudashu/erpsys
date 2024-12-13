@@ -122,8 +122,8 @@ class InstructionAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceRule)
 class ServiceRuleAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ServiceRule._meta.fields]
-    list_display_links = ['label', 'name',]
+    list_display = ['order', 'label', 'service', 'event', 'system_instruction', 'operand_service', 'parameter_values', 'id']
+    list_display_links = ['order', 'label']
     search_fields = ['label', 'name', 'pym']
     autocomplete_fields = ['event', 'service', 'operand_service']
 

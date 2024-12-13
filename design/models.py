@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 
 import uuid
@@ -124,9 +125,10 @@ class Operator(ERPSysBase):
     role = models.ManyToManyField(Role, blank=True, verbose_name="角色")
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")
     related_staff = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="关系人")
+    context = models.JSONField(blank=True, null=True, verbose_name="上下文")
 
     class Meta:
-        verbose_name = "服务-人员"
+        verbose_name = "资源-人员"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -172,6 +174,7 @@ class Knowledge(ERPSysBase):
         ordering = ["id"]
 
 class Service(ERPSysBase):
+    serve_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, verbose_name="服务对象类型")
     consists = models.ManyToManyField('self', through='ServiceConsists', symmetrical=False, verbose_name="服务组成")
     subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type__in = ['Model', 'Log']), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
     form = models.ForeignKey("Form", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
@@ -184,12 +187,39 @@ class Service(ERPSysBase):
     capital_requirements = models.ManyToManyField(Capital, through='CapitalRequirements', verbose_name="资金需求")
     knowledge_requirements = models.ManyToManyField(Knowledge, through='KnowledgeRequirements', verbose_name="知识需求")
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='价格')
-    # authorize_roles = models.ManyToManyField(Role, related_name='roles_authorized', blank=True, verbose_name="允许角色")
-    # authorize_operators = models.ManyToManyField(Operator, related_name='operators_authorized', blank=True, verbose_name="允许操作员")
     route_to = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='services_routed_from', blank=True, null=True, verbose_name="传递至")
     reference = models.ManyToManyField(DataItem, related_name='referenced_services', blank=True, verbose_name="引用")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
     service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], default='OPERATION', verbose_name="服务类型")
+
+    @classmethod
+    def get_unique_content_types(cls):
+        """
+        返回所有服务中使用的不重复的serve_content_type信息列表
+        返回格式: [{'id': content_type_id, 'model': model_class_name, 'verbose_name': verbose_name}, ...]
+        """
+        from django.contrib.contenttypes.models import ContentType
+        content_type_ids = set(cls.objects.values_list('serve_content_type', flat=True).exclude(serve_content_type__isnull=True))
+        result = []
+        for ct_id in sorted(content_type_ids):
+            ct = ContentType.objects.get(id=ct_id)
+            model_class = ct.model_class()
+            verbose_name = model_class._meta.verbose_name if model_class else ct.name
+            # 如果verbose_name包含'-'，只取'-'后面的部分
+            if isinstance(verbose_name, str) and '-' in verbose_name:
+                verbose_name = verbose_name.split('-')[1].strip()
+            result.append({
+                'id': ct_id,
+                'model': model_class.__name__ if model_class else ct.model.title(),
+                'verbose_name': verbose_name
+            })
+        return result
+
+    @property
+    def serve_model_name(self):
+        """获取服务对象的模型类名称字符串"""
+        model_class = self.serve_content_type.model_class() if self.serve_content_type else None
+        return model_class.__name__ if model_class else None
 
     class Meta:
         verbose_name = "服务"
@@ -323,17 +353,28 @@ class Instruction(ERPSysBase):
         ordering = ['id']
 
 class ServiceRule(ERPSysBase):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="服务")
+    sys_calls = [
+        ('start_one_service', '开始一个服务'),
+        ('start_batch_service', '开始多个服务'),
+        ('end_service_program', '结束服务程序'),
+        ('return_calling_service', '返回调用服务')
+    ]
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="主体服务")
     event = models.ForeignKey(Event, on_delete=models.CASCADE,  blank=True, null=True, verbose_name="事件")
+    # system_instruction = models.CharField(max_length=255, choices=sys_calls, blank=True, null=True, verbose_name="系统指令")
     system_instruction = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
-    operand_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_operand_service", verbose_name="所操作服务")
+    operand_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_operand_service", verbose_name="操作服务")
     parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
     order = models.SmallIntegerField(default=0, verbose_name="顺序")
 
     class Meta:
         verbose_name = "服务-规则"
         verbose_name_plural = verbose_name
-        ordering = ['event', 'event', 'order']
+        ordering = ['order', 'service', 'event', 'id']
+
+    def save(self, *args, **kwargs):
+        self.label = f"{self.event.label} - {self.service.label}"
+        super().save(*args, **kwargs)
 
 class WorkOrder(ERPSysBase):
     config = models.JSONField(blank=True, null=True, verbose_name="配置")

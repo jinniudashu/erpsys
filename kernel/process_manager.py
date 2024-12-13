@@ -42,7 +42,7 @@ class ContextFrame:
     def get_inheritable_context(self) -> Dict[str, Any]:
         """获取可继承的上下文变量"""
         return {
-            'customer': self.process.customer,
+            'customer': self.process.entity_content_object,
             'business_context': self.process.control_context,
             'schedule_context': self.process.schedule_context,
         }
@@ -148,12 +148,12 @@ class ProcessContextManager:
 def preprocess_context(instance: Process, created: bool) -> dict:
     """预处理上下文"""
     process_context = model_to_dict(instance)
-    model_context = model_to_dict(instance.content_object) if instance.content_object else {}
+    model_context = model_to_dict(instance.form_content_object) if instance.form_content_object else {}
     control_context = instance.control_context if instance.control_context else {}
     schedule_context = instance.schedule_context if instance.schedule_context else {}
     context = {**model_context, **process_context, **control_context, **schedule_context}
     context.update({"instance": instance})
-    context.update({"customer": instance.customer})
+    context.update({"customer": instance.entity_content_object})
     context.update({"created": created, "timezone_now": timezone.now()})
     return context
 
@@ -177,7 +177,7 @@ class RuleEvaluator:
             'result': frame.return_value,
             'local_vars': frame.local_vars,
             'inherited_context': frame.inherited_context,
-            'customer': frame.process.customer,
+            'customer': frame.process.entity_content_object,
             'current_time': timezone.now(),
         }
         return context
@@ -239,7 +239,7 @@ class ProcessScheduler:
         return {
             'process_id': process.id,
             'service': process.service.label,
-            'customer': process.customer.label if process.customer else None,
+            'customer': process.entity_content_object.label if process.entity_content_object else None,
             'priority': process.priority,
             'scheduled_time': process.scheduled_time,
         }
@@ -262,7 +262,7 @@ def on_user_login(sender, user, request, **kwargs):
         operator = Operator.objects.get(user=user)
         params = {
             'service': Service.objects.get(name='user_login'),
-            'customer': operator,
+            'entity_content_object': operator,
             'operator': operator,
             'state': ProcessState.TERMINATED.name,
             'priority': 0

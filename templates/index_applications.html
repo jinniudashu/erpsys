@@ -16,35 +16,7 @@
 {% block content %}
     {% verbatim %}
     <div id="app">
-        <label>搜索：</label>
-        <input class="form-control" type="search" 
-               v-model="searchText" 
-               @input="debounceSearch"
-               placeholder="查找...">
-        <div v-if="profile_list.length > 0">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th v-for="header in profile_header_visible" :key="header.name" scope="col">
-                            {{ header.label }}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="profile in profile_list" :key="profile.id">
-                        <td v-for="header in profile_header_visible" :key="header.name">
-                            <a :href="'entity_operation/' + profile.id">
-                            {{ profile[header.name] }}
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <br>        
-        <hr>
-        <br>
-        <div v-for="item in privateTaskList" :key="item.title">
+        <div v-for="item in tasks.private" :key="item.title">
             <div v-if="item.task_list.length > 0">
                 <h3>{{ item.title }}</h3>
                 <br>
@@ -60,8 +32,8 @@
                     <tbody>
                         <tr v-for="task in item.task_list" :key="task.id">
                             <td v-for="header in getSortedVisibleHeaders(item.task_head)" :key="header.name">
-                                <template v-if="header.name === 'customer_name'">
-                                    <a :href="'entity_operation/' + task.customer_id">
+                                <template v-if="header.name === 'entity_label'">
+                                    <a :href="'entity_operation/' + task.entity_type + '/' + task.entity_id">
                                         {{ task[header.name] }}
                                     </a>
                                 </template>
@@ -79,11 +51,11 @@
 
                             <!-- <td>
                                 <span @click.stop="openMenu(task.id)">...</span>
-                                <div v-if="openMenuTodoId === task.id" class="dropdown-menu">
+                                <div v-if="ui.menu.openTaskId === task.id" class="dropdown-menu">
                                     <a href="#" @click.stop.prevent="openSwapMenu(task)">
                                         换班 <span class="triangle">&#9654;</span>
-                                        <div v-if="openSwapMenuTodoId === task.id" class="sub-menu">
-                                            <a v-for="employee in shiftEmployees" :key="employee.id" href="#" @click.stop.prevent="handleShift(task.id, employee.id)">
+                                        <div v-if="ui.menu.openSwapTaskId === task.id" class="sub-menu">
+                                            <a v-for="employee in ui.menu.shiftEmployees" :key="employee.id" href="#" @click.stop.prevent="handleShift(task.id, employee.id)">
                                                 {{ employee.name }}
                                             </a>
                                         </div>
@@ -100,7 +72,7 @@
         </div>
         <hr>
         <br>
-        <div v-for="item in publicTaskList" :key="item.title">
+        <div v-for="item in tasks.public" :key="item.title">
             <div v-if="item.task_list.length > 0">
                 <h3>{{ item.title }}</h3>
                 <br>
@@ -132,7 +104,59 @@
             <hr>
             <br>
         </div>
-        <div v-if="showConfirmation" class="confirmation-box">
+        <label>新建：</label>
+        <br>        
+        <br>
+        <div v-for="item in operator.context.newEntityServices" :key="item.id">
+            <a :href="'/erp/new_service_process/0/' + item.id + '/?entity_label=' + encodeURIComponent(entitySearching.searchText)" class="btn btn-primary">
+                {{ item.title }}
+            </a>
+        </div>
+        <br>        
+        <hr>
+        <br>
+        <div>
+            <div class="form-group">
+                <label>类型：</label>
+                <select class="form-control" v-model="entitySearching.selectedType">
+                    <option v-for="type in operator.context.entityTypes" 
+                            :key="type.id" 
+                            :value="type.model">
+                        {{ type.verbose_name }}
+                    </option>
+                </select>
+            </div>
+            <label>搜索：</label>
+            <input class="form-control" type="search" 
+                   v-model="entitySearching.searchText" 
+                   @input="debounceSearch"
+                   placeholder="查找...">
+        </div>
+        <div v-if="entitySearching.searchResults.list.length > 0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th v-for="header in entitySearching.searchResults.headerVisible" :key="header.name" scope="col">
+                        {{ header.label }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="profile in entitySearching.searchResults.list" :key="profile.id">
+                    <td v-for="header in entitySearching.searchResults.headerVisible" :key="header.name">
+                        <a :href="'entity_operation/' + entitySearching.selectedType + '/' + profile.id">
+                        {{ profile[header.name] }}
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <br>        
+        <hr>
+        <br>
+    
+        <div v-if="ui.menu.showConfirmation" class="confirmation-box">
             <p>确认要进行换班操作吗？</p>
             <button @click="confirmShift">确认</button>
             <button @click="cancelShift">取消</button>
@@ -148,142 +172,173 @@
         const customerServiceApp = {
             data() {
                 return {
-                    privateTaskList: [],
-                    publicTaskList: [],
-                    profile_list: [],
-                    profile_header_visible: [],
-                    searchText: '',
-                    debounceTimeout: null,
-                    shiftEmployees: [],
-                    allEmployees: [],
-                    openMenuTodoId: null,
-                    openSwapMenuTodoId: null,
-                    showConfirmation: false,
-                    currentEmployeeId: null,
+                    // 任务相关
+                    tasks: {
+                        private: [],
+                        public: [],
+                        sockets: {
+                            private: null,
+                            public: null
+                        }
+                    },
+                    // 实体搜索相关
+                    entitySearching: {
+                        selectedType: 'Operator',
+                        searchText: '',
+                        searchTimeout: null,
+                        searchResults: {
+                            list: [],
+                            header: [],
+                            headerVisible: []
+                        }
+                    },
+                    // 操作员上下文
+                    operator: {
+                        context: {
+                            entityTypes: [],
+                            newEntityServices: [],
+                            allEmployees: []
+                        }
+                    },
+                    // UI状态
+                    ui: {
+                        isLoading: false,
+                        menu: {
+                            openTaskId: null,
+                            openSwapTaskId: null,
+                            showConfirmation: false,
+                            currentEmployeeId: null,
+                            shiftEmployees: []
+                        }
+                    }
                 }
             },
 
             methods: {
-                async search(text) {
-                    const searchURL = `${window.location.origin}/erp/search/?search_content=entity&search_text=${text}`;
+                // API 请求相关
+                async fetchURL(url) {
                     try {
-                        const response = await fetch(searchURL, {
-                            headers: {
-                                'Accept': 'application/json',
-                            }
+                        const response = await fetch(url, {
+                            headers: { 'Accept': 'application/json' }
                         });
                         if (!response.ok) {
-                            throw new Error('HTTP error ' + response.status);
+                            throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
                         }
-                        const result = await response.json();
-                        this.profile_list = result.profile_list;
-                        profile_header = result.profile_header;
-                        this.profile_header_visible = profile_header.filter(header => header.visible)
+                        return await response.json();
                     } catch (error) {
-                        console.error('Error:', error);
+                        console.error(`Error fetching ${url}:`, error);
+                        throw error;
+                    }
+                },
+
+                // 数据初始化
+                async fetchInitialData() {
+                    this.ui.isLoading = true;
+                    try {
+                        const context = await this.fetchURL(`${window.location.origin}/erp/operator_context/`);
+                        this.operator.context = {
+                            entityTypes: context.entity_types || [],
+                            newEntityServices: context.new_entity_services || [],
+                            allEmployees: context.all_employees || []
+                        };
+                    } catch (error) {
+                        console.error('Failed to fetch initial data:', error);
+                    } finally {
+                        this.ui.isLoading = false;
+                    }
+                },
+
+                // 实体搜索相关
+                async searchEntities(text) {
+                    try {
+                        const searchURL = `${window.location.origin}/erp/search/?search_content=entity&search_text=${text}`;
+                        const result = await this.fetchURL(searchURL);
+                        this.entitySearching.searchResults = {
+                            list: result.profile_list || [],
+                            header: result.profile_header || [],
+                            headerVisible: (result.profile_header || []).filter(header => header.visible)
+                        };
+                    } catch (error) {
+                        console.error('Search failed:', error);
                     }
                 },
 
                 debounceSearch() {
-                    clearTimeout(this.debounceTimeout);
-                    this.debounceTimeout = setTimeout(() => {
-                        this.search(this.searchText);
+                    clearTimeout(this.entitySearching.searchTimeout);
+                    this.entitySearching.searchTimeout = setTimeout(() => {
+                        this.searchEntities(this.entitySearching.searchText);
                     }, 500);
                 },
 
-                getSortedVisibleHeaders(taskHead) {
-                    return taskHead
+                // 任务操作相关
+                handleProcOperation(id, opCode) {
+                    window.location.href = 'manage_task/?pid=' + id + '&op_code=' + opCode;
+                },
+
+                // 菜单操作相关
+                openMenu(id) {
+                    this.ui.menu.openTaskId = id;
+                },
+
+                openSwapMenu(task) {
+                    this.ui.menu.openSwapTaskId = task.id;
+                    this.ui.menu.shiftEmployees = this.operator.context.allEmployees
+                        .filter(employee => employee.allowed_services.includes(task.service_id));
+                },
+
+                handleShift(todoId, employeeId) {
+                    window.location.href = 'manage_task/?proc_id=' + todoId + 
+                        '&op_code=SHIFT&operator_id=' + employeeId;
+                },
+
+                handleOutsideClick() {
+                    this.ui.menu.openTaskId = null;
+                    this.ui.menu.openSwapTaskId = null;
+                },
+
+                // WebSocket 相关
+                initWebSockets() {
+                    const ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+                    const baseUrl = ws_scheme + '://' + window.location.host;
+
+                    // 私有任务WebSocket
+                    this.tasks.sockets.private = new WebSocket(baseUrl + "/private_task_list/");
+                    this.tasks.sockets.private.onmessage = (event) => {
+                        this.tasks.private = JSON.parse(event.data);
+                        console.log('privateTaskList:', this.tasks.private);
+                    };
+
+                    // 公共任务WebSocket
+                    this.tasks.sockets.public = new WebSocket(baseUrl + "/public_task_list/");
+                    this.tasks.sockets.public.onmessage = (event) => {
+                        this.tasks.public = JSON.parse(event.data);
+                        console.log('publicTaskList:', this.tasks.public);
+                    };
+                },
+
+                // 工具方法
+                getSortedVisibleHeaders(headers) {
+                    return headers
                         .filter(header => header.visible)
                         .sort((a, b) => a.order - b.order);
-                },
-
-                handleProcOperation(id, opCode) {
-                    window.location.href = 'manage_task/?pid=' + id + '&op_code=' + opCode
-                },
-                
-                openMenu(id) {
-                    this.openMenuTodoId = id;
-                },
-                
-                openSwapMenu(task) {
-                    this.openSwapMenuTodoId = task.id;
-                    // 筛选出允许服务当前服务项目的员工
-                    this.shiftEmployees = this.allEmployees.filter(employee => employee.allowed_services.includes(task.service_id));
-                },
-                
-                handleShift(todoId, employeeId) {
-                    this.currentEmployeeId = employeeId;                    
-                    // this.showConfirmation = true;
-                    window.location.href = 'manage_task/?proc_id=' + todoId + '&op_code=SHIFT&operator_id=' + employeeId;
-                },                
-                
-                confirmShift() {
-                    console.log('确认换班到员工ID:', this.currentEmployeeId);
-                    // 这里处理换班的逻辑
-
-                    this.showConfirmation = false;  // 关闭确认框
-                    this.openSwapMenuTodoId = null; // 关闭子菜单
-                    this.openMenuTodoId = null;     // 关闭主菜单
-                },
-                
-                cancelShift() {
-                    this.showConfirmation = false;  // 只关闭确认框
-                },
-                
-                handleOutsideClick(event) {
-                    // 隐藏主菜单、子菜单
-                    this.openMenuTodoId = null;
-                    this.openSwapMenuTodoId = null;
-                },
+                }
             },
 
             created() {
-                let _this = this;
-                var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws"
-
-                // 建立信道 - 操作员任务列表
-                const privateTaskList = new WebSocket(`${ws_scheme}://${window.location.host}/private_task_list/`);
-                privateTaskList.onmessage = function (event) {
-                    _this.privateTaskList = JSON.parse(event.data)
-                    console.log('privateTaskList:', _this.privateTaskList)
-                };
-
-                // 建立信道 - 公共任务列表
-                const publicTaskList = new WebSocket(`${ws_scheme}://${window.location.host}/public_task_list/`);
-                publicTaskList.onmessage = function (event) {
-                    _this.publicTaskList = JSON.parse(event.data);
-                    console.log('publicTaskList:', _this.publicTaskList)
-                };
-
-                // 获取员工列表[{'id': 1, 'name': '张三', 'allow_services': [1,2,3]}, ...]
-                const fetchEmployeesURL = `${window.location.origin}/basic-api/get_employees/`;
-                const fetchEmployees = async () => {
-                    try {
-                        const response = await fetch(fetchEmployeesURL, {
-                            headers: {
-                                'Accept': 'application/json',
-                            }
-                        });
-                        if (!response.ok) {
-                            throw new Error('HTTP error ' + response.status);
-                        }
-                        const result = await response.json();
-                        _this.allEmployees = result;
-                        console.log('allEmployees:', result)
-                    } catch (error) {
-                        console.error('Error:', error);
-                    }
-                }
-                fetchEmployees();
+                this.initWebSockets();
+                this.fetchInitialData();
             },
 
             mounted() {
                 document.addEventListener('click', this.handleOutsideClick);
             },
 
-            beforeDestroy() {
+            beforeUnmount() {
                 document.removeEventListener('click', this.handleOutsideClick);
-            },
+                // 清理WebSocket连接
+                if (this.tasks.sockets.private) this.tasks.sockets.private.close();
+                if (this.tasks.sockets.public) this.tasks.sockets.public.close();
+            }
         };
 
         createApp(customerServiceApp).mount('#app');

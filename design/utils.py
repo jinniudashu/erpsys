@@ -12,7 +12,7 @@ from design.models import DataItem, DESIGN_CLASS_MAPPING, Organization as design
 from design.models import ServiceConsists, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
 from design.script_file_header import ScriptFileHeader, get_master_field_script, get_admin_script, get_model_footer
 
-from kernel.models import Organization as kernel_Organization, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule, WorkOrder as kernel_WorkOrder, Form as kernel_Form
+from kernel.models import Organization as kernel_Organization, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceRule as kernel_ServiceRule, WorkOrder as kernel_WorkOrder, Form as kernel_Form, SysParams as kernel_SysParams
 from applications.models import CLASS_MAPPING
 # Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
@@ -161,6 +161,7 @@ def generate_source_code(project):
         def prepare_service_config(service):
             return {
                 "erpsys_id": service.erpsys_id,
+                "serve_content_type": service.serve_model_name,
                 "consists": [
                     {"erpsys_id": sub.sub_service.erpsys_id, "name": sub.sub_service.name, "quantity": sub.quantity}
                     for sub in ServiceConsists.objects.filter(service=service)
@@ -267,6 +268,15 @@ def generate_source_code(project):
                         # 如果找到了对应的目标关联对象，则建立多对多关系
                         if target_related_objects:
                             getattr(new_obj, field.name).set(target_related_objects)
+
+        # CreateOrUpdate entity_content_types to kernel.SysParams
+        entity_content_types = design_Service.get_unique_content_types()
+        kernel_SysParams.objects.update_or_create(
+            label='实体类型',
+            defaults={
+                'config': entity_content_types
+            }
+        )
 
     # 生成脚本
     def generate_script(data_item):

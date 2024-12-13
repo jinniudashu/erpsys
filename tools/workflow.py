@@ -65,7 +65,7 @@ class 服务实例:
         self.pid = proc.pid
         self.result = self.create_record()
         proc.content_object = self.result
-        proc.path = f'/{settings.CUSTOMER_SITE_NAME}/applications/{self.service_item.service_orm.config['subject']['name'].lower()}/{proc.id}/change/'
+        proc.form_url = f'/{settings.CUSTOMER_SITE_NAME}/applications/{self.service_item.service_orm.config['subject']['name'].lower()}/{proc.id}/change/'
         proc.save()
 
         return proc

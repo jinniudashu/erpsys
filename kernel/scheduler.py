@@ -20,7 +20,7 @@ def on_user_login(sender, user, request, **kwargs):
         operator = Operator.objects.get(user=user)
         params = {
             'service': Service.objects.get(name='user_login'),
-            'customer': operator,
+            'entity_content_object': operator,
             'operator': operator,
             'state': ProcessState.TERMINATED.name,
             'priority': 0
@@ -30,20 +30,27 @@ def on_user_login(sender, user, request, **kwargs):
 def preprocess_context(instance: Process, created: bool) -> dict:
     """预处理上下文"""
     process_context = model_to_dict(instance)
-    model_context = model_to_dict(instance.content_object) if instance.content_object else {}
-    control_context = instance.control_context if instance.control_context else {}
-    schedule_context = instance.schedule_context if instance.schedule_context else {}
-    context = {**model_context, **process_context, **control_context, **schedule_context}
+    model_context = model_to_dict(instance.form_content_object) if instance.form_content_object else {}
+    # control_context = instance.control_context if instance.control_context else {}
+    # schedule_context = instance.schedule_context if instance.schedule_context else {}
+    # context = {**model_context, **process_context, **control_context, **schedule_context}
+    context = {**model_context, **process_context}
     context.update({"instance": instance})
-    context.update({"customer": instance.customer})
+    context.update({"entity_content_object": instance.entity_content_object})
     context.update({"created": created, "timezone_now": timezone.now()})
+    context.update({"parent": instance.parent})
     return context
 
 @receiver(post_save, sender=Process, dispatch_uid="post_save_process")
-def schedule_process_updating(sender, instance: Process, created: bool, **kwargs) -> None:
-    """接收Process实例更新信号, 调度作业"""
+def on_process_save(sender, instance: Process, created: bool, **kwargs):
+    """
+    处理进程保存信号
+    构造业务上下文，根据业务规则评估业务状态，调度作业
+    """
     # 构造进程上下文
     context = preprocess_context(instance, created)
+
+    # 检查过程中调用的值
 
     # 检查服务相关规则
     rules = ServiceRule.objects.filter(service=instance.service)

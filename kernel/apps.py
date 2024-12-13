@@ -6,3 +6,4 @@ class KernelConfig(AppConfig):
 
     def ready(self):
         import kernel.scheduler
+        import kernel.models  # 添加这行以确保信号被注册
