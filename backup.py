@@ -7,7 +7,7 @@ from django.core.management import call_command
 from datetime import datetime
 
 # 设置Django的环境
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django-erp-os-framework.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erpsys.settings')
 django.setup()
 
 # 获取命令行参数

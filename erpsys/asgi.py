@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django-erp-os-framework.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erpsys.settings')
 django.setup()  # 添加这行，确保Django完全初始化
 
 from django.core.asgi import get_asgi_application

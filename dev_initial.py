@@ -3,7 +3,7 @@ import shutil
 import django
 from dotenv import load_dotenv
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django-erp-os-framework.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erpsys.settings')
 django.setup()
 
 from django.contrib.auth.models import User

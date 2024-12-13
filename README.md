@@ -1,4 +1,4 @@
-# django-erp-os-framework
+# erpsys
 
 """
 进程控制块 - ProcessControlBlock, 用于在多个语义层级上管理业务进程
