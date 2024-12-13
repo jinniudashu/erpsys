@@ -31,7 +31,7 @@ from .models import *
 }
 
 def get_model_footer(verbose_name):
-    return f"""
+    return f'''
     class Meta:
         verbose_name = "{verbose_name}"
         verbose_name_plural = verbose_name
@@ -44,12 +44,12 @@ def get_model_footer(verbose_name):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
+            label = re.sub(r'[^\\w\\u4e00-\\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
         super().save(*args, **kwargs)
-    """
+    '''
 
 def get_master_field_script(data_item, master_class_name):
     return f"""    master = models.ForeignKey({master_class_name}, on_delete=models.SET_NULL, related_name='property_set_{data_item.name}', blank=True, null=True, verbose_name="{data_item.affiliated_to.label}")
