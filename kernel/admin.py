@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from django.template import context
 from django.urls import path
@@ -199,10 +198,6 @@ class ApplicationsSite(admin.AdminSite):
         pass
 
 applications_site = ApplicationsSite(name = 'ApplicationsSite')
-
-@admin.register(Session)
-class SessionAdmin(admin.ModelAdmin):
-    list_display = ['session_key', 'session_data', 'expire_date']
 
 @admin.register(ERPSysRegistry)
 class ERPSysRegistryAdmin(admin.ModelAdmin):

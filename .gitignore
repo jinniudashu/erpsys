@@ -57,3 +57,5 @@ poetry/core/*
 .aider*
 
 app.log
+
+db.sqlite3
