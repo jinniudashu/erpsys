@@ -236,15 +236,28 @@ class ServiceAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Event._meta.fields]
     list_display_links = ['id', 'label', 'name',]
+    search_fields = ['label', 'name', 'pym']
 
 @admin.register(Instruction)
 class InstructionAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Instruction._meta.fields]
     list_display_links = ['id', 'label', 'name',]
 
+class ServiceRuleInline(admin.TabularInline):
+    model = ServiceRule
+    autocomplete_fields = ['event', 'service', 'operand_service']
+    extra = 0
+
+@admin.register(ServiceProgram)
+class ServiceProgramAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ServiceProgram._meta.fields]
+    list_display_links = ['label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+    inlines = [ServiceRuleInline]
+
 @admin.register(ServiceRule)
 class ServiceRuleAdmin(admin.ModelAdmin):
-    list_display = ['order', 'label', 'service', 'event', 'system_instruction', 'operand_service', 'parameter_values', 'id']
+    list_display = ['service_program', 'order', 'label', 'service', 'event', 'system_instruction', 'operand_service', 'parameter_values', 'id']
     list_display_links = ['order', 'label']
     search_fields = ['label', 'name', 'pym']
 

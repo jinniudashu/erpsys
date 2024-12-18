@@ -352,13 +352,25 @@ class Instruction(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
+class ServiceProgram(ERPSysBase):
+    sys_default = models.BooleanField(default=False, verbose_name="系统默认")
+    creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="创建者")
+    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+
+    class Meta:
+        verbose_name = "服务-程序"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
 class ServiceRule(ERPSysBase):
     sys_calls = [
-        ('start_one_service', '开始一个服务'),
-        ('start_batch_service', '开始多个服务'),
-        ('end_service_program', '结束服务程序'),
-        ('return_calling_service', '返回调用服务')
+        ('start_one_service', '启动'),
+        ('start_batch_service', '批量启动'),
+        ('end_service_program', '结束'),
+        ('call_service_program', '调用'),
+        ('return_calling_service', '返回')
     ]
+    service_program = models.ForeignKey(ServiceProgram, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务程序")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="主体服务")
     event = models.ForeignKey(Event, on_delete=models.CASCADE,  blank=True, null=True, verbose_name="事件")
     # system_instruction = models.CharField(max_length=255, choices=sys_calls, blank=True, null=True, verbose_name="系统指令")

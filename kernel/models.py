@@ -122,7 +122,18 @@ class Instruction(ERPSysBase):
     def __str__(self):
         return self.label
 
+class ServiceProgram(ERPSysBase):
+    sys_default = models.BooleanField(default=False, verbose_name="系统默认")
+    creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="创建者")
+    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+
+    class Meta:
+        verbose_name = "服务程序"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
 class ServiceRule(ERPSysBase):
+    service_program = models.ForeignKey(ServiceProgram, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务程序")
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
     event = models.ForeignKey(Event, on_delete=models.SET_NULL,  blank=True, null=True, verbose_name="事件")
     system_instruction = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')

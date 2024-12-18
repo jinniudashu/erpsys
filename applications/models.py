@@ -29,7 +29,7 @@ class FuWuLeiBie(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -56,7 +56,7 @@ class RuChuKuCaoZuo(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -83,7 +83,7 @@ class KeHuLaiYuan(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -110,7 +110,7 @@ class HunFou(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -137,7 +137,7 @@ class ZhengZhuang(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -164,7 +164,7 @@ class ZhenDuan(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -191,7 +191,7 @@ class ShouFeiLeiXing(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -221,7 +221,7 @@ class Material(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -248,7 +248,7 @@ class Equipment(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -275,7 +275,7 @@ class Device(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -302,7 +302,7 @@ class Capital(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -331,7 +331,7 @@ class Knowledge(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -369,7 +369,7 @@ class Profile(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -405,7 +405,7 @@ class WuLiaoTaiZhang(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -446,7 +446,7 @@ class YuYueJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -480,7 +480,7 @@ class JianKangDiaoChaJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -509,7 +509,7 @@ class ZhuanKePingGuJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -540,7 +540,7 @@ class ZhenDuanJiChuLiYiJianJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -568,7 +568,7 @@ class RouDuSuZhiLiaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -596,7 +596,7 @@ class ChaoShengPaoZhiLiaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -624,7 +624,7 @@ class HuangJinWeiZhenZhiLiaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -652,7 +652,7 @@ class DiaoQZhiLiaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -680,7 +680,7 @@ class GuangZiZhiLiaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -708,7 +708,7 @@ class GuoSuanZhiLiaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -736,7 +736,7 @@ class ShuiGuangZhenZhiLiaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -764,7 +764,7 @@ class ChongZhiJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -792,7 +792,7 @@ class XiaoFeiJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -822,7 +822,7 @@ class SuiFangJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -852,7 +852,7 @@ class FaSongZhiLiaoZhuYiShiXiangJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -882,7 +882,7 @@ class QianShuZhiQingTongYiShuJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -911,7 +911,7 @@ class DengLuQianDaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -940,7 +940,7 @@ class YuYueTiXingJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -973,7 +973,7 @@ class ShouFeiJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label
@@ -1002,7 +1002,7 @@ class ZhiLiaoXiangMuHeXiaoJiLu(models.Model):
         if self.erpsys_id is None:
             self.erpsys_id = uuid.uuid1()
         if self.label and self.name is None:
-            label = re.sub(r'[^\w一-龥]', '', self.label)
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
             self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
             self.name = "_".join(lazy_pinyin(label[:10]))
             self.label = label

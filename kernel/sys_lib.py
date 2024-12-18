@@ -214,7 +214,7 @@ def get_entity_profile(entity):
     work_order_content, work_order_head_filtered = get_represent_list([entity], work_order)
     return {'profile_content': work_order_content[0], 'profile_header': work_order_head_filtered}
 
-# 根据工单返回内容列表和表头
+# 根据工单配置返回内容列表和表头
 def get_represent_list(instances, work_order):
     represent_list = []
     for instance in instances:
@@ -228,20 +228,6 @@ def get_represent_list(instances, work_order):
     work_order_head_filtered = [{k: v for k, v in item.items() if k != 'value_expression'} for item in work_order]
 
     return represent_list, work_order_head_filtered
-
-def get_customer_profile_field_value(customer, field_name):
-    # 获取客户基本信息表model和系统API字段，用于查询hssc_customer_number和hssc_name
-    customer_entity = Operator.objects.get(name='Operator')
-    customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
-    api_fields_map = customer_entity.base_form.api_fields
-    hssc_field = api_fields_map.get(field_name, None).get('field_name')
-
-    profile = eval(customer_profile_model).objects.filter(customer=customer).last()
-
-    if profile:
-        return getattr(profile, hssc_field)
-    else:
-        return ''
 
 def get_nested_field_value(instance, value_expression):
     """
@@ -278,6 +264,20 @@ def format_field_value(value):
         return ''
     else:
         return str(value)
+
+def get_customer_profile_field_value(customer, field_name):
+    # 获取客户基本信息表model和系统API字段，用于查询hssc_customer_number和hssc_name
+    customer_entity = Operator.objects.get(name='Operator')
+    customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
+    api_fields_map = customer_entity.base_form.api_fields
+    hssc_field = api_fields_map.get(field_name, None).get('field_name')
+
+    profile = eval(customer_profile_model).objects.filter(customer=customer).last()
+
+    if profile:
+        return getattr(profile, hssc_field)
+    else:
+        return ''
 
 # 创建定时任务
 def add_periodic_task(every, task_name):
