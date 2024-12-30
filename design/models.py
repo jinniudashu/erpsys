@@ -122,6 +122,7 @@ class Role(ERPSysBase):
         ordering = ['id']
 
 class Operator(ERPSysBase):
+    active = models.BooleanField(default=False, verbose_name="启用")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='design_operator', verbose_name="用户")
     role = models.ManyToManyField(Role, blank=True, verbose_name="角色")
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")

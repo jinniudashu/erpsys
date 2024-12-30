@@ -58,15 +58,13 @@ class Role(ERPSysBase):
         ordering = ['id']
 
 class Operator(ERPSysBase):
+    active = models.BooleanField(default=False, verbose_name="启用")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="用户")
     role = models.ManyToManyField(Role, blank=True, verbose_name="角色")
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")
     related_staff = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="关系人")
     context = models.JSONField(blank=True, null=True, verbose_name="上下文")
-    processes = GenericRelation('Process', 
-                               content_type_field='entity_content_type',
-                               object_id_field='entity_object_id',
-                               related_query_name='entity')
+    processes = GenericRelation('Process', content_type_field='entity_content_type', object_id_field='entity_object_id', related_query_name='entity')
 
     class Meta:
         verbose_name = "人员"
