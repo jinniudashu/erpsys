@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from kernel.admin import applications_site, hide_fields
+from kernel.admin import applications_site, ErpFormAdmin, hide_fields
 from .models import *
 
 

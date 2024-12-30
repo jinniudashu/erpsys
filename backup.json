@@ -37,18 +37,6 @@
                 2,
                 3,
                 4,
-                209,
-                210,
-                211,
-                212,
-                213,
-                214,
-                215,
-                216,
-                217,
-                218,
-                219,
-                220,
                 221,
                 222,
                 223,
@@ -173,6 +161,14 @@
                 342,
                 343,
                 344,
+                345,
+                346,
+                347,
+                348,
+                349,
+                350,
+                351,
+                352,
                 9,
                 10,
                 11,
@@ -313,14 +309,6 @@
                 118,
                 119,
                 120,
-                349,
-                350,
-                351,
-                352,
-                345,
-                346,
-                347,
-                348,
                 149,
                 150,
                 151,
@@ -345,34 +333,34 @@
                 170,
                 171,
                 172,
+                213,
+                214,
+                215,
+                216,
+                217,
+                218,
+                219,
+                220,
                 173,
                 174,
                 175,
                 176,
-                205,
-                206,
-                207,
-                208,
+                209,
+                210,
+                211,
+                212,
                 177,
                 178,
                 179,
                 180,
-                201,
-                202,
-                203,
-                204,
                 181,
                 182,
                 183,
                 184,
-                197,
-                198,
-                199,
-                200,
-                193,
-                194,
-                195,
-                196,
+                205,
+                206,
+                207,
+                208,
                 185,
                 186,
                 187,
@@ -381,6 +369,18 @@
                 190,
                 191,
                 192,
+                201,
+                202,
+                203,
+                204,
+                193,
+                194,
+                195,
+                196,
+                197,
+                198,
+                199,
+                200,
                 21,
                 22,
                 23,
@@ -393,7 +393,7 @@
         "pk": 3,
         "fields": {
             "password": "pbkdf2_sha256$600000$hdDokS1S5tnFZJj0FCnfZS$BJmUxzEXzs2WdfZ3JChw+bE1/ep/57SbxRhUKzI5YV8=",
-            "last_login": "2024-12-18T09:12:25.618Z",
+            "last_login": "2024-12-29T10:07:56.187Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -426,18 +426,6 @@
                 2,
                 3,
                 4,
-                209,
-                210,
-                211,
-                212,
-                213,
-                214,
-                215,
-                216,
-                217,
-                218,
-                219,
-                220,
                 221,
                 222,
                 223,
@@ -562,6 +550,14 @@
                 342,
                 343,
                 344,
+                345,
+                346,
+                347,
+                348,
+                349,
+                350,
+                351,
+                352,
                 9,
                 10,
                 11,
@@ -702,14 +698,6 @@
                 118,
                 119,
                 120,
-                349,
-                350,
-                351,
-                352,
-                345,
-                346,
-                347,
-                348,
                 149,
                 150,
                 151,
@@ -734,34 +722,34 @@
                 170,
                 171,
                 172,
+                213,
+                214,
+                215,
+                216,
+                217,
+                218,
+                219,
+                220,
                 173,
                 174,
                 175,
                 176,
-                205,
-                206,
-                207,
-                208,
+                209,
+                210,
+                211,
+                212,
                 177,
                 178,
                 179,
                 180,
-                201,
-                202,
-                203,
-                204,
                 181,
                 182,
                 183,
                 184,
-                197,
-                198,
-                199,
-                200,
-                193,
-                194,
-                195,
-                196,
+                205,
+                206,
+                207,
+                208,
                 185,
                 186,
                 187,
@@ -770,6 +758,18 @@
                 190,
                 191,
                 192,
+                201,
+                202,
+                203,
+                204,
+                193,
+                194,
+                195,
+                196,
+                197,
+                198,
+                199,
+                200,
                 21,
                 22,
                 23,
@@ -797,18 +797,6 @@
                 2,
                 3,
                 4,
-                209,
-                210,
-                211,
-                212,
-                213,
-                214,
-                215,
-                216,
-                217,
-                218,
-                219,
-                220,
                 221,
                 222,
                 223,
@@ -933,6 +921,14 @@
                 342,
                 343,
                 344,
+                345,
+                346,
+                347,
+                348,
+                349,
+                350,
+                351,
+                352,
                 9,
                 10,
                 11,
@@ -1073,14 +1069,6 @@
                 118,
                 119,
                 120,
-                349,
-                350,
-                351,
-                352,
-                345,
-                346,
-                347,
-                348,
                 149,
                 150,
                 151,
@@ -1105,34 +1093,34 @@
                 170,
                 171,
                 172,
+                213,
+                214,
+                215,
+                216,
+                217,
+                218,
+                219,
+                220,
                 173,
                 174,
                 175,
                 176,
-                205,
-                206,
-                207,
-                208,
+                209,
+                210,
+                211,
+                212,
                 177,
                 178,
                 179,
                 180,
-                201,
-                202,
-                203,
-                204,
                 181,
                 182,
                 183,
                 184,
-                197,
-                198,
-                199,
-                200,
-                193,
-                194,
-                195,
-                196,
+                205,
+                206,
+                207,
+                208,
                 185,
                 186,
                 187,
@@ -1141,6 +1129,18 @@
                 190,
                 191,
                 192,
+                201,
+                202,
+                203,
+                204,
+                193,
+                194,
+                195,
+                196,
+                197,
+                198,
+                199,
+                200,
                 21,
                 22,
                 23,
@@ -4814,6 +4814,16 @@
         }
     },
     {
+        "model": "design.material",
+        "pk": 783,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "1ca20ed0-beda-11ef-9689-0e586f6f8a1e"
+        }
+    },
+    {
         "model": "design.service",
         "pk": 1,
         "fields": {
@@ -4830,7 +4840,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -4851,7 +4861,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -4872,7 +4882,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -4893,7 +4903,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -4914,7 +4924,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -4935,7 +4945,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -4956,7 +4966,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -4977,7 +4987,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -4998,7 +5008,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5019,7 +5029,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5040,7 +5050,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5061,7 +5071,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5082,7 +5092,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5103,7 +5113,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5124,7 +5134,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5145,7 +5155,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5166,7 +5176,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5187,7 +5197,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5208,7 +5218,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5271,7 +5281,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5313,7 +5323,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5334,7 +5344,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5355,7 +5365,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5376,7 +5386,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5397,7 +5407,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5418,7 +5428,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5460,7 +5470,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5481,7 +5491,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5502,7 +5512,7 @@
             "price": null,
             "route_to": null,
             "program": null,
-            "service_type": "USER",
+            "service_type": "MANUAL",
             "reference": []
         }
     },
@@ -5657,6 +5667,20 @@
         }
     },
     {
+        "model": "design.event",
+        "pk": 4,
+        "fields": {
+            "label": "\u5168\u90e8\u5b8c\u6210",
+            "name": "batch_completed",
+            "pym": null,
+            "erpsys_id": "bff66e24-bf9c-11ef-a55e-0e586f6f8a1e",
+            "description": "\u6279\u6b21\u670d\u52a1\u4efb\u52a1\u5168\u90e8\u5b8c\u6210",
+            "expression": "batch_completed==True",
+            "is_timer": false,
+            "parameters": null
+        }
+    },
+    {
         "model": "design.instruction",
         "pk": 2,
         "fields": {
@@ -5724,7 +5748,11 @@
             "name": "standard_service_program",
             "pym": null,
             "erpsys_id": "06430890-bd47-11ef-adfc-0e586f6f8a1e",
+            "version": null,
             "sys_default": true,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "active": true,
             "creator": 79,
             "created_at": "2024-12-18T13:50:21.716Z"
         }
@@ -7232,12 +7260,192 @@
     },
     {
         "model": "kernel.operator",
-        "pk": 446,
+        "pk": 453,
         "fields": {
-            "label": "a",
-            "name": "a",
-            "pym": "a",
-            "erpsys_id": "48acfcac-b920-11ef-aa83-0e586f6f8a1e",
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "5dad6aea-c368-11ef-a3ad-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 454,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "68713c72-c390-11ef-9f63-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 455,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "40fc8d20-c423-11ef-894d-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 456,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "4a1666be-c42e-11ef-92fc-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 457,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "22e7aba6-c42f-11ef-a8d5-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 458,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "b0276ecc-c437-11ef-94fa-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 459,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "d91cc70a-c437-11ef-94fa-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 460,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "e2a5b16e-c438-11ef-bf65-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 461,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "56f21632-c454-11ef-a92b-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 462,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "61a97b06-c454-11ef-a92b-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 463,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "97832290-c459-11ef-9923-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 464,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "a09c30e8-c4bc-11ef-9923-0e586f6f8a1e",
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 465,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "dc9df976-c4c8-11ef-84bc-0e586f6f8a1e",
             "user": null,
             "organization": null,
             "related_staff": null,
@@ -7403,7 +7611,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7437,7 +7645,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7471,7 +7679,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7505,7 +7713,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7539,7 +7747,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7573,7 +7781,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7607,7 +7815,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7641,7 +7849,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7675,7 +7883,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7709,7 +7917,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7743,7 +7951,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7777,7 +7985,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7811,7 +8019,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7845,7 +8053,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7879,7 +8087,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7913,7 +8121,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7947,7 +8155,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -7981,7 +8189,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8015,7 +8223,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8082,7 +8290,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8150,7 +8358,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8184,7 +8392,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8218,7 +8426,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8268,7 +8476,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8313,7 +8521,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8381,7 +8589,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8415,7 +8623,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8449,7 +8657,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8483,7 +8691,7 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "USER"
+                "service_type": "MANUAL"
             }
         }
     },
@@ -8690,7 +8898,11 @@
             "name": "standard_service_program",
             "pym": null,
             "erpsys_id": "06430890-bd47-11ef-adfc-0e586f6f8a1e",
+            "version": null,
             "sys_default": true,
+            "entity_content_type": 42,
+            "entity_object_id": null,
+            "active": true,
             "creator": 438,
             "created_at": "2024-12-18T13:50:21.716Z"
         }
@@ -8703,7 +8915,7 @@
             "name": "logined",
             "pym": "yhdlwc",
             "erpsys_id": "9c286804-40c5-11ef-95e5-0e586f6f8a1e",
-            "service_program": null,
+            "service_program": 1,
             "service": 463,
             "event": 40,
             "system_instruction": 40,
@@ -9388,6 +9600,49 @@
                 }
             ],
             "expires_in": 8
+        }
+    },
+    {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 1,
+        "fields": {
+            "every": 30,
+            "period": "seconds"
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictasks",
+        "pk": 1,
+        "fields": {
+            "last_update": "2024-12-29T03:02:34.825Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 1,
+        "fields": {
+            "name": "\u8f6e\u8be2\u8c03\u5ea6",
+            "task": "kernel.tasks.def run_scheduler():",
+            "interval": 1,
+            "crontab": null,
+            "solar": null,
+            "clocked": null,
+            "args": "[]",
+            "kwargs": "{}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": null,
+            "one_off": false,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2024-12-21T13:53:36.945Z",
+            "description": ""
         }
     }
 ]

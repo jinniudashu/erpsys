@@ -1,29 +1,166 @@
 from django.db.models import Q, Manager
 from django.utils import timezone
-from django_celery_beat.models import PeriodicTask, IntervalSchedule
 from django.conf import settings
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
-import json
+from abc import ABC, abstractmethod
+from typing import Optional, Dict, Any
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from datetime import datetime, timedelta
 from enum import Enum, auto
+import json
 
-from kernel.models import Service, Process, WorkOrder
+from kernel.models import Service, Process, WorkOrder, ServiceProgram
 from kernel.types import ProcessState
 
 from applications.models import *
 
-def sys_call(sys_call_str, **kwargs):
+class SysCallResult:
+    def __init__(self, success: bool, message: str = "", data: Optional[dict] = None):
+        self.success = success
+        self.message = message
+        self.data = data or {}
+
+    def __repr__(self):
+        return f"<SysCallResult success={self.success} message={self.message} data={self.data}>"
+
+class SysCallInterface(ABC):
+    """
+    系统调用抽象接口
+    """
+    @abstractmethod
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        执行系统调用。kwargs 里应包含所需的关键参数，如 process, operand_service, operator, context 等。
+        返回 SysCallResult。
+        进一步可做：
+        - 遇到业务错误（如参数非法）可以抛自定义异常，再由上层捕获并写日志到上下文
+        """
+        pass
+
+class StartOneServiceCall(SysCallInterface):
+    """
+    启动一个新的服务进程
+    """
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        必需参数：
+            - process: 当前过程
+            - operand_service: 要启动的新服务
+            - operator: 操作员 (可选，但多数情况下需要)
+            - entity_content_object: 新进程的关联业务对象
+            - ...
+        """
+        # 1. 参数校验
+        if "operand_service" not in kwargs:
+            return SysCallResult(
+                success=False,
+                message="Missing operand_service for start_one_service",
+            )
+        operand_service = kwargs["operand_service"]
+        if not isinstance(operand_service, Service):
+            return SysCallResult(False, "operand_service is not a valid Service object")
+        
+        # 2. 业务逻辑：创建新的Process
+        process = kwargs.get("process")
+        operator = kwargs.get("operator")
+        entity_object = kwargs.get("entity_content_object")
+
+        new_proc = Process.objects.create(
+            parent=process,
+            service=operand_service,
+            operator=operator,
+            entity_content_object=entity_object,
+            state=ProcessState.NEW.name,
+            name=f"{operand_service.label}",
+        )
+        # 3. 返回成功信息
+        return SysCallResult(
+            success=True,
+            message="Successfully started one service",
+            data={"new_process_id": new_proc.id}
+        )
+
+class EndServiceProgramCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        标记当前服务程序结束，或做后续清理
+        """
+        process = kwargs.get("process")
+        if not process:
+            return SysCallResult(False, "No process provided")
+
+        # 这里根据您的业务逻辑判断结束条件
+        # 示例：将 process 设置为 TERMINATED
+        process.state = ProcessState.TERMINATED.name
+        process.end_time = timezone.now()
+        process.save()
+
+        return SysCallResult(True, f"ServiceProgram ended for process {process.id}")
+
+class StartBatchServiceCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        批量启动服务进程
+        """
+        pass
+
+class CallServiceProgramCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        调用服务程序
+        """
+        pass
+
+class ReturnCallingServiceCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        返回调用服务
+        """
+        pass
+
+CALL_REGISTRY = {
+    "start_one_service": StartOneServiceCall,
+    "start_batch_service": StartBatchServiceCall,
+    "end_service_program": EndServiceProgramCall,
+    "call_service_program": CallServiceProgramCall,
+    "return_calling_service": ReturnCallingServiceCall,
+    # ... 其它
+}    
+
+def sys_call(sys_call_name: str, **kwargs) -> SysCallResult:
+    """
+    统一系统调用入口
+    """
+    call_class = CALL_REGISTRY.get(sys_call_name)
+    if not call_class:
+        return SysCallResult(False, f"Undefined sys_call '{sys_call_name}'")
+
+    call_instance = call_class()
+    
+    try:
+        result = call_instance.execute(**kwargs)
+        return result
+    except Exception as ex:
+        # 统一异常处理
+        return SysCallResult(False, f"Exception in sys_call '{sys_call_name}': {ex}")
+
+def old_sys_call(sys_call_str, **kwargs):
     """
     系统调用入口函数
     """
 
     def start_one_service(**kwargs):
+        """
+        启动
+        """
         # 准备新的服务作业进程参数
         # operation_proc = kwargs['operation_proc']
         # customer = operation_proc.customer
         # current_operator = kwargs['operator']
+
+        # ================ 分别处理人工任务类型和系统任务类型 ================
 
         # 创建新的服务作业进程
         proc = sys_create_process(**kwargs)
@@ -31,17 +168,34 @@ def sys_call(sys_call_str, **kwargs):
         return proc
 
     def start_batch_service(**kwargs):
+        """
+        批量启动
+        """
+        # ================ 分别处理人工任务类型和系统任务类型 ================
         pass
 
     def end_service_program(**kwargs):
+        """"
+        结束
+        """
         pass
+
+    def call_service_program(**kwargs):
+        """
+        调用
+        """
+        # 获取当前进程的父进程
+        proc = kwargs['operation_proc']
+        parent_proc = proc.parent_proc
+        if parent_proc and parent_proc.service == kwargs['operand_service']:  # 如果父进程服务是规则指定的下一个服务，执行调用
+            parent_proc.call_service_program()
+            print('调用服务程序 至:', parent_proc)
 
     def return_calling_service(**kwargs):
+        """"
+        返回
+        """
         pass
-
-    def create_batch_process(**kwargs):
-        pass
-        return f'创建n个服务作业进程'
 
     def send_back(**kwargs):
         '''
@@ -80,21 +234,25 @@ def sys_create_business_record(**kwargs):
 
 # 创建进程
 def sys_create_process(**kwargs):
-    service = kwargs.get('sys_call_operand')
+    service_rule = kwargs.get('service_rule', None)
+    if not service_rule :
+        raise ValueError("service_rule is required")
+    service_program = service_rule.service_program
+    service = service_rule.service
     parent = kwargs.get('parent')
     previous = kwargs.get('instance')
     operator = kwargs.get('operator')
-    entity_content_object = kwargs.get('entity_content_object')
-    state = kwargs.get('state')
-    priority = kwargs.get('priority')
+    entity_content_object = kwargs.get('entity_content_object', None)
+    state = kwargs.get('state', ProcessState.NEW.name)
+    priority = kwargs.get('priority', 0)
 
     params = {
-        'name': service.label,
+        'name': f"{service_program.label} - {service_rule.service.label} - {operator}",
         'parent': parent,
         'previous': previous,
         'service': service,
         'entity_content_object': entity_content_object,
-        'state': ProcessState.NEW.name,
+        'state': state,
         'priority': 0
     }
     proc = Process.objects.create(**params)
@@ -107,6 +265,50 @@ def sys_create_process(**kwargs):
     proc.form_content_object = business_form_instance
     proc.form_url = f"/{settings.CUSTOMER_SITE_NAME}/applications/{service.config['subject']['name'].lower()}/{business_form_instance.id}/change/"
     proc.save()
+
+    # 将服务程序信息写入上下文
+    context_stack = ContextStack()
+    frame = context_stack.push(proc)
+    frame.local_vars['service_program_id'] = service_program.erpsys_id
+    frame.local_vars['service_rule_id'] = service_rule.erpsys_id
+
+    return proc
+
+# ================ 待整理吸收：分别处理人工任务类型和系统任务类型 ================
+# # 1. 创建人工任务
+# def create_manual_task(process: Process):
+#     with ProcessContextManager(process) as context:
+#         # 创建待办事项
+#         task_item = create_task_item(process)
+#         # 设置状态为等待
+#         context.status = 'WAITING'
+#         # 挂起当前执行
+#         suspend_execution(context)
+#         return task_item
+
+# # 2. 人工处理过程（在系统外部进行）
+# # 系统接受到任务表单保存信号后，调用此函数恢复执行
+# # 3. 恢复执行
+# def resume_manual_task(task_item, result):
+#     process = task_item.process
+#     with ProcessContextManager(process) as context:
+#         # 恢复上下文
+#         restore_context(context)
+#         # 设置处理结果
+#         context.return_value = result
+#         context.status = 'COMPLETED'
+#         # 触发规则评估和后续处理
+#         handle_task_completion(context)
+
+# # 3. 自动任务执行
+# def execute_automatic_task(process: Process):
+#     with ProcessContextManager(process) as context:
+#         # 执行实际任务
+#         result = _do_execute_process(process)
+#         context.return_value = result
+#         return result
+
+# ========================================================
 
 # 更新操作员任务列表
 def update_task_list(operator, is_public):
@@ -265,19 +467,25 @@ def format_field_value(value):
     else:
         return str(value)
 
-def get_customer_profile_field_value(customer, field_name):
-    # 获取客户基本信息表model和系统API字段，用于查询hssc_customer_number和hssc_name
-    customer_entity = Operator.objects.get(name='Operator')
-    customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
-    api_fields_map = customer_entity.base_form.api_fields
-    hssc_field = api_fields_map.get(field_name, None).get('field_name')
+def get_program_entrypoints(model_str):
+    '''
+    获取所有服务程序的入口点
+    参数:
+    model_str: 模型名字符串小写
+    返回格式:
+    [
+        {'title': '入口点名称', 'id': '入口点erpsys_id'}
+    ]
+    '''
+    # 使用model_str过滤entity_content_type
+    programs = ServiceProgram.objects.filter(entity_content_type__model=model_str)
+    program_entrypoints = []
+    for program in programs:
+        first_rule = program.servicerule_set.all().order_by('order').first()
+        if first_rule:
+            program_entrypoints.append({'title': first_rule.service.label, 'id': first_rule.erpsys_id})
 
-    profile = eval(customer_profile_model).objects.filter(customer=customer).last()
-
-    if profile:
-        return getattr(profile, hssc_field)
-    else:
-        return ''
+    return program_entrypoints
 
 # 创建定时任务
 def add_periodic_task(every, task_name):

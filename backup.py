@@ -29,6 +29,7 @@ call_command(
         'contenttypes',
         'applications',
         'kernel.process',  # 开发阶段不备份Process，以避免恢复时触发生成PERIODIC TASKS，导致恢复失败
+        'kernel.processcontextsnapshot'
     ]
 )
 

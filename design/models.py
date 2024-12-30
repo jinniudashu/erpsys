@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth.models import User
 
 import uuid
@@ -190,12 +191,12 @@ class Service(ERPSysBase):
     route_to = models.ForeignKey(Operator, on_delete=models.SET_NULL, related_name='services_routed_from', blank=True, null=True, verbose_name="传递至")
     reference = models.ManyToManyField(DataItem, related_name='referenced_services', blank=True, verbose_name="引用")
     program = models.JSONField(blank=True, null=True, verbose_name="服务程序")
-    service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], default='OPERATION', verbose_name="服务类型")
+    service_type = models.CharField(max_length=50, choices=[(service_type.name, service_type.value) for service_type in ServiceType], default='MANUAL', verbose_name="服务类型")
 
     @classmethod
     def get_unique_content_types(cls):
         """
-        返回所有服务中使用的不重复的serve_content_type信息列表
+        abstract实体类型, 返回所有服务中使用的不重复的serve_content_type信息列表
         返回格式: [{'id': content_type_id, 'model': model_class_name, 'verbose_name': verbose_name}, ...]
         """
         from django.contrib.contenttypes.models import ContentType
@@ -353,7 +354,12 @@ class Instruction(ERPSysBase):
         ordering = ['id']
 
 class ServiceProgram(ERPSysBase):
+    version = models.CharField(max_length=255, blank=True, null=True, verbose_name="版本")
     sys_default = models.BooleanField(default=False, verbose_name="系统默认")
+    entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, verbose_name="实体类型")
+    entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
+    entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
+    active = models.BooleanField(default=True, verbose_name="启用")
     creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="创建者")
     created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
 

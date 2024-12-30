@@ -8,15 +8,9 @@ from django.http import JsonResponse
 from django.contrib.contenttypes.admin import GenericStackedInline
 
 from .models import *
-from .sys_lib import search_profiles, get_entity_profile
+from .sys_lib import search_profiles, get_entity_profile, get_program_entrypoints
 from .views import CustomTokenObtainPairView, CustomTokenRefreshView
-
-def hide_fields(fields):
-    exclude_fields = ['id', 'created_time', 'label', 'name', 'pym', 'erpsys_id', 'pid', 'updated_time']
-    for field in exclude_fields:
-        if field in fields:
-            fields.remove(field)
-    fields.extend(['created_time', 'id'])
+from .signals import operand_finished
 
 admin.site.site_header = "..运营平台"
 admin.site.site_title = ".."
@@ -39,24 +33,54 @@ class ApplicationsSite(admin.AdminSite):
             path('entity_operation/<str:entity_type>/<str:id>/', self.entity_operation, name='entity_operation'),
             path('entity_context/<str:id>/', self.entity_context, name='entity_context'),
             path('search/', self.search, name='search'),
-            path('new_service_process/<str:entity_id>/<str:service_id>/', self.new_service_process, name='new_service_process'),
+            path('new_service_process/<str:entity_id>/<str:program_point_id>/', self.new_service_process, name='new_service_process'),
             path('new_service_process_schedule/<str:entity_id>/<str:service_id>/', self.new_service_process_schedule, name='new_service_process_schedule'),
             path('manage_task/', self.manage_task, name='manage_task'),
             path('assign_operator/<int:pid>/', self.assign_operator, name='assign_operator'),
         ]
         return my_urls + urls
 
-    def operator_context(self, request, **kwargs):
+    def operator_context(self, request):
+        user = request.user
         context = {}
 
         # 实体类型
-        context['entity_types'] = SysParams.objects.get(label='实体类型').config
+        entity_types = SysParams.objects.get(label='实体类型').config
+        # 为每个实体类型添加其对应的服务入口点
+        for entity_type in entity_types:
+            model_str = entity_type['model'].lower()  # 转换为小写
+            entity_type['service_entrypoints'] = get_program_entrypoints(model_str)
 
+        """
+        实体类型格式:
+        [
+            {
+                "id": "1",
+                "model": "customer",
+                "verbose_name": "客户",
+                "service_entrypoints": [
+                    {
+                        "title": "入口点名称",
+                        "id": "入口点erpsys_id"
+                    }
+                ]
+            }
+        ]
+        """
+        context['entity_types'] = entity_types
+
+        """
+        员工列表格式:
+        [
+            {
+                "id": "1",
+                "name": "test",
+                "allowed_services": []
+            }
+        ]
+        """
         # 员工列表，过滤掉操作员自己，用于排班
         context['all_employees'] = [{'id': '1', 'name': 'test', 'allowed_services': []}]
-
-        # 新建实体服务
-        context['new_entity_services'] = [{'title': '客户服务', 'id': 'bb592f4c-b3ac-11ef-a6d8-0e586f6f8a1e'}]
 
         return JsonResponse(context, safe=False)
 
@@ -110,9 +134,14 @@ class ApplicationsSite(admin.AdminSite):
         """
         人工创建新服务
         """
+        # 从request中获取操作人
+        user = request.user
+        operator = Operator.objects.get(user=user)
+
         # 获取服务
-        service_id = kwargs.get('service_id', None)
-        service = Service.objects.get(erpsys_id = service_id)
+        program_point_id = kwargs.get('program_point_id', None)
+        service_rule = ServiceRule.objects.get(erpsys_id = program_point_id)
+        service = service_rule.service
         # 获取服务对象类型
         serve_content_type_str = service.config['serve_content_type']
 
@@ -125,24 +154,26 @@ class ApplicationsSite(admin.AdminSite):
             # 为新实体创建服务
             # 创建实体实例
             entity_label = request.GET.get('entity_label', None)
+            if not entity_label:
+                entity_label = '未知'
             entity = eval(serve_content_type_str).objects.create(
                 label = entity_label
             )
 
         print(f"为{entity}创建服务：{service}, entity_id={entity_id}")
+
         # 1. 定位服务上下文：获取或创建当前实体上下文        
 
         # 2. 在进程上下文中添加“开始服务程序”事件标识:start_service_program==True
 
         # 3. 创建服务进程
-        # params = {
-        #     'service': service,
-        #     'entity_content_object': entity,
-        #     'operator': operator,
-        #     'state': ProcessState.TERMINATED.name,
-        #     'priority': 0
-        # }
-        # Process.objects.create(**params)
+        params = {
+            'service': service,
+            'entity_content_object': entity,
+            'operator': operator,
+            'priority': 0
+        }
+        Process.objects.create(**params)
 
         return redirect(f'/{settings.CUSTOMER_SITE_NAME}/')
 
@@ -197,7 +228,7 @@ class ApplicationsSite(admin.AdminSite):
     def assign_operator(self, request, **kwargs):
         pass
 
-applications_site = ApplicationsSite(name = 'ApplicationsSite')
+applications_site = ApplicationsSite(name='ApplicationsSite')
 
 @admin.register(ERPSysRegistry)
 class ERPSysRegistryAdmin(admin.ModelAdmin):
@@ -309,10 +340,10 @@ class ProcessAdmin(admin.ModelAdmin):
         }),
     )
 
-@admin.register(ProcessFrameState)
-class ProcessFrameStateAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ProcessFrameState._meta.fields]
-    list_display_links = ['id', 'label', 'name',]
+@admin.register(ProcessContextSnapshot)
+class ProcessContextSnapshotAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ProcessContextSnapshot._meta.fields]
+    list_display_links = ['id', ]
     search_fields = ['label', 'name', 'pym']
 
 @admin.register(SysParams)
@@ -321,10 +352,74 @@ class SysParamsAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'label', 'name',]
     search_fields = ['label', 'name', 'pym']
 
-# @admin.register(Stacks)
-# class StacksAdmin(admin.ModelAdmin):
-#     list_display = [field.name for field in Stacks._meta.fields]
-#     list_display_links = ['id', 'process',]
-#     search_fields = ['id', 'process']
-#     list_filter = ['process']
-#     readonly_fields = ['id', 'created_time', 'updated_time']
+class ErpFormAdmin(admin.ModelAdmin):
+    # list_fields = ['name', 'id']
+    # exclude = ["label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
+    view_on_site = False
+
+    def has_change_permission(self, request, obj=None):
+        # 修改表单时如果表单操作员与当前用户不一致，不允许修改
+        if obj: 
+            if request.user.operator != obj.pid.operator:
+                return False
+        return super().has_change_permission(request, obj)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        # base_form = 'base_form'
+        # extra_context['base_form'] = base_form
+        return super().change_view(
+            request, object_id, form_url, extra_context=extra_context,
+        )
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+        if any(key.endswith('-TOTAL_FORMS') for key in request.POST):
+            # 表单数据包含InlineModelAdmin 实例, 由save_formset发送服务作业完成信号
+            # 保存obj到request for later retrieval in save_formset
+            request._saved_obj = obj                
+        else: # 表单数据不包含InlineModelAdmin 实例, 由save_model发送服务作业完成信号
+            # 把表单内容存入CustomerServiceLog
+            # log = create_customer_service_log(form.cleaned_data, None, obj)
+
+            print('操作完成(save_model)：', obj.pid)
+            operand_finished.send(sender=self, pid=obj.pid, request=request, form_data=form.cleaned_data, formset_data=None)
+
+    def save_formset(self, request, form, formset, change):
+        super().save_formset(request, form, formset, change)
+
+        # Retrieve obj from the request
+        obj = getattr(request, '_saved_obj', None)
+
+        form_data = form.cleaned_data
+        formset_data = formset.cleaned_data
+
+        # 把表单明细内容存入CustomerServiceLog
+        # log = create_customer_service_log(form_data, formset_data, obj)
+
+        print('操作完成(save_formset)：', obj.pid)
+        operand_finished.send(sender=self, pid=obj.pid, request=request, form_data=form_data, formset_data=formset_data)
+
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context.update({
+            'show_save': True,
+            'show_save_and_continue': False,
+            'show_save_and_add_another': False,
+            'show_delete': False
+        })
+        return super().render_change_form(request, context, add, change, form_url, obj)
+
+    # def response_change(self, request, obj):        
+    #     # 按照service.route_to的配置跳转
+    #     if obj.pid.service.route_to == 'CUSTOMER_HOMEPAGE':
+    #         return redirect(obj.customer)
+    #     else:
+    #         return redirect('index')
+
+def hide_fields(fields):
+    exclude_fields = ['id', 'created_time', 'label', 'name', 'pym', 'erpsys_id', 'pid', 'updated_time']
+    for field in exclude_fields:
+        if field in fields:
+            fields.remove(field)
+    fields.extend(['created_time', 'id'])

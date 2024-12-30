@@ -1,9 +1,10 @@
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.postgres.fields import JSONField  # 使用PostgreSQL的JSONField
 
 import uuid
 import re
@@ -78,6 +79,15 @@ class Operator(ERPSysBase):
     def get_task_list(self, state_set):
         return self.processes.filter(state__in=state_set)
 
+    def switch_task(self, from_process, to_process):
+        with ProcessExecutionContext(from_process, mode='write'):
+            from_process.state = ProcessState.WAITING.name
+            from_process.save()
+        with ProcessExecutionContext(to_process, mode='read'):
+            to_process.state = ProcessState.RUNNING.name
+            to_process.operator = self
+            to_process.save()
+
 class Resource(ERPSysBase):
     class Meta:
         verbose_name = "资源"
@@ -123,7 +133,12 @@ class Instruction(ERPSysBase):
         return self.label
 
 class ServiceProgram(ERPSysBase):
+    version = models.CharField(max_length=255, blank=True, null=True, verbose_name="版本")
     sys_default = models.BooleanField(default=False, verbose_name="系统默认")
+    entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, related_name="as_entity_program", verbose_name="实体类型")
+    entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
+    entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
+    active = models.BooleanField(default=True, verbose_name="启用")
     creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="创建者")
     created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
 
@@ -193,26 +208,17 @@ class Process(models.Model):
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划时间")
     time_window = models.DurationField(blank=True, null=True, verbose_name='时间窗')
     operator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, related_name="as_operator_process", verbose_name="操作员")
+    creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, related_name="as_creator_process", verbose_name="创建者")
     work_order = models.ForeignKey(WorkOrder, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="工单")
-    form_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
-    form_object_id = models.PositiveIntegerField(null=True, blank=True)
+    form_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, verbose_name="表单类型")
+    form_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="表单ID")
     form_content_object = GenericForeignKey('form_content_type', 'form_object_id')
-    form_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="路径")
+    form_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="表单路径")
     start_time = models.DateTimeField(blank=True, null=True, verbose_name="开始时间")
     end_time = models.DateTimeField(blank=True, null=True, verbose_name="结束时间")
     updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    program_entrypoint = models.CharField(max_length=255, blank=True, null=True, verbose_name="程序入口")
     created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
-    accounting = models.JSONField(blank=True, null=True, verbose_name="帐务")
-    schedule_context = models.JSONField(blank=True, null=True, verbose_name="调度上下文")  # 涉及到决定进程执行顺序、分配CPU时间等方面的信息
-    control_context = models.JSONField(blank=True, null=True, verbose_name="控制上下文")  # 涉及到进程的状态管理、进程间通信、同步等方面的信息
-    stack = models.JSONField(blank=True, null=True, verbose_name="栈")  # 存储局部变量、函数参数以及程序的控制流（例如，函数调用时的返回地址）
-    program = models.JSONField(blank=True, null=True, verbose_name="程序")
-    pc = models.PositiveIntegerField(blank=True, null=True, verbose_name="程序计数器")
-    registers = models.JSONField(blank=True, null=True, verbose_name="寄存器")
-    io_status = models.JSONField(blank=True, null=True, verbose_name="I/O状态")
-    cpu_scheduling = models.JSONField(blank=True, null=True, verbose_name="CPU调度")
-    sp = models.PositiveIntegerField(blank=True, null=True, verbose_name="栈指针")
-    pcb = models.JSONField(blank=True, null=True, verbose_name="进程控制块")
 
     class Meta:
         verbose_name = "进程"
@@ -227,8 +233,8 @@ class Process(models.Model):
             self.erpsys_id = str(uuid.uuid1())
         if self.service and self.operator:
             self.name = f"{self.service} - {self.operator}"
-        return super().save(*args, **kwargs)
-    
+        super().save(*args, **kwargs)
+
     def get_all_children(self):
         children = []
         for child in self.child_instances.all():
@@ -273,23 +279,52 @@ class Process(models.Model):
         self.state = ProcessState.READY.name
         self.save()
 
-class ProcessFrameState(ERPSysBase):
-    """进程栈帧状态模型"""
-    process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
-    parent_frame = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="父栈帧")
-    status = models.CharField(max_length=50, verbose_name="状态")
-    local_vars = models.JSONField(null=True, blank=True, verbose_name="本地变量")
-    inherited_context = models.JSONField(null=True, blank=True, verbose_name="继承上下文")
-    return_value = models.JSONField(null=True, blank=True, verbose_name="返回值")
-    timestamp = models.DateTimeField(auto_now=True, verbose_name="时间戳")
+class ProcessContextSnapshot(models.Model):
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    process = models.ForeignKey('Process', on_delete=models.CASCADE, verbose_name="进程")
+    version = models.PositiveIntegerField(default=1, verbose_name="版本号")
+    context_data = models.JSONField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "进程上下文快照"
+        verbose_name_plural = verbose_name
+        ordering = ['-version']
+        unique_together = ('process', 'version')
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = str(uuid.uuid1())
+        super().save(*args, **kwargs)
+
+class ResourceRequirement(ERPSysBase):
+    resource_type = models.CharField(max_length=50, verbose_name="资源类型")
+    capacity = models.PositiveIntegerField(default=1, verbose_name="容量")  # 表示该资源能同时支持多少个进程（如 1 表示独占，>1 表示可并发）
 
     class Meta:
-        verbose_name = "进程栈帧状态"
+        verbose_name = "资源需求"
         verbose_name_plural = verbose_name
-        ordering = ['-timestamp']
+        ordering = ['id']
 
-    def __str__(self):
-        return f"{self.process} - {self.status} ({self.timestamp})"
+class ResourceCalendar(ERPSysBase):
+    resource = models.ForeignKey(ResourceRequirement, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="资源")
+    start_time = models.DateTimeField(verbose_name="开始时间")
+    end_time = models.DateTimeField(verbose_name="结束时间")
+
+    class Meta:
+        verbose_name = "资源日历"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+class ResourceStatus(ERPSysBase):
+    capacity = models.PositiveIntegerField(default=1, verbose_name="容量")  # 表示该资源能同时支持多少个进程（如 1 表示独占，>1 表示可并发）
+    current_usage = models.PositiveIntegerField(default=0, verbose_name="当前使用量")  # 表示当前已被多少进程占用
+    busy_until = models.DateTimeField(null=True, blank=True, verbose_name="忙碌到期时间")  # 如果有时间限制，例如某资源会在某个时间之前保持忙碌
+
+    class Meta:
+        verbose_name = "资源状态"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
 
 class SysParams(ERPSysBase):
     config = models.JSONField(blank=True, null=True, verbose_name="配置")
@@ -299,19 +334,3 @@ class SysParams(ERPSysBase):
         verbose_name = "系统参数"
         verbose_name_plural = verbose_name
         ordering = ['id']
-
-class Stacks(ERPSysBase):
-    process = models.ForeignKey(Process, on_delete=models.CASCADE, verbose_name="进程")
-    stack = models.JSONField(blank=True, null=True, verbose_name="栈")
-    heap = models.JSONField(blank=True, null=True, verbose_name="堆")
-    sp = models.PositiveIntegerField(blank=True, null=True, verbose_name="栈指针")
-    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
-    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
-
-    class Meta:
-        verbose_name = "进程栈"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return str(self.process)

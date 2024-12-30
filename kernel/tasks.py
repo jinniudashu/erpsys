@@ -3,9 +3,15 @@ from django_celery_beat.models import PeriodicTask
 
 import subprocess
 
+from .scheduler import scheduling_loop
+
 @shared_task
 def task_backup_data():
     subprocess.run(['python', 'backup.py', 'crontab'])
+
+@shared_task
+def run_scheduler():
+    scheduling_loop()
 
 @shared_task
 def timer_interrupt(task_name):

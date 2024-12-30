@@ -22,7 +22,7 @@ from kernel.models import Operator, Process, Service, Organization
 
     'admin_file_head': f"""from django.contrib import admin
 
-from kernel.admin import applications_site, hide_fields
+from kernel.admin import applications_site, ErpFormAdmin, hide_fields
 from .models import *
 
 """,
@@ -63,7 +63,7 @@ def get_admin_script(class_name, is_dict):
 
     return f"""
 @admin.register({class_name})
-class {class_name}Admin(admin.ModelAdmin):
+class {class_name}Admin(ErpFormAdmin):
     list_display = [field.name for field in {class_name}._meta.fields]{hide_fields}
     list_display_links = list_display
     search_fields = ['label', 'name', 'pym']

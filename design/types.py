@@ -73,7 +73,7 @@ class SystemResourceType(Enum):
 
 class ServiceType(Enum):
     """服务类型枚举类"""
-    USER = "用户"
+    MANUAL = "人工"
     AGENT = "代理"
     SYSTEM = "系统"
 

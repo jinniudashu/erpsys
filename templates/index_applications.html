@@ -107,10 +107,13 @@
         <label>新建：</label>
         <br>        
         <br>
-        <div v-for="item in operator.context.newEntityServices" :key="item.id">
-            <a :href="'/erp/new_service_process/0/' + item.id + '/?entity_label=' + encodeURIComponent(entitySearching.searchText)" class="btn btn-primary">
-                {{ item.title }}
-            </a>
+        <div v-if="getCurrentEntityType && getCurrentEntityType.service_entrypoints.length > 0">
+            <div v-for="service in getCurrentEntityType.service_entrypoints" :key="service.id">
+                <a :href="'/erp/new_service_process/0/' + service.id + '/?entity_label=' + encodeURIComponent(entitySearching.searchText)" 
+                   class="btn btn-primary">
+                    {{ service.title }}
+                </a>
+            </div>
         </div>
         <br>        
         <hr>
@@ -119,7 +122,7 @@
             <div class="form-group">
                 <label>类型：</label>
                 <select class="form-control" v-model="entitySearching.selectedType">
-                    <option v-for="type in operator.context.entityTypes" 
+                    <option v-for="type in operator.context.entity_types" 
                             :key="type.id" 
                             :value="type.model">
                         {{ type.verbose_name }}
@@ -195,9 +198,8 @@
                     // 操作员上下文
                     operator: {
                         context: {
-                            entityTypes: [],
-                            newEntityServices: [],
-                            allEmployees: []
+                            entity_types: [],  // 包含 service_entrypoints 的实体类型列表
+                            all_employees: []
                         }
                     },
                     // UI状态
@@ -237,10 +239,10 @@
                     try {
                         const context = await this.fetchURL(`${window.location.origin}/erp/operator_context/`);
                         this.operator.context = {
-                            entityTypes: context.entity_types || [],
-                            newEntityServices: context.new_entity_services || [],
-                            allEmployees: context.all_employees || []
+                            entity_types: context.entity_types || [],
+                            all_employees: context.all_employees || []
                         };
+                        console.log('operatorContext:', this.operator.context);
                     } catch (error) {
                         console.error('Failed to fetch initial data:', error);
                     } finally {
@@ -282,7 +284,7 @@
 
                 openSwapMenu(task) {
                     this.ui.menu.openSwapTaskId = task.id;
-                    this.ui.menu.shiftEmployees = this.operator.context.allEmployees
+                    this.ui.menu.shiftEmployees = this.operator.context.all_employees
                         .filter(employee => employee.allowed_services.includes(task.service_id));
                 },
 
@@ -321,6 +323,14 @@
                     return headers
                         .filter(header => header.visible)
                         .sort((a, b) => a.order - b.order);
+                }
+            },
+
+            computed: {
+                getCurrentEntityType() {
+                    return this.operator.context.entity_types.find(
+                        type => type.model.toLowerCase() === this.entitySearching.selectedType.toLowerCase()
+                    );
                 }
             },
 
