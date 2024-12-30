@@ -288,7 +288,7 @@ class ServiceProgramAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceRule)
 class ServiceRuleAdmin(admin.ModelAdmin):
-    list_display = ['service_program', 'order', 'label', 'service', 'event', 'system_instruction', 'operand_service', 'parameter_values', 'id']
+    list_display = ['service_program', 'order', 'label', 'service', 'event', 'system_instruction', 'operand_service', 'entity_content_type', 'entity_object_id', 'parameter_values', 'id']
     list_display_links = ['order', 'label']
     search_fields = ['label', 'name', 'pym']
 

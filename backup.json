@@ -393,7 +393,7 @@
         "pk": 3,
         "fields": {
             "password": "pbkdf2_sha256$600000$hdDokS1S5tnFZJj0FCnfZS$BJmUxzEXzs2WdfZ3JChw+bE1/ep/57SbxRhUKzI5YV8=",
-            "last_login": "2024-12-29T10:07:56.187Z",
+            "last_login": "2024-12-29T10:08:44.676Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -5770,6 +5770,8 @@
             "event": 2,
             "system_instruction": 2,
             "operand_service": 3,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 10
         }
@@ -5787,6 +5789,8 @@
             "event": 1,
             "system_instruction": 2,
             "operand_service": 26,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 20
         }
@@ -5804,6 +5808,8 @@
             "event": 1,
             "system_instruction": 2,
             "operand_service": 29,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 30
         }
@@ -5821,6 +5827,8 @@
             "event": 1,
             "system_instruction": 2,
             "operand_service": 28,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 50
         }
@@ -5838,6 +5846,8 @@
             "event": 1,
             "system_instruction": 2,
             "operand_service": 5,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 60
         }
@@ -5855,6 +5865,8 @@
             "event": 1,
             "system_instruction": 2,
             "operand_service": 19,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 100
         }
@@ -5872,6 +5884,8 @@
             "event": 1,
             "system_instruction": 3,
             "operand_service": 30,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 110
         }
@@ -5889,6 +5903,8 @@
             "event": 2,
             "system_instruction": 2,
             "operand_service": 4,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 40
         }
@@ -5906,6 +5922,8 @@
             "event": 1,
             "system_instruction": 3,
             "operand_service": 29,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 70
         }
@@ -5923,6 +5941,8 @@
             "event": 1,
             "system_instruction": 2,
             "operand_service": 30,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 80
         }
@@ -5940,6 +5960,8 @@
             "event": 2,
             "system_instruction": 2,
             "operand_service": 8,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 90
         }
@@ -5957,6 +5979,8 @@
             "event": 1,
             "system_instruction": 2,
             "operand_service": 7,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 120
         }
@@ -5974,6 +5998,8 @@
             "event": 1,
             "system_instruction": 2,
             "operand_service": 33,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 130
         }
@@ -5991,6 +6017,8 @@
             "event": 3,
             "system_instruction": 2,
             "operand_service": 35,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 95
         }
@@ -6008,6 +6036,8 @@
             "event": 1,
             "system_instruction": 4,
             "operand_service": null,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 97
         }
@@ -6025,6 +6055,8 @@
             "event": 2,
             "system_instruction": 2,
             "operand_service": 37,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 140
         }
@@ -6042,6 +6074,8 @@
             "event": 1,
             "system_instruction": 3,
             "operand_service": 33,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 150
         }
@@ -8920,6 +8954,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 484,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 0
         }
@@ -8937,6 +8973,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 487,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 20
         }
@@ -8954,6 +8992,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 490,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 30
         }
@@ -8971,6 +9011,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 489,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 50
         }
@@ -8988,6 +9030,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 469,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 60
         }
@@ -9005,6 +9049,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 483,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 100
         }
@@ -9022,6 +9068,8 @@
             "event": 40,
             "system_instruction": 41,
             "operand_service": 491,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 110
         }
@@ -9039,6 +9087,8 @@
             "event": 41,
             "system_instruction": 40,
             "operand_service": 467,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 10
         }
@@ -9056,6 +9106,8 @@
             "event": 40,
             "system_instruction": 41,
             "operand_service": 490,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 70
         }
@@ -9073,6 +9125,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 491,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 80
         }
@@ -9090,6 +9144,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 471,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 120
         }
@@ -9107,6 +9163,8 @@
             "event": 40,
             "system_instruction": 40,
             "operand_service": 494,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 130
         }
@@ -9124,6 +9182,8 @@
             "event": 41,
             "system_instruction": 40,
             "operand_service": 468,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 40
         }
@@ -9141,6 +9201,8 @@
             "event": 41,
             "system_instruction": 40,
             "operand_service": 472,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 90
         }
@@ -9158,6 +9220,8 @@
             "event": 42,
             "system_instruction": 40,
             "operand_service": 496,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 95
         }
@@ -9175,6 +9239,8 @@
             "event": 40,
             "system_instruction": 42,
             "operand_service": null,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 97
         }
@@ -9192,6 +9258,8 @@
             "event": 41,
             "system_instruction": 40,
             "operand_service": 498,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 140
         }
@@ -9209,6 +9277,8 @@
             "event": 40,
             "system_instruction": 41,
             "operand_service": 494,
+            "entity_content_type": null,
+            "entity_object_id": null,
             "parameter_values": null,
             "order": 150
         }
@@ -9614,7 +9684,7 @@
         "model": "django_celery_beat.periodictasks",
         "pk": 1,
         "fields": {
-            "last_update": "2024-12-29T03:02:34.825Z"
+            "last_update": "2024-12-29T10:08:27.064Z"
         }
     },
     {

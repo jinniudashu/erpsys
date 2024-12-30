@@ -1,9 +1,10 @@
+from django.db import models
+from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
 from django.utils import timezone
 from django.db.models import Count
 from django.utils.dateparse import parse_time, parse_date, parse_datetime
 from django.core.exceptions import ValidationError
-from django.db import models
 
 import logging
 import json
@@ -148,7 +149,26 @@ def generate_source_code(project):
         def handle_foreign_key(field, value):
             if value is None:
                 return None
+
             related_model = field.related_model
+
+            # 特殊处理 ContentType
+            if related_model.__name__ == 'ContentType':
+                if value is not None:
+                    # 获取原始模型名称
+                    original_model = value.model_class().__name__
+                    # 在 kernel 应用中查找对应的模型
+                    try:
+                        # 注意: 这里假设 kernel 中的模型名称与 design 中相同
+                        return ContentType.objects.get(
+                            app_label='kernel',
+                            model=original_model.lower()
+                        )
+                    except ContentType.DoesNotExist:
+                        print(f"Warning: No matching ContentType found in kernel for model={original_model}")
+                        return None
+
+            # 处理其他外键关系
             if related_model.__name__ in COPY_CLASS_MAPPING:
                 _, target_related_model = COPY_CLASS_MAPPING[related_model.__name__]
                 try:

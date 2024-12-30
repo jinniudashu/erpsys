@@ -153,6 +153,9 @@ class ServiceRule(ERPSysBase):
     event = models.ForeignKey(Event, on_delete=models.SET_NULL,  blank=True, null=True, verbose_name="事件")
     system_instruction = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
     operand_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_next_service", verbose_name="后续服务")
+    entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, related_name="kernel_service_rule", verbose_name="实体类型")
+    entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
+    entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
     parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
     order = models.SmallIntegerField(default=0, verbose_name="顺序")
 
