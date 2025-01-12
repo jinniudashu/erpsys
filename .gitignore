@@ -6,7 +6,7 @@
 
 agent_results/
 
-.env
+# .env
 .venv
 .env_new
 

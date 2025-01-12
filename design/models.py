@@ -360,6 +360,7 @@ class ServiceProgram(ERPSysBase):
     entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, verbose_name="实体类型")
     entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
     entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
+    manual_start = models.BooleanField(default=True, verbose_name="手动启动")
     active = models.BooleanField(default=True, verbose_name="启用")
     creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="创建者")
     created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")

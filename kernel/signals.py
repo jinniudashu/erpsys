@@ -1,7 +1,7 @@
 from django.dispatch import Signal
 
 # 人工指令信号
-ux_input_signal = Signal(["process"])
+ux_input_signal = Signal(['pid'])
 
 # 作业开始
 operand_started = Signal(['pid'])

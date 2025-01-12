@@ -109,7 +109,7 @@
         <br>
         <div v-if="getCurrentEntityType && getCurrentEntityType.service_entrypoints.length > 0">
             <div v-for="service in getCurrentEntityType.service_entrypoints" :key="service.id">
-                <a :href="'/erp/new_service_process/0/' + service.id + '/?entity_label=' + encodeURIComponent(entitySearching.searchText)" 
+                <a :href="'/erp/new_service_process/0/' + service.service_rule_id + '/?entity_label=' + encodeURIComponent(entitySearching.searchText)" 
                    class="btn btn-primary">
                     {{ service.title }}
                 </a>

@@ -381,7 +381,8 @@ def generate_source_code(project):
         model_head = model_head + ScriptFileHeader['class_base_fields']
 
         # 添加master ForeignKey
-        if data_item.affiliated_to is not None:
+        has_master = data_item.affiliated_to is not None
+        if has_master:
             master = data_item.affiliated_to
             while master.implement_type == 'Field':
                 master = master.business_type
@@ -396,7 +397,7 @@ def generate_source_code(project):
             class_name = data_item.get_data_item_class_name()
         else:
             class_name = data_item.name
-        admin_script = get_admin_script(class_name, is_dict)
+        admin_script = get_admin_script(class_name, is_dict, has_master)
 
         return model_script, admin_script, fields_type_dict
 

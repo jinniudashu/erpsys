@@ -7,6 +7,7 @@ class ProcessState(Enum):
     RUNNING = auto()
     WAITING = auto()
     TERMINATED = auto()
+    SUSPENDED = auto()
     ERROR = auto()
 
     @property
@@ -14,8 +15,9 @@ class ProcessState(Enum):
         return {
             ProcessState.NEW: "新建",
             ProcessState.READY: "就绪",
-            ProcessState.RUNNING: "执行中",
+            ProcessState.RUNNING: "运行",
             ProcessState.WAITING: "等待",
+            ProcessState.SUSPENDED: "挂起",
             ProcessState.TERMINATED: "终止",
             ProcessState.ERROR: "错误"
         }[self]
@@ -46,12 +48,13 @@ CONTEXT_SCHEMA = {
                     "registers": {"type": "object"},
                     "resource_management": {"type": "object"},
                     "accounting": {"type": "object"},
-                    "scheduling_info": {"type": "object"}
+                    "scheduling_info": {"type": "object"},
+                    "events_triggered_log": {"type": "array", "items": {"type": "object"}}
                 },
                 "required": ["process_id", "status", "local_vars", "inherited_context"]
             }
         },
-        "timestamp": {"type": "string", "format": "date-time"}
+        # "timestamp": {"type": "string", "format": "date-time"}
     },
-    "required": ["frames", "timestamp"]
+    "required": ["frames"]
 }

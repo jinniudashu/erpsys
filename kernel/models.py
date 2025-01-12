@@ -136,6 +136,7 @@ class ServiceProgram(ERPSysBase):
     entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, related_name="as_entity_program", verbose_name="实体类型")
     entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
     entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
+    manual_start = models.BooleanField(default=True, verbose_name="手动启动")
     active = models.BooleanField(default=True, verbose_name="启用")
     creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="创建者")
     created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
@@ -217,9 +218,9 @@ class Process(models.Model):
     form_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="表单路径")
     start_time = models.DateTimeField(blank=True, null=True, verbose_name="开始时间")
     end_time = models.DateTimeField(blank=True, null=True, verbose_name="结束时间")
-    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
     program_entrypoint = models.CharField(max_length=255, blank=True, null=True, verbose_name="程序入口")
-    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_at = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
 
     class Meta:
         verbose_name = "进程"
@@ -284,8 +285,9 @@ class ProcessContextSnapshot(models.Model):
     erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
     process = models.ForeignKey('Process', on_delete=models.CASCADE, verbose_name="进程")
     version = models.PositiveIntegerField(default=1, verbose_name="版本号")
-    context_data = models.JSONField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    context_data = models.JSONField(null=True, blank=True, verbose_name="上下文数据")
+    context_hash = models.CharField(max_length=64, null=True, blank=True, verbose_name="上下文哈希")
+    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
     
     class Meta:
         verbose_name = "进程上下文快照"

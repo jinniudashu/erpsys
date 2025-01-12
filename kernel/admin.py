@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.contrib.contenttypes.admin import GenericStackedInline
 
 from .models import *
-from .sys_lib import search_profiles, get_entity_profile, get_program_entrypoints
+from .sys_lib import search_profiles, get_entity_profile, get_program_entrypoints, ProcessCreator
 from .views import CustomTokenObtainPairView, CustomTokenRefreshView
 from .signals import operand_finished
 
@@ -33,7 +33,7 @@ class ApplicationsSite(admin.AdminSite):
             path('entity_operation/<str:entity_type>/<str:id>/', self.entity_operation, name='entity_operation'),
             path('entity_context/<str:id>/', self.entity_context, name='entity_context'),
             path('search/', self.search, name='search'),
-            path('new_service_process/<str:entity_id>/<str:program_point_id>/', self.new_service_process, name='new_service_process'),
+            path('new_service_process/<str:entity_id>/<str:service_rule_id>/', self.new_service_process, name='new_service_process'),
             path('new_service_process_schedule/<str:entity_id>/<str:service_id>/', self.new_service_process_schedule, name='new_service_process_schedule'),
             path('manage_task/', self.manage_task, name='manage_task'),
             path('assign_operator/<int:pid>/', self.assign_operator, name='assign_operator'),
@@ -61,7 +61,7 @@ class ApplicationsSite(admin.AdminSite):
                 "service_entrypoints": [
                     {
                         "title": "入口点名称",
-                        "id": "入口点erpsys_id"
+                        "service_rule_id": "入口点erpsys_id"
                     }
                 ]
             }
@@ -139,10 +139,12 @@ class ApplicationsSite(admin.AdminSite):
         operator = Operator.objects.get(user=user)
 
         # 获取服务
-        program_point_id = kwargs.get('program_point_id', None)
-        service_rule = ServiceRule.objects.get(erpsys_id = program_point_id)
-        service = service_rule.service
+        service_rule_id = kwargs.get('service_rule_id', None)
+        service_rule = ServiceRule.objects.get(erpsys_id = service_rule_id)
+        program_entrypoint = service_rule.service_program.erpsys_id
+        
         # 获取服务对象类型
+        service = service_rule.service
         serve_content_type_str = service.config['serve_content_type']
 
         # 获取或创建新实体
@@ -166,14 +168,23 @@ class ApplicationsSite(admin.AdminSite):
 
         # 2. 在进程上下文中添加“开始服务程序”事件标识:start_service_program==True
 
-        # 3. 创建服务进程
+        # 3. 创建新服务进程
         params = {
+            'service_rule': service_rule,
             'service': service,
             'entity_content_object': entity,
             'operator': operator,
-            'priority': 0
+            'state': ProcessState.NEW.name,
+            'priority': 0,
+            'program_entrypoint': program_entrypoint,
+            'init_params': {'start_service_program': True}
         }
-        Process.objects.create(**params)
+
+        creator = ProcessCreator()
+        proc = creator.create_process(params)
+
+        # 发送登录作业完成信号
+        operand_finished.send(sender=self.new_service_process, pid=proc, request=request, form_data=None, formset_data=None)
 
         return redirect(f'/{settings.CUSTOMER_SITE_NAME}/')
 
@@ -186,8 +197,6 @@ class ApplicationsSite(admin.AdminSite):
         # 1. 操作人识别当前上下文位置，将此位置信息传入此处
         # 2. 上下文位置为空，则初始化一个新的上下文
 
-        # 定位服务上下文
-
         entity_id = kwargs.get('entity_id', None)
         service_id = kwargs.get('service_id', None)
         return redirect(f'/{settings.CUSTOMER_SITE_NAME}/')
@@ -196,7 +205,6 @@ class ApplicationsSite(admin.AdminSite):
         """
         系统主页: 用户任务看板
         """
-        # user = User.objects.get(username=request.user).customer
         return super().index(request, extra_context=extra_context)
 
     def manage_task(self, request, **kwargs):
@@ -246,16 +254,20 @@ class RoleAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Role._meta.fields]
     list_display_links = ['id', 'label', 'name',]
     filter_horizontal = ['services']
+    search_fields = ['label', 'name', 'pym']
 
 @admin.register(Operator)
 class OperatorAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Operator._meta.fields]
     list_display_links = ['id', 'label', 'name',]
+    search_fields = ['label', 'name', 'pym']
+applications_site.register(Operator, OperatorAdmin)
 
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Resource._meta.fields]
     list_display_links = ['id', 'label', 'name',]
+    search_fields = ['label', 'name', 'pym']
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
@@ -296,11 +308,13 @@ class ServiceRuleAdmin(admin.ModelAdmin):
 class FormAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Form._meta.fields]
     list_display_links = ['id', 'label', 'name',]
+    search_fields = ['label', 'name', 'pym']
 
 @admin.register(WorkOrder)
 class WorkOrderAdmin(admin.ModelAdmin):
     list_display = [field.name for field in WorkOrder._meta.fields]
     list_display_links = ['id', 'label', 'name',]
+    search_fields = ['label', 'name', 'pym']
 
 @admin.register(Process)
 class ProcessAdmin(admin.ModelAdmin):
@@ -309,7 +323,7 @@ class ProcessAdmin(admin.ModelAdmin):
     search_fields = ['pid', 'name', 'service', 'state']
     list_filter = ['state', 'service']
     autocomplete_fields = ['service']
-    readonly_fields = ['created_time', 'updated_time']
+    readonly_fields = ['created_at', 'updated_at']
     
     # 添加content_type字段到表单中
     raw_id_fields = ['entity_content_type', 'form_content_type']
@@ -328,14 +342,8 @@ class ProcessAdmin(admin.ModelAdmin):
             'fields': ('form_url', 'form_content_type', 'form_object_id'),
             'classes': ('collapse',),
         }),
-        ('进程控制', {
-            'fields': ('program', 'pc', 'registers', 'io_status', 'cpu_scheduling', 
-                      'accounting', 'sp', 'pcb', 'stack', 'schedule_context', 
-                      'control_context'),
-            'classes': ('collapse',),
-        }),
         ('时间信息', {
-            'fields': ('start_time', 'end_time', 'created_time', 'updated_time'),
+            'fields': ('start_time', 'end_time', 'created_at', 'updated_at'),
             'classes': ('collapse',),
         }),
     )
@@ -382,7 +390,6 @@ class ErpFormAdmin(admin.ModelAdmin):
         else: # 表单数据不包含InlineModelAdmin 实例, 由save_model发送服务作业完成信号
             # 把表单内容存入CustomerServiceLog
             # log = create_customer_service_log(form.cleaned_data, None, obj)
-
             print('操作完成(save_model)：', obj.pid)
             operand_finished.send(sender=self, pid=obj.pid, request=request, form_data=form.cleaned_data, formset_data=None)
 
@@ -397,7 +404,6 @@ class ErpFormAdmin(admin.ModelAdmin):
 
         # 把表单明细内容存入CustomerServiceLog
         # log = create_customer_service_log(form_data, formset_data, obj)
-
         print('操作完成(save_formset)：', obj.pid)
         operand_finished.send(sender=self, pid=obj.pid, request=request, form_data=form_data, formset_data=formset_data)
 
