@@ -7,10 +7,9 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.contenttypes.admin import GenericStackedInline
 
-from .models import *
-from .sys_lib import search_profiles, get_entity_profile, get_program_entrypoints, ProcessCreator
-from .views import CustomTokenObtainPairView, CustomTokenRefreshView
-from .signals import operand_finished
+from kernel.models import *
+from kernel.sys_lib import search_profiles, get_entity_profile, get_program_entrypoints, ProcessCreator, ProcessExecutionContext, RuleEvaluator
+from kernel.views import CustomTokenObtainPairView, CustomTokenRefreshView
 
 admin.site.site_header = "..运营平台"
 admin.site.site_title = ".."
@@ -39,7 +38,7 @@ class ApplicationsSite(admin.AdminSite):
             path('assign_operator/<int:pid>/', self.assign_operator, name='assign_operator'),
         ]
         return my_urls + urls
-
+    
     def operator_context(self, request):
         user = request.user
         context = {}
@@ -107,7 +106,7 @@ class ApplicationsSite(admin.AdminSite):
         return response
 
     def entity_context(self, request, **kwargs):
-        entity_id = kwargs.get('id', None )
+        entity_id = kwargs.get('id', None)
         context = {}
         if entity_id:
             customer = Operator.objects.get(erpsys_id = entity_id)
@@ -177,14 +176,16 @@ class ApplicationsSite(admin.AdminSite):
             'state': ProcessState.NEW.name,
             'priority': 0,
             'program_entrypoint': program_entrypoint,
-            'init_params': {'start_service_program': True}
+            'init_params': {},
+            'instance': None,  # 当前操作员登录的守候进程
+            'parent_frame': None
         }
 
         creator = ProcessCreator()
         proc = creator.create_process(params)
 
-        # 发送登录作业完成信号
-        operand_finished.send(sender=self.new_service_process, pid=proc, request=request, form_data=None, formset_data=None)
+        # # 发送登录作业完成信号
+        # operand_finished.send(sender=self.new_service_process, pid=proc, request=request, form_data=None, formset_data=None)
 
         return redirect(f'/{settings.CUSTOMER_SITE_NAME}/')
 
@@ -362,15 +363,16 @@ class SysParamsAdmin(admin.ModelAdmin):
 
 class ErpFormAdmin(admin.ModelAdmin):
     # list_fields = ['name', 'id']
-    # exclude = ["label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
+    exclude = ["label", "name", "pym", "erpsys_id", "pid"]
     view_on_site = False
 
-    def has_change_permission(self, request, obj=None):
-        # 修改表单时如果表单操作员与当前用户不一致，不允许修改
-        if obj: 
-            if request.user.operator != obj.pid.operator:
-                return False
-        return super().has_change_permission(request, obj)
+    # def has_change_permission(self, request, obj=None):
+    #     # 修改表单时如果表单操作员与当前用户不一致，不允许修改
+    #     if obj:
+    #         print('user:', request.user, 'operator:', obj.pid.operator)
+    #         if request.user.operator != obj.pid.operator:
+    #             return False
+    #     return super().has_change_permission(request, obj)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra_context = extra_context or {}
@@ -383,15 +385,21 @@ class ErpFormAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
 
+        # 表单进程状态置为完成
+        obj.pid.state = ProcessState.TERMINATED.name
+        obj.pid.save()
+
         if any(key.endswith('-TOTAL_FORMS') for key in request.POST):
-            # 表单数据包含InlineModelAdmin 实例, 由save_formset发送服务作业完成信号
+            # 表单数据包含InlineModelAdmin 实例, 由save_formset处理
             # 保存obj到request for later retrieval in save_formset
             request._saved_obj = obj                
-        else: # 表单数据不包含InlineModelAdmin 实例, 由save_model发送服务作业完成信号
+        else: # 表单数据不包含InlineModelAdmin 实例, 由save_model直接处理
             # 把表单内容存入CustomerServiceLog
             # log = create_customer_service_log(form.cleaned_data, None, obj)
             print('操作完成(save_model)：', obj.pid)
-            operand_finished.send(sender=self, pid=obj.pid, request=request, form_data=form.cleaned_data, formset_data=None)
+            with ProcessExecutionContext(obj.pid) as frame:
+                evaluator = RuleEvaluator()
+                evaluator.evaluate_rules(frame)
 
     def save_formset(self, request, form, formset, change):
         super().save_formset(request, form, formset, change)
@@ -405,7 +413,9 @@ class ErpFormAdmin(admin.ModelAdmin):
         # 把表单明细内容存入CustomerServiceLog
         # log = create_customer_service_log(form_data, formset_data, obj)
         print('操作完成(save_formset)：', obj.pid)
-        operand_finished.send(sender=self, pid=obj.pid, request=request, form_data=form_data, formset_data=formset_data)
+        with ProcessExecutionContext(obj.pid) as frame:
+            evaluator = RuleEvaluator()
+            evaluator.evaluate_rules(frame)
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
@@ -422,10 +432,3 @@ class ErpFormAdmin(admin.ModelAdmin):
     #         return redirect(obj.customer)
     #     else:
     #         return redirect('index')
-
-def hide_fields(fields):
-    exclude_fields = ['id', 'created_time', 'label', 'name', 'pym', 'erpsys_id', 'pid', 'updated_time']
-    for field in exclude_fields:
-        if field in fields:
-            fields.remove(field)
-    fields.extend(['created_time', 'id'])

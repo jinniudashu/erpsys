@@ -408,7 +408,7 @@ def generate_source_code(project):
     fields_type = {}
     class_mappings_str = """CLASS_MAPPING = {\n"""
 
-    for item in DataItem.objects.filter(implement_type='Model').order_by('dependency_order'):
+    for item in DataItem.objects.filter(implement_type__in=['Model', 'Log']).order_by('dependency_order'):
         _model_script, _admin_script, _fields_type_dict = generate_script(item)
         models_script = f'{models_script}{_model_script}'
         admin_script = f'{admin_script}{_admin_script}'

@@ -59,7 +59,7 @@ class Role(ERPSysBase):
 
 class Operator(ERPSysBase):
     active = models.BooleanField(default=False, verbose_name="启用")
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="用户")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='operator', verbose_name="用户")
     role = models.ManyToManyField(Role, blank=True, verbose_name="角色")
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="组织")
     related_staff = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="关系人")
@@ -117,6 +117,25 @@ class Event(ERPSysBase):
         verbose_name = "事件"
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+    def save(self, *args, **kwargs):
+        if self.expression:
+            # 将表达式中的进程相关字段替换为带前缀的形式
+            process_fields = {
+                'state': 'process_state',
+                'name': 'process_name',
+                'service': 'process_service',
+                'priority': 'process_priority',
+                'created_at': 'process_created_at',
+            }
+            
+            expression = self.expression
+            for old_key, new_key in process_fields.items():
+                # 使用正则表达式确保只替换独立的字段名
+                expression = re.sub(r'\b' + old_key + r'\b', new_key, expression)
+            self.expression = expression
+            
+        super().save(*args, **kwargs)
 
 class Instruction(ERPSysBase):
     sys_call = models.CharField(max_length=255, verbose_name="系统调用")

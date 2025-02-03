@@ -393,7 +393,7 @@
         "pk": 3,
         "fields": {
             "password": "pbkdf2_sha256$600000$hdDokS1S5tnFZJj0FCnfZS$BJmUxzEXzs2WdfZ3JChw+bE1/ep/57SbxRhUKzI5YV8=",
-            "last_login": "2025-01-11T03:30:20.047Z",
+            "last_login": "2025-02-03T11:53:28.261Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -3096,15 +3096,15 @@
         "pk": 123,
         "fields": {
             "label": "\u65e5\u5fd7",
-            "name": "ri_zhi",
+            "name": "Log",
             "pym": "rz",
             "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-            "field_type": "TypeField",
+            "field_type": "Reserved",
             "business_type": null,
             "sub_class": null,
             "affiliated_to": null,
             "implement_type": "Log",
-            "dependency_order": 0,
+            "dependency_order": 20,
             "default_value": null,
             "is_multivalued": false,
             "max_length": 255,
@@ -4906,6 +4906,76 @@
         }
     },
     {
+        "model": "design.material",
+        "pk": 791,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "2351ab66-d3e6-11ef-b6ec-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 792,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "2ee30d92-d3ed-11ef-9e30-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 793,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "58c82812-d3ee-11ef-aefb-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 794,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "95d45082-d3ee-11ef-9937-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 795,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "0a3dff3c-d6e6-11ef-a2f6-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 796,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "dab1c276-d6fe-11ef-8981-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 797,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "b64a3fb2-d730-11ef-a0fe-0e586f6f8a1e"
+        }
+    },
+    {
         "model": "design.service",
         "pk": 1,
         "fields": {
@@ -5729,7 +5799,7 @@
             "pym": "fwks",
             "erpsys_id": "1204ccc4-b3a9-11ef-a6d8-0e586f6f8a1e",
             "description": "\u5f00\u59cb\u4e00\u4e2a\u5305\u542b\u4e00\u7cfb\u5217\u670d\u52a1\u7684\u7a0b\u5e8f",
-            "expression": "start_service_program==True",
+            "expression": "state=='NEW'",
             "is_timer": false,
             "parameters": null
         }
@@ -5743,7 +5813,7 @@
             "pym": "dy",
             "erpsys_id": "29bd7b0a-b3da-11ef-86ca-0e586f6f8a1e",
             "description": "\u670d\u52a1\u8fc7\u7a0b\u4e2d\u8c03\u7528\u5176\u5b83\u670d\u52a1",
-            "expression": "calling_service==True",
+            "expression": "state=='SUSPENDED'",
             "is_timer": false,
             "parameters": null
         }
@@ -6191,6 +6261,25 @@
             "entity_object_id": null,
             "parameter_values": null,
             "order": 150
+        }
+    },
+    {
+        "model": "design.servicerule",
+        "pk": 19,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u5ba2\u6237\u670d\u52a1",
+            "name": "wan_cheng_ke_hu_fu_wu",
+            "pym": "wckhfw",
+            "erpsys_id": "ec69144c-d6e5-11ef-a2f6-0e586f6f8a1e",
+            "service_program": 1,
+            "service": 34,
+            "event": 1,
+            "system_instruction": 3,
+            "operand_service": 34,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null,
+            "order": 160
         }
     },
     {
@@ -7994,6 +8083,518 @@
         }
     },
     {
+        "model": "kernel.operator",
+        "pk": 489,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "88eca746-cfd1-11ef-99d2-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 490,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "3b6c77be-cffc-11ef-876f-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 491,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "a9446cee-d0c7-11ef-b0fc-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 492,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "2d854b08-d0c9-11ef-b7b2-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 493,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "ef689b6c-d3e4-11ef-b6ec-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 494,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "f45504e4-d3ee-11ef-b914-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 495,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "a311277c-d405-11ef-9f93-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 496,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "f1a20884-d405-11ef-9f93-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 497,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "a83018da-d49b-11ef-b3bb-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 498,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "786c72ce-d4a0-11ef-88f4-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 499,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "c1577404-d4b7-11ef-9fdc-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 500,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "1513f02a-d4ba-11ef-946e-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 501,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "259f5ca6-d56c-11ef-b327-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 502,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "b14c46ea-d56e-11ef-8f32-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 503,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "35947b82-d571-11ef-8822-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 504,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "1e8d962a-d572-11ef-9687-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 505,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "962fdad4-d573-11ef-a19e-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 506,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "3c380b64-d582-11ef-a67e-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 507,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "f812250e-d582-11ef-92bd-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 508,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "08399ed2-d6e4-11ef-a2f6-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 509,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "2b39df86-d6fe-11ef-8981-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 510,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "545c5b72-d6ff-11ef-af46-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 511,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "69f35a40-d703-11ef-9e54-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 512,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "a55bab7e-d711-11ef-86a2-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 513,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "10f9e698-d712-11ef-9216-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 514,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "b9a7b470-d729-11ef-a9e1-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 515,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "161da7e6-d72f-11ef-9b2b-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 516,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "d1e46e32-d730-11ef-9484-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 517,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "f778626e-d73c-11ef-ae83-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 518,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "8fe59184-e223-11ef-b46b-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 519,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "abe28c16-e223-11ef-b46b-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
+        "model": "kernel.operator",
+        "pk": 520,
+        "fields": {
+            "label": "\u672a\u77e5",
+            "name": "wei_zhi",
+            "pym": "wz",
+            "erpsys_id": "7c3da2fa-e225-11ef-9b97-0e586f6f8a1e",
+            "active": false,
+            "user": null,
+            "organization": null,
+            "related_staff": null,
+            "context": null,
+            "role": []
+        }
+    },
+    {
         "model": "kernel.resource",
         "pk": 235,
         "fields": {
@@ -8077,7 +8678,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -8111,7 +8712,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -8824,7 +9425,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -8858,7 +9459,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -9010,7 +9611,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -9055,7 +9656,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -9089,7 +9690,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -9157,7 +9758,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -9191,7 +9792,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -9259,7 +9860,7 @@
                 "knowledge_requirements": [],
                 "subject": {
                     "erpsys_id": "8766a5ee-904c-11ef-8786-0e586f6f8a1d",
-                    "name": "RiZhi"
+                    "name": "Log"
                 },
                 "price": "None",
                 "route_to": {},
@@ -9353,7 +9954,7 @@
             "pym": "fwks",
             "erpsys_id": "1204ccc4-b3a9-11ef-a6d8-0e586f6f8a1e",
             "description": "\u5f00\u59cb\u4e00\u4e2a\u5305\u542b\u4e00\u7cfb\u5217\u670d\u52a1\u7684\u7a0b\u5e8f",
-            "expression": "start_service_program==True",
+            "expression": "process_state=='NEW'",
             "parameters": null
         }
     },
@@ -9366,7 +9967,7 @@
             "pym": "dy",
             "erpsys_id": "29bd7b0a-b3da-11ef-86ca-0e586f6f8a1e",
             "description": "\u670d\u52a1\u8fc7\u7a0b\u4e2d\u8c03\u7528\u5176\u5b83\u670d\u52a1",
-            "expression": "calling_service==True",
+            "expression": "process_state=='SUSPENDED'",
             "parameters": null
         }
     },
@@ -9488,7 +10089,7 @@
             "manual_start": false,
             "active": true,
             "creator": null,
-            "created_at": "2025-01-03T06:53:29.787Z"
+            "created_at": "2025-01-03T06:52:42.725Z"
         }
     },
     {
@@ -9831,6 +10432,25 @@
             "entity_object_id": null,
             "parameter_values": null,
             "order": 150
+        }
+    },
+    {
+        "model": "kernel.servicerule",
+        "pk": 58,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u5ba2\u6237\u670d\u52a1",
+            "name": "wan_cheng_ke_hu_fu_wu",
+            "pym": "wckhfw",
+            "erpsys_id": "ec69144c-d6e5-11ef-a2f6-0e586f6f8a1e",
+            "service_program": 1,
+            "service": 495,
+            "event": 40,
+            "system_instruction": 41,
+            "operand_service": 495,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null,
+            "order": 160
         }
     },
     {
@@ -10231,18 +10851,86 @@
         }
     },
     {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 2,
+        "fields": {
+            "every": 1,
+            "period": "minutes"
+        }
+    },
+    {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 3,
+        "fields": {
+            "every": 10,
+            "period": "seconds"
+        }
+    },
+    {
+        "model": "django_celery_beat.crontabschedule",
+        "pk": 1,
+        "fields": {
+            "minute": "0",
+            "hour": "4",
+            "day_of_month": "*",
+            "month_of_year": "*",
+            "day_of_week": "*",
+            "timezone": "Asia/Shanghai"
+        }
+    },
+    {
+        "model": "django_celery_beat.crontabschedule",
+        "pk": 2,
+        "fields": {
+            "minute": "*/15",
+            "hour": "*",
+            "day_of_month": "*",
+            "month_of_year": "*",
+            "day_of_week": "*",
+            "timezone": "Asia/Shanghai"
+        }
+    },
+    {
         "model": "django_celery_beat.periodictasks",
         "pk": 1,
         "fields": {
-            "last_update": "2025-01-11T02:52:09.583Z"
+            "last_update": "2025-02-03T02:50:37.776Z"
         }
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 1,
+        "pk": 2,
         "fields": {
-            "name": "\u8f6e\u8be2\u8c03\u5ea6",
-            "task": "kernel.tasks.def run_scheduler():",
+            "name": "celery.backend_cleanup",
+            "task": "celery.backend_cleanup",
+            "interval": null,
+            "crontab": 1,
+            "solar": null,
+            "clocked": null,
+            "args": "[]",
+            "kwargs": "{}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 43200,
+            "one_off": false,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": "2025-02-03T02:50:37.784Z",
+            "total_run_count": 4,
+            "date_changed": "2025-02-03T02:50:37.809Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 3,
+        "fields": {
+            "name": "backup-data-daily",
+            "task": "kernel.tasks.task_backup_data",
             "interval": 1,
             "crontab": null,
             "solar": null,
@@ -10259,9 +10947,9 @@
             "one_off": false,
             "start_time": null,
             "enabled": true,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2024-12-21T13:53:36.945Z",
+            "last_run_at": "2025-02-03T02:51:07.815Z",
+            "total_run_count": 22,
+            "date_changed": "2025-02-03T02:51:25.725Z",
             "description": ""
         }
     }

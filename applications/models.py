@@ -917,6 +917,33 @@ class DengLuQianDaoJiLu(models.Model):
             self.label = label
         super().save(*args, **kwargs)
     
+class Log(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+    erpsys_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="ERPSysID")
+    pid = models.ForeignKey(Process, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+
+    class Meta:
+        verbose_name = "日志"
+        verbose_name_plural = verbose_name
+        ordering = ["-id"]
+    
+    def __str__(self):
+        return self.label if self.label else ''
+
+    def save(self, *args, **kwargs):
+        if self.erpsys_id is None:
+            self.erpsys_id = uuid.uuid1()
+        if self.label and self.name is None:
+            label = re.sub(r'[^\w\u4e00-\u9fa5]', '', self.label)
+            self.pym = ''.join(lazy_pinyin(label, style=Style.FIRST_LETTER))
+            self.name = "_".join(lazy_pinyin(label[:10]))
+            self.label = label
+        super().save(*args, **kwargs)
+    
 class YuYueTiXingJiLu(models.Model):
     label = models.CharField(max_length=255, null=True, verbose_name="中文名称")
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
@@ -1040,6 +1067,7 @@ CLASS_MAPPING = {
     "FaSongZhiLiaoZhuYiShiXiangJiLu": FaSongZhiLiaoZhuYiShiXiangJiLu,
     "QianShuZhiQingTongYiShuJiLu": QianShuZhiQingTongYiShuJiLu,
     "DengLuQianDaoJiLu": DengLuQianDaoJiLu,
+    "Log": Log,
     "YuYueTiXingJiLu": YuYueTiXingJiLu,
     "ShouFeiJiLu": ShouFeiJiLu,
     "ZhiLiaoXiangMuHeXiaoJiLu": ZhiLiaoXiangMuHeXiaoJiLu,

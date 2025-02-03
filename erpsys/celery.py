@@ -9,20 +9,19 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erpsys.settings')
 
 app = Celery('erpsys')
 
-# 使用Redis作为消息代理
+# 从 Django 设置中加载 Celery 配置: 使用Redis作为消息代理
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.conf.update(
-    # 添加这行来处理废弃警告
-    broker_connection_retry_on_startup=True,    
+    broker_connection_retry_on_startup=True,
 )
 
 # 自动从所有已注册的Django app中加载任务
 app.autodiscover_tasks()
 
-# app.conf.beat_schedule = {
-#     'backup-data-daily': {
-#         'task': 'kernel.tasks.task_backup_data',
-#         'schedule': crontab(hour=0, minute=0),  # 每天0点运行
-#     },
-# }
+app.conf.beat_schedule = {
+    'backup-data-daily': {
+        'task': 'kernel.tasks.task_backup_data',
+        'schedule': 30,  # 30秒
+    },
+}

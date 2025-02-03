@@ -38,11 +38,11 @@ SystemObject = [
 ImplementType = [
     ('Field', '字段'),
     ('Model', '数据表'),
+    ('KernelModel', '系统表'),
+    ('Log', '日志'),
     ('View', '视图'),
     ('MenuItem', '菜单项'),
-    ('KernelModel', '系统表'),
-    ('Program', '程序'),
-    ('Log', '日志')
+    ('Program', '程序')
 ]
 
 ResourceType = [

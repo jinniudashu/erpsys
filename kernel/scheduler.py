@@ -15,118 +15,7 @@ import json
 from kernel.signals import operand_finished, ux_input_signal
 from kernel.models import Process, Service, ServiceProgram, ServiceRule, Operator, ProcessContextSnapshot
 from kernel.types import ProcessState, CONTEXT_SCHEMA
-from kernel.sys_lib import sys_call, ContextFrame, ContextStack, ProcessExecutionContext, ProcessCreator, update_task_list, update_entity_task_group_list
-
-class RuleEvaluator:
-    """规则评估器：记录规则评估和执行日志到上下文"""
-    
-    def evaluate_rules(self, frame: ContextFrame):
-        """根据规则评估当前上下文中的业务事件，并记录执行日志到frame.local_vars"""
-        eval_context = self._build_evaluation_context(frame)
-
-        service_program_id = frame.process.program_entrypoint
-        if not service_program_id:
-            raise ValueError("No ServiceProgram ID found in context")
-        service_program = ServiceProgram.objects.get(erpsys_id=service_program_id)
-
-        # 限定规则范围
-        rules = ServiceRule.objects.filter(
-            service_program=service_program,
-            service=frame.process.service,
-        )
-
-        for rule in rules:
-            condition_met = self._evaluate_condition(rule, eval_context)
-            if condition_met:
-                self._execute_action(rule, eval_context)
-                frame.events_triggered_log.append({
-                    'rule_id': rule.erpsys_id,
-                    'rule_label': rule.label,
-                    'event_expression': rule.event.expression,
-                    'evaluated_at': timezone.now().isoformat()
-                })
-
-    def _build_evaluation_context(self, frame: ContextFrame) -> Dict[str, Any]:
-        """构建扁平化的规则评估上下文"""
-        # 1. 序列化进程信息
-        process = frame.process
-        process_data = {
-            'id': process.id,
-            'name': process.name,
-            'state': process.state,
-            'service_id': process.service.id if process.service else None,
-            'service_name': process.service.name if process.service else None,
-            'program_entrypoint': process.program_entrypoint,
-            'priority': process.priority,
-            'created_at': process.created_at.isoformat() if process.created_at else None,
-        }
-
-        # 2. 获取完整的继承上下文链
-        def get_inherited_chain(context_dict, depth=0, max_depth=10):
-            if not context_dict or depth >= max_depth:
-                return {}
-            
-            result = context_dict.copy()
-            parent_context = frame.parent_frame.inherited_context if frame.parent_frame else {}
-            parent_data = get_inherited_chain(parent_context, depth + 1)
-            
-            # 子级上下文优先
-            parent_data.update(result)
-            return parent_data
-
-        inherited_data = get_inherited_chain(frame.inherited_context)
-
-        # 3. 构建扁平化上下文
-        context = {
-            # 进程信息（使用 process_ 前缀避免命名冲突）
-            'process_id': process_data['id'],
-            'process_name': process_data['name'],
-            'process_state': process_data['state'],
-            'process_service': process_data['service_name'],
-            'process_entrypoint': process_data['program_entrypoint'],
-            'process_priority': process_data['priority'],
-            'process_created_at': process_data['created_at'],
-
-            # 操作者信息
-            'operator_id': process.operator.id if process.operator else None,
-            'operator_name': str(process.operator) if process.operator else None,
-
-            # 实体对象信息
-            'entity_id': process.entity_content_object.id if process.entity_content_object else None,
-            'entity_type': process.entity_content_type.model if process.entity_content_type else None,
-            'entity_name': str(process.entity_content_object) if process.entity_content_object else None,
-
-            # 时间信息
-            'current_time': timezone.now().isoformat(),
-
-            # 返回值
-            'result': frame.return_value,
-        }
-
-        # 4. 合并本地变量（可能覆盖上面的基础信息）
-        context.update(frame.local_vars)
-
-        # 5. 合并继承的上下文（优先级最低）
-        context.update(inherited_data)
-
-        return context
-
-    def _evaluate_condition(self, rule: ServiceRule, context: Dict[str, Any]) -> bool:
-        """评估规则条件"""
-        try:
-            print('评估上下文：', context)
-            if rule.event and rule.event.expression:
-                return eval(rule.event.expression, {}, context)
-            return False  # 如果没有事件或表达式，返回False表示条件不满足
-        except Exception as e:
-            print(f"规则条件评估错误: {e}")
-            return False
-
-    def _execute_action(self, rule: ServiceRule, context: Dict[str, Any]):
-        if rule.system_instruction:
-            sys_call_str = rule.system_instruction.sys_call
-            context['operand_service'] = rule.operand_service
-            sys_call(sys_call_str, **context)
+from kernel.sys_lib import ProcessCreator, update_task_list, update_entity_task_group_list
 
 @receiver(user_logged_in)
 def on_user_login(sender, user, request, **kwargs):
@@ -143,6 +32,7 @@ def on_user_login(sender, user, request, **kwargs):
         service_rule = ServiceRule.objects.get(service_program=service_program, service__name='user_login')
         params = {
             'service_rule': service_rule,
+            'service': service_rule.service,
             'entity_content_object': operator,
             'operator': operator,
             'state': ProcessState.TERMINATED.name,
@@ -156,27 +46,6 @@ def on_user_login(sender, user, request, **kwargs):
         creator = ProcessCreator(need_business_record=False)
         proc = creator.create_process(params)
 
-        # 发送登录作业完成信号
-        operand_finished.send(sender=on_user_login, pid=proc, request=request, form_data=None, formset_data=None)
-
-@receiver(operand_finished)
-def operand_finished_handler(sender, **kwargs):
-    """
-    业务表单变更后，在此处评估业务状态变更情况
-    1. 检查是否有规则预定义的业务事件发生
-    2. 如果发生业务事件，执行预定业务程序
-    3. 更新进程状态
-    """
-    process = kwargs['pid']
-    with ProcessExecutionContext(process) as frame:
-        # 评估规则
-        evaluator = RuleEvaluator()
-        evaluator.evaluate_rules(frame)
-
-    # *************************************************
-    # 检查表单内服务指令，立即执行/计划执行
-    # *************************************************
-
 @receiver(post_save, sender=Process, dispatch_uid="post_save_process")
 def on_process_save(sender, instance: Process, created: bool, **kwargs):
     """
@@ -189,66 +58,23 @@ def on_process_save(sender, instance: Process, created: bool, **kwargs):
 
         update_entity_task_group_list(instance.entity_content_object)
 
-    # # 根据状态执行相应的处理逻辑
-    # match instance.state:
-    #     case ProcessState.READY.name:
-    #         _handle_ready_state(frame)
-    #     case ProcessState.RUNNING.name:
-    #         _handle_running_state(frame)
-    #     case ProcessState.WAITING.name:
-    #         _handle_waiting_state(frame)
-    #     case ProcessState.SUSPENDED.name:
-    #         _handle_suspended_state(frame)
-    #     case ProcessState.TERMINATED.name:
-    #         _handle_terminated_state(frame)
-    #     case ProcessState.ERROR.name:
-    #         _handle_error_state(frame)
-    #     case _:
-    #         logger.warning(f"Unhandled process state: {instance.state}")            
+# @receiver(operand_finished)
+# def operand_finished_handler(sender, **kwargs):
+#     """
+#     业务表单变更后，在此处评估业务状态变更情况
+#     1. 检查是否有规则预定义的业务事件发生
+#     2. 如果发生业务事件，执行预定业务程序
+#     3. 更新进程状态
+#     """
+#     process = kwargs['pid']
+#     with ProcessExecutionContext(process) as frame:
+#         # 评估规则
+#         evaluator = RuleEvaluator()
+#         evaluator.evaluate_rules(frame)
 
-def _handle_ready_state(self, frame):
-    """处理就绪状态"""
-    frame.local_vars['state_changed'] = "状态更新为READY"
-    frame.local_vars['state_ready'] = True
-    # 将进程加入调度队列
-    scheduler = ProcessScheduler()
-    scheduler.add_to_run_queue(frame.process)
-
-def _handle_running_state(self, frame):
-    """处理运行状态"""
-    frame.local_vars['state_changed'] = "状态更新为RUNNING"
-    frame.scheduling_info['last_scheduled_time'] = timezone.now()
-
-def _handle_waiting_state(self, frame):
-    """处理等待状态"""
-    frame.local_vars['state_changed'] = "状态更新为WAITING"
-    # 记录等待原因
-    frame.local_vars['wait_reason'] = frame.process.wait_reason
-
-def _handle_suspended_state(self, frame):
-    """处理挂起状态"""
-    frame.local_vars['state_changed'] = "状态更新为SUSPENDED"
-    # 保存挂起时的上下文信息
-    frame.local_vars['suspend_info'] = {
-        'suspended_at': timezone.now(),
-        'suspend_reason': frame.process.suspend_reason
-    }
-
-def _handle_terminated_state(self, frame):
-    """处理终止状态"""
-    frame.local_vars['state_changed'] = "状态更新为TERMINATED"
-    frame.return_value = {'message': 'Process completed successfully'}
-    # 清理资源
-    resource_manager = ResourceManager()
-    resource_manager.release_all(frame.process)
-
-def _handle_error_state(self, frame):
-    """处理错误状态"""
-    frame.status = 'ERROR'
-    frame.return_value = {'error': str(frame.process.error)}
-    # 错误处理和恢复
-    error_handler = ProcessErrorHandler()
-    error_handler.handle_error(frame.process, frame.process.error)
+#     # *************************************************
+#     # 检查表单内服务指令，立即执行/计划执行
+#     # *************************************************
 
 def on_timer_signal(**kwargs):
     # 将Celery的定时任务信号转译为业务事件
@@ -303,15 +129,6 @@ def on_timer_signal(**kwargs):
 
         # 4. 其他额外逻辑（异常检测/重试等），省略...
 
-def attempt_resource_allocation(process):
-    resource = process.control_context.get('resource')
-    if resource and resource['available'] > 0:
-        resource['available'] -= 1
-        process.control_context.update({'resource': resource})
-        process.save()
-        return True
-    return False
-
 @receiver(ux_input_signal)
 def on_ux_input(**kwargs):
     """接收人工指令调度"""
@@ -320,6 +137,46 @@ def on_ux_input(**kwargs):
     优先级最高
     """
     pass
+
+def _handle_ready_state(self, frame):
+    """处理就绪状态"""
+    pass
+
+def _handle_running_state(self, frame):
+    """处理运行状态"""
+    pass
+
+def _handle_waiting_state(self, frame):
+    """处理等待状态"""
+    pass
+
+def _handle_suspended_state(self, frame):
+    """处理挂起状态"""
+    pass
+
+def _handle_terminated_state(self, frame):
+    """处理终止状态"""
+    pass
+    # 清理资源
+    # resource_manager = ResourceManager()
+    # resource_manager.release_all(frame.process)
+
+def _handle_error_state(self, frame):
+    """处理错误状态"""
+    pass
+    # frame.return_value = {'error': str(frame.process.error)}
+    # 错误处理和恢复
+    # error_handler = ProcessErrorHandler()
+    # error_handler.handle_error(frame.process, frame.process.error)
+
+# def attempt_resource_allocation(process):
+#     resource = process.control_context.get('resource')
+#     if resource and resource['available'] > 0:
+#         resource['available'] -= 1
+#         process.control_context.update({'resource': resource})
+#         process.save()
+#         return True
+#     return False
 
 # def preprocess_context(instance: Process, created: bool) -> dict:
 #     """预处理上下文"""

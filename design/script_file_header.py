@@ -22,7 +22,7 @@ from kernel.models import Operator, Process, Service, Organization
 
     'admin_file_head': f"""from django.contrib import admin
 
-from kernel.admin import applications_site, ErpFormAdmin, hide_fields
+from kernel.admin import applications_site, ErpFormAdmin
 from .models import *
 
 """,
@@ -56,14 +56,12 @@ def get_master_field_script(data_item, master_class_name):
 """
 
 def get_admin_script(class_name, is_dict, has_master):
-    hide_fields = '' if is_dict else f"""\n    hide_fields(list_display)"""
-
     autocomplete_fields = f"""\n    autocomplete_fields = ['master']""" if has_master else ''
 
     return f"""
 @admin.register({class_name})
 class {class_name}Admin(ErpFormAdmin):
-    list_display = [field.name for field in {class_name}._meta.fields]{hide_fields}
+    list_display = [field.name for field in {class_name}._meta.fields]
     list_display_links = list_display
     search_fields = ['label', 'name', 'pym']
     list_filter = list_display{autocomplete_fields}

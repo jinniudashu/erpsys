@@ -95,7 +95,7 @@ if DJANGO_ENV == 'dev':
     }
     CHANNEL_REDIS_HOST = 'redis://localhost:6379/0'
     CELERY_REDIS_HOST = 'redis://localhost:6379/1'
-    CELERY_RESULT_REDIS_HOST = 'redis://localhost:6379/1'
+    CELERY_RESULT_REDIS_HOST = 'redis://localhost:6379/2'
 else:
     DEBUG = False
     ALLOWED_HOSTS = ["*"]
@@ -111,7 +111,7 @@ else:
     }
     CHANNEL_REDIS_HOST = 'redis://redis:6379/0'
     CELERY_REDIS_HOST = 'redis://redis:6379/1'
-    CELERY_RESULT_REDIS_HOST = 'redis://redis:6379/1'
+    CELERY_RESULT_REDIS_HOST = 'redis://redis:6379/2'
 
 CHANNEL_LAYERS = {
     "default": {
@@ -209,6 +209,16 @@ LOGGING = {
     },
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 # CELERY SETTINGS
 CELERY_BROKER_URL = CELERY_REDIS_HOST
 CELERY_RESULT_BACKEND = CELERY_RESULT_REDIS_HOST
@@ -219,11 +229,11 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-CUSTOMER_SITE_NAME = 'erp'
-
 # Weichat mini-program API
 WECHAT_APP_ID = env('WECHAT_APP_ID')
 WECHAT_APP_SECRET = env('WECHAT_APP_SECRET')
 WECHAT_MCH_ID = env('WECHAT_MCH_ID')
 WECHAT_MCH_KEY = env('WECHAT_MCH_KEY')
 WECHAT_NOTIFY_URL = env('WECHAT_NOTIFY_URL')
+
+CUSTOMER_SITE_NAME = 'erp'
