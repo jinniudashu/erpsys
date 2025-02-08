@@ -140,7 +140,6 @@ class ApplicationsSite(admin.AdminSite):
         # 获取服务
         service_rule_id = kwargs.get('service_rule_id', None)
         service_rule = ServiceRule.objects.get(erpsys_id = service_rule_id)
-        program_entrypoint = service_rule.service_program.erpsys_id
         
         # 获取服务对象类型
         service = service_rule.service
@@ -175,7 +174,6 @@ class ApplicationsSite(admin.AdminSite):
             'operator': operator,
             'state': ProcessState.NEW.name,
             'priority': 0,
-            'program_entrypoint': program_entrypoint,
             'init_params': {},
             'instance': None,  # 当前操作员登录的守候进程
             'parent_frame': None
@@ -426,9 +424,8 @@ class ErpFormAdmin(admin.ModelAdmin):
         })
         return super().render_change_form(request, context, add, change, form_url, obj)
 
-    # def response_change(self, request, obj):        
-    #     # 按照service.route_to的配置跳转
-    #     if obj.pid.service.route_to == 'CUSTOMER_HOMEPAGE':
-    #         return redirect(obj.customer)
-    #     else:
-    #         return redirect('index')
+    def response_change(self, request, obj):
+        master = obj.master
+        master_class_name = master.__class__.__name__
+        return redirect(f'/{settings.CUSTOMER_SITE_NAME}/entity_operation/{master_class_name}/{master.erpsys_id}/')
+        # return redirect(f'/{settings.CUSTOMER_SITE_NAME}/')

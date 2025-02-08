@@ -38,7 +38,7 @@ CONTEXT_SCHEMA = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "process_id": {"type": "number"},
+                    "process_id": {"type": "string"},
                     "status": {"type": "string"},
                     "local_vars": {"type": "object"},
                     "inherited_context": {"type": "object"},

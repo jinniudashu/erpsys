@@ -1,20 +1,13 @@
 from django.db.models.signals import post_save
 from django.db import transaction
 from django.dispatch import receiver
-from django.contrib import messages
 from django.contrib.auth.signals import user_logged_in
-from django.forms.models import model_to_dict
 from django.utils import timezone
 from django.conf import settings
 
-from datetime import timedelta
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass
-import json
-
-from kernel.signals import operand_finished, ux_input_signal
-from kernel.models import Process, Service, ServiceProgram, ServiceRule, Operator, ProcessContextSnapshot
-from kernel.types import ProcessState, CONTEXT_SCHEMA
+from kernel.signals import ux_input_signal
+from kernel.models import Process, ServiceProgram, ServiceRule, Operator
+from kernel.types import ProcessState
 from kernel.sys_lib import ProcessCreator, update_task_list, update_entity_task_group_list
 
 @receiver(user_logged_in)

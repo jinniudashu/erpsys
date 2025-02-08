@@ -2,9 +2,9 @@ from django.db.models import Q, Manager
 from django.db import transaction
 from django.utils import timezone
 from django.conf import settings
-# from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
-from typing import Dict, Any
+from abc import ABC, abstractmethod
+from typing import Dict, Any, Optional
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from datetime import datetime, timedelta
@@ -16,10 +16,8 @@ import re
 
 from kernel.models import Service, Process, WorkOrder, ServiceProgram, ServiceRule, ProcessContextSnapshot
 from kernel.types import ProcessState, CONTEXT_SCHEMA
-from kernel.tasks import execute_sys_call_task
 
 from applications.models import *
-
 
 # ================ 1. 基础上下文数据结构 ================
 class ContextFrame:
@@ -55,7 +53,7 @@ class ContextFrame:
     def to_dict(self):
         """将当前帧序列化为字典"""
         return {
-            "process_id": self.process.id,
+            "process_id": self.process.erpsys_id,
             "status": self.status,
             "local_vars": self.local_vars,
             "inherited_context": self.inherited_context,
@@ -215,7 +213,7 @@ class ProcessExecutionContext:
     def serialize_process(self, process):
         """序列化进程对象为字典，包含其关键信息"""
         return {
-            'process_id': process.pid,
+            'process_id': process.erpsys_id,
             'process_name': process.name,
             'process_state': process.state,
             'process_service': process.service.name if process.service else None,
@@ -287,9 +285,9 @@ class ProcessExecutionContext:
             # 验证数据结构
             data = snapshot.context_data
             # 数据验证在ContextStack.from_dict中进行
-            def process_lookup(pid):
+            def process_lookup(process_id):
                 from kernel.models import Process
-                return Process.objects.get(id=pid)
+                return Process.objects.get(erpsys_id=process_id)
 
             stack = ContextStack.from_dict(data, process_lookup)
             return stack, snapshot.version
@@ -443,7 +441,7 @@ class ProcessCreator:
             'state': kwargs.get('state', ProcessState.NEW.name),
             'operator': operator,
             'priority': kwargs.get('priority', 0),
-            'program_entrypoint': kwargs.get('program_entrypoint')
+            "program_entrypoint": service_program.erpsys_id
         }
 
         # 1. 创建新的 Process 对象
@@ -574,10 +572,167 @@ class RuleEvaluator:
             # 2) 当前函数不再阻塞等待子进程创建，而是只发送消息
             print('执行系统调用：', sys_call_str, context)
             # 调用 Celery 任务
+            from kernel.tasks import execute_sys_call_task
             result = execute_sys_call_task.delay(sys_call_str, context)
             # 这样在此处我们就不会立即创建新进程，也不会产生嵌套上下文。
             # 父上下文在后续 _execute_action 结束后即可退出并保存快照，
             # Worker 那边才会在一个新上下文里创建子进程。
+
+class SysCallResult:
+    def __init__(self, success: bool, message: str = "", data: Optional[dict] = None):
+        self.success = success
+        self.message = message
+        self.data = data or {}
+
+    def __repr__(self):
+        return f"<SysCallResult success={self.success} message={self.message} data={self.data}>"
+
+class SysCallInterface(ABC):
+    """
+    系统调用抽象接口
+    """
+    @abstractmethod
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        执行系统调用。kwargs 里应包含所需的关键参数，如 process, operand_service, operator, context 等。
+        返回 SysCallResult。
+        进一步可做：
+        - 遇到业务错误（如参数非法）可以抛自定义异常，再由上层捕获并写日志到上下文
+        """
+        pass
+
+class StartOneServiceCall(SysCallInterface):
+    """
+    启动一个新的服务进程
+    """
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        必需参数：
+            - service_rule_id: 服务规则 erpsys_id
+            - process_id: 当前过程 erpsys_id
+            - operand_service: 要启动的新服务
+            - operator: 操作员 (可选，但多数情况下需要)
+            - entity_content_object: 新进程的关联业务实体，多数情况下为父进程关联的业务实体
+            - ...
+        """
+        print('执行系统调用 start_one_service：', kwargs)
+        # 1. 参数校验
+        if "service_rule_id" not in kwargs:
+            return SysCallResult(
+                success=False,
+                message="Missing service_rule_id for start_one_service",
+            )
+        service_rule_id = kwargs.get("service_rule_id")
+        service_rule = ServiceRule.objects.get(erpsys_id = service_rule_id)
+        operand_service = service_rule.operand_service
+        
+        if not isinstance(operand_service, Service):
+            return SysCallResult(False, "operand_service is not a valid Service object")
+        
+        # 2. 业务逻辑：创建新的Process
+        parent_process_id = kwargs.get("process_id")
+        parent_process = Process.objects.get(erpsys_id = parent_process_id)
+        operator = parent_process.operator
+        entity_content_object = parent_process.entity_content_object
+
+        params = {
+            "parent": parent_process,
+            "service_rule": service_rule,
+            "service": operand_service,
+            "operator": operator,
+            "entity_content_object": entity_content_object,
+            "name": f"{operand_service.label}",
+            "parent_frame": kwargs.get("parent_frame", None),
+        }
+        print('新服务进程创建参数：', params)
+
+        # 3. 创建新的进程
+        creator = ProcessCreator()
+        # 获取当前进程的父帧
+        proc = creator.create_process(params)
+
+        print(f"新服务进程 created: {proc}")
+
+        # 4. 返回成功信息
+        return SysCallResult(
+            success=True,
+            message="Successfully started one service",
+            data={"new_process_id": proc.id}
+        )
+
+class EndServiceProgramCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        标记当前服务程序结束，或做后续清理
+        """
+        process = kwargs.get("process")
+        if not process:
+            return SysCallResult(False, "No process provided")
+
+        # 这里根据您的业务逻辑判断结束条件
+        # 示例：将 process 设置为 TERMINATED
+        process.state = ProcessState.TERMINATED.name
+        process.end_time = timezone.now()
+        process.save()
+
+        return SysCallResult(True, f"ServiceProgram ended for process {process.erpsys_id}")
+
+class StartBatchServiceCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        批量启动服务进程
+        """
+        pass
+
+class CallServiceProgramCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        调用服务程序
+        """
+        pass
+
+class ReturnCallingServiceCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        返回调用服务
+        """
+        pass
+
+class UpdateResourceStateCall(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        更新资源状态
+        """
+        print('更新资源状态：', self, kwargs)
+
+        return SysCallResult(
+            success=True,
+            message="Successfully updated resource state",
+            data={"resource_id": kwargs.get("resource_id")}
+        )            
+        
+CALL_REGISTRY = {
+    "start_one_service": StartOneServiceCall,
+    "start_batch_service": StartBatchServiceCall,
+    "end_service_program": EndServiceProgramCall,
+    "call_service_program": CallServiceProgramCall,
+    "return_calling_service": ReturnCallingServiceCall,
+    "update_resource_state": UpdateResourceStateCall,
+    # ... 其它
+}    
+
+def sys_call(sys_call_name: str, **kwargs) -> SysCallResult:
+    """
+    统一系统调用入口
+    """
+    call_class = CALL_REGISTRY.get(sys_call_name)
+    if not call_class:
+        return SysCallResult(False, f"Undefined sys_call '{sys_call_name}'")
+
+    try:
+        return call_class().execute(**kwargs)
+    except Exception as e:
+        return SysCallResult(False, f"Exception in sys_call '{sys_call_name}': {e}")
 
 # 更新操作员任务列表
 def update_task_list(operator, is_public):
