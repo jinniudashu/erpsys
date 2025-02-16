@@ -371,17 +371,9 @@ class ServiceProgram(ERPSysBase):
         ordering = ['id']
 
 class ServiceRule(ERPSysBase):
-    sys_calls = [
-        ('start_one_service', '启动'),
-        ('start_batch_service', '批量启动'),
-        ('end_service_program', '结束'),
-        ('call_service_program', '调用'),
-        ('return_calling_service', '返回')
-    ]
     service_program = models.ForeignKey(ServiceProgram, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务程序")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="主体服务")
     event = models.ForeignKey(Event, on_delete=models.CASCADE,  blank=True, null=True, verbose_name="事件")
-    # system_instruction = models.CharField(max_length=255, choices=sys_calls, blank=True, null=True, verbose_name="系统指令")
     system_instruction = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
     operand_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="ruled_as_operand_service", verbose_name="操作服务")
     entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, related_name="design_service_rule", verbose_name="实体类型")

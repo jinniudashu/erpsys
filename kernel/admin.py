@@ -168,6 +168,8 @@ class ApplicationsSite(admin.AdminSite):
 
         # 3. 创建新服务进程
         params = {
+            "parent": None,
+            "previous": None,  # 应为登录后的人工守候进程
             'service_rule': service_rule,
             'service': service,
             'entity_content_object': entity,
@@ -175,7 +177,6 @@ class ApplicationsSite(admin.AdminSite):
             'state': ProcessState.NEW.name,
             'priority': 0,
             'init_params': {},
-            'instance': None,  # 当前操作员登录的守候进程
             'parent_frame': None
         }
 
@@ -428,4 +429,3 @@ class ErpFormAdmin(admin.ModelAdmin):
         master = obj.master
         master_class_name = master.__class__.__name__
         return redirect(f'/{settings.CUSTOMER_SITE_NAME}/entity_operation/{master_class_name}/{master.erpsys_id}/')
-        # return redirect(f'/{settings.CUSTOMER_SITE_NAME}/')

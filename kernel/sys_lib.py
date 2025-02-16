@@ -31,24 +31,18 @@ class ContextFrame:
         self.local_vars = {}  # 任务执行过程中的局部变量
         self.return_value = None # 任务的返回值
         self.inherited_context = parent_frame.get_inheritable_context() if parent_frame else {}
-        self.error_info = None # 如果任务失败，存储错误信息
-        self.program_pointer = None  # 服务程序计数器，指向服务执行到的位置
-        self.registers = {}  # 用于存储任务执行过程中的操作员前端上下文数据，类似于 CPU 寄存器
-        self.resource_management = {} # 描述任务占用的资源，例如打开的文件、数据库连接等
-        self.accounting = {}  # 描述任务所属的账务信息
-        self.scheduling_info = {  # 调度相关信息
-            "last_scheduled_time": None,
-            "operator_time_used": 0, # 任务作业节点占用时间
-        }
         self.events_triggered_log = [] # 记录任务触发的事件日志
+        self.error_info = None # 如果任务失败，存储错误信息
+        # self.resource_management = {} # 描述任务占用的资源，例如打开的文件、数据库连接等
+        # self.accounting = {}  # 描述任务所属的账务信息
+        # self.scheduling_info = {  # 调度相关信息
+        #     "last_scheduled_time": None,
+        #     "operator_time_used": 0, # 任务作业节点占用时间
+        # }
 
     def get_inheritable_context(self):
         """获取可继承的上下文数据"""
-        return {
-            'resource_management': self.resource_management,  # 资源管理信息可继承
-            'accounting': self.accounting,  # 账务信息可继承
-            'scheduling_info': self.scheduling_info,  # 调度信息可继承
-        }
+        return {}
 
     def to_dict(self):
         """将当前帧序列化为字典"""
@@ -59,11 +53,6 @@ class ContextFrame:
             "inherited_context": self.inherited_context,
             "return_value": self.return_value,
             "error_info": self.error_info,
-            "program_pointer": self.program_pointer,
-            "registers": self.registers,
-            "resource_management": self.resource_management,
-            "accounting": self.accounting,
-            "scheduling_info": self.scheduling_info,
             "events_triggered_log": self.events_triggered_log
         }
 
@@ -77,14 +66,6 @@ class ContextFrame:
         frame.inherited_context = data["inherited_context"]
         frame.return_value = data.get("return_value")
         frame.error_info = data.get("error_info")
-        frame.program_pointer = data.get("program_pointer")
-        frame.registers = data.get("registers", {})
-        frame.resource_management = data.get("resource_management", {})
-        frame.accounting = data.get("accounting", {})
-        frame.scheduling_info = data.get("scheduling_info", {
-            "last_scheduled_time": None,
-            "operator_time_used": 0
-        })
         frame.events_triggered_log = data.get("events_triggered_log", [])
         return frame
 
@@ -141,7 +122,7 @@ class ProcessExecutionContext:
     2. 每次进入和退出时创建新的版本快照（version号），可回溯。
     3. 在存储和恢复时对上下文数据进行JSON Schema验证，确保数据结构一致性。
 
-    待优化：
+    待实现优化：
     - 可选择在进入/退出时自动调用某些 SysCall（如cleanup_service）来做资源回收（更新资源状态）等操作
     """
     def __init__(self, process, parent_frame=None, version=None):
@@ -163,10 +144,18 @@ class ProcessExecutionContext:
             self.stack = ContextStack()
 
         frame = self.stack.push(self.process)
-        # frame = self.stack.current_frame()
         
         # 将进程信息序列化并加入到上下文
-        process_info = self.serialize_process(self.process)
+        process_info = {
+            'process_id': self.process.erpsys_id,
+            'process_name': self.process.name,
+            'process_state': self.process.state,
+            'process_service': self.process.service.name if self.process.service else None,
+            'process_operator': str(self.process.operator) if self.process.operator else None,
+            'process_priority': self.process.priority,
+            'process_created_at': self.process.created_at.isoformat() if self.process.created_at else None,
+            'process_updated_at': self.process.updated_at.isoformat() if self.process.updated_at else None
+        }
         frame.local_vars.update(process_info)  # 将进程信息添加到上下文中
 
         # 返回当前帧
@@ -177,67 +166,29 @@ class ProcessExecutionContext:
         current_frame = self.stack.current_frame()
 
         if exc_type is None:
-            self._handle_completion(current_frame)
+            print('此处添加任务完成处理逻辑：', current_frame.process)            
         else:
-            self._handle_exception(current_frame, exc_val)
-
-        # 计算上下文的稳定哈希值
-        # def get_context_hash(stack):
-        #     context_dict = stack.to_dict()
-        #     print("原始上下文:", json.dumps(context_dict, indent=2))
-            
-        #     def normalize_dict(d):
-        #         if isinstance(d, dict):
-        #             return {k: normalize_dict(v) for k, v in d.items() 
-        #                 if k not in ['evaluated_at', 'last_scheduled_time']}
-        #         elif isinstance(d, list):
-        #             return [normalize_dict(x) for x in d]
-        #         return d
-                    
-        #     normalized_dict = normalize_dict(context_dict)
-        #     print("标准化后上下文:", json.dumps(normalized_dict, indent=2))
-            
-        #     import hashlib
-        #     context_str = json.dumps(normalized_dict, sort_keys=True)
-        #     return hashlib.sha256(context_str.encode()).hexdigest()
+            print('此处添加任务异常处理逻辑：', current_frame.process)
 
         current_hash = self._calculate_context_hash(self.stack)
-        print("当前哈希值:", current_hash)
-        print("上次哈希值:", self._previous_context_hash)
 
         if self._previous_context_hash != current_hash:
             print("检测到上下文变化，保存新版本")
             self.version = self._save_context(self.stack, self.process, current_hash)  # 传入当前哈希值
             self._previous_context_hash = current_hash
 
-    def serialize_process(self, process):
-        """序列化进程对象为字典，包含其关键信息"""
-        return {
-            'process_id': process.erpsys_id,
-            'process_name': process.name,
-            'process_state': process.state,
-            'process_service': process.service.name if process.service else None,
-            'process_operator': str(process.operator) if process.operator else None,
-            'process_priority': process.priority,
-            'process_created_at': process.created_at.isoformat() if process.created_at else None,
-            'process_updated_at': process.updated_at.isoformat() if process.updated_at else None
-        }
-
     def _calculate_context_hash(self, stack):
         """计算并返回当前上下文的哈希值"""
-        context_dict = stack.to_dict()
-        normalized_dict = self._normalize_context_dict(context_dict)
-        return hashlib.sha256(json.dumps(normalized_dict, sort_keys=True).encode()).hexdigest()
-
-    def _normalize_context_dict(self, context_dict):
-        """标准化上下文字典，以确保其结构一致性"""
         def normalize(d):
             if isinstance(d, dict):
                 return {k: normalize(v) for k, v in d.items()}
             elif isinstance(d, list):
                 return [normalize(x) for x in d]
             return d
-        return normalize(context_dict)
+            
+        context_dict = stack.to_dict()
+        normalized_dict = normalize(context_dict)
+        return hashlib.sha256(json.dumps(normalized_dict, sort_keys=True).encode()).hexdigest()
 
     def _init_new_stack(self, process):
         """初始化新的上下文栈"""
@@ -328,45 +279,6 @@ class ProcessExecutionContext:
         snapshot = ProcessContextSnapshot.objects.filter(process=process).order_by('-version').first()
         return snapshot.version if snapshot else 0
 
-    def change_state(self, new_state):
-        """同步更改进程状态和上下文"""
-        with transaction.atomic():
-            # 更新进程状态
-            self.process.state = new_state
-            self.process.save()
-            
-            # 更新上下文状态
-            self._handle_state_change()
-
-    def _handle_state_change(self):
-        """
-        处理状态变化逻辑，比如当进程状态发生变化时需要做的处理。
-        此处只是示例，实际可根据业务需求调整。
-        """
-        print('此处添加进程状态变化处理逻辑：', self.process)
-
-    def _handle_completion(self, frame):
-        """
-        处理完成逻辑，比如当任务完成时是否需要更新frame状态或写入return_value。
-        此处只是示例，实际可根据业务需求调整。
-        """
-        print('此处添加任务完成处理逻辑：', frame.process)
-        # if frame.return_value:
-        #     # 如果有返回值，根据业务逻辑更新进程状态
-        #     frame.process.state = "TERMINATED"
-        #     frame.process.save()
-
-    def _handle_exception(self, frame, exception):
-        """
-        处理异常，设置frame状态并记录错误信息
-        """
-        print('此处添加任务异常处理逻辑：', frame.process)
-        # frame.status = 'ERROR'
-        # frame.return_value = {'error': str(exception)}
-        # # 根据业务需求更新Process状态
-        # frame.process.state = "ERROR"
-        # frame.process.save()
-
 class ProcessCreator:
     """
     进程创建器：负责创建进程和相关业务记录
@@ -435,7 +347,7 @@ class ProcessCreator:
         process_params = {
             'name': f"{service_program.label} - {service.label} - {operator}",
             'parent': kwargs.get('parent', None),
-            'previous': kwargs.get('instance', None),
+            'previous': kwargs.get('previous', None),
             'service': service,
             'entity_content_object': kwargs.get('entity_content_object'),
             'state': kwargs.get('state', ProcessState.NEW.name),
@@ -446,6 +358,8 @@ class ProcessCreator:
 
         # 1. 创建新的 Process 对象
         process = Process.objects.create(**process_params)
+        if not process.parent:
+            process.parent = process
 
         # 2. 创建业务记录（如果需要）
         if self.need_business_record:
@@ -500,13 +414,15 @@ class RuleEvaluator:
         for rule in rules:
             condition_met = self._evaluate_condition(rule, eval_context)
             if condition_met:
+                # frame.local_vars['service_rule_id'] = rule.erpsys_id
+                frame.local_vars['operand_process_id'] = frame.process.parent.erpsys_id
                 frame.events_triggered_log.append({
                     'rule_id': rule.erpsys_id,
                     'rule_label': rule.label,
                     'event_expression': rule.event.expression,
                     'evaluated_at': timezone.now().isoformat()
                 })
-                # eval_context['parent_frame'] = frame
+                eval_context['service_rule_id'] = rule.erpsys_id
                 self._execute_action(rule, eval_context)
 
     def _build_evaluation_context(self, frame: ContextFrame) -> Dict[str, Any]:
@@ -601,7 +517,7 @@ class SysCallInterface(ABC):
         """
         pass
 
-class StartOneServiceCall(SysCallInterface):
+class StartService(SysCallInterface):
     """
     启动一个新的服务进程
     """
@@ -620,7 +536,7 @@ class StartOneServiceCall(SysCallInterface):
         if "service_rule_id" not in kwargs:
             return SysCallResult(
                 success=False,
-                message="Missing service_rule_id for start_one_service",
+                message="Missing service_rule_id for start_service",
             )
         service_rule_id = kwargs.get("service_rule_id")
         service_rule = ServiceRule.objects.get(erpsys_id = service_rule_id)
@@ -630,13 +546,14 @@ class StartOneServiceCall(SysCallInterface):
             return SysCallResult(False, "operand_service is not a valid Service object")
         
         # 2. 业务逻辑：创建新的Process
-        parent_process_id = kwargs.get("process_id")
-        parent_process = Process.objects.get(erpsys_id = parent_process_id)
-        operator = parent_process.operator
-        entity_content_object = parent_process.entity_content_object
+        previous_process_id = kwargs.get("process_id")
+        previous_process = Process.objects.get(erpsys_id = previous_process_id)
+        operator = previous_process.operator
+        entity_content_object = previous_process.entity_content_object
 
         params = {
-            "parent": parent_process,
+            "parent": previous_process.parent,
+            "previous": previous_process,
             "service_rule": service_rule,
             "service": operand_service,
             "operator": operator,
@@ -660,64 +577,40 @@ class StartOneServiceCall(SysCallInterface):
             data={"new_process_id": proc.id}
         )
 
-class EndServiceProgramCall(SysCallInterface):
-    def execute(self, **kwargs) -> SysCallResult:
-        """
-        标记当前服务程序结束，或做后续清理
-        """
-        process = kwargs.get("process")
-        if not process:
-            return SysCallResult(False, "No process provided")
-
-        # 这里根据您的业务逻辑判断结束条件
-        # 示例：将 process 设置为 TERMINATED
-        process.state = ProcessState.TERMINATED.name
-        process.end_time = timezone.now()
-        process.save()
-
-        return SysCallResult(True, f"ServiceProgram ended for process {process.erpsys_id}")
-
-class StartBatchServiceCall(SysCallInterface):
-    def execute(self, **kwargs) -> SysCallResult:
-        """
-        批量启动服务进程
-        """
-        pass
-
-class CallServiceProgramCall(SysCallInterface):
+class CallSubService(SysCallInterface):
     def execute(self, **kwargs) -> SysCallResult:
         """
         调用服务程序
         """
         pass
 
-class ReturnCallingServiceCall(SysCallInterface):
+class CallingReturn(SysCallInterface):
     def execute(self, **kwargs) -> SysCallResult:
         """
         返回调用服务
         """
         pass
 
-class UpdateResourceStateCall(SysCallInterface):
+class StartIterationService(SysCallInterface):
     def execute(self, **kwargs) -> SysCallResult:
         """
-        更新资源状态
+        启动迭代服务
         """
-        print('更新资源状态：', self, kwargs)
+        pass
 
-        return SysCallResult(
-            success=True,
-            message="Successfully updated resource state",
-            data={"resource_id": kwargs.get("resource_id")}
-        )            
-        
+class StartParallelService(SysCallInterface):
+    def execute(self, **kwargs) -> SysCallResult:
+        """
+        并行启动服务进程
+        """
+        pass
+
 CALL_REGISTRY = {
-    "start_one_service": StartOneServiceCall,
-    "start_batch_service": StartBatchServiceCall,
-    "end_service_program": EndServiceProgramCall,
-    "call_service_program": CallServiceProgramCall,
-    "return_calling_service": ReturnCallingServiceCall,
-    "update_resource_state": UpdateResourceStateCall,
+    "start_service": StartService,
+    "call_sub_service": CallSubService,
+    "calling_return": CallingReturn,
+    "start_iteration_service": StartIterationService,
+    "start_parallel_service": StartParallelService,
     # ... 其它
 }    
 

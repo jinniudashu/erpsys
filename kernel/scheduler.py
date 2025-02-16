@@ -24,6 +24,8 @@ def on_user_login(sender, user, request, **kwargs):
         service_program = ServiceProgram.objects.get(sys_default=True)
         service_rule = ServiceRule.objects.get(service_program=service_program, service__name='user_login')
         params = {
+            "parent": None,
+            "previous": None,
             'service_rule': service_rule,
             'service': service_rule.service,
             'entity_content_object': operator,
