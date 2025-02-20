@@ -36,7 +36,6 @@ def on_user_login(sender, user, request, **kwargs):
             'init_params': {}
         }
 
-        # import pdb; pdb.set_trace()  # 在这里设置断点
         # 创建一个登录进程
         creator = ProcessCreator(need_business_record=False)
         proc = creator.create_process(params)

@@ -37,14 +37,6 @@
                 2,
                 3,
                 4,
-                221,
-                222,
-                223,
-                224,
-                225,
-                226,
-                227,
-                228,
                 229,
                 230,
                 231,
@@ -205,10 +197,10 @@
                 42,
                 43,
                 44,
-                145,
-                146,
-                147,
-                148,
+                149,
+                150,
+                151,
+                152,
                 45,
                 46,
                 47,
@@ -233,10 +225,10 @@
                 66,
                 67,
                 68,
-                141,
-                142,
-                143,
-                144,
+                145,
+                146,
+                147,
+                148,
                 69,
                 70,
                 71,
@@ -257,10 +249,10 @@
                 86,
                 87,
                 88,
-                137,
-                138,
-                139,
-                140,
+                141,
+                142,
+                143,
+                144,
                 89,
                 90,
                 91,
@@ -277,14 +269,18 @@
                 102,
                 103,
                 104,
-                133,
-                134,
-                135,
-                136,
+                137,
+                138,
+                139,
+                140,
                 105,
                 106,
                 107,
                 108,
+                133,
+                134,
+                135,
+                136,
                 129,
                 130,
                 131,
@@ -309,10 +305,6 @@
                 118,
                 119,
                 120,
-                149,
-                150,
-                151,
-                152,
                 153,
                 154,
                 155,
@@ -333,54 +325,62 @@
                 170,
                 171,
                 172,
-                213,
-                214,
-                215,
-                216,
-                217,
-                218,
-                219,
-                220,
                 173,
                 174,
                 175,
                 176,
-                209,
-                210,
-                211,
-                212,
+                221,
+                222,
+                223,
+                224,
+                225,
+                226,
+                227,
+                228,
                 177,
                 178,
                 179,
                 180,
+                217,
+                218,
+                219,
+                220,
                 181,
                 182,
                 183,
                 184,
-                205,
-                206,
-                207,
-                208,
                 185,
                 186,
                 187,
                 188,
+                213,
+                214,
+                215,
+                216,
                 189,
                 190,
                 191,
                 192,
-                201,
-                202,
-                203,
-                204,
+                209,
+                210,
+                211,
+                212,
                 193,
                 194,
                 195,
                 196,
+                205,
+                206,
+                207,
+                208,
                 197,
                 198,
                 199,
                 200,
+                201,
+                202,
+                203,
+                204,
                 21,
                 22,
                 23,
@@ -393,7 +393,7 @@
         "pk": 3,
         "fields": {
             "password": "pbkdf2_sha256$600000$hdDokS1S5tnFZJj0FCnfZS$BJmUxzEXzs2WdfZ3JChw+bE1/ep/57SbxRhUKzI5YV8=",
-            "last_login": "2025-02-13T04:15:03.992Z",
+            "last_login": "2025-02-17T13:48:31.573Z",
             "is_superuser": true,
             "username": "admin",
             "first_name": "",
@@ -426,14 +426,6 @@
                 2,
                 3,
                 4,
-                221,
-                222,
-                223,
-                224,
-                225,
-                226,
-                227,
-                228,
                 229,
                 230,
                 231,
@@ -594,10 +586,10 @@
                 42,
                 43,
                 44,
-                145,
-                146,
-                147,
-                148,
+                149,
+                150,
+                151,
+                152,
                 45,
                 46,
                 47,
@@ -622,10 +614,10 @@
                 66,
                 67,
                 68,
-                141,
-                142,
-                143,
-                144,
+                145,
+                146,
+                147,
+                148,
                 69,
                 70,
                 71,
@@ -646,10 +638,10 @@
                 86,
                 87,
                 88,
-                137,
-                138,
-                139,
-                140,
+                141,
+                142,
+                143,
+                144,
                 89,
                 90,
                 91,
@@ -666,14 +658,18 @@
                 102,
                 103,
                 104,
-                133,
-                134,
-                135,
-                136,
+                137,
+                138,
+                139,
+                140,
                 105,
                 106,
                 107,
                 108,
+                133,
+                134,
+                135,
+                136,
                 129,
                 130,
                 131,
@@ -698,10 +694,6 @@
                 118,
                 119,
                 120,
-                149,
-                150,
-                151,
-                152,
                 153,
                 154,
                 155,
@@ -722,54 +714,62 @@
                 170,
                 171,
                 172,
-                213,
-                214,
-                215,
-                216,
-                217,
-                218,
-                219,
-                220,
                 173,
                 174,
                 175,
                 176,
-                209,
-                210,
-                211,
-                212,
+                221,
+                222,
+                223,
+                224,
+                225,
+                226,
+                227,
+                228,
                 177,
                 178,
                 179,
                 180,
+                217,
+                218,
+                219,
+                220,
                 181,
                 182,
                 183,
                 184,
-                205,
-                206,
-                207,
-                208,
                 185,
                 186,
                 187,
                 188,
+                213,
+                214,
+                215,
+                216,
                 189,
                 190,
                 191,
                 192,
-                201,
-                202,
-                203,
-                204,
+                209,
+                210,
+                211,
+                212,
                 193,
                 194,
                 195,
                 196,
+                205,
+                206,
+                207,
+                208,
                 197,
                 198,
                 199,
                 200,
+                201,
+                202,
+                203,
+                204,
                 21,
                 22,
                 23,
@@ -797,14 +797,6 @@
                 2,
                 3,
                 4,
-                221,
-                222,
-                223,
-                224,
-                225,
-                226,
-                227,
-                228,
                 229,
                 230,
                 231,
@@ -965,10 +957,10 @@
                 42,
                 43,
                 44,
-                145,
-                146,
-                147,
-                148,
+                149,
+                150,
+                151,
+                152,
                 45,
                 46,
                 47,
@@ -993,10 +985,10 @@
                 66,
                 67,
                 68,
-                141,
-                142,
-                143,
-                144,
+                145,
+                146,
+                147,
+                148,
                 69,
                 70,
                 71,
@@ -1017,10 +1009,10 @@
                 86,
                 87,
                 88,
-                137,
-                138,
-                139,
-                140,
+                141,
+                142,
+                143,
+                144,
                 89,
                 90,
                 91,
@@ -1037,14 +1029,18 @@
                 102,
                 103,
                 104,
-                133,
-                134,
-                135,
-                136,
+                137,
+                138,
+                139,
+                140,
                 105,
                 106,
                 107,
                 108,
+                133,
+                134,
+                135,
+                136,
                 129,
                 130,
                 131,
@@ -1069,10 +1065,6 @@
                 118,
                 119,
                 120,
-                149,
-                150,
-                151,
-                152,
                 153,
                 154,
                 155,
@@ -1093,54 +1085,62 @@
                 170,
                 171,
                 172,
-                213,
-                214,
-                215,
-                216,
-                217,
-                218,
-                219,
-                220,
                 173,
                 174,
                 175,
                 176,
-                209,
-                210,
-                211,
-                212,
+                221,
+                222,
+                223,
+                224,
+                225,
+                226,
+                227,
+                228,
                 177,
                 178,
                 179,
                 180,
+                217,
+                218,
+                219,
+                220,
                 181,
                 182,
                 183,
                 184,
-                205,
-                206,
-                207,
-                208,
                 185,
                 186,
                 187,
                 188,
+                213,
+                214,
+                215,
+                216,
                 189,
                 190,
                 191,
                 192,
-                201,
-                202,
-                203,
-                204,
+                209,
+                210,
+                211,
+                212,
                 193,
                 194,
                 195,
                 196,
+                205,
+                206,
+                207,
+                208,
                 197,
                 198,
                 199,
                 200,
+                201,
+                202,
+                203,
+                204,
                 21,
                 22,
                 23,
@@ -4996,6 +4996,56 @@
         }
     },
     {
+        "model": "design.material",
+        "pk": 800,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "cd6195be-ed11-11ef-a82a-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 801,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "fdb12f36-ed11-11ef-b5f7-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 802,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "129c90e2-ed13-11ef-b6b9-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 803,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "ce3a971e-ed35-11ef-8edb-0e586f6f8a1e"
+        }
+    },
+    {
+        "model": "design.material",
+        "pk": 804,
+        "fields": {
+            "label": "\u4e54\u96c5\u767b\u6781\u81f4",
+            "name": "qiao_ya_deng_ji_zhi",
+            "pym": "qydjz",
+            "erpsys_id": "fdf9963c-edc4-11ef-aa01-0e586f6f8a1e"
+        }
+    },
+    {
         "model": "design.service",
         "pk": 1,
         "fields": {
@@ -5006,6 +5056,7 @@
             "serve_content_type": 21,
             "subject": 57,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5027,6 +5078,7 @@
             "serve_content_type": 21,
             "subject": 57,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5048,6 +5100,7 @@
             "serve_content_type": 23,
             "subject": 79,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5069,6 +5122,7 @@
             "serve_content_type": 23,
             "subject": 79,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5090,6 +5144,7 @@
             "serve_content_type": 23,
             "subject": 99,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5111,6 +5166,7 @@
             "serve_content_type": 23,
             "subject": 114,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5132,6 +5188,7 @@
             "serve_content_type": 23,
             "subject": 126,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5153,6 +5210,7 @@
             "serve_content_type": 23,
             "subject": 100,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5174,6 +5232,7 @@
             "serve_content_type": 23,
             "subject": 107,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5195,6 +5254,7 @@
             "serve_content_type": 23,
             "subject": 108,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5216,6 +5276,7 @@
             "serve_content_type": 23,
             "subject": 109,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5237,6 +5298,7 @@
             "serve_content_type": 23,
             "subject": 110,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5258,6 +5320,7 @@
             "serve_content_type": 23,
             "subject": 111,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5279,6 +5342,7 @@
             "serve_content_type": 23,
             "subject": 112,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5300,6 +5364,7 @@
             "serve_content_type": 23,
             "subject": 113,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5321,6 +5386,7 @@
             "serve_content_type": 23,
             "subject": 117,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5342,6 +5408,7 @@
             "serve_content_type": 23,
             "subject": 118,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5363,6 +5430,7 @@
             "serve_content_type": 23,
             "subject": 116,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5384,6 +5452,7 @@
             "serve_content_type": 23,
             "subject": 101,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5405,6 +5474,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5426,6 +5496,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5447,6 +5518,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": true,
             "action_func_name": "send_wechart_message",
             "action_api": 1,
             "action_api_params": null,
@@ -5468,6 +5540,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5489,6 +5562,7 @@
             "serve_content_type": 23,
             "subject": 124,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5510,6 +5584,7 @@
             "serve_content_type": 23,
             "subject": 79,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5531,6 +5606,7 @@
             "serve_content_type": 23,
             "subject": 92,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5552,6 +5628,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": false,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5573,6 +5650,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": false,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5594,6 +5672,7 @@
             "serve_content_type": 23,
             "subject": 133,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5615,6 +5694,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5636,6 +5716,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5657,6 +5738,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": false,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5678,6 +5760,7 @@
             "serve_content_type": 23,
             "subject": 99,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5699,6 +5782,7 @@
             "serve_content_type": 23,
             "subject": 123,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5720,6 +5804,7 @@
             "serve_content_type": 23,
             "subject": null,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5741,6 +5826,7 @@
             "serve_content_type": 23,
             "subject": null,
             "form": null,
+            "primitive": true,
             "action_func_name": null,
             "action_api": null,
             "action_api_params": null,
@@ -5918,6 +6004,158 @@
         }
     },
     {
+        "model": "design.servicelibrary",
+        "pk": 1,
+        "fields": {
+            "label": "\u670d\u52a1\u5f00\u59cb - \u5ba2\u6237\u63a5\u5f85",
+            "name": "fu_wu_kai_shi_ke_hu_jie_dai",
+            "pym": "fwkskhjd",
+            "erpsys_id": "568a471e-ece0-11ef-b493-0e586f6f8a1e",
+            "belongs_to_service": 29,
+            "order": 10,
+            "service": 29,
+            "event": 2,
+            "system_instruction": 2,
+            "operand_service": 4,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "design.servicelibrary",
+        "pk": 2,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u5230\u8bca\u786e\u8ba4",
+            "name": "wan_cheng_dao_zhen_que_ren",
+            "pym": "wcdzqr",
+            "erpsys_id": "21d70b32-ece1-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 29,
+            "order": 20,
+            "service": 4,
+            "event": 1,
+            "system_instruction": 2,
+            "operand_service": 28,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "design.servicelibrary",
+        "pk": 3,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u7ef4\u62a4\u5ba2\u6237\u6863\u6848",
+            "name": "wan_cheng_wei_hu_ke_hu_dang_an",
+            "pym": "wcwhkhda",
+            "erpsys_id": "4c10f688-ece1-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 29,
+            "order": 30,
+            "service": 28,
+            "event": 1,
+            "system_instruction": 2,
+            "operand_service": 5,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "design.servicelibrary",
+        "pk": 4,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u5065\u5eb7\u8c03\u67e5",
+            "name": "wan_cheng_jian_kang_diao_cha",
+            "pym": "wcjkdc",
+            "erpsys_id": "66e85690-ece1-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 29,
+            "order": 40,
+            "service": 5,
+            "event": 1,
+            "system_instruction": 4,
+            "operand_service": null,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "design.servicelibrary",
+        "pk": 5,
+        "fields": {
+            "label": "\u670d\u52a1\u5f00\u59cb - \u63a5\u8bca",
+            "name": "fu_wu_kai_shi_jie_zhen",
+            "pym": "fwksjz",
+            "erpsys_id": "b63cb5ec-ece1-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 30,
+            "order": 110,
+            "service": 30,
+            "event": 2,
+            "system_instruction": 2,
+            "operand_service": 8,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "design.servicelibrary",
+        "pk": 6,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u9762\u8bca\u8bc4\u4f30",
+            "name": "wan_cheng_mian_zhen_ping_gu",
+            "pym": "wcmzpg",
+            "erpsys_id": "01074a10-ece2-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 30,
+            "order": 120,
+            "service": 8,
+            "event": 1,
+            "system_instruction": 2,
+            "operand_service": 35,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "design.servicelibrary",
+        "pk": 7,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u76ae\u80a4\u68c0\u67e5",
+            "name": "wan_cheng_pi_fu_jian_cha",
+            "pym": "wcpfjc",
+            "erpsys_id": "13f9b90a-ece2-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 30,
+            "order": 130,
+            "service": 35,
+            "event": 1,
+            "system_instruction": 2,
+            "operand_service": 19,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "design.servicelibrary",
+        "pk": 8,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u8bca\u65ad\u53ca\u5904\u7406",
+            "name": "wan_cheng_zhen_duan_ji_chu_li",
+            "pym": "wczdjcl",
+            "erpsys_id": "2d51cd0c-ece2-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 30,
+            "order": 140,
+            "service": 19,
+            "event": 1,
+            "system_instruction": 4,
+            "operand_service": null,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
         "model": "design.serviceprogram",
         "pk": 1,
         "fields": {
@@ -5961,6 +6199,7 @@
             "name": "xin_jian_ke_hu_fu_wu",
             "pym": "xjkhfw",
             "erpsys_id": "beab02a8-b3af-11ef-8d4c-0e586f6f8a1e",
+            "order": 10,
             "service_program": 1,
             "service": 34,
             "event": 2,
@@ -5968,8 +6207,7 @@
             "operand_service": 3,
             "entity_content_type": 23,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 10
+            "parameter_values": null
         }
     },
     {
@@ -5980,6 +6218,7 @@
             "name": "xin_yu_yue_wan_cheng",
             "pym": "xyywc",
             "erpsys_id": "d9e6e0f0-b3af-11ef-8d4c-0e586f6f8a1e",
+            "order": 20,
             "service_program": 1,
             "service": 3,
             "event": 1,
@@ -5987,8 +6226,7 @@
             "operand_service": 26,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 20
+            "parameter_values": null
         }
     },
     {
@@ -5999,6 +6237,7 @@
             "name": "dao_zhen_ti_xing_wan_cheng",
             "pym": "dztxwc",
             "erpsys_id": "3d91d84e-b3b0-11ef-8d4c-0e586f6f8a1e",
+            "order": 30,
             "service_program": 1,
             "service": 26,
             "event": 1,
@@ -6006,132 +6245,18 @@
             "operand_service": 29,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 30
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 5,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u5230\u8bca\u786e\u8ba4",
-            "name": "dao_zhen_que_ren_wan_cheng",
-            "pym": "dzqrwc",
-            "erpsys_id": "d2452a22-b3b0-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 4,
-            "event": 1,
-            "system_instruction": 2,
-            "operand_service": 28,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 50
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 6,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u7ef4\u62a4\u5ba2\u6237\u6863\u6848",
-            "name": "wei_hu_ke_hu_dang_an_wan_cheng",
-            "pym": "whkhdawc",
-            "erpsys_id": "f3276a34-b3b0-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 28,
-            "event": 1,
-            "system_instruction": 2,
-            "operand_service": 5,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 60
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 7,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u9762\u8bca\u8bc4\u4f30",
-            "name": "mian_zhen_ping_gu_wan_cheng",
-            "pym": "mzpgwc",
-            "erpsys_id": "0b1be458-b3b1-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 8,
-            "event": 1,
-            "system_instruction": 2,
-            "operand_service": 19,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 100
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 8,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u8bca\u65ad\u53ca\u5904\u7406",
-            "name": "zhen_duan_wan_cheng",
-            "pym": "zdwc",
-            "erpsys_id": "2bd6944a-b3b1-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 19,
-            "event": 1,
-            "system_instruction": null,
-            "operand_service": 30,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 110
+            "parameter_values": null
         }
     },
     {
         "model": "design.servicerule",
         "pk": 9,
         "fields": {
-            "label": "\u670d\u52a1\u5f00\u59cb - \u5ba2\u6237\u63a5\u5f85",
+            "label": "\u5b8c\u6210 - \u5ba2\u6237\u63a5\u5f85",
             "name": "xin_jian_ke_hu_jie_dai",
             "pym": "xjkhjd",
             "erpsys_id": "4f8ce414-b3b8-11ef-84fd-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 29,
-            "event": 2,
-            "system_instruction": 2,
-            "operand_service": 4,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 40
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 10,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u5065\u5eb7\u8c03\u67e5",
-            "name": "jian_kang_diao_cha_wan_cheng",
-            "pym": "jkdcwc",
-            "erpsys_id": "950c5682-b3b8-11ef-84fd-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 5,
-            "event": 1,
-            "system_instruction": null,
-            "operand_service": 29,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 70
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 11,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u5ba2\u6237\u63a5\u5f85",
-            "name": "ke_hu_jie_dai_wan_cheng",
-            "pym": "khjdwc",
-            "erpsys_id": "d48d3506-b3b8-11ef-84fd-0e586f6f8a1e",
+            "order": 40,
             "service_program": 1,
             "service": 29,
             "event": 1,
@@ -6139,27 +6264,7 @@
             "operand_service": 30,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 80
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 12,
-        "fields": {
-            "label": "\u670d\u52a1\u5f00\u59cb - \u63a5\u8bca",
-            "name": "xin_jian_jie_zhen",
-            "pym": "xjjz",
-            "erpsys_id": "188c0bce-b3b9-11ef-84fd-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 30,
-            "event": 2,
-            "system_instruction": 2,
-            "operand_service": 8,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 90
+            "parameter_values": null
         }
     },
     {
@@ -6170,6 +6275,7 @@
             "name": "jie_zhen_wan_cheng",
             "pym": "jzwc",
             "erpsys_id": "528598ea-b3b9-11ef-84fd-0e586f6f8a1e",
+            "order": 50,
             "service_program": 1,
             "service": 30,
             "event": 1,
@@ -6177,8 +6283,7 @@
             "operand_service": 7,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 120
+            "parameter_values": null
         }
     },
     {
@@ -6189,6 +6294,7 @@
             "name": "jiao_fei_wan_cheng",
             "pym": "jfwc",
             "erpsys_id": "6a576f8e-b3b9-11ef-84fd-0e586f6f8a1e",
+            "order": 60,
             "service_program": 1,
             "service": 7,
             "event": 1,
@@ -6196,103 +6302,26 @@
             "operand_service": 33,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 130
+            "parameter_values": null
         }
     },
     {
         "model": "design.servicerule",
         "pk": 15,
         "fields": {
-            "label": "\u8c03\u7528\u670d\u52a1 - \u9762\u8bca\u8bc4\u4f30",
-            "name": "diao_yong_pi_fu_jian_cha",
-            "pym": "dypfjc",
-            "erpsys_id": "30a29d04-b3dc-11ef-ac09-0e586f6f8a1e",
+            "label": "\u5b8c\u6210 - \u6cbb\u7597\u670d\u52a1",
+            "name": "wan_cheng_zhi_liao_fu_wu",
+            "pym": "wczlfw",
+            "erpsys_id": "bd15fc44-edc1-11ef-aa01-0e586f6f8a1e",
+            "order": 70,
             "service_program": 1,
-            "service": 8,
-            "event": 3,
-            "system_instruction": 2,
-            "operand_service": 35,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 95
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 16,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u76ae\u80a4\u68c0\u67e5",
-            "name": "pi_fu_jian_cha_wan_cheng",
-            "pym": "pfjcwc",
-            "erpsys_id": "5db987bc-b3dc-11ef-ac09-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 35,
+            "service": 33,
             "event": 1,
             "system_instruction": 4,
             "operand_service": null,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 97
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 17,
-        "fields": {
-            "label": "\u670d\u52a1\u5f00\u59cb - \u6cbb\u7597\u670d\u52a1",
-            "name": "kai_shi_fu_wu_cheng_xu_zhi_liao_fu_wu",
-            "pym": "ksfwcxzlfw",
-            "erpsys_id": "452d5d8a-b450-11ef-91f6-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 33,
-            "event": 2,
-            "system_instruction": 2,
-            "operand_service": 37,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 140
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 18,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u6cbb\u7597\u670d\u52a1",
-            "name": "wan_cheng_zhi_liao_fu_wu",
-            "pym": "wczlfw",
-            "erpsys_id": "9dd02346-b450-11ef-91f6-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 33,
-            "event": 1,
-            "system_instruction": null,
-            "operand_service": 33,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 150
-        }
-    },
-    {
-        "model": "design.servicerule",
-        "pk": 19,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u5ba2\u6237\u670d\u52a1",
-            "name": "wan_cheng_ke_hu_fu_wu",
-            "pym": "wckhfw",
-            "erpsys_id": "ec69144c-d6e5-11ef-a2f6-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 34,
-            "event": 1,
-            "system_instruction": null,
-            "operand_service": 34,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 160
+            "parameter_values": null
         }
     },
     {
@@ -9085,7 +9114,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "SYSTEM"
+                "service_type": "SYSTEM",
+                "primitive": true
             }
         }
     },
@@ -9119,7 +9149,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "SYSTEM"
+                "service_type": "SYSTEM",
+                "primitive": true
             }
         }
     },
@@ -9153,7 +9184,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9187,7 +9219,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9221,7 +9254,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9255,7 +9289,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9289,7 +9324,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9323,7 +9359,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9357,7 +9394,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9391,7 +9429,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9425,7 +9464,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9459,7 +9499,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9493,7 +9534,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9527,7 +9569,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9561,7 +9604,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9595,7 +9639,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9629,7 +9674,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9663,7 +9709,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9697,7 +9744,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9731,7 +9779,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9765,7 +9814,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9832,7 +9882,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9866,7 +9917,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "SYSTEM"
+                "service_type": "SYSTEM",
+                "primitive": true
             }
         }
     },
@@ -9900,7 +9952,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9934,7 +9987,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -9968,7 +10022,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -10018,7 +10073,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": false
             }
         }
     },
@@ -10063,7 +10119,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": false
             }
         }
     },
@@ -10097,7 +10154,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "SYSTEM"
+                "service_type": "SYSTEM",
+                "primitive": true
             }
         }
     },
@@ -10131,7 +10189,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -10165,7 +10224,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -10199,7 +10259,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": false
             }
         }
     },
@@ -10233,7 +10294,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "MANUAL"
+                "service_type": "MANUAL",
+                "primitive": true
             }
         }
     },
@@ -10267,7 +10329,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "SYSTEM"
+                "service_type": "SYSTEM",
+                "primitive": true
             }
         }
     },
@@ -10298,7 +10361,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "SYSTEM"
+                "service_type": "SYSTEM",
+                "primitive": true
             }
         }
     },
@@ -10329,7 +10393,8 @@
                 "route_to": {},
                 "reference": [],
                 "program": null,
-                "service_type": "SYSTEM"
+                "service_type": "SYSTEM",
+                "primitive": true
             }
         }
     },
@@ -10451,6 +10516,158 @@
         }
     },
     {
+        "model": "kernel.servicelibrary",
+        "pk": 1,
+        "fields": {
+            "label": "\u670d\u52a1\u5f00\u59cb - \u5ba2\u6237\u63a5\u5f85",
+            "name": "fu_wu_kai_shi_ke_hu_jie_dai",
+            "pym": "fwkskhjd",
+            "erpsys_id": "568a471e-ece0-11ef-b493-0e586f6f8a1e",
+            "belongs_to_service": 490,
+            "order": 10,
+            "service": 490,
+            "event": 41,
+            "system_instruction": 40,
+            "operand_service": 468,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "kernel.servicelibrary",
+        "pk": 2,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u5230\u8bca\u786e\u8ba4",
+            "name": "wan_cheng_dao_zhen_que_ren",
+            "pym": "wcdzqr",
+            "erpsys_id": "21d70b32-ece1-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 490,
+            "order": 20,
+            "service": 468,
+            "event": 40,
+            "system_instruction": 40,
+            "operand_service": 489,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "kernel.servicelibrary",
+        "pk": 3,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u7ef4\u62a4\u5ba2\u6237\u6863\u6848",
+            "name": "wan_cheng_wei_hu_ke_hu_dang_an",
+            "pym": "wcwhkhda",
+            "erpsys_id": "4c10f688-ece1-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 490,
+            "order": 30,
+            "service": 489,
+            "event": 40,
+            "system_instruction": 40,
+            "operand_service": 469,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "kernel.servicelibrary",
+        "pk": 4,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u5065\u5eb7\u8c03\u67e5",
+            "name": "wan_cheng_jian_kang_diao_cha",
+            "pym": "wcjkdc",
+            "erpsys_id": "66e85690-ece1-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 490,
+            "order": 40,
+            "service": 469,
+            "event": 40,
+            "system_instruction": 42,
+            "operand_service": null,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "kernel.servicelibrary",
+        "pk": 5,
+        "fields": {
+            "label": "\u670d\u52a1\u5f00\u59cb - \u63a5\u8bca",
+            "name": "fu_wu_kai_shi_jie_zhen",
+            "pym": "fwksjz",
+            "erpsys_id": "b63cb5ec-ece1-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 491,
+            "order": 110,
+            "service": 491,
+            "event": 41,
+            "system_instruction": 40,
+            "operand_service": 472,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "kernel.servicelibrary",
+        "pk": 6,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u9762\u8bca\u8bc4\u4f30",
+            "name": "wan_cheng_mian_zhen_ping_gu",
+            "pym": "wcmzpg",
+            "erpsys_id": "01074a10-ece2-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 491,
+            "order": 120,
+            "service": 472,
+            "event": 40,
+            "system_instruction": 40,
+            "operand_service": 496,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "kernel.servicelibrary",
+        "pk": 7,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u76ae\u80a4\u68c0\u67e5",
+            "name": "wan_cheng_pi_fu_jian_cha",
+            "pym": "wcpfjc",
+            "erpsys_id": "13f9b90a-ece2-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 491,
+            "order": 130,
+            "service": 496,
+            "event": 40,
+            "system_instruction": 40,
+            "operand_service": 483,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "kernel.servicelibrary",
+        "pk": 8,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u8bca\u65ad\u53ca\u5904\u7406",
+            "name": "wan_cheng_zhen_duan_ji_chu_li",
+            "pym": "wczdjcl",
+            "erpsys_id": "2d51cd0c-ece2-11ef-a1f0-0e586f6f8a1e",
+            "belongs_to_service": 491,
+            "order": 140,
+            "service": 483,
+            "event": 40,
+            "system_instruction": 42,
+            "operand_service": null,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
         "model": "kernel.serviceprogram",
         "pk": 1,
         "fields": {
@@ -10460,7 +10677,7 @@
             "erpsys_id": "06430890-bd47-11ef-adfc-0e586f6f8a1e",
             "version": null,
             "sys_default": false,
-            "entity_content_type": 42,
+            "entity_content_type": 43,
             "entity_object_id": null,
             "manual_start": true,
             "active": true,
@@ -10478,7 +10695,7 @@
             "erpsys_id": "548be03a-c99f-11ef-ae65-0e586f6f8a1e",
             "version": null,
             "sys_default": true,
-            "entity_content_type": 42,
+            "entity_content_type": 43,
             "entity_object_id": null,
             "manual_start": false,
             "active": true,
@@ -10488,363 +10705,135 @@
     },
     {
         "model": "kernel.servicerule",
-        "pk": 40,
-        "fields": {
-            "label": "\u7528\u6237\u767b\u5f55\u5b8c\u6210",
-            "name": "logined",
-            "pym": "yhdlwc",
-            "erpsys_id": "9c286804-40c5-11ef-95e5-0e586f6f8a1e",
-            "service_program": 2,
-            "service": 463,
-            "event": 40,
-            "system_instruction": null,
-            "operand_service": null,
-            "entity_content_type": 42,
-            "entity_object_id": null,
-            "parameter_values": "{\"active\": True}",
-            "order": 0
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 41,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u65b0\u9884\u7ea6",
-            "name": "xin_yu_yue_wan_cheng",
-            "pym": "xyywc",
-            "erpsys_id": "d9e6e0f0-b3af-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 467,
-            "event": 40,
-            "system_instruction": 40,
-            "operand_service": 487,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 20
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 42,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u5230\u8bca\u63d0\u9192",
-            "name": "dao_zhen_ti_xing_wan_cheng",
-            "pym": "dztxwc",
-            "erpsys_id": "3d91d84e-b3b0-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 487,
-            "event": 40,
-            "system_instruction": 40,
-            "operand_service": 490,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 30
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 43,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u5230\u8bca\u786e\u8ba4",
-            "name": "dao_zhen_que_ren_wan_cheng",
-            "pym": "dzqrwc",
-            "erpsys_id": "d2452a22-b3b0-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 468,
-            "event": 40,
-            "system_instruction": 40,
-            "operand_service": 489,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 50
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 44,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u7ef4\u62a4\u5ba2\u6237\u6863\u6848",
-            "name": "wei_hu_ke_hu_dang_an_wan_cheng",
-            "pym": "whkhdawc",
-            "erpsys_id": "f3276a34-b3b0-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 489,
-            "event": 40,
-            "system_instruction": 40,
-            "operand_service": 469,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 60
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 45,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u9762\u8bca\u8bc4\u4f30",
-            "name": "mian_zhen_ping_gu_wan_cheng",
-            "pym": "mzpgwc",
-            "erpsys_id": "0b1be458-b3b1-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 472,
-            "event": 40,
-            "system_instruction": 40,
-            "operand_service": 483,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 100
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 46,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u8bca\u65ad\u53ca\u5904\u7406",
-            "name": "zhen_duan_wan_cheng",
-            "pym": "zdwc",
-            "erpsys_id": "2bd6944a-b3b1-11ef-8d4c-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 483,
-            "event": 40,
-            "system_instruction": null,
-            "operand_service": 491,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 110
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 47,
+        "pk": 59,
         "fields": {
             "label": "\u670d\u52a1\u5f00\u59cb - \u5ba2\u6237\u670d\u52a1",
             "name": "xin_jian_ke_hu_fu_wu",
             "pym": "xjkhfw",
             "erpsys_id": "beab02a8-b3af-11ef-8d4c-0e586f6f8a1e",
             "service_program": 1,
+            "order": 10,
             "service": 495,
             "event": 41,
             "system_instruction": 40,
             "operand_service": 467,
-            "entity_content_type": 42,
+            "entity_content_type": 43,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 10
+            "parameter_values": null
         }
     },
     {
         "model": "kernel.servicerule",
-        "pk": 48,
+        "pk": 60,
         "fields": {
-            "label": "\u5b8c\u6210 - \u5065\u5eb7\u8c03\u67e5",
-            "name": "jian_kang_diao_cha_wan_cheng",
-            "pym": "jkdcwc",
-            "erpsys_id": "950c5682-b3b8-11ef-84fd-0e586f6f8a1e",
+            "label": "\u5b8c\u6210 - \u65b0\u9884\u7ea6",
+            "name": "xin_yu_yue_wan_cheng",
+            "pym": "xyywc",
+            "erpsys_id": "d9e6e0f0-b3af-11ef-8d4c-0e586f6f8a1e",
             "service_program": 1,
-            "service": 469,
+            "order": 20,
+            "service": 467,
             "event": 40,
-            "system_instruction": null,
+            "system_instruction": 40,
+            "operand_service": 487,
+            "entity_content_type": null,
+            "entity_object_id": null,
+            "parameter_values": null
+        }
+    },
+    {
+        "model": "kernel.servicerule",
+        "pk": 61,
+        "fields": {
+            "label": "\u5b8c\u6210 - \u5230\u8bca\u63d0\u9192",
+            "name": "dao_zhen_ti_xing_wan_cheng",
+            "pym": "dztxwc",
+            "erpsys_id": "3d91d84e-b3b0-11ef-8d4c-0e586f6f8a1e",
+            "service_program": 1,
+            "order": 30,
+            "service": 487,
+            "event": 40,
+            "system_instruction": 40,
             "operand_service": 490,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 70
+            "parameter_values": null
         }
     },
     {
         "model": "kernel.servicerule",
-        "pk": 49,
+        "pk": 62,
         "fields": {
             "label": "\u5b8c\u6210 - \u5ba2\u6237\u63a5\u5f85",
-            "name": "ke_hu_jie_dai_wan_cheng",
-            "pym": "khjdwc",
-            "erpsys_id": "d48d3506-b3b8-11ef-84fd-0e586f6f8a1e",
+            "name": "xin_jian_ke_hu_jie_dai",
+            "pym": "xjkhjd",
+            "erpsys_id": "4f8ce414-b3b8-11ef-84fd-0e586f6f8a1e",
             "service_program": 1,
+            "order": 40,
             "service": 490,
             "event": 40,
             "system_instruction": 40,
             "operand_service": 491,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 80
+            "parameter_values": null
         }
     },
     {
         "model": "kernel.servicerule",
-        "pk": 50,
+        "pk": 63,
         "fields": {
             "label": "\u5b8c\u6210 - \u63a5\u8bca",
             "name": "jie_zhen_wan_cheng",
             "pym": "jzwc",
             "erpsys_id": "528598ea-b3b9-11ef-84fd-0e586f6f8a1e",
             "service_program": 1,
+            "order": 50,
             "service": 491,
             "event": 40,
             "system_instruction": 40,
             "operand_service": 471,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 120
+            "parameter_values": null
         }
     },
     {
         "model": "kernel.servicerule",
-        "pk": 51,
+        "pk": 64,
         "fields": {
             "label": "\u5b8c\u6210 - \u4ea4\u8d39",
             "name": "jiao_fei_wan_cheng",
             "pym": "jfwc",
             "erpsys_id": "6a576f8e-b3b9-11ef-84fd-0e586f6f8a1e",
             "service_program": 1,
+            "order": 60,
             "service": 471,
             "event": 40,
             "system_instruction": 40,
             "operand_service": 494,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 130
+            "parameter_values": null
         }
     },
     {
         "model": "kernel.servicerule",
-        "pk": 52,
+        "pk": 65,
         "fields": {
-            "label": "\u670d\u52a1\u5f00\u59cb - \u5ba2\u6237\u63a5\u5f85",
-            "name": "xin_jian_ke_hu_jie_dai",
-            "pym": "xjkhjd",
-            "erpsys_id": "4f8ce414-b3b8-11ef-84fd-0e586f6f8a1e",
+            "label": "\u5b8c\u6210 - \u6cbb\u7597\u670d\u52a1",
+            "name": "wan_cheng_zhi_liao_fu_wu",
+            "pym": "wczlfw",
+            "erpsys_id": "bd15fc44-edc1-11ef-aa01-0e586f6f8a1e",
             "service_program": 1,
-            "service": 490,
-            "event": 41,
-            "system_instruction": 40,
-            "operand_service": 468,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 40
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 53,
-        "fields": {
-            "label": "\u670d\u52a1\u5f00\u59cb - \u63a5\u8bca",
-            "name": "xin_jian_jie_zhen",
-            "pym": "xjjz",
-            "erpsys_id": "188c0bce-b3b9-11ef-84fd-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 491,
-            "event": 41,
-            "system_instruction": 40,
-            "operand_service": 472,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 90
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 54,
-        "fields": {
-            "label": "\u8c03\u7528\u670d\u52a1 - \u9762\u8bca\u8bc4\u4f30",
-            "name": "diao_yong_pi_fu_jian_cha",
-            "pym": "dypfjc",
-            "erpsys_id": "30a29d04-b3dc-11ef-ac09-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 472,
-            "event": 42,
-            "system_instruction": 40,
-            "operand_service": 496,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 95
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 55,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u76ae\u80a4\u68c0\u67e5",
-            "name": "pi_fu_jian_cha_wan_cheng",
-            "pym": "pfjcwc",
-            "erpsys_id": "5db987bc-b3dc-11ef-ac09-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 496,
+            "order": 70,
+            "service": 494,
             "event": 40,
             "system_instruction": 42,
             "operand_service": null,
             "entity_content_type": null,
             "entity_object_id": null,
-            "parameter_values": null,
-            "order": 97
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 56,
-        "fields": {
-            "label": "\u670d\u52a1\u5f00\u59cb - \u6cbb\u7597\u670d\u52a1",
-            "name": "kai_shi_fu_wu_cheng_xu_zhi_liao_fu_wu",
-            "pym": "ksfwcxzlfw",
-            "erpsys_id": "452d5d8a-b450-11ef-91f6-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 494,
-            "event": 41,
-            "system_instruction": 40,
-            "operand_service": 498,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 140
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 57,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u6cbb\u7597\u670d\u52a1",
-            "name": "wan_cheng_zhi_liao_fu_wu",
-            "pym": "wczlfw",
-            "erpsys_id": "9dd02346-b450-11ef-91f6-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 494,
-            "event": 40,
-            "system_instruction": null,
-            "operand_service": 494,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 150
-        }
-    },
-    {
-        "model": "kernel.servicerule",
-        "pk": 58,
-        "fields": {
-            "label": "\u5b8c\u6210 - \u5ba2\u6237\u670d\u52a1",
-            "name": "wan_cheng_ke_hu_fu_wu",
-            "pym": "wckhfw",
-            "erpsys_id": "ec69144c-d6e5-11ef-a2f6-0e586f6f8a1e",
-            "service_program": 1,
-            "service": 495,
-            "event": 40,
-            "system_instruction": null,
-            "operand_service": 495,
-            "entity_content_type": null,
-            "entity_object_id": null,
-            "parameter_values": null,
-            "order": 160
+            "parameter_values": null
         }
     },
     {
@@ -11288,7 +11277,7 @@
         "model": "django_celery_beat.periodictasks",
         "pk": 1,
         "fields": {
-            "last_update": "2025-02-03T11:57:30.627Z"
+            "last_update": "2025-02-17T13:48:26.139Z"
         }
     },
     {

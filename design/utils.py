@@ -9,11 +9,11 @@ from django.core.exceptions import ValidationError
 import logging
 import json
 
-from design.models import DataItem, DESIGN_CLASS_MAPPING, Organization as design_Organization, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceProgram as design_ServiceProgram, ServiceRule as design_ServiceRule, WorkOrder as design_WorkOrder, Form as design_Form
+from design.models import DataItem, DESIGN_CLASS_MAPPING, Organization as design_Organization, Role as design_Role, Operator as design_Operator, Resource as design_Resource, Material as design_Material, Equipment as design_Equipment, Device as design_Device, Capital as design_Capital, Knowledge as design_Knowledge, Service as design_Service, Event as design_Event, Instruction as design_Instruction, ServiceLibrary as design_ServiceLibrary, ServiceProgram as design_ServiceProgram, ServiceRule as design_ServiceRule, WorkOrder as design_WorkOrder, Form as design_Form
 from design.models import ServiceConsists, MaterialRequirements, EquipmentRequirements, DeviceRequirements, CapitalRequirements, KnowledgeRequirements
 from design.script_file_header import ScriptFileHeader, get_master_field_script, get_admin_script, get_model_footer
 
-from kernel.models import Organization as kernel_Organization, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceProgram as kernel_ServiceProgram, ServiceRule as kernel_ServiceRule, WorkOrder as kernel_WorkOrder, Form as kernel_Form, SysParams as kernel_SysParams
+from kernel.models import Organization as kernel_Organization, Role as kernel_Role, Operator as kernel_Operator, Resource as kernel_Resource, Service as kernel_Service, Event as kernel_Event, Instruction as kernel_Instruction, ServiceLibrary as kernel_ServiceLibrary, ServiceProgram as kernel_ServiceProgram, ServiceRule as kernel_ServiceRule, WorkOrder as kernel_WorkOrder, Form as kernel_Form, SysParams as kernel_SysParams
 from applications.models import CLASS_MAPPING
 # Material as applications_Material, Equipment as applications_Equipment, Device as applications_Device, Capital as applications_Capital, Knowledge as applications_Knowledge
 
@@ -37,6 +37,7 @@ COPY_CLASS_MAPPING = {
     # 二级依赖
     "Operator": (design_Operator, kernel_Operator),   # 依赖Organization和Role
     "ServiceProgram": (design_ServiceProgram, kernel_ServiceProgram),  # 依赖Operator
+    "ServiceLibrary": (design_ServiceLibrary, kernel_ServiceLibrary),  # 依赖Service、Event、Instruction
     
     # 三级依赖
     "ServiceRule": (design_ServiceRule, kernel_ServiceRule),  # 依赖Service、Event、Instruction、ServiceProgram
@@ -226,7 +227,8 @@ def generate_source_code(project):
                     for item in service.reference.all()
                 ],
                 "program": service.program,
-                "service_type": service.service_type
+                "service_type": service.service_type,
+                "primitive": service.primitive
             }
 
         # 按照依赖顺序复制模型
