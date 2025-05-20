@@ -181,6 +181,7 @@ class Service(ERPSysBase):
     subject = models.ForeignKey(DataItem, on_delete=models.SET_NULL, limit_choices_to=Q(implement_type__in = ['Model', 'Log']), related_name='served_services', blank=True, null=True, verbose_name="作业记录")
     form = models.ForeignKey("Form", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
     primitive = models.BooleanField(default=True, verbose_name="基本服务")
+    manual_start = models.BooleanField(default=False, verbose_name="手动启动")
     action_func_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='动作函数名')
     action_api = models.ForeignKey("Api", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="API")
     action_api_params = models.JSONField(blank=True, null=True, verbose_name="API参数")
@@ -355,46 +356,9 @@ class Instruction(ERPSysBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-class ServiceLibrary(ERPSysBase):
-    belongs_to_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='services_belong_to', verbose_name="隶属服务")
-    order = models.SmallIntegerField(default=0, verbose_name="顺序")
-    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
-    event = models.ForeignKey(Event, on_delete=models.SET_NULL,  blank=True, null=True, verbose_name="事件")
-    system_instruction = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
-    operand_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="design_ruled_as_next_service_func", verbose_name="后续服务")
-    entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, related_name="design_service_func", verbose_name="实体类型")
-    entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
-    entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
-    parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
-
-    class Meta:
-        verbose_name = "服务-函数库"
-        verbose_name_plural = verbose_name
-        ordering = ['belongs_to_service', 'order', 'service', 'event', 'id']
-
-    def save(self, *args, **kwargs):
-        self.label = f"{self.event.label} - {self.service.label}"
-        super().save(*args, **kwargs)
-
-class ServiceProgram(ERPSysBase):
-    version = models.CharField(max_length=255, blank=True, null=True, verbose_name="版本")
-    sys_default = models.BooleanField(default=False, verbose_name="系统默认")
-    entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, verbose_name="实体类型")
-    entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
-    entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
-    manual_start = models.BooleanField(default=True, verbose_name="手动启动")
-    active = models.BooleanField(default=True, verbose_name="启用")
-    creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="创建者")
-    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
-
-    class Meta:
-        verbose_name = "服务-程序"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
 class ServiceRule(ERPSysBase):
+    target_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='services_belong_to', verbose_name="隶属服务")
     order = models.SmallIntegerField(default=0, verbose_name="顺序")
-    service_program = models.ForeignKey(ServiceProgram, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务程序")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="主体服务")
     event = models.ForeignKey(Event, on_delete=models.CASCADE,  blank=True, null=True, verbose_name="事件")
     system_instruction = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
@@ -407,7 +371,7 @@ class ServiceRule(ERPSysBase):
     class Meta:
         verbose_name = "服务-规则"
         verbose_name_plural = verbose_name
-        ordering = ['order', 'service', 'event', 'id']
+        ordering = ['target_service', 'order', 'service', 'event', 'id']
 
     def save(self, *args, **kwargs):
         self.label = f"{self.event.label} - {self.service.label}"

@@ -93,6 +93,8 @@ class Resource(ERPSysBase):
         ordering = ['id']
 
 class Service(ERPSysBase):
+    serve_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name="content_type_served",null=True, blank=True, verbose_name="服务对象类型")
+    manual_start = models.BooleanField(default=False, verbose_name="手动启动")
     config = models.JSONField(blank=True, null=True, verbose_name="配置")
 
     class Meta:
@@ -149,44 +151,8 @@ class Instruction(ERPSysBase):
     def __str__(self):
         return self.label
 
-class ServiceLibrary(ERPSysBase):
-    belongs_to_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='services_belong_to', verbose_name="隶属服务")
-    order = models.SmallIntegerField(default=0, verbose_name="顺序")
-    service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
-    event = models.ForeignKey(Event, on_delete=models.SET_NULL,  blank=True, null=True, verbose_name="事件")
-    system_instruction = models.ForeignKey(Instruction, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='系统指令')
-    operand_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, related_name="kernel_ruled_as_next_service_func", verbose_name="后续服务")
-    entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, related_name="kernel_service_func", verbose_name="实体类型")
-    entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
-    entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
-    parameter_values = models.JSONField(blank=True, null=True, verbose_name="参数值")
-
-    class Meta:
-        verbose_name = "服务函数库"
-        verbose_name_plural = verbose_name
-        ordering = ['belongs_to_service', 'order', 'service', 'event', 'id']
-
-    def __str__(self):
-        return self.label
-
-class ServiceProgram(ERPSysBase):
-    version = models.CharField(max_length=255, blank=True, null=True, verbose_name="版本")
-    sys_default = models.BooleanField(default=False, verbose_name="系统默认")
-    entity_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True, related_name="as_entity_program", verbose_name="实体类型")
-    entity_object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name="实体ID")
-    entity_content_object = GenericForeignKey('entity_content_type', 'entity_object_id')
-    manual_start = models.BooleanField(default=True, verbose_name="手动启动")
-    active = models.BooleanField(default=True, verbose_name="启用")
-    creator = models.ForeignKey(Operator, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="创建者")
-    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
-
-    class Meta:
-        verbose_name = "服务程序"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
 class ServiceRule(ERPSysBase):
-    service_program = models.ForeignKey(ServiceProgram, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务程序")
+    target_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='services_belong_to', verbose_name="隶属服务")
     order = models.SmallIntegerField(default=0, verbose_name="顺序")
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
     event = models.ForeignKey(Event, on_delete=models.SET_NULL,  blank=True, null=True, verbose_name="事件")
@@ -200,7 +166,7 @@ class ServiceRule(ERPSysBase):
     class Meta:
         verbose_name = "服务规则"
         verbose_name_plural = verbose_name
-        ordering = ['order', 'service', 'event', 'id']
+        ordering = ['target_service', 'order', 'service', 'event', 'id']
 
     def __str__(self):
         return self.label

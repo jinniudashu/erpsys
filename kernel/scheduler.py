@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from kernel.signals import ux_input_signal
-from kernel.models import Process, ServiceProgram, ServiceRule, Operator
+from kernel.models import Process, ServiceRule, Operator, Service
 from kernel.types import ProcessState
 from kernel.sys_lib import ProcessCreator, update_task_list, update_entity_task_group_list
 
@@ -19,10 +19,11 @@ def on_user_login(sender, user, request, **kwargs):
     """
     if request.path == f'/{settings.CUSTOMER_SITE_NAME}/login/':  # 应用登录
 
-        # 创建一个登录进程, state=TERMINATED
+        # 创建一个登录守候进程, state=RUNNING
         operator = Operator.objects.get(user=user)
-        service_program = ServiceProgram.objects.get(sys_default=True)
-        service_rule = ServiceRule.objects.get(service_program=service_program, service__name='user_login')
+        # 获取登录服务程序, 有bug -> sys_default
+        service_program = Service.objects.get(label='标准登录程序')
+        service_rule = ServiceRule.objects.get(target_service=service_program, service__name='user_login')
         params = {
             "parent": None,
             "previous": None,
@@ -30,13 +31,13 @@ def on_user_login(sender, user, request, **kwargs):
             'service': service_rule.service,
             'entity_content_object': operator,
             'operator': operator,
-            'state': ProcessState.TERMINATED.name,
+            'state': ProcessState.RUNNING.name,
             'priority': 0,
             'program_entrypoint': service_program.erpsys_id,
             'init_params': {}
         }
 
-        # 创建一个登录进程
+        # 创建登录守候进程
         creator = ProcessCreator(need_business_record=False)
         proc = creator.create_process(params)
 

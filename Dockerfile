@@ -8,22 +8,25 @@ ENV PYTHONUNBUFFERED=1
 # 设置工作目录
 WORKDIR /app
 
-# 安装系统依赖
-RUN apt-get update && apt-get install -y \
+# 安装系统依赖 - 合并 RUN 命令并清理缓存
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
     curl \
     nano \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* /var/tmp/*
 
 # 将 requirements.txt 文件复制到容器中
 COPY requirements.txt /app/
 
-# 安装 Python 依赖
+# 安装 Python 依赖 - 确保清理 pip 缓存
 RUN pip install --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt \
+    && rm -rf ~/.cache/pip
 
-# 将当前目录下的所有文件复制到容器中
+# 仅复制必要的文件到容器中（使用 .dockerignore 排除不需要的文件）
 COPY . /app/
 
 USER root
@@ -32,7 +35,8 @@ USER root
 RUN chmod +x /app/wait-for-it.sh
 
 # 收集静态文件
-RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput \
+    && rm -rf /tmp/* /var/tmp/*
 
 # 暴露应用运行端口
 EXPOSE 8000

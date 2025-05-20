@@ -4,17 +4,19 @@ from django.utils import timezone
 from django.conf import settings
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from datetime import datetime, timedelta
-from enum import Enum, auto
+from datetime import datetime
 import json
 import jsonschema
 import hashlib
 import re
 
-from kernel.models import Service, Process, WorkOrder, ServiceProgram, ServiceRule, ProcessContextSnapshot
+from kernel.models import (
+    Service, ServiceRule, ProcessContextSnapshot,
+    Process, Operator, WorkOrder
+)
 from kernel.types import ProcessState, CONTEXT_SCHEMA
 
 from applications.models import *
@@ -22,30 +24,30 @@ from applications.models import *
 # ================ 1. 基础上下文数据结构 ================
 class ContextFrame:
     """
-    上下文帧
+    上下文帧：表示某个Process的执行上下文，含局部变量、调用日志等。
+    支持嵌套时，child frame 的 parent_frame 即为父Process对应的frame。
     """
-    def __init__(self, process, parent_frame=None):
+    def __init__(self, process: Process, parent_frame: 'ContextFrame' = None):
         self.process = process
-        self.parent_frame = parent_frame  # 指向父帧
-        self.status = 'ACTIVE'  
+        self.parent_frame = parent_frame  # 父帧
+        self.status = 'ACTIVE'
         self.local_vars = {}  # 任务执行过程中的局部变量
-        self.return_value = None # 任务的返回值
+        self.return_value = None  # 任务（服务函数）的返回值
         self.inherited_context = parent_frame.get_inheritable_context() if parent_frame else {}
-        self.events_triggered_log = [] # 记录任务触发的事件日志
-        self.error_info = None # 如果任务失败，存储错误信息
-        # self.resource_management = {} # 描述任务占用的资源，例如打开的文件、数据库连接等
-        # self.accounting = {}  # 描述任务所属的账务信息
-        # self.scheduling_info = {  # 调度相关信息
-        #     "last_scheduled_time": None,
-        #     "operator_time_used": 0, # 任务作业节点占用时间
-        # }
+        self.events_triggered_log = []  # 记录任务触发的事件日志
+        self.error_info = None  # 任务出错时存储信息
 
-    def get_inheritable_context(self):
-        """获取可继承的上下文数据"""
+    def get_inheritable_context(self) -> dict:
+        """
+        获取可从父帧继承的上下文。默认父帧的 local_vars 为可继承部分,
+        这里可根据业务需要做细粒度筛选。
+        """
+        if self.parent_frame:
+            return dict(self.parent_frame.local_vars)  # 浅拷贝一份即可
         return {}
 
-    def to_dict(self):
-        """将当前帧序列化为字典"""
+    def to_dict(self) -> dict:
+        """将当前帧序列化为字典，供持久化用。"""
         return {
             "process_id": self.process.erpsys_id,
             "status": self.status,
@@ -57,10 +59,12 @@ class ContextFrame:
         }
 
     @classmethod
-    def from_dict(cls, data, process_lookup):
-        """从字典创建帧实例"""
+    def from_dict(cls, data: dict, process_lookup) -> 'ContextFrame':
+        """
+        从字典创建帧实例。process_lookup: 通过erpsys_id定位Process实例的回调。
+        """
         process = process_lookup(data["process_id"])
-        frame = cls(process)
+        frame = cls(process, parent_frame=None)
         frame.status = data["status"]
         frame.local_vars = data["local_vars"]
         frame.inherited_context = data["inherited_context"]
@@ -71,81 +75,90 @@ class ContextFrame:
 
 class ContextStack:
     """
-    上下文堆栈
+    上下文堆栈：管理多个ContextFrame，用于模拟函数调用栈。
+    栈顶frame即当前执行中的Process。
     """
     def __init__(self):
-        self.frames = []  # 存储所有上下文帧的列表
+        self.frames: List[ContextFrame] = []
         
-    def push(self, process):
-        # 获取当前栈顶帧作为父帧
-        parent_frame = self.frames[-1] if self.frames else None
-        # 创建新帧，并关联父帧
+    def push(self, process: Process, parent_frame: ContextFrame = None) -> ContextFrame:
+        """
+        入栈并创建新的ContextFrame；若提供parent_frame，则将其设置为新frame的父帧。
+        若不提供，则默认以上一个栈顶frame作为父帧。
+        """
+        if parent_frame is None and self.frames:
+            parent_frame = self.frames[-1]
+
         frame = ContextFrame(process, parent_frame)
-
-        # 继承服务程序标识
-        if parent_frame:
-            frame.local_vars['service_program_id'] = parent_frame.local_vars.get('service_program_id')
-
-        # 将新帧压入栈
         self.frames.append(frame)
-
         return frame
-        
-    def pop(self):
+
+    def pop(self) -> Optional[ContextFrame]:
+        """出栈并返回当前frame"""
         return self.frames.pop() if self.frames else None
-        
-    def current_frame(self):
+
+    def current_frame(self) -> Optional[ContextFrame]:
+        """获取栈顶frame"""
         return self.frames[-1] if self.frames else None
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
+        """将整个上下文栈序列化为可JSON化的字典结构"""
         return {
             "frames": [f.to_dict() for f in self.frames],
-            # "timestamp": timezone.now().isoformat()
         }
 
     @classmethod
-    def from_dict(cls, data, process_lookup):
-        # 验证数据
+    def from_dict(cls, data: dict, process_lookup) -> 'ContextStack':
+        """
+        反序列化生成ContextStack对象。
+        需要借助process_lookup(process_id)来从erpsys_id恢复真实的Process对象。
+        """
+        # 先做结构校验
         jsonschema.validate(instance=data, schema=CONTEXT_SCHEMA)
+
         stack = cls()
-        # frames需要按照顺序重建，由于有parent关系，可以直接按顺序还原
-        # 假设frames按栈顺序存储（第0个是底层）
+        # frames按顺序还原，假设下标0是底层
         for frame_data in data["frames"]:
             frame = ContextFrame.from_dict(frame_data, process_lookup)
+            # 先暂存
             stack.frames.append(frame)
+
+        # 第二遍遍历，重新关联parent_frame（如果同一堆栈内）
+        for i in range(len(stack.frames)):
+            if i > 0:
+                stack.frames[i].parent_frame = stack.frames[i - 1]
         return stack
 
 class ProcessExecutionContext:
     """
     进程执行上下文管理器：
-    1. 支持多级调用栈（通过ContextStack保存多个ContextFrame）。
-    2. 每次进入和退出时创建新的版本快照（version号），可回溯。
-    3. 在存储和恢复时对上下文数据进行JSON Schema验证，确保数据结构一致性。
-
-    待实现优化：
-    - 可选择在进入/退出时自动调用某些 SysCall（如cleanup_service）来做资源回收（更新资源状态）等操作
+    - 通过ContextStack存储多个ContextFrame，支持多级嵌套调用；
+    - 在进入/退出时，对上下文进行快照并存储到ProcessContextSnapshot中（若有变化）；
+    - 结合SysCall机制可实现“调用子服务 -> 挂起当前进程 -> 等子进程结束 -> 子进程call_return -> 父进程恢复”。
     """
-    def __init__(self, process, parent_frame=None, version=None):
+    def __init__(self, process: Process, parent_frame: ContextFrame = None, version: int = None):
         self.process = process
         self.parent_frame = parent_frame
         self.version = version
-        self.stack = None
+        self.stack: ContextStack = None
+        self._previous_context_hash = self._get_last_context_hash(process) if process else None
 
-        # 从数据库加载上一次的哈希值
-        self._previous_context_hash = self._get_last_context_hash(process) if process else None        
-        print('ProcessExecutionContext.__init__ 创建进程上下文：', self.process, self.version)
-
-    def __enter__(self):
-        # 如果有父上下文帧，继承父上下文栈
+    def __enter__(self) -> ContextFrame:
+        # 若父帧存在，则沿用其stack，否则从DB中加载或新建stack
         if self.parent_frame:
             self.stack = self.parent_frame.stack
         else:
-            # 创建新的上下文栈
-            self.stack = ContextStack()
+            # 先尝试从DB恢复最新上下文
+            restored = self._restore_context(self.process)
+            if restored:
+                self.stack, self.version = restored
+            else:
+                self.stack = ContextStack()
+                self.version = 0
 
-        frame = self.stack.push(self.process)
-        
-        # 将进程信息序列化并加入到上下文
+        # push新的frame
+        new_frame = self.stack.push(self.process, parent_frame=self.parent_frame)
+        # 把Process本身信息放到local_vars，做评估时可访问
         process_info = {
             'process_id': self.process.erpsys_id,
             'process_name': self.process.name,
@@ -154,76 +167,48 @@ class ProcessExecutionContext:
             'process_operator': str(self.process.operator) if self.process.operator else None,
             'process_priority': self.process.priority,
             'process_created_at': self.process.created_at.isoformat() if self.process.created_at else None,
-            'process_updated_at': self.process.updated_at.isoformat() if self.process.updated_at else None
+            'process_updated_at': self.process.updated_at.isoformat() if self.process.updated_at else None,
         }
-        frame.local_vars.update(process_info)  # 将进程信息添加到上下文中
+        new_frame.local_vars.update(process_info)
 
-        # 返回当前帧
-        return frame
+        return new_frame
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        # 在退出上下文时保存快照（如有变化）
-        current_frame = self.stack.current_frame()
-
-        if exc_type is None:
-            print('此处添加任务完成处理逻辑：', current_frame.process)            
-        else:
-            print('此处添加任务异常处理逻辑：', current_frame.process)
-
+        """
+        退出上下文时，将stack序列化并保存至DB(若有变化)。
+        """
         current_hash = self._calculate_context_hash(self.stack)
-
-        if self._previous_context_hash != current_hash:
-            print("检测到上下文变化，保存新版本")
-            self.version = self._save_context(self.stack, self.process, current_hash)  # 传入当前哈希值
+        if current_hash != self._previous_context_hash:
+            self.version = self._save_context(self.stack, self.process, current_hash)
             self._previous_context_hash = current_hash
 
-    def _calculate_context_hash(self, stack):
-        """计算并返回当前上下文的哈希值"""
+        # 在正常结束时，如需清理资源或进行收尾，可在此添加逻辑
+        if exc_type is not None:
+            current_frame = self.stack.current_frame()
+            if current_frame:
+                current_frame.error_info = str(exc_val)
+            print(f"ProcessExecutionContext: 捕获异常 {exc_val} (process={self.process})")
+
+    def _calculate_context_hash(self, stack: ContextStack) -> str:
+        """
+        计算当前上下文的哈希值，用于判断上下文是否有更新。
+        """
         def normalize(d):
             if isinstance(d, dict):
                 return {k: normalize(v) for k, v in d.items()}
             elif isinstance(d, list):
                 return [normalize(x) for x in d]
             return d
-            
+
         context_dict = stack.to_dict()
         normalized_dict = normalize(context_dict)
         return hashlib.sha256(json.dumps(normalized_dict, sort_keys=True).encode()).hexdigest()
 
-    def _init_new_stack(self, process):
-        """初始化新的上下文栈"""
-        # 1. 创建新的上下文栈
-        stack = ContextStack()
-        stack.push(process)
-        frame = stack.current_frame()  # 获取当前帧
-
-        # 2. 初始化参数设置
-        if hasattr(self, 'init_params') and self.init_params:
-            # 2.1 设置核心参数
-            frame.local_vars.update({
-                'service_program_id': self.init_params.get('program_entrypoint'),
-            })
-            
-            # 2.2 设置其他自定义参数
-            custom_params = {
-                k: v for k, v in self.init_params.items() 
-                if k not in ['program_entrypoint']
-            }
-            if custom_params:
-                frame.local_vars.update(custom_params)
-
-        # 3. 版本号管理
-        latest_version = self._get_latest_version(process)
-
-        return (stack, latest_version + 1)
-
-    def _restore_context(self, process, version=None):
+    def _restore_context(self, process: Process, version: int = None) -> Optional[tuple]:
         """
-        从DB中恢复上下文栈：
-        - 如果指定version，则尝试加载对应的版本。
-        - 如果未指定version，加载最新版本。
-        - 返回(stack, version)或None如果无历史。
-        幂等恢复：恢复不会修改数据库，只读操作。
+        从数据库加载上下文堆栈：
+        - 如果指定version，则加载对应版本；
+        - 否则加载最新版本。
         """
         qs = ProcessContextSnapshot.objects.filter(process=process)
         if version:
@@ -232,77 +217,134 @@ class ProcessExecutionContext:
             qs = qs.order_by('-version')
 
         snapshot = qs.first()
-        if snapshot:
-            # 验证数据结构
-            data = snapshot.context_data
-            # 数据验证在ContextStack.from_dict中进行
-            def process_lookup(process_id):
-                from kernel.models import Process
-                return Process.objects.get(erpsys_id=process_id)
+        if not snapshot:
+            return None
 
-            stack = ContextStack.from_dict(data, process_lookup)
-            return stack, snapshot.version
-        return None
+        data = snapshot.context_data
 
-    def _save_context(self, stack, process, current_hash):
-        """保存上下文快照，同时保存哈希值"""
+        def process_lookup(pid):
+            return Process.objects.get(erpsys_id=pid)
+
+        stack = ContextStack.from_dict(data, process_lookup)
+        return stack, snapshot.version
+
+    def _save_context(self, stack: ContextStack, process: Process, current_hash: str) -> int:
+        """
+        将当前stack序列化保存为新的ProcessContextSnapshot，并返回新的version号。
+        """
         context_data = stack.to_dict()
-        
-        # 验证上下文数据结构
-        try:
-            jsonschema.validate(context_data, CONTEXT_SCHEMA)
-        except jsonschema.exceptions.ValidationError as e:
-            raise ValueError(f"Invalid context data structure: {str(e)}")
-            
-        # 获取最新版本号
-        latest_version = self._get_latest_version(process)
-        new_version = latest_version + 1
-        
-        # 创建新的快照
+        # 验证结构
+        jsonschema.validate(context_data, CONTEXT_SCHEMA)
+
+        # 获取最新version
+        latest_version = (
+            ProcessContextSnapshot.objects.filter(process=process)
+            .order_by('-version')
+            .first()
+        )
+        new_version = latest_version.version + 1 if latest_version else 1
+
         ProcessContextSnapshot.objects.create(
             process=process,
             version=new_version,
             context_data=context_data,
-            context_hash=current_hash  # 保存当前哈希值
+            context_hash=current_hash
         )
-        
         return new_version
 
-    def _get_last_context_hash(self, process):
-        """从数据库获取最后一次的上下文哈希值"""
-        last_snapshot = ProcessContextSnapshot.objects.filter(
-            process=process
-        ).order_by('-version').first()
+    def _get_last_context_hash(self, process: Process) -> Optional[str]:
+        """获取上次保存的快照哈希"""
+        last_snapshot = ProcessContextSnapshot.objects.filter(process=process).order_by('-version').first()
         return last_snapshot.context_hash if last_snapshot else None
-
-    def _get_latest_version(self, process):
-        snapshot = ProcessContextSnapshot.objects.filter(process=process).order_by('-version').first()
-        return snapshot.version if snapshot else 0
 
 class ProcessCreator:
     """
-    进程创建器：负责创建进程和相关业务记录
+    进程创建器：根据 ServiceRule 等信息创建 Process 和相应业务表单
     """
-    def __init__(self, need_business_record=True):
-        """
-        Args:
-            need_business_record: 是否创建业务记录。某些情况下不需要创建业务记录，
-                                  比如用户登录服务进程（登录信息由Django系统记录）
-        """
-        self.context = None
+    def __init__(self, need_business_record: bool = True):
         self.need_business_record = need_business_record
-    
-    def prepare_context(self, params):
-        print('prepare_context 准备进程上下文：', params)
-        """准备进程上下文"""
-        self.context = ProcessExecutionContext(None)
-        # 初始化基本参数
-        self.context.init_params = params  # 存储初始化参数
-        return self.context
 
-    def create_business_record(self, process):
-        """创建业务记录"""
-        model_name = process.service.config['subject']['name']
+    def create_process(self, kwargs: dict) -> Process:
+        """
+        创建新的服务进程，并将其纳入上下文管理。
+        kwargs 必需包含以下字段：
+          - service_rule: ServiceRule实例
+          - service: Service实例
+          - operator: Operator实例
+          - state: 初始状态 (可选，默认NEW)
+          - entity_content_object: 业务实体 (可选)
+          - parent_frame: 父进程上下文帧 (可选)
+        """        
+        service_rule = kwargs.get('service_rule')
+        if not service_rule:
+            raise ValueError("service_rule is required")
+
+        service_program = service_rule.target_service
+        service = kwargs.get('service')
+        if not service:
+            raise ValueError("service is required")
+
+        operator = kwargs.get('operator')
+        if not operator:
+            raise ValueError("operator is required")
+
+        parent_frame = kwargs.get('parent_frame', None)
+        entity = kwargs.get('entity_content_object', None)
+
+        # 创建Process
+        process_params = {
+            'name': f"{service_program.label} - {service.label} - {operator}",
+            'parent': kwargs.get('parent', None),
+            'previous': kwargs.get('previous', None),
+            'service': service,
+            'entity_content_object': entity,
+            'state': kwargs.get('state', ProcessState.NEW.name),
+            'operator': operator,
+            'priority': kwargs.get('priority', 0),
+            'program_entrypoint': service_program.erpsys_id
+        }
+        process = Process.objects.create(**process_params)
+
+        # 若此Process无显式 parent，则自指向（默认让 parent=自己）
+        if not process.parent:
+            process.parent = process
+            process.save()
+
+        # 若需创建业务记录
+        if self.need_business_record:
+            form_obj =self._create_business_record(process)
+            # 更新进程表单信息
+            process.form_content_object = form_obj
+            model_name = process.service.config.get('subject')['name']
+            process.form_url = f"/{settings.CUSTOMER_SITE_NAME}/applications/{model_name.lower()}/{form_obj.id}/change/"
+            process.save()
+
+        # 用上下文管理器写入init_params并评估规则
+        init_params = kwargs.get('init_params', {})
+        with ProcessExecutionContext(process, parent_frame=parent_frame) as frame:
+            frame.local_vars.update(init_params)
+            frame.local_vars.update({
+                'service_program_id': service_program.erpsys_id,
+                'service_rule_id': service_rule.erpsys_id
+            })
+
+            evaluator = RuleEvaluator()
+            evaluator.evaluate_rules(frame)
+
+        return process
+
+    def _create_business_record(self, process):
+        """
+        根据service.config['subject']中的模型名，为此Process创建业务表单实例。
+        如果该模型定义了master字段，则自动关联 process.entity_content_object。        
+        """
+        if not process.service or not process.service.config:
+            return
+        subject_conf = process.service.config.get('subject')
+        if not subject_conf or 'name' not in subject_conf:
+            return
+
+        model_name = subject_conf['name']
         model_class = eval(model_name)
 
         params = {
@@ -310,190 +352,134 @@ class ProcessCreator:
             'pid': process
         }
 
-        # 检查模型是否有master字段
         if hasattr(model_class, 'master'):
             params['master'] = process.entity_content_object
 
         return model_class.objects.create(**params)
 
-    def create_process(self, kwargs):
-        """
-        创建新的服务进程，同时继承父上下文。
-        Args:
-            kwargs: 包含进程创建所需参数的字典。
-            parent_frame: 父任务的上下文帧（可选）。
-        """        
-        # 验证必需参数
-        service_rule = kwargs.get('service_rule')
-        if not service_rule:
-            raise ValueError("service_rule is required")
-
-        # 获取服务程序和服务信息
-        service_program = service_rule.service_program
-        service = kwargs.get('service')
-        operand_service = service_rule.operand_service
-
-        # 获取操作者信息
-        operator = kwargs.get('operator')
-        if not operator:
-            raise ValueError("operator is required")
-
-        # 获取初始化参数
-        parent_frame = kwargs.get('parent_frame', None)
-        init_params = kwargs.get('init_params', {})
-
-        # 准备进程创建参数
-        print('create_process 准备进程创建参数：', kwargs)
-        process_params = {
-            'name': f"{service_program.label} - {service.label} - {operator}",
-            'parent': kwargs.get('parent', None),
-            'previous': kwargs.get('previous', None),
-            'service': service,
-            'entity_content_object': kwargs.get('entity_content_object'),
-            'state': kwargs.get('state', ProcessState.NEW.name),
-            'operator': operator,
-            'priority': kwargs.get('priority', 0),
-            "program_entrypoint": service_program.erpsys_id
-        }
-
-        # 1. 创建新的 Process 对象
-        process = Process.objects.create(**process_params)
-        if not process.parent:
-            process.parent = process
-
-        # 2. 创建业务记录（如果需要）
-        if self.need_business_record:
-            business_form_instance = self.create_business_record(process)
-            
-            # 更新进程表单信息
-            process.form_content_object = business_form_instance
-            process.form_url = f"/{settings.CUSTOMER_SITE_NAME}/applications/{service.config['subject']['name'].lower()}/{business_form_instance.id}/change/"
-            process.save()
-
-        # 3. 创建上下文环境
-        with ProcessExecutionContext(process, parent_frame=parent_frame) as frame:
-            # 继承父上下文变量（如果有父上下文）
-            if parent_frame:
-                frame.parent_frame = parent_frame
-                frame.local_vars.update(parent_frame.local_vars)
-
-            frame.local_vars.update(init_params)  # 存储初始化参数
-        
-            # 4. 将服务程序信息写入上下文
-            frame.local_vars.update({
-                'service_program_id': service_program.erpsys_id,
-                'service_rule_id': service_rule.erpsys_id
-            })
-
-            # 5. 执行业务规则评估
-            evaluator = RuleEvaluator()
-            evaluator.evaluate_rules(frame)
-
-        print(f"Process created: {process.id} with context {frame.to_dict()}")
-        
-        return process
-
 class RuleEvaluator:
-    """规则评估器：记录规则评估和执行日志到上下文"""
-    
+    """
+    规则评估器：对当前Frame上下文进行条件判断，若满足则执行对应系统指令
+    """
+
     def evaluate_rules(self, frame: ContextFrame):
-        """根据规则评估当前上下文中的业务事件，并记录执行日志到frame.local_vars"""
+        process = frame.process
+        service_program_id = process.program_entrypoint
+        if not service_program_id:
+            return
+
+        try:
+            sp = Service.objects.get(erpsys_id=service_program_id)
+        except Service.DoesNotExist:
+            return
+
+        # 找到与当前Process匹配的所有规则
+        rules = ServiceRule.objects.filter(
+            target_service=sp,
+            service=process.service
+        )
         eval_context = self._build_evaluation_context(frame)
 
-        service_program_id = frame.process.program_entrypoint
-        if not service_program_id:
-            raise ValueError("No ServiceProgram ID found in context")
-        service_program = ServiceProgram.objects.get(erpsys_id=service_program_id)
-
-        # 限定规则范围
-        rules = ServiceRule.objects.filter(
-            service_program=service_program,
-            service=frame.process.service,
-        )
-
         for rule in rules:
-            condition_met = self._evaluate_condition(rule, eval_context)
-            if condition_met:
-                # frame.local_vars['service_rule_id'] = rule.erpsys_id
-                frame.local_vars['operand_process_id'] = frame.process.parent.erpsys_id
-                frame.events_triggered_log.append({
-                    'rule_id': rule.erpsys_id,
-                    'rule_label': rule.label,
-                    'event_expression': rule.event.expression,
-                    'evaluated_at': timezone.now().isoformat()
-                })
-                eval_context['service_rule_id'] = rule.erpsys_id
-                self._execute_action(rule, eval_context)
+            if rule.event and rule.event.expression:
+                if self._evaluate_condition(rule, eval_context):
+                    # 命中后执行系统指令
+                    frame.events_triggered_log.append({
+                        'rule_id': rule.erpsys_id,
+                        'rule_label': rule.label,
+                        'event_expression': rule.event.expression,
+                        'evaluated_at': timezone.now().isoformat()
+                    })
+                    # frame.local_vars['operand_process_id'] = frame.process.parent.erpsys_id
+                    self._execute_action(rule, eval_context)
 
     def _build_evaluation_context(self, frame: ContextFrame) -> Dict[str, Any]:
-        """构建扁平化的规则评估上下文"""
-        # 1. 直接使用frame.local_vars中已有的进程信息
-        process_info = frame.local_vars
+        """
+        构建规则评估上下文。默认把frame.local_vars和父帧(inherited_context)的变量进行合并。
+        """
+        # 也可加入更多业务信息
+        ctx = {}
+        ctx.update(frame.inherited_context)
+        ctx.update(frame.local_vars)
+        return ctx
 
-        # 2. 获取完整的继承上下文链
-        def get_inherited_chain(context_dict, depth=0, max_depth=10):
-            if not context_dict or depth >= max_depth:
-                return {}
+        # """构建扁平化的规则评估上下文"""
+        # # 1. 直接使用frame.local_vars中已有的进程信息
+        # process_info = frame.local_vars
+
+        # # 2. 获取完整的继承上下文链
+        # def get_inherited_chain(context_dict, depth=0, max_depth=10):
+        #     if not context_dict or depth >= max_depth:
+        #         return {}
             
-            result = context_dict.copy()
-            parent_context = frame.parent_frame.inherited_context if frame.parent_frame else {}
-            parent_data = get_inherited_chain(parent_context, depth + 1)
+        #     result = context_dict.copy()
+        #     parent_context = frame.parent_frame.inherited_context if frame.parent_frame else {}
+        #     parent_data = get_inherited_chain(parent_context, depth + 1)
             
-            # 子级上下文优先
-            parent_data.update(result)
-            return parent_data
+        #     # 子级上下文优先
+        #     parent_data.update(result)
+        #     return parent_data
 
-        inherited_data = get_inherited_chain(frame.inherited_context)
+        # inherited_data = get_inherited_chain(frame.inherited_context)
 
-        # 3. 构建扁平化上下文
-        context = {
-            **process_info,  # 带前缀的进程信息
-            **inherited_data,  # 继承的上下文数据
-        }
+        # # 3. 构建扁平化上下文
+        # context = {
+        #     **process_info,  # 带前缀的进程信息
+        #     **inherited_data,  # 继承的上下文数据
+        # }
 
-        print('扁平化上下文：', context)
+        # print('扁平化上下文：', context)
 
-        return context
+        # return context
 
     def _evaluate_condition(self, rule: ServiceRule, context: Dict[str, Any]) -> bool:
-        """评估规则条件"""
+        """
+        评估 rule.event.expression 中的条件表达式。
+        注意：表达式中会使用 process_state, process_name 等专门加了process前缀的进程对象字段。
+        """
         try:
-            print('评估上下文：', context)
-            if rule.event and rule.event.expression:
-                # 将表达式中的进程相关字段替换为带前缀的形式
-                expression = rule.event.expression
-                # 替换所有进程相关字段
-                field_mappings = {
-                    r'\bstate\b': 'process_state',
-                    r'\bname\b': 'process_name',
-                    r'\bservice\b': 'process_service',
-                    r'\boperator\b': 'process_operator',
-                    r'\bpriority\b': 'process_priority',
-                    r'\bcreated_at\b': 'process_created_at',
-                    r'\bupdated_at\b': 'process_updated_at'
-                }
-                for old_field, new_field in field_mappings.items():
-                    expression = re.sub(old_field, new_field, expression)
-                print('转换后的表达式：', expression)
-                return eval(expression, {}, context)
-            return False  # 如果没有事件或表达式，返回False表示条件不满足
+            expression = rule.event.expression
+            return eval(expression, {}, context)
         except Exception as e:
-            print(f"规则条件评估错误: {e}")
+            print(f"[RuleEvaluator] 条件评估异常: {e}")
             return False
 
-    def _execute_action(self, rule: ServiceRule, context: Dict[str, Any]):
-        if rule.system_instruction:
-            sys_call_str = rule.system_instruction.sys_call
-            # 1) 将关键的上下文数据序列化后交给 Celery
-            # 2) 当前函数不再阻塞等待子进程创建，而是只发送消息
-            print('执行系统调用：', sys_call_str, context)
-            # 调用 Celery 任务
-            from kernel.tasks import execute_sys_call_task
-            result = execute_sys_call_task.delay(sys_call_str, context)
-            # 这样在此处我们就不会立即创建新进程，也不会产生嵌套上下文。
-            # 父上下文在后续 _execute_action 结束后即可退出并保存快照，
-            # Worker 那边才会在一个新上下文里创建子进程。
+        # """评估规则条件"""
+        # try:
+        #     print('评估上下文：', context)
+        #     if rule.event and rule.event.expression:
+        #         # 将表达式中的进程相关字段替换为带前缀的形式
+        #         expression = rule.event.expression
+        #         # 替换所有进程相关字段
+        #         field_mappings = {
+        #             r'\bstate\b': 'process_state',
+        #             r'\bname\b': 'process_name',
+        #             r'\bservice\b': 'process_service',
+        #             r'\boperator\b': 'process_operator',
+        #             r'\bpriority\b': 'process_priority',
+        #             r'\bcreated_at\b': 'process_created_at',
+        #             r'\bupdated_at\b': 'process_updated_at'
+        #         }
+        #         for old_field, new_field in field_mappings.items():
+        #             expression = re.sub(old_field, new_field, expression)
+        #         print('转换后的表达式：', expression)
+        #         return eval(expression, {}, context)
+        #     return False  # 如果没有事件或表达式，返回False表示条件不满足
+        # except Exception as e:
+        #     print(f"规则条件评估错误: {e}")
+        #     return False
 
+    def _execute_action(self, rule: ServiceRule, context: Dict[str, Any]):
+        if not rule.system_instruction:
+            return
+
+        sys_call_name = rule.system_instruction.sys_call
+        context['service_rule_id'] = rule.erpsys_id
+        from kernel.tasks import execute_sys_call_task
+        # 异步调用 Celery 任务
+        execute_sys_call_task.delay(sys_call_name, context)
+
+# ================ 2. 系统指令实现（SysCall） ================
 class SysCallResult:
     def __init__(self, success: bool, message: str = "", data: Optional[dict] = None):
         self.success = success
@@ -509,101 +495,276 @@ class SysCallInterface(ABC):
     """
     @abstractmethod
     def execute(self, **kwargs) -> SysCallResult:
-        """
-        执行系统调用。kwargs 里应包含所需的关键参数，如 process, operand_service, operator, context 等。
-        返回 SysCallResult。
-        进一步可做：
-        - 遇到业务错误（如参数非法）可以抛自定义异常，再由上层捕获并写日志到上下文
-        """
         pass
 
 class StartService(SysCallInterface):
     """
-    启动一个新的服务进程
+    启动一个新的 primitive Service
+    （与“调用服务”区别：它仅启动单一服务进程，而不修改当前进程状态）
     """
     def execute(self, **kwargs) -> SysCallResult:
-        """
-        必需参数：
-            - service_rule_id: 服务规则 erpsys_id
-            - process_id: 当前过程 erpsys_id
-            - operand_service: 要启动的新服务
-            - operator: 操作员 (可选，但多数情况下需要)
-            - entity_content_object: 新进程的关联业务实体，多数情况下为父进程关联的业务实体
-            - ...
-        """
-        print('执行系统调用 start_one_service：', kwargs)
-        # 1. 参数校验
-        if "service_rule_id" not in kwargs:
+        try:
+            # 1. 校验
+            service_rule_id = kwargs.get("service_rule_id")
+            if not service_rule_id:
+                return SysCallResult(False, "缺少 service_rule_id 参数")
+
+            sr = ServiceRule.objects.get(erpsys_id=service_rule_id)
+            operand_service = sr.operand_service
+            if not operand_service:
+                return SysCallResult(False, "当前规则未指定 operand_service")
+
+            # 2. 找到当前process（发起方）
+            process_id = kwargs.get("process_id")
+            if not process_id:
+                return SysCallResult(False, "缺少 process_id 参数")
+            proc = Process.objects.get(erpsys_id=process_id)
+
+            operator = proc.operator
+            entity = proc.entity_content_object
+
+            # 3. 创建新Process
+            params = {
+                "parent": proc.parent,
+                "previous": proc,
+                "service_rule": sr,
+                "service": operand_service,
+                "operator": operator,
+                "entity_content_object": entity,
+                "name": operand_service.label,
+                "parent_frame": kwargs.get("parent_frame", None),
+            }
+            creator = ProcessCreator()
+            new_proc = creator.create_process(params)
+
             return SysCallResult(
-                success=False,
-                message="Missing service_rule_id for start_service",
+                success=True,
+                message="成功启动新的服务进程",
+                data={"new_process_id": new_proc.erpsys_id}
             )
-        service_rule_id = kwargs.get("service_rule_id")
-        service_rule = ServiceRule.objects.get(erpsys_id = service_rule_id)
-        operand_service = service_rule.operand_service
-        
-        if not isinstance(operand_service, Service):
-            return SysCallResult(False, "operand_service is not a valid Service object")
-        
-        # 2. 业务逻辑：创建新的Process
-        previous_process_id = kwargs.get("process_id")
-        previous_process = Process.objects.get(erpsys_id = previous_process_id)
-        operator = previous_process.operator
-        entity_content_object = previous_process.entity_content_object
-
-        params = {
-            "parent": previous_process.parent,
-            "previous": previous_process,
-            "service_rule": service_rule,
-            "service": operand_service,
-            "operator": operator,
-            "entity_content_object": entity_content_object,
-            "name": f"{operand_service.label}",
-            "parent_frame": kwargs.get("parent_frame", None),
-        }
-        print('新服务进程创建参数：', params)
-
-        # 3. 创建新的进程
-        creator = ProcessCreator()
-        # 获取当前进程的父帧
-        proc = creator.create_process(params)
-
-        print(f"新服务进程 created: {proc}")
-
-        # 4. 返回成功信息
-        return SysCallResult(
-            success=True,
-            message="Successfully started one service",
-            data={"new_process_id": proc.id}
-        )
+        except Exception as e:
+            return SysCallResult(False, f"StartService异常: {e}")
 
 class CallSubService(SysCallInterface):
     def execute(self, **kwargs) -> SysCallResult:
         """
-        调用服务程序
+        在当前进程内调用另一个子服务（可primitive，也可服务函数）；
+        当前进程进入 WAITING，待子服务完成后再恢复。
         """
-        pass
+        try:
+            # 1. 校验
+            service_rule_id = kwargs.get("service_rule_id")
+            if not service_rule_id:
+                return SysCallResult(False, "缺少 service_rule_id 参数")
+
+            sr = ServiceRule.objects.get(erpsys_id=service_rule_id)
+            operand_service = sr.operand_service
+            if not operand_service:
+                return SysCallResult(False, "当前规则未指定 operand_service")
+
+            process_id = kwargs.get("process_id")
+            if not process_id:
+                return SysCallResult(False, "缺少 process_id 参数")
+
+            parent_process = Process.objects.get(erpsys_id=process_id)
+
+            # 2. 当父进程还没终止时，将其挂起为WAITING
+            if parent_process.state != ProcessState.TERMINATED.name:
+                parent_process.state = ProcessState.WAITING.name
+                parent_process.save()
+
+            # 3. 创建子进程
+            operator = parent_process.operator
+            entity = parent_process.entity_content_object
+
+            # 先读取父上下文
+            with ProcessExecutionContext(parent_process) as parent_frame:
+                params = {
+                    "parent": parent_process,
+                    "previous": parent_process,
+                    "service_rule": sr,
+                    "service": operand_service,
+                    "operator": operator,
+                    "entity_content_object": entity,
+                    "parent_frame": parent_frame,  # 建立子进程时的上下文嵌套
+                }
+                creator = ProcessCreator()
+                child_proc = creator.create_process(params)
+
+            return SysCallResult(
+                True,
+                "已创建子服务进程，父进程已挂起等待子进程完成",
+                data={"child_process_id": child_proc.erpsys_id}
+            )
+        except Exception as e:
+            return SysCallResult(False, f"CallSubService异常: {e}")
 
 class CallingReturn(SysCallInterface):
+    """
+    从子服务返回到父服务:
+    1. 将当前子进程置为 TERMINATED;
+    2. 弹出当前Frame，恢复父Frame;
+    3. 父进程置为 READY 或 RUNNING。
+    """
     def execute(self, **kwargs) -> SysCallResult:
-        """
-        返回调用服务
-        """
-        pass
+        try:
+            child_process_id = kwargs.get("process_id")
+            if not child_process_id:
+                return SysCallResult(False, "缺少当前process_id参数")
+
+            child_process = Process.objects.get(erpsys_id=child_process_id)
+            parent_process = child_process.parent
+            if not parent_process or (parent_process == child_process):
+                # 如果parent_process == 自己，说明此进程是顶层，可能不需要返回
+                return SysCallResult(False, "无法调用返回：父进程不存在或与子进程相同")
+
+            # 1. 子进程结束
+            child_process.state = ProcessState.TERMINATED.name
+            child_process.save()
+
+            # 2. 弹出上下文堆栈
+            with ProcessExecutionContext(child_process) as child_frame:
+                # 将child_frame的返回值写回父frame的 local_vars（如有需求）
+                return_value = child_frame.return_value
+
+            # 手动恢复父上下文(让父进程回到RUNNING或就绪态)
+            parent_process.refresh_from_db()
+            parent_state = parent_process.state
+            if parent_state == ProcessState.WAITING.name:
+                parent_process.state = ProcessState.RUNNING.name
+                parent_process.save()
+
+            return SysCallResult(
+                True,
+                "子进程已返回并终止，父进程恢复",
+                data={"parent_process_id": parent_process.erpsys_id, "return_value": return_value}
+            )
+        except Exception as e:
+            return SysCallResult(False, f"CallingReturn异常: {e}")
 
 class StartIterationService(SysCallInterface):
+    """
+    启动循环服务：同一个Service重复执行N次或直到条件终止
+    在业务中常用于“一系列相同流程的多次重复”场景
+    """
     def execute(self, **kwargs) -> SysCallResult:
         """
-        启动迭代服务
+        参数约定：
+          - service_rule_id
+          - process_id
+          - iterations: 需要执行的次数
         """
-        pass
+        try:
+            service_rule_id = kwargs.get("service_rule_id")
+            if not service_rule_id:
+                return SysCallResult(False, "缺少 service_rule_id")
+
+            sr = ServiceRule.objects.get(erpsys_id=service_rule_id)
+            operand_service = sr.operand_service
+            if not operand_service:
+                return SysCallResult(False, "当前规则未指定 operand_service")
+
+            process_id = kwargs.get("process_id")
+            if not process_id:
+                return SysCallResult(False, "缺少 process_id")
+
+            parent_process = Process.objects.get(erpsys_id=process_id)
+            operator = parent_process.operator
+            entity = parent_process.entity_content_object
+
+            iterations = kwargs.get("iterations", 1)
+            if not isinstance(iterations, int) or iterations <= 0:
+                return SysCallResult(False, f"非法循环次数: {iterations}")
+
+            with ProcessExecutionContext(parent_process) as parent_frame:
+                created_ids = []
+                creator = ProcessCreator()
+                for i in range(iterations):
+                    params = {
+                        "parent": parent_process,
+                        "previous": parent_process,
+                        "service_rule": sr,
+                        "service": operand_service,
+                        "operator": operator,
+                        "entity_content_object": entity,
+                        "init_params": {"iteration_index": i + 1},
+                        "parent_frame": parent_frame
+                    }
+                    child_proc = creator.create_process(params)
+                    created_ids.append(child_proc.erpsys_id)
+
+            return SysCallResult(
+                True,
+                f"成功创建 {iterations} 个循环子进程",
+                data={"child_process_ids": created_ids}
+            )
+        except Exception as e:
+            return SysCallResult(False, f"StartIterationService异常: {e}")
 
 class StartParallelService(SysCallInterface):
+    """
+    启动并行服务：同一个Service并发生成多个子进程，如会诊调度给多位医生。
+    业务侧可等到全部完成后再做后续处理。
+    """
     def execute(self, **kwargs) -> SysCallResult:
         """
-        并行启动服务进程
+        参数约定：
+          - service_rule_id
+          - process_id
+          - threads: 并发数量(或指定执行的若干Operator)
         """
-        pass
+        try:
+            service_rule_id = kwargs.get("service_rule_id")
+            if not service_rule_id:
+                return SysCallResult(False, "缺少 service_rule_id")
+
+            sr = ServiceRule.objects.get(erpsys_id=service_rule_id)
+            operand_service = sr.operand_service
+            if not operand_service:
+                return SysCallResult(False, "当前规则未指定 operand_service")
+
+            process_id = kwargs.get("process_id")
+            if not process_id:
+                return SysCallResult(False, "缺少 process_id")
+
+            parent_process = Process.objects.get(erpsys_id=process_id)
+            entity = parent_process.entity_content_object
+
+            threads = kwargs.get("threads", 1)
+            # 并发数检查
+            if not isinstance(threads, int) or threads <= 0:
+                return SysCallResult(False, f"并发数量无效: {threads}")
+
+            # 若传入operators列表，则优先针对指定操作员，否则默认与父进程同一operator
+            operators_list = kwargs.get("operators", [])
+            if not operators_list:
+                operators_list = [parent_process.operator.erpsys_id] * threads
+
+            with ProcessExecutionContext(parent_process) as parent_frame:
+                child_ids = []
+                creator = ProcessCreator()
+                for index, op_id in enumerate(operators_list, start=1):
+                    op = Operator.objects.get(erpsys_id=op_id)
+                    params = {
+                        "parent": parent_process,
+                        "previous": parent_process,
+                        "service_rule": sr,
+                        "service": operand_service,
+                        "operator": op,
+                        "entity_content_object": entity,
+                        "init_params": {"parallel_index": index},
+                        "parent_frame": parent_frame
+                    }
+                    proc = creator.create_process(params)
+                    child_ids.append(proc.erpsys_id)
+
+            return SysCallResult(
+                True,
+                "并行子进程已全部创建",
+                data={"child_process_ids": child_ids}
+            )
+        except Exception as e:
+            return SysCallResult(False, f"StartParallelService异常: {e}")
 
 CALL_REGISTRY = {
     "start_service": StartService,
@@ -795,13 +956,13 @@ def get_program_entrypoints(model_str):
     ]
     '''
     # 使用model_str过滤entity_content_type
-    programs = ServiceProgram.objects.filter(manual_start=True, entity_content_type__model=model_str)
+    programs = Service.objects.filter(manual_start=True, serve_content_type__model=model_str)
     program_entrypoints = []
     for program in programs:
         first_rule = program.servicerule_set.all().order_by('order').first()
         if first_rule:
             program_entrypoints.append({'title': first_rule.service.label, 'service_rule_id': first_rule.erpsys_id})
-
+    print("program_entrypoints: ", program_entrypoints, "model_str: ", model_str, "programs: ", programs, "first_rule:")
     return program_entrypoints
 
 # 创建定时任务
