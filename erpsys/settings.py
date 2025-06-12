@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'design',
     'kernel',
     'applications',
+    'mcp_servers',
     # Celery apps
     'django_celery_results',
     'django_celery_beat',

@@ -1,74 +1,154 @@
-# erpsys
+# Django ERP OS Framework
 
-"""
-进程控制块 - ProcessControlBlock, 用于在多个语义层级上管理业务进程
-每个层级是独立的语义空间, 都有各自的独立业务上下文, 有适宜本层语义空间的Assistants Manager对当前层次的进程依照本层级业务规则进行特定操作, 包括：业务事件、调度规则、现场调度控制、初始化进程
-1. 跟踪合约进程的状态，确定特定会员的合约执行接下来要做什么？为其中的哪位客户进行哪个服务项目？输出一个服务序列
-2. 跟踪服务进程的状态，确定特定客户的服务项目接下来要做什么，什么时候做，谁做？输出一个任务序列
-3. 跟踪任务进程的状态，确定特定任务接下来的操作序列是什么？输出一个操作序列
+A **customizable ERP framework** with sophisticated workflow engine and meta-modeling capabilities. This project demonstrates a novel approach to enterprise resource planning by treating business operations as computational processes, enabling unprecedented levels of automation and optimization.
 
-schedule_context: 
-进程的优先级
-估计或测量的执行时间
-截止日期或其他时间限制
-资源需求（CPU、内存、I/O 等）
-安全或访问控制信息
-其他调度策略或参数
+## Framework Architecture
 
-control_context:
-进程标识和属性（例如 PID、父进程、用户 ID、组 ID）
-进程状态（例如，运行、暂停、终止）
-进程调度参数（例如，量子、优先级提升、抢占）
-进程资源使用情况（例如 CPU 时间、内存、I/O）
-进程通信通道（例如管道、套接字、共享内存）
-处理安全和访问控制信息
-其他过程控制参数或标志
+### Three-Layer Meta-Framework Design
 
-process_program:
-解释性语言（例如 Python、Ruby、JavaScript）的字节码文件
-shell 或命令语言（例如 Bash、PowerShell、cmd）中的脚本文件
+#### 1. Design Layer (`design/` app) - Meta-Modeling System
+The **configuration engine** where business domains are defined without programming:
 
-process_data:
-程序中定义的全局或静态变量
-在运行时分配的动态或堆变量
-过程的输入或输出参数
-进程使用的临时或中间数据
-进程的配置或设置
-进程的元数据或统计信息（例如创建时间、修改时间、访问时间）
-与过程相关的其他数据或状态信息    
+**Data Structure Designer:**
+- **DataItem**: Meta-model for defining business entities and their relationships
+- **DataItemConsists**: Composition relationships between data items
+- **Field Type System**: Dynamic field type definitions supporting various data types
+- **Business Type Inheritance**: Entity inheritance hierarchies for complex business models
 
-# Linux命令 taskset => 把进程和特定的CPU绑定在一起
-# 公平分享CPU资源 Round-Robin
-# 医生每位患者面诊15分钟，是一种轮转调度算法
-# 动态优先级调度算法 MLFQ(Multi-Level Feedback Queue)
-# Linux调度算法 CFS(Completely Fair Scheduler)
-# 调度参数：nice值，优先级（权重？），实时性，时间片大小，调度策略
-# 不同岗位的操作员 => 异构处理器
+**Service Architecture Designer:**
+- **Service**: Configurable business processes and workflows
+- **ServiceRule**: Event-driven business logic definitions
+- **Event**: Trigger conditions and expressions for automation
+- **Instruction**: System-level commands and operations
 
-Operating System Services Provide:
-1. User Interface: CLI, GUI
-2. Program Execution: Source code -> Compiler -> Object code -> Executor
-3. I/O Operations
-4. File System Manipulation
-5. Communications: Inter-process communication, Networking
-6. Error Detection: Hardware, Software
-7. Resource Allocation: CPU, Memory, I/O devices
-8. Accounting: Usage statistics, Billing information -- Which users use how much and what kinds of resources
-9. Protection and Security: User authentication, File permissions, Encryption
+**Resource Planning Designer:**
+- **Resource Types**: Material, Equipment, Device, Capital, Knowledge abstractions
+- **Resource Requirements**: Service-to-resource mappings and dependencies
+- **Capacity Planning**: Resource allocation and scheduling algorithms
 
-Types of System Calls
-1. Process Control
-2. File Manipulation
-3. Device Management
-4. Information Maintenance
-5. Communications
+**UI/Form Generator:**
+- **Form**: Dynamic form definitions from data structures
+- **FormFields**: Field configuration and validation rules
+- **MenuItem**: Navigation structure generation
 
-Types of System Programs
-1. File Management
-2. Status Information
-3. File Modification
-4. Programming Language Support
-5. Program Loading and Execution
-6. Communications
+#### 2. Execution Layer (`kernel/` app) - Workflow Engine
+The **runtime engine** that executes designed business processes:
 
-"""
+**Process Management Core:**
+- **Process Control Block (PCB)**: Unique process identifier and state management
+- **Process States**: NEW, READY, RUNNING, WAITING, SUSPENDED, TERMINATED
+- **Process Hierarchy**: Parent-child and sequential process relationships
+- **Entity Binding**: Generic foreign key binding to business entities
+- **Operator Assignment**: Resource allocation and task assignment
+
+**Scheduler Engine:**
+- **Event-Driven Execution**: Signal-based process triggering and automation
+- **Resource Allocation**: Multi-constraint scheduling algorithm
+- **State Management**: Complete process lifecycle management
+- **Context Switching**: Operator task switching capabilities
+
+**Business Rules Engine:**
+- **Rule Evaluator**: Dynamic expression evaluation for business logic
+- **Event Processing**: Automated workflow triggers and responses
+- **Instruction Execution**: System command processing and execution
+
+#### 3. Application Layer (`applications/` app) - Domain Implementation
+Where the **configured business domain models** are instantiated and deployed.
+
+## Framework Capabilities
+
+### Core Strengths
+
+**True Meta-Programming Architecture**
+- Runtime model generation from meta-definitions
+- No-code business entity creation
+- Inheritance and composition support
+- Dynamic class generation with Chinese language support
+
+**Sophisticated Process Management**
+- OS-Inspired Design: Real Process Control Block implementation for business processes
+- Multi-State Workflow: Complete process lifecycle management
+- Resource-Aware Scheduling: Constraint-based process allocation
+- Hierarchical Processes: Parent-child and sequential process chains
+
+**Event-Driven Architecture**
+- Signal-based workflow automation
+- Real-time process state synchronization
+- Decoupled component communication
+- Automatic task list updates and scheduling
+
+**Generic Resource Management**
+- Unified resource abstraction across all resource types
+- Capacity planning and allocation algorithms
+- Resource requirement specifications per service
+- Multi-dimensional resource constraints
+
+## Technical Innovation
+
+**Business Process as OS Process Metaphor**
+- Each business operation becomes a schedulable process
+- Resource contention resolution using CPU scheduling algorithms
+- Context switching between different business activities
+- Priority-based process execution
+
+**Meta-Model Driven Development**
+- Business analysts can define entities without programming
+- Form generation from data structure definitions
+- API mapping and integration capabilities
+- Dynamic relationship management
+
+**Multi-Tenant Service Framework**
+- Generic service definitions reusable across domains
+- Rule-based business logic configuration
+- Pluggable instruction sets
+- Domain-specific customization without code changes
+
+## Technology Stack
+
+- **Backend**: Django 4.2.7 with Django REST Framework
+- **Database**: SQLite (development) / PostgreSQL (production)
+- **Caching & Message Queue**: Redis
+- **Task Queue**: Celery with beat scheduler
+- **Real-time**: Django Channels with WebSocket support
+- **Internationalization**: Native Chinese language support with pypinyin
+
+## Demo Implementation: Aesthetic Medical Practice
+
+The framework includes a complete demonstration implementation for aesthetic medicine clinics, showcasing:
+
+- **Patient Management**: Complete demographic and medical history tracking
+- **Treatment Operations**: Support for various cosmetic procedures (Botox, laser, etc.)
+- **Appointment Scheduling**: Advanced booking system with resource allocation
+- **Financial Management**: Billing, prepaid accounts, and consumption tracking
+- **Inventory Control**: Medical supplies with expiration date management
+- **Follow-up Care**: Automated patient care and reminder systems
+
+## Strategic Value
+
+This framework represents a **meta-ERP platform** capable of generating domain-specific ERP solutions across industries. Key advantages:
+
+**Rapid Deployment**: Configure new business domains without traditional development cycles
+**Process Optimization**: Sophisticated workflow optimization using computational process management
+**Vertical Market Solutions**: Easily adapt to different industries (healthcare, retail, manufacturing, hospitality)
+**Scalable Architecture**: Support for multi-location and multi-tenant deployments
+**No-Code Configuration**: Business users can modify workflows and entities without programming
+
+## Installation and Setup
+
+1. **Clone the repository**
+2. **Install dependencies**: `pip install -r requirements.txt`
+3. **Configure database**: Update settings for your environment
+4. **Run migrations**: `python manage.py migrate`
+5. **Create superuser**: `python manage.py createsuperuser`
+6. **Start development server**: `python manage.py runserver`
+
+For production deployment, use the included Docker configuration and PostgreSQL setup.
+
+## Framework Evaluation
+
+**Innovation Level**: Genuinely novel approach to ERP framework design
+**Technical Architecture**: Well-structured meta-programming foundation
+**Reusability**: Highly configurable across diverse business domains
+**Commercial Viability**: Strong potential for vertical market ERP solutions
+
+The process-centric design enables sophisticated workflow optimization that traditional ERP systems struggle with, making this framework particularly valuable for service-oriented businesses requiring complex resource allocation and process management.
