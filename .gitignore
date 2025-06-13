@@ -59,3 +59,6 @@ poetry/core/*
 app.log
 
 db.sqlite3
+
+# Django static files
+staticfiles/
