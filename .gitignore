@@ -62,3 +62,5 @@ db.sqlite3
 
 # Django static files
 staticfiles/
+
+CLAUDE.local.md
