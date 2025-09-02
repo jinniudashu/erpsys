@@ -6,9 +6,11 @@
 
 agent_results/
 
-# .env
+.env
 .venv
 .env_new
+
+tools/
 
 *.pyc
 # Byte-compile / optimized / DLL files
